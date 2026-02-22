@@ -1,0 +1,143 @@
+.settings-section {
+    .section-header {
+        margin-bottom: 2rem;
+        position: relative;
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+
+            &::before {
+                content: '🔔';
+                font-size: 1.2rem;
+                margin-right: 0.5rem;
+            }
+        }
+
+        // Custom float icon for notifications page header
+        &::after {
+            content: '🔔';
+            position: absolute;
+            right: 2rem;
+            top: 0;
+            font-size: 2rem;
+            opacity: 0.1;
+        }
+
+        p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+    }
+
+    .settings-card-group {
+        border: 1px solid #2d3748;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        background: #000;
+        width: 100%;
+
+        .card-title {
+            margin-bottom: 2rem;
+
+            h3 {
+                font-size: 1.1rem;
+                color: #fff;
+                margin-bottom: 0.25rem;
+            }
+
+            p {
+                font-size: 0.85rem;
+                color: #718096;
+            }
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #1a202c;
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+
+            .setting-info {
+                h4 {
+                    color: #fff;
+                    margin-bottom: 0.25rem;
+                    font-size: 0.95rem;
+                }
+
+                p {
+                    color: #718096;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+    }
+
+    // Reuse toggle-switch and btn-primary from shared styles if possible
+    // But since SCSS isn't global, I will duplicate for safety or I would put in shared SCSS file
+    // For now, duplicating the toggle-switch styles
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+
+        input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+
+            &:checked+.slider {
+                background-color: #4299e1;
+            }
+
+            &:checked+.slider:before {
+                transform: translateX(20px);
+            }
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #4a5568;
+            transition: .4s;
+            border-radius: 34px;
+
+            &:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .btn-primary {
+        background: #4299e1;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:hover {
+            background: #3182ce;
+        }
+    }
+}

@@ -1,0 +1,264 @@
+<div class="overview-container">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1>Security Overview</h1>
+            <p>Real-time Threat Monitoring & Risk Posture</p>
+        </div>
+        <div class="header-actions">
+            <span class="last-updated"><lucide-icon [name]="CheckCircle" [size]="14"></lucide-icon> Live Updated</span>
+            <button class="action-btn primary"><lucide-icon [name]="RefreshCw" [size]="16"></lucide-icon>
+                Refresh</button>
+        </div>
+    </div>
+
+    <!-- 1. KPI Strip -->
+    <div class="kpi-strip">
+        <div class="kpi-card" [class.status-safe]="kpiData.securityStatus.status === 'secure'"
+            [class.status-warning]="kpiData.securityStatus.status === 'degraded'"
+            [class.status-critical]="kpiData.securityStatus.status === 'critical'">
+            <div class="kpi-icon">
+                <lucide-icon [name]="kpiData.securityStatus.icon" [size]="24"></lucide-icon>
+            </div>
+            <div class="kpi-info">
+                <span class="value">{{ kpiData.securityStatus.value }}</span>
+                <span class="label">{{ kpiData.securityStatus.label }}</span>
+            </div>
+        </div>
+
+        <div class="kpi-card" [class.status-critical]="kpiData.activeIncidents.value > 0">
+            <div class="kpi-icon">
+                <lucide-icon [name]="kpiData.activeIncidents.icon" [size]="24"></lucide-icon>
+            </div>
+            <div class="kpi-info">
+                <span class="value">{{ kpiData.activeIncidents.value }}</span>
+                <span class="label">{{ kpiData.activeIncidents.label }}</span>
+            </div>
+        </div>
+
+        <div class="kpi-card" [class.status-critical]="kpiData.atRiskEndpoints.value > 0">
+            <div class="kpi-icon">
+                <lucide-icon [name]="kpiData.atRiskEndpoints.icon" [size]="24"></lucide-icon>
+            </div>
+            <div class="kpi-info">
+                <span class="value">{{ kpiData.atRiskEndpoints.value }}</span>
+                <span class="label">{{ kpiData.atRiskEndpoints.label }}</span>
+            </div>
+        </div>
+
+        <div class="kpi-card status-neutral">
+            <div class="kpi-icon">
+                <lucide-icon [name]="kpiData.unmanagedDevices.icon" [size]="24"></lucide-icon>
+            </div>
+            <div class="kpi-info">
+                <span class="value">{{ kpiData.unmanagedDevices.value }}</span>
+                <span class="label">{{ kpiData.unmanagedDevices.label }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Main Visual Row -->
+    <div class="visual-row">
+        <!-- Protection Coverage Donut -->
+        <div class="card protection-card">
+            <div class="card-header">
+                <h3>Protection Coverage</h3>
+            </div>
+            <div class="card-body donut-layout">
+                <div class="donut-chart-container">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
+                        <path class="circle-bg"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle protected" stroke-dasharray="85, 100"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle at-risk" stroke-dasharray="10, 100" stroke-dashoffset="-85"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle offline" stroke-dasharray="5, 100" stroke-dashoffset="-95"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <text x="18" y="20.35" class="percentage">85%</text>
+                    </svg>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="dot protected"></span>
+                        <div class="legend-info">
+                            <span class="count">{{ protectionStats.protected }}</span>
+                            <span class="label">Protected</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <span class="dot at-risk"></span>
+                        <div class="legend-info">
+                            <span class="count">{{ protectionStats.atRisk }}</span>
+                            <span class="label">At Risk</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <span class="dot offline"></span>
+                        <div class="legend-info">
+                            <span class="count">{{ protectionStats.offline }}</span>
+                            <span class="label">Offline</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Trend Line Chart -->
+        <div class="card trend-card">
+            <div class="card-header">
+                <h3>Risk Trend</h3>
+                <div class="period-selector">
+                    <button [class.active]="currentTrendPeriod === '24h'" (click)="setTrendPeriod('24h')">24h</button>
+                    <button [class.active]="currentTrendPeriod === '7d'" (click)="setTrendPeriod('7d')">7d</button>
+                    <button [class.active]="currentTrendPeriod === '30d'" (click)="setTrendPeriod('30d')">30d</button>
+                </div>
+            </div>
+            <div class="card-body trend-layout">
+                <!-- CSS-only simple line chart visualization for mock -->
+                <div class="line-chart-container">
+                    <div class="chart-grid">
+                        <div class="grid-line" style="top: 0%"></div>
+                        <div class="grid-line" style="top: 25%"></div>
+                        <div class="grid-line" style="top: 50%"></div>
+                        <div class="grid-line" style="top: 75%"></div>
+                        <div class="grid-line" style="top: 100%"></div>
+                    </div>
+                    <div class="trend-line-wrapper">
+                        <!-- Simplified visual representation of the trend line using SVG polyline -->
+                        <svg class="trend-svg" viewBox="0 0 100 50" preserveAspectRatio="none">
+                            <polyline points="0,40 10,35 20,30 30,32 40,25 50,15 60,18 70,22 80,20 90,10 100,5"
+                                class="trend-polyline" />
+                            <defs>
+                                <linearGradient id="trendGradient" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.5" />
+                                    <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+                                </linearGradient>
+                            </defs>
+                            <polygon
+                                points="0,40 10,35 20,30 30,32 40,25 50,15 60,18 70,22 80,20 90,10 100,5 100,50 0,50"
+                                fill="url(#trendGradient)" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Secondary Row -->
+    <div class="secondary-row">
+        <!-- Agent Health -->
+        <div class="card agent-health-card">
+            <div class="card-header">
+                <h3>Agent Health & Updates</h3>
+            </div>
+            <div class="card-body">
+                <div class="health-bars">
+                    @for (item of agentHealth; track item.label) {
+                    <div class="health-bar-row" [ngClass]="'status-' + item.color">
+                        <div class="bar-info">
+                            <span class="label">{{ item.label }}</span>
+                            <span class="count" [class.text-critical]="item.color === 'critical'"
+                                [class.text-warning]="item.color === 'warning'">
+                                {{ item.count }}
+                            </span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill" [class.fill-critical]="item.color === 'critical'"
+                                [class.fill-warning]="item.color === 'warning'"
+                                [class.fill-neutral]="item.color === 'neutral'"
+                                [style.width.%]="(item.count / 50) * 100"></div> <!-- Mock pct -->
+                        </div>
+                        <button class="action-sm">{{ item.action }}</button>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Contributors -->
+        <div class="card risk-contributors-card">
+            <div class="card-header">
+                <h3>Top Risk Contributors</h3>
+            </div>
+            <div class="card-body">
+                <div class="contributors-list">
+                    @for (item of riskContributors; track item.name) {
+                    <div class="contributor-row" [ngClass]="'impact-' + item.impact.toLowerCase()">
+                        <div class="contributor-info">
+                            <span class="name">{{ item.name }}</span>
+                            <span class="impact-chip" [class.impact-critical]="item.impact === 'Critical'"
+                                [class.impact-high]="item.impact === 'High'"
+                                [class.impact-medium]="item.impact === 'Medium'">
+                                {{ item.impact }}
+                            </span>
+                        </div>
+                        <button class="fix-btn">Fix</button>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Bottom Row -->
+    <div class="bottom-row">
+        <!-- Recent Incidents -->
+        <div class="card incidents-table-card">
+            <div class="card-header">
+                <h3>Recent Incidents</h3>
+                <a routerLink="/dashboard/incidents" class="view-all">View All</a>
+            </div>
+            <div class="card-body">
+                <table class="clean-table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Threat</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (incident of recentIncidents; track incident.id) {
+                        <tr [ngClass]="'severity-' + incident.severity">
+                            <td class="primary-text">{{ incident.endpoint }}</td>
+                            <td>{{ incident.threat }}</td>
+                            <td>
+                                <span class="severity-dot" [class.critical]="incident.severity === 'critical'"
+                                    [class.high]="incident.severity === 'high'"
+                                    [class.medium]="incident.severity === 'medium'"></span>
+                                {{ incident.severity | titlecase }}
+                            </td>
+                            <td><span class="status-badge {{incident.status.toLowerCase()}}">{{ incident.status
+                                    }}</span></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Live Threat Feed -->
+        <div class="card threat-feed-card">
+            <div class="card-header">
+                <h3>Live Threat Feed</h3>
+                <span class="live-pulse">● Live</span>
+            </div>
+            <div class="card-body feed-container">
+                <div class="feed-list">
+                    @for (threat of recentThreats; track threat.id) {
+                    <div class="feed-item" [ngClass]="'severity-' + threat.severity">
+                        <div class="feed-time">{{ threat.time }}</div>
+                        <div class="feed-content">
+                            <span class="feed-threat">{{ threat.name }}</span>
+                            <span class="feed-host">on {{ threat.host }}</span>
+                        </div>
+                        <span class="feed-type">{{ threat.type }}</span>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

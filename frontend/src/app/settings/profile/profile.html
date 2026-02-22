@@ -1,0 +1,135 @@
+<div class="profile-container">
+    <!-- Header Section -->
+    <header class="profile-header">
+        <div class="user-id-badge">ID: AD-7729-SEC</div>
+        <div class="user-meta">
+            <div class="profile-avatar">AD</div>
+            <div class="profile-title">
+                <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+                <div class="role-tag">
+                    <span class="pulse-dot"></span>
+                    {{ user.role }}
+                </div>
+            </div>
+        </div>
+        <div class="profile-status">
+            <div class="status-item">
+                <span class="label">Status</span>
+                <span class="value active">{{ user.status }}</span>
+            </div>
+            <div class="status-item">
+                <span class="label">Last Login</span>
+                <span class="value">{{ user.lastLogin }}</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="profile-grid">
+        <!-- Left Column: Details & Stats -->
+        <div class="profile-left">
+            <!-- Stats Grid -->
+            <section class="stats-grid">
+                @for (stat of securityStats; track stat.label) {
+                <div class="stat-card" [style.border-bottom-color]="stat.color">
+                    <div class="stat-main">
+                        <span class="stat-value">{{ stat.value }}</span>
+                        <span class="stat-trend">{{ stat.trend }}</span>
+                    </div>
+                    <span class="stat-label">{{ stat.label }}</span>
+                </div>
+                }
+            </section>
+
+            <!-- Personal Info Card -->
+            <section class="info-card glass-panel">
+                <div class="panel-header">
+                    <h2>Personal Information</h2>
+                    <button class="edit-toggle" (click)="isEditing = !isEditing">
+                        {{ isEditing ? 'Cancel' : 'Edit Profile' }}
+                    </button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" [(ngModel)]="user.email" [disabled]="!isEditing">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" [(ngModel)]="user.phone" [disabled]="!isEditing">
+                    </div>
+                    <div class="form-group">
+                        <label>Security Clearance</label>
+                        <div class="clearance-badge">{{ user.clearance }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Timezone</label>
+                        <select [(ngModel)]="user.timezone" [disabled]="!isEditing">
+                            <option>UTC-5 (Eastern Time)</option>
+                            <option>UTC+0 (London)</option>
+                            <option>UTC+1 (Paris)</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Bio / Objectives</label>
+                        <textarea rows="3" [(ngModel)]="user.bio" [disabled]="!isEditing"></textarea>
+                    </div>
+                </div>
+
+                @if (isEditing) {
+                <div class="panel-actions">
+                    <button class="btn-save" (click)="saveProfile()">Save Changes</button>
+                </div>
+                }
+            </section>
+        </div>
+
+        <!-- Right Column: Activity & Security -->
+        <div class="profile-right">
+            <!-- Recent Activity -->
+            <section class="activity-card glass-panel">
+                <div class="panel-header">
+                    <h2>Recent Operations</h2>
+                    <a href="#" class="view-all">View Log</a>
+                </div>
+                <div class="activity-list">
+                    @for (act of recentActivity; track act.time) {
+                    <div class="activity-item">
+                        <div class="activity-icon"><lucide-icon [name]="act.icon" [size]="18"></lucide-icon></div>
+                        <div class="activity-info">
+                            <p class="activity-desc"><strong>{{ act.action }}</strong> on {{ act.target }}</p>
+                            <span class="activity-time">{{ act.time }}</span>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </section>
+
+            <!-- Security Credentials -->
+            <section class="security-card glass-panel">
+                <div class="panel-header">
+                    <h2>Authentication</h2>
+                </div>
+                <div class="security-items">
+                    <div class="security-item">
+                        <div class="status-icon success-glow"><lucide-icon [name]="CheckCircle"
+                                [size]="20"></lucide-icon></div>
+                        <div class="item-text">
+                            <h3>Multi-Factor Auth</h3>
+                            <p>Enabled (Hardware Token)</p>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <div class="status-icon"><lucide-icon [name]="Key" [size]="20"></lucide-icon></div>
+                        <div class="item-text">
+                            <h3>API Credentials</h3>
+                            <p>3 Active Keys</p>
+                        </div>
+                    </div>
+                </div>
+                <a [routerLink]="['/dashboard/settings/security']" class="btn-outline-full"
+                    style="text-align: center; display: block; text-decoration: none;">Manage Security Settings</a>
+            </section>
+        </div>
+    </div>
+</div>

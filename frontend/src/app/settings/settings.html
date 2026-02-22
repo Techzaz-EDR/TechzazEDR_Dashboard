@@ -1,0 +1,30 @@
+<div class="settings-container">
+    <div class="page-header">
+        <h1>Settings</h1>
+        <p>Manage organization and security settings</p>
+    </div>
+
+    <div class="tabs-header">
+        <nav class="tabs-nav">
+            <a routerLink="organization" routerLinkActive="active" class="tab-item">
+                <span class="icon"><lucide-icon [name]="Building" [size]="18"></lucide-icon></span> Organization
+            </a>
+            <a routerLink="security" routerLinkActive="active" class="tab-item">
+                <span class="icon"><lucide-icon [name]="Lock" [size]="18"></lucide-icon></span> Security
+            </a>
+            <a routerLink="notifications" routerLinkActive="active" class="tab-item">
+                <span class="icon"><lucide-icon [name]="Bell" [size]="18"></lucide-icon></span> Notifications
+            </a>
+            <a routerLink="api-keys" routerLinkActive="active" class="tab-item">
+                <span class="icon"><lucide-icon [name]="Key" [size]="18"></lucide-icon></span> API Keys
+            </a>
+            <a routerLink="profile" routerLinkActive="active" class="tab-item">
+                <span class="icon"><lucide-icon [name]="User" [size]="18"></lucide-icon></span> Profile
+            </a>
+        </nav>
+    </div>
+
+    <div class="settings-content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

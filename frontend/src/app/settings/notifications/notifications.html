@@ -1,0 +1,49 @@
+<div class="settings-section">
+    <div class="section-header">
+        <h2>Notification Preferences</h2>
+        <p>Configure alert and notification settings</p>
+    </div>
+
+    <div class="settings-card-group">
+        <div class="card-title">
+            <h3>Alert Settings</h3>
+            <p>Control how and when you receive alerts</p>
+        </div>
+
+        <div class="setting-item">
+            <div class="setting-info">
+                <h4>Critical Threats</h4>
+                <p>Notify on critical threat detection</p>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-item">
+            <div class="setting-info">
+                <h4>Incident Updates</h4>
+                <p>Notify on incident status changes</p>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-item">
+            <div class="setting-info">
+                <h4>Daily Summary</h4>
+                <p>Receive daily security summary</p>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <button class="btn-primary" style="margin-top: 2rem;" (click)="savePreferences()">Save Notification
+            Settings</button>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+<div class="users-container content-scroll">
+    <div class="page-header">
+        <div class="header-content">
+            <div>
+                <h1>Users</h1>
+                <p>Manage team members and access control</p>
+            </div>
+            <button class="add-user-btn" (click)="openModal()">
+                <lucide-icon [name]="PlusIcon" [size]="18"></lucide-icon> Add User
+            </button>
+        </div>
+    </div>
+
+    <div class="users-card">
+        <div class="card-header">
+            <h3>Team Members</h3>
+            <span class="count">4 users</span>
+            <div class="search-wrapper">
+                <lucide-icon [name]="SearchIcon" [size]="18" class="search-icon"></lucide-icon>
+                <input type="text" placeholder="Search users..." [(ngModel)]="searchTerm" />
+            </div>
+        </div>
+
+        <div class="users-table">
+            <div class="table-header">
+                <div class="col name">Name</div>
+                <div class="col email">Email</div>
+                <div class="col role">Role</div>
+                <div class="col status">Status</div>
+                <div class="col last-login">Last Login</div>
+                <div class="col actions">Actions</div>
+            </div>
+
+            <div class="table-body">
+                @for (user of filteredUsers; track user.id) {
+                <div class="table-row">
+                    <div class="col name">
+                        <div class="avatar" [style.background-color]="user.avatarColor">
+                            <lucide-icon [name]="ShieldIcon" [size]="16"></lucide-icon>
+                        </div>
+                        <span class="user-name">{{ user.name }}</span>
+                    </div>
+                    <div class="col email">{{ user.email }}</div>
+                    <div class="col role">
+                        <span class="badge" [class]="user.role.toLowerCase().replace(' ', '-')">{{ user.role }}</span>
+                    </div>
+                    <div class="col status">
+                        <span class="status-badge" [class]="user.status">{{ user.status }}</span>
+                    </div>
+                    <div class="col last-login">{{ user.lastLogin }}</div>
+                    <div class="col actions">
+                        <button class="icon-btn" title="Edit"><lucide-icon [name]="EditIcon"
+                                [size]="18"></lucide-icon></button>
+                        <button class="icon-btn" title="Delete"><lucide-icon [name]="TrashIcon"
+                                [size]="18"></lucide-icon></button>
+                        <button class="icon-btn" title="More"><lucide-icon [name]="MoreVerticalIcon"
+                                [size]="18"></lucide-icon></button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add User Modal -->
+@if (showAddUserModal) {
+<div class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add New User</h2>
+            <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" [(ngModel)]="newUser.name" placeholder="e.g. John Doe">
+                <small>To identify the person in logs</small>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" [(ngModel)]="newUser.email" placeholder="e.g. john@company.com">
+                <small>Username for login and alerts</small>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Role / Access Level</label>
+                    <select [(ngModel)]="newUser.role">
+                        <option value="Admin">Admin</option>
+                        <option value="Analyst">Analyst</option>
+                        <option value="Viewer">Viewer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Department</label>
+                    <select [(ngModel)]="newUser.department">
+                        <option value="IT">IT</option>
+                        <option value="Security">Security</option>
+                        <option value="HR">HR</option>
+                        <option value="Finance">Finance</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Temporary Password</label>
+                <input type="password" [(ngModel)]="newUser.password" placeholder="••••••••">
+                <small>Must change on first login</small>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+            <button class="btn-save" (click)="saveUser()">Save User</button>
+        </div>
+    </div>
+</div>
+}

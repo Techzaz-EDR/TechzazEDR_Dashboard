@@ -1,0 +1,75 @@
+<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" (mousemove)="onMouseMove($event)"
+    (mouseleave)="onMouseLeave()">
+    <div class="hover-glow"></div>
+
+    <!-- Background Data Fragments -->
+    <div class="data-fragments">
+        <div class="fragment" style="--top: 15%; --left: 10%; --delay: 0s">Techzaz EDR</div>
+        <div class="fragment" style="--top: 25%; --left: 80%; --delay: 3s">Techzaz EDR</div>
+        <div class="fragment" style="--top: 65%; --left: 15%; --delay: 6s">Techzaz EDR</div>
+        <div class="fragment" style="--top: 80%; --left: 70%; --delay: 1.5s">Techzaz EDR</div>
+    </div>
+
+
+    <div class="auth-card">
+        <!-- Forms Container -->
+        <div class="forms-wrapper">
+            <!-- Sign In Form -->
+            <form class="sign-in-form">
+                <div class="form-header">
+                    <h2>Platform Access</h2>
+                </div>
+
+                <div class="input-field">
+                    <lucide-icon [name]="User" [size]="20"></lucide-icon>
+                    <input type="text" placeholder="Work Email" />
+                </div>
+                <div class="input-field">
+                    <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
+                    <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" />
+                </div>
+
+                <a href="#" class="forgot-password">Reset Credentials?</a>
+                <button type="button" class="btn solid" (click)="signIn()">Authenticate</button>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form class="sign-up-form">
+                <div class="form-header">
+                    <h2>Initialize Tenant</h2>
+                </div>
+
+                <div class="input-field">
+                    <lucide-icon [name]="User" [size]="20"></lucide-icon>
+                    <input type="text" placeholder="Administrator Name" />
+                </div>
+                <div class="input-field">
+                    <lucide-icon [name]="Mail" [size]="20"></lucide-icon>
+                    <input type="email" placeholder="Work Email" />
+                </div>
+                <div class="input-field">
+                    <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
+                    <input type="password" placeholder="Master Password" />
+                </div>
+
+                <button type="button" class="btn solid" (click)="signIn()">Deploy Workspace</button>
+            </form>
+        </div>
+
+        <!-- Overlay Container (Sliding Panel) -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Existing User?</h1>
+                    <p>Access your Security Operations Center (SOC) dashboard and active endpoints.</p>
+                    <button class="btn transparent" (click)="toggleMode()">Log In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Techzaz EDR</h1>
+                    <p>Next-generation endpoint detection and automated response for the modern enterprise.</p>
+                    <button class="btn transparent" (click)="toggleMode()">Initialize</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

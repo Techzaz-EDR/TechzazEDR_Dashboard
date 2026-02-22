@@ -1,0 +1,219 @@
+<div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="logo-icon"><lucide-icon [name]="Shield" [size]="24"></lucide-icon></div>
+            <div class="logo-text">
+                <span class="main">Techzaz</span>
+                <span class="sub">EDR Platform</span>
+            </div>
+        </div>
+
+        <nav class="side-nav">
+            @for (item of navItems; track item.label) {
+            @if (item.children) {
+            <!-- Group Header -->
+            <div class="nav-group-header" (click)="toggleGroup(item)" [class.expanded]="item.expanded">
+                <div class="header-main">
+                    <span class="icon"><lucide-icon [name]="item.icon" [size]="20"></lucide-icon></span>
+                    <span class="label">{{ item.label }}</span>
+                </div>
+                <span class="chevron"><lucide-icon [name]="ChevronDown" [size]="16"
+                        [class.rotate-180]="item.expanded"></lucide-icon></span>
+            </div>
+
+            <!-- Children -->
+            @if (item.expanded) {
+            <div class="nav-group-children">
+                @for (child of item.children; track child.label) {
+                <a [routerLink]="child.route" routerLinkActive="active" class="nav-item child-item">
+                    <span class="icon"><lucide-icon [name]="child.icon" [size]="18"></lucide-icon></span>
+                    {{ child.label }}
+                </a>
+                }
+            </div>
+            }
+            } @else {
+            <!-- Standard Link -->
+            <a [routerLink]="item.route" routerLinkActive="active" class="nav-item">
+                <span class="icon"><lucide-icon [name]="item.icon" [size]="20"></lucide-icon></span>
+                {{ item.label }}
+            </a>
+            }
+            }
+        </nav>
+
+        <div class="sidebar-footer">
+            <a routerLink="/" class="nav-item">
+                <span class="icon"><lucide-icon [name]="Home" [size]="20"></lucide-icon></span> Back to Home
+            </a>
+            <a routerLink="/login" class="nav-item logout">
+                <span class="icon"><lucide-icon [name]="LogOut" [size]="20"></lucide-icon></span> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="search-bar">
+                <span class="search-icon"><lucide-icon [name]="Search" [size]="18"></lucide-icon></span>
+                <input type="text" placeholder="Search endpoints, threats, hash..." />
+            </div>
+
+            <div class="top-actions">
+                <!-- Global Time Filter -->
+                <div class="time-filter">
+                    <span class="icon"><lucide-icon [name]="Clock" [size]="18"></lucide-icon></span>
+                    <select class="time-select">
+                        <option value="24h" selected>Last 24 Hours</option>
+                        <option value="7d">Last 7 Days</option>
+                        <option value="30d">Last 30 Days</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+
+                <div class="divider"></div>
+
+                <button class="icon-btn notification-btn" (click)="toggleNotifications()"
+                    [class.active]="isNotificationOpen">
+                    <lucide-icon [name]="Bell" [size]="20"></lucide-icon>
+                    <span class="badge-dot"></span>
+                </button>
+
+                @if (isNotificationOpen) {
+                <div class="notification-dropdown">
+                    <div class="dropdown-header">
+                        <h3>Notifications</h3>
+                        <div class="header-actions">
+                            <span class="icon"><lucide-icon [name]="MessageSquare" [size]="18"></lucide-icon></span>
+                        </div>
+                    </div>
+                    <div class="dropdown-content">
+                        @for (note of notifications; track note.time) {
+                        <div class="notification-item" [class.unread]="!note.read" (click)="openMessages(note)">
+                            <div class="avatar" [style.background-color]="note.read ? '#374151' : note.color">
+                                {{ note.avatar }}
+                            </div>
+                            <div class="note-details">
+                                <div class="note-top">
+                                    <span class="user">{{ note.user }}</span>
+                                    <span class="time">{{ note.time }}</span>
+                                </div>
+                                <p class="action">{{ note.action }}</p>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                    <div class="dropdown-footer">
+                        <a href="#">See all incoming activity</a>
+                    </div>
+                    <!-- Pointer/Triangle -->
+                    <div class="dropdown-pointer"></div>
+                </div>
+                }
+
+                <div class="user-profile" (click)="toggleDropdown()" [class.active]="isDropdownOpen">
+                    <div class="avatar-circle">AD</div>
+                    <div class="user-details">
+                        <span class="username">Admin User</span>
+                        <span class="role">Security Ops</span>
+                    </div>
+                    <span class="dropdown-icon"><lucide-icon [name]="ChevronDown" [size]="16"></lucide-icon></span>
+
+                    @if (isDropdownOpen) {
+                    <div class="dropdown-menu">
+                        <div class="user-info-dropdown">
+                            <span class="email">admin@techzaz.com</span>
+                        </div>
+                        <div class="menu-divider"></div>
+                        <a [routerLink]="['/dashboard/settings/profile']" class="menu-item">Profile</a>
+                        <a routerLink="/dashboard/settings" class="menu-item">Settings</a>
+                        <div class="menu-divider"></div>
+                        <a routerLink="/login" class="menu-item logout">Logout</a>
+                    </div>
+                    }
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content-area">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
+    <!-- Messages Modal Overlay -->
+    @if (showMessagesModal) {
+    <div class="messages-modal-overlay" (click)="closeMessages()">
+        <div class="messages-modal" (click)="$event.stopPropagation()">
+            <!-- Sidebar: Conversations -->
+            <div class="messages-sidebar">
+                <div class="sidebar-header">
+                    <h3>Messages <span class="count">12</span></h3>
+                    <button class="icon-btn add-btn">+</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" placeholder="Search messages" />
+                </div>
+                <div class="conversation-list">
+                    @for (conv of conversations; track conv.id) {
+                    <div class="conv-item" [class.active]="currentConversationId === conv.id"
+                        (click)="selectConversation(conv.id)">
+                        <div class="avatar">{{ conv.avatar }}</div>
+                        <div class="conv-info">
+                            <div class="top">
+                                <span class="name">{{ conv.user }}</span>
+                                <span class="time">{{ conv.time }}</span>
+                            </div>
+                            <div class="bottom">
+                                <span class="preview">{{ conv.message }}</span>
+                                @if (conv.unread) {
+                                <span class="badge">Question</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Main Chat Area -->
+            <div class="messages-main">
+                <div class="chat-header">
+                    <div class="user-info">
+                        <div class="avatar-small">{{ activeUser?.avatar }}</div>
+                        <div class="details">
+                            <span class="name">{{ activeUser?.user }}</span>
+                            <span class="status">● Online</span>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="call-btn"><lucide-icon [name]="Phone" [size]="16"></lucide-icon> Call</button>
+                    </div>
+                </div>
+
+                <div class="chat-messages">
+                    @for (msg of activeChat; track msg.id) {
+                    <div class="message-row" [class.mine]="msg.sender === 'me'">
+                        @if (msg.sender !== 'me') {
+                        <div class="avatar-tiny">{{ activeUser?.avatar }}</div>
+                        }
+                        <div class="bubble">
+                            {{ msg.text }}
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" placeholder="Type a message..." [(ngModel)]="newMessageText"
+                        (keyup.enter)="sendMessage()" />
+                    <button class="send-btn" (click)="sendMessage()"><lucide-icon [name]="Send"
+                            [size]="18"></lucide-icon></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>

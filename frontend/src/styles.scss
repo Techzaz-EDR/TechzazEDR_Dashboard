@@ -1,0 +1,211 @@
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    /* Techzaz Enterprise Palette - Redesigned Dark Theme */
+    --bg-primary: #080b12;
+    /* Deepest Navy (Home Page Match) */
+    --bg-dark: #0d1117;
+    /* Legacy/Alt Dark */
+    --bg-secondary: #0f1219;
+    /* Slightly lighter than primary */
+
+    --bg-card: rgba(13, 17, 23, 0.75);
+    /* Matches bg-dark with opacity */
+    --bg-hover: rgba(59, 130, 246, 0.1);
+
+    --primary: #3b82f6;
+    /* Blue 500 */
+    --primary-glow: rgba(59, 130, 246, 0.5);
+    --secondary: #8b5cf6;
+    /* Violet 500 */
+    --secondary-glow: rgba(139, 92, 246, 0.5);
+
+    --accent-cyan: #06b6d4;
+    --accent-purple: #7c3aed;
+    --accent-glow: rgba(59, 130, 246, 0.4);
+
+    --text-primary: #f8fafc;
+    /* Slate 50 */
+    --text-secondary: #cbd5e1;
+    /* Slate 300 */
+    --text-white: #f0f6fc;
+    --text-gray: #8b949e;
+    --text-muted: #64748b;
+    /* Slate 500 */
+
+    --border-color: #1e293b;
+    /* Slate 800 */
+    --border-strong: #334155;
+    --border-light: rgba(255, 255, 255, 0.08);
+    --border-hover: #475569;
+
+    /* Chart & Status Colors */
+    --chart-primary: #3b82f6;
+    --chart-warning: #f59e0b;
+    --chart-critical: #ef4444;
+    --chart-neutral: #64748b;
+
+    --status-critical: #ef4444;
+    --status-critical-bg: rgba(239, 68, 68, 0.1);
+    --status-high: #f97316;
+    --status-high-bg: rgba(249, 115, 22, 0.1);
+    --status-medium: #f59e0b;
+    --status-medium-bg: rgba(245, 158, 11, 0.1);
+    --status-low: #10b981;
+    --status-low-bg: rgba(16, 185, 129, 0.1);
+    --status-info-bg: rgba(59, 130, 246, 0.1);
+
+    /* Shadows */
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.15);
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, #080b12 0%, #0f1219 100%);
+    --gradient-text: linear-gradient(90deg, #60a5fa, #a78bfa);
+    --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+
+    /* Transitions */
+    --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-white);
+}
+
+.gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    50% {
+        box-shadow: 0 0 25px var(--primary-glow);
+    }
+}
+
+@keyframes grid-move {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+.animate-entrance {
+    animation: slideUp 0.8s var(--ease-out) forwards;
+}
+
+.delay-100 {
+    animation-delay: 100ms;
+}
+
+.delay-200 {
+    animation-delay: 200ms;
+}
+
+.delay-300 {
+    animation-delay: 300ms;
+}
+
+/* Utilities */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.glass-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+
+/* Lucide Icon Global Styling */
+lucide-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    stroke-width: 1.5;
+}
+
+.icon-left {
+    margin-right: 8px;
+}

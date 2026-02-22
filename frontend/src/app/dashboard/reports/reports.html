@@ -1,0 +1,53 @@
+<div class="reports-container content-scroll">
+    <div class="page-header">
+        <div class="header-content">
+            <div>
+                <h1>Reports</h1>
+                <p>View and download generated security reports</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="reports-list-section">
+        <div class="section-header">
+            <h3>Generated Reports</h3>
+            <span class="count">{{ reports.length }} reports available</span>
+        </div>
+
+        <div class="reports-list">
+            @for (report of reports; track report.id) {
+            <div class="report-item">
+                <div class="report-icon">
+                    <lucide-icon [name]="report.icon" [size]="24" class="icon"></lucide-icon>
+                </div>
+
+                <div class="report-info">
+                    <h3 class="report-title">{{ report.title }}</h3>
+                    <div class="report-meta">
+                        <span>{{ report.type }}</span>
+                        <span class="separator">•</span>
+                        <span>{{ report.format }}</span>
+                        <span class="separator">•</span>
+                        <span>{{ report.size }}</span>
+                        <span class="separator">•</span>
+                        <span>{{ report.date }}</span>
+                    </div>
+                </div>
+
+                <div class="report-actions">
+                    <div class="status-badge" [class]="report.status">{{ report.status }}</div>
+
+                    <div class="action-buttons">
+                        <button class="icon-btn" title="View"><lucide-icon [name]="Eye"
+                                [size]="18"></lucide-icon></button>
+                        <button class="icon-btn" title="Download"><lucide-icon [name]="Download"
+                                [size]="18"></lucide-icon></button>
+                        <button class="icon-btn delete" title="Delete"><lucide-icon [name]="Trash2"
+                                [size]="18"></lucide-icon></button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

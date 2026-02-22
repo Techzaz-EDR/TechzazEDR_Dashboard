@@ -1,0 +1,17 @@
+<div class="api-keys-container">
+    <div class="section-title">
+        <h2>API Access</h2>
+        <p>Manage API keys for backend integration</p>
+    </div>
+
+    <div class="api-key-card">
+        <label class="label">Active API Keys</label>
+
+        <div class="key-field">
+            <code class="key-value">sk_live_51234567890abcdef...</code>
+            <button class="btn-revoke" (click)="revokeKey()">Revoke</button>
+        </div>
+
+        <button class="btn-generate" (click)="generateKey()">Generate New API Key</button>
+    </div>
+</div>

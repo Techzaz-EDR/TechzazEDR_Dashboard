@@ -1,0 +1,276 @@
+<div class="analytics-container">
+    <!-- Top Stats Row -->
+    <div class="stats-grid">
+        <div class="stat-card glass-card">
+            <div class="stat-header">
+                <h3>Total Threats</h3>
+                <span class="stat-icon"><lucide-icon [name]="ShieldIcon" [size]="20"></lucide-icon></span>
+            </div>
+            <div class="stat-body">
+                <div class="value">{{ totalThreats }}</div>
+                <div class="change positive">
+                    <lucide-icon [name]="TrendingUpIcon" [size]="14" class="trend-icon"></lucide-icon>
+                    +{{ threatsGrowth }}% from last week
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card glass-card">
+            <div class="stat-header">
+                <h3>Detection Rate</h3>
+                <span class="stat-icon"><lucide-icon [name]="TargetIcon" [size]="20"></lucide-icon></span>
+            </div>
+            <div class="stat-body">
+                <div class="value">{{ detectionRate }}%</div>
+                <div class="change positive">
+                    <lucide-icon [name]="TrendingUpIcon" [size]="14" class="trend-icon"></lucide-icon>
+                    +{{ detectionGrowth }}% from last week
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card glass-card">
+            <div class="stat-header">
+                <h3>Avg Response</h3>
+                <span class="stat-icon"><lucide-icon [name]="ZapIcon" [size]="20"></lucide-icon></span>
+            </div>
+            <div class="stat-body">
+                <div class="value">{{ avgResponseTime }}m</div>
+                <div class="change positive">
+                    <lucide-icon [name]="TrendingDownIcon" [size]="14" class="trend-icon"></lucide-icon>
+                    -{{ responseImprovement }}% improvement
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card glass-card">
+            <div class="stat-header">
+                <h3>Resolved</h3>
+                <span class="stat-icon"><lucide-icon [name]="CheckCircleIcon" [size]="20"></lucide-icon></span>
+            </div>
+            <div class="stat-body">
+                <div class="value">{{ incidentsResolved }}</div>
+                <div class="change positive">
+                    <lucide-icon [name]="TrendingUpIcon" [size]="14" class="trend-icon"></lucide-icon>
+                    +{{ resolvedGrowth }}% increase
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <!-- Threat Trend -->
+        <div class="chart-card glass-card large">
+            <div class="card-header">
+                <h3>Threat Intelligence Trend</h3>
+                <p class="subtitle">Real-time analysis of threat detection over the past 7 days</p>
+            </div>
+            <div class="chart-content line-chart-container">
+                <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="mediumGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.5" />
+                            <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+                        </linearGradient>
+                        <linearGradient id="criticalGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#ef4444" stop-opacity="0.5" />
+                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Grid Lines -->
+                    <line x1="0" y1="50" x2="600" y2="50" class="grid-line" />
+                    <line x1="0" y1="100" x2="600" y2="100" class="grid-line" />
+                    <line x1="0" y1="150" x2="600" y2="150" class="grid-line" />
+
+                    <!-- Medium Severity Path -->
+                    <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
+                    <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="6" />
+
+                    <!-- Critical Severity Path -->
+                    <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
+                    <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="6" />
+                </svg>
+
+                <div class="x-axis">
+                    <span>Monday</span><span>Tuesday</span><span>Wednesday</span><span>Thursday</span><span>Friday</span><span>Saturday</span><span>Sunday</span>
+                </div>
+
+                <div class="chart-legend">
+                    <div class="legend-item"><span class="dot critical"></span> Critical Threats</div>
+                    <div class="legend-item"><span class="dot medium"></span> System Alerts</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incident Status -->
+        <div class="chart-card glass-card cyber-card">
+            <div class="card-header">
+                <h3>Incident Lifecycle</h3>
+                <p class="subtitle">Current distribution of incident states</p>
+            </div>
+            <div class="chart-content donut-chart-container">
+                <div class="donut-viz">
+                    <svg class="circle-svg" viewBox="0 0 100 100">
+                        <circle class="track" cx="50" cy="50" r="40" />
+                        <!-- Simplified segments as example, real logic would need SVG calculations -->
+                        <circle class="segment resolved" cx="50" cy="50" r="40" stroke="#3b82f6"
+                            style="--dash-offset: 35; stroke-dasharray: 65 100;" />
+                        <circle class="segment investigating" cx="50" cy="50" r="40" stroke="#EF4444"
+                            style="--dash-offset: 0; stroke-dasharray: 15 100; stroke-dashoffset: -65;" />
+                        <circle class="segment contained" cx="50" cy="50" r="40" stroke="#F97316"
+                            style="--dash-offset: 0; stroke-dasharray: 20 100; stroke-dashoffset: -80;" />
+                    </svg>
+                    <div class="donut-center">
+                        <span class="total">80</span>
+                        <span class="label">Total</span>
+                    </div>
+                </div>
+
+                <div class="donut-legend">
+                    @for (segment of donutSegments; track segment.label) {
+                    <div class="legend-item">
+                        <span class="dot" [style.background-color]="segment.color"></span>
+                        <span class="label">{{ segment.label }}</span>
+                        <span class="percent">{{ segment.percent }}%</span>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Detection Methods -->
+        <div class="chart-card glass-card">
+            <div class="card-header">
+                <h3>Detection Vectors</h3>
+                <p class="subtitle">Top performing security layers</p>
+            </div>
+            <div class="chart-content bars-container vertical">
+                @for (item of detectionMethods; track item.label) {
+                <div class="bar-group">
+                    <div class="bar-wrapper">
+                        <div class="bar" [style.height]="item.height" [style.color]="item.color"
+                            [style.background]="'linear-gradient(to top, ' + item.color + ', transparent)'"></div>
+                    </div>
+                    <span class="label">{{ item.label }}</span>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Top Threats -->
+        <div class="chart-card glass-card">
+            <div class="card-header">
+                <h3>Critical Malware types</h3>
+                <p class="subtitle">Most prevalent threat categories</p>
+            </div>
+            <div class="chart-content bars-container horizontal">
+                @for (threat of topThreats; track threat.label) {
+                <div class="bar-row">
+                    <span class="label">{{ threat.label }}</span>
+                    <div class="bar-track">
+                        <div class="bar" [style.width]="threat.width" [style.color]="threat.color"
+                            [style.background]="'linear-gradient(to right, transparent, ' + threat.color + ')'"></div>
+                    </div>
+                    <span class="value">{{ threat.count }}</span>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Detailed Log -->
+        <div class="chart-card glass-card detailed-log-section">
+            <div class="log-header-bar">
+                <h3>
+                    Live Threat Feed
+                    <span class="badge">SECURE</span>
+                </h3>
+                <span class="subtitle">{{ detailedThreatLogs.length }} events active</span>
+            </div>
+            <div class="log-list">
+                @for (log of detailedThreatLogs; track log.title; let i = $index) {
+                <div class="log-item" [style.animation-delay]="(i * 0.1) + 's'">
+                    <div class="log-icon">
+                        @if (log.severity === 'CRITICAL') { <lucide-icon [name]="AlertTriangleIcon" [size]="16"
+                            color="#ef4444"></lucide-icon> }
+                        @else if (log.severity === 'HIGH') { <lucide-icon [name]="OctagonIcon" [size]="16"
+                            color="#f97316"></lucide-icon> }
+                        @else { <lucide-icon [name]="SearchIcon" [size]="16" color="#3b82f6"></lucide-icon> }
+                    </div>
+                    <div class="log-main">
+                        <div class="log-top">
+                            <h4>{{ log.title }}</h4>
+                            <span class="time">{{ log.time }}</span>
+                        </div>
+                        <div class="log-details">
+                            <span class="device">{{ log.device }}</span>
+                            <span class="category">{{ log.category }}</span>
+                        </div>
+                    </div>
+                    <div class="log-actions">
+                        <span class="status-tag">{{ log.status }}</span>
+                        <span class="severity-tag" [ngClass]="'severity-' + log.severity.toLowerCase()">
+                            {{ log.severity }}
+                        </span>
+                        <button class="view-button" title="View Details"><lucide-icon [name]="EyeIcon"
+                                [size]="16"></lucide-icon></button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Section -->
+    <div class="report-section-container">
+
+        <div class="report-content-wrapper">
+            <div class="report-info">
+                <div class="info-icon">
+                    <lucide-icon [name]="FileTextIcon" [size]="32"></lucide-icon>
+                    <div class="icon-pulse"></div>
+                </div>
+                <div class="text-group">
+                    <h3>Enterprise Security Report</h3>
+                    <p>Generate high-fidelity security analytics for executive review.</p>
+                </div>
+            </div>
+
+            <div class="report-form">
+                <div class="control-group">
+                    <div class="label-with-icon">
+                        <lucide-icon [name]="SettingsIcon" [size]="14"></lucide-icon>
+                        <label>Configuration</label>
+                    </div>
+                    <div class="cyber-select-wrapper">
+                        <button class="cyber-select" (click)="toggleReportType()">
+                            {{ reportType }}
+                            <lucide-icon [name]="ChevronDownIcon" [size]="16"></lucide-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="label-with-icon">
+                        <lucide-icon [name]="FingerprintIcon" [size]="14"></lucide-icon>
+                        <label>Post-Processing</label>
+                    </div>
+                    <div class="cyber-select-wrapper">
+                        <select [(ngModel)]="reportFormat" class="cyber-native-select">
+                            <option value="PDF">Secure PDF</option>
+                            <option value="CSV">Data Export (CSV)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="action-group">
+                    <button class="btn-generate-premium" (click)="generateReport()">
+                        <div class="btn-glow"></div>
+                        <lucide-icon [name]="DownloadIcon" [size]="18" class="icon"></lucide-icon>
+                        <span>Initialize Generation</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

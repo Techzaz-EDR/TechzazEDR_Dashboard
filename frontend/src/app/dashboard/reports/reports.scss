@@ -1,0 +1,219 @@
+/* src/app/dashboard/reports/reports.scss */
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.page-header {
+    margin-bottom: 40px;
+
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 5px;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    p {
+        color: var(--text-secondary);
+    }
+}
+
+.reports-list-section {
+    .section-header {
+        margin-bottom: 20px;
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .count {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    }
+}
+
+.reports-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .report-item {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 1.5rem 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 0;
+        animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+        @for $i from 1 through 10 {
+            &:nth-child(#{$i}) {
+                animation-delay: #{$i * 0.1}s;
+            }
+        }
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+
+            .report-icon {
+                transform: scale(1.1) rotate(5deg);
+                box-shadow: 0 0 25px currentColor;
+            }
+
+            .action-buttons .icon-btn {
+                opacity: 0.9;
+            }
+        }
+
+        .report-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            color: #3b82f6;
+            transition: all 0.4s ease;
+
+            // Varied colors for icons based on child position for variety
+            &:nth-of-type(1) {
+                color: #3b82f6;
+                background: rgba(59, 130, 246, 0.1);
+            }
+        }
+
+        /* Category Specific Colors */
+        &:nth-child(2) .report-icon {
+            color: #f97316;
+            background: rgba(249, 115, 22, 0.1);
+        }
+
+        &:nth-child(3) .report-icon {
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        &:nth-child(4) .report-icon {
+            color: #a855f7;
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        &:nth-child(5) .report-icon {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .report-info {
+            flex: 1;
+
+            .report-title {
+                color: #f8fafc;
+                font-size: 1.1rem;
+                font-weight: 700;
+                margin-bottom: 4px;
+            }
+
+            .report-meta {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                color: #94a3b8;
+                font-size: 0.85rem;
+                font-weight: 500;
+
+                .separator {
+                    color: rgba(255, 255, 255, 0.1);
+                }
+            }
+        }
+
+        .report-actions {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+
+            .status-badge {
+                font-size: 0.7rem;
+                font-weight: 800;
+                padding: 4px 12px;
+                border-radius: 8px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+
+                &.ready {
+                    background: rgba(34, 197, 94, 0.1);
+                    color: #4ade80;
+                    border: 1px solid rgba(34, 197, 94, 0.2);
+                }
+            }
+
+            .action-buttons {
+                display: flex;
+                gap: 1rem;
+
+                .icon-btn {
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 8px;
+                    width: 36px;
+                    height: 36px;
+                    color: #94a3b8;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    opacity: 0.5;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        opacity: 1 !important;
+                        background: rgba(59, 130, 246, 0.1);
+                        color: #3b82f6;
+                        border-color: rgba(59, 130, 246, 0.3);
+                        transform: translateY(-2px);
+                    }
+
+                    &.delete:hover {
+                        background: rgba(239, 68, 68, 0.1);
+                        color: #f87171;
+                        border-color: rgba(239, 68, 68, 0.3);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

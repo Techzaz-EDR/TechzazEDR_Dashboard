@@ -1,0 +1,110 @@
+/* src/app/settings/settings.scss */
+
+:host {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+}
+
+.settings-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 40px;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+
+    .page-header {
+        margin-bottom: 24px;
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin: 0 0 6px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+    }
+
+    .tabs-header {
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 0;
+        /* Content will have padding/margin if needed */
+
+        .tabs-nav {
+            display: flex;
+            gap: 32px;
+
+            .tab-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 0;
+                color: var(--text-secondary);
+                text-decoration: none;
+                font-size: 0.95rem;
+                font-weight: 500;
+                position: relative;
+                transition: color 0.2s;
+                border-bottom: 2px solid transparent;
+                margin-bottom: -1px;
+                /* Overlap border-bottom */
+
+                .icon {
+                    font-size: 1rem;
+                }
+
+                &:hover {
+                    color: var(--text-primary);
+                }
+
+                &.active {
+                    color: var(--text-primary);
+                    background-color: var(--bg-card);
+                    /* Exact deep purple from screenshot */
+                    padding-left: 16px;
+                    padding-right: 16px;
+                    border-radius: 8px 8px 0 0;
+                    border-bottom: none;
+                    border: 1px solid var(--border-color);
+                    /* Add border to match card */
+                    border-bottom-color: var(--bg-card);
+                    /* Hide bottom border to merge */
+
+                    /* Remove the simple border-bottom and use full background */
+                }
+            }
+        }
+    }
+
+    .settings-content {
+        flex: 1;
+        overflow-y: auto;
+        padding-top: 0;
+        /* Remove padding to merge tab and content */
+
+        /* Custom Scrollbar */
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: var(--bg-hover);
+            border-radius: 3px;
+
+            &:hover {
+                background: var(--text-muted);
+            }
+        }
+    }
+}

@@ -1,0 +1,93 @@
+<div class="topic-page">
+    <nav class="nav-minimal">
+        <a routerLink="/" class="back-link">&larr; Back to Home</a>
+        <div class="logo-small">Techzaz <span>EDR</span></div>
+    </nav>
+
+    <main class="topic-content">
+        <section class="hero-showcase">
+            <div class="hero-left">
+                <span class="pill-badge">Next-Gen Cybersecurity</span>
+                <h1 class="hero-headline">
+                    Next-Gen Endpoint <br>
+                    <span class="gradient-text">Detection & Response</span>
+                </h1>
+                <p class="hero-description">
+                    Advanced real-time protection powered by AI. Detect, investigate, and respond to threats across your
+                    entire endpoint fleet with unprecedented speed and accuracy.
+                </p>
+                <div class="hero-ctas">
+                    <button class="btn btn-primary" routerLink="/login">Get Started Free</button>
+                    <button class="btn btn-outline" routerLink="/login">Request a Demo</button>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="visual-container">
+                    <!-- Light streaks in background -->
+                    <div class="light-streaks"></div>
+
+                    <div class="platform-container">
+                        <div class="energy-beam"></div>
+                        <div class="platform-base"></div>
+                        <div class="shield-reflection"></div>
+
+                        <div class="floating-shield">
+                            <div class="shield-wireframe">
+                                <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMid meet">
+                                    <path
+                                        d="M50 5 L10 25 L10 60 C10 85 50 115 50 115 C50 115 90 85 90 60 L90 25 L50 5 Z"
+                                        fill="none" class="main-path" />
+                                    <path
+                                        d="M50 15 L20 30 L20 60 C20 80 50 100 50 100 C50 100 80 80 80 60 L80 30 L50 15 Z"
+                                        fill="none" class="inner-path" />
+                                    <line x1="50" y1="5" x2="50" y2="115" class="wire-line" />
+                                    <line x1="10" y1="60" x2="90" y2="60" class="wire-line" />
+                                </svg>
+                            </div>
+                            <div class="neon-ring-outer"></div>
+                            <div class="neon-ring-inner"></div>
+                        </div>
+
+                        <div class="particles-field">
+                            <span style="--i:1"></span><span style="--i:2"></span><span style="--i:3"></span>
+                            <span style="--i:4"></span><span style="--i:5"></span><span style="--i:6"></span>
+                            <span style="--i:7"></span><span style="--i:8"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <header class="topic-header">
+            <div class="topic-icon-large">{{ currentTopic.icon }}</div>
+            <h1>{{ currentTopic.title }}</h1>
+            <p class="hero-desc">{{ currentTopic.desc }}</p>
+        </header>
+
+        <section class="placeholder-content">
+            <div class="glow-box">
+                <h3>Detailed Information coming soon</h3>
+                <p>We are currently updating our documentation for <strong>{{ currentTopic.title }}</strong>. Contact
+                    our support team if you have immediate questions.</p>
+                <div class="actions">
+                    <button class="btn btn-primary" routerLink="/login">Go to Dashboard</button>
+                    <button class="btn btn-outline" routerLink="/login">Contact Sales</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="related-topics">
+            <h2>Related Security Topics</h2>
+            <div class="topics-grid">
+                <div class="topic-pill">Detection Engineering</div>
+                <div class="topic-pill">Threat Response</div>
+                <div class="topic-pill">Infrastructure Protection</div>
+                <div class="topic-pill">Team Operations</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="minimal-footer">
+        <p>&copy; 2026 Techzaz EDR Platform. All systems operational.</p>
+    </footer>
+</div>
