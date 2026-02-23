@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+from app.core.config import settings
 
-app = FastAPI()
+app = FastAPI(title=settings.PROJECT_NAME)
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
