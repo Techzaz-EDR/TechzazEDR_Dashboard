@@ -1,0 +1,6 @@
+
+> endpoint-project@0.0.0 start
+> ng serve --port 4202
+
+[1m[31mAn unhandled exception occurred: Port 4202 is already in use. Use '--port' to specify a different port.
+See "C:\Users\USER\AppData\Local\Temp\ng-1hSfhd\angular-errors.log" for further details.[39m[22m

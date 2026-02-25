@@ -195,31 +195,65 @@
     <!-- 4. HOW IT WORKS -->
     <section class="how-it-works" id="how-it-works">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" #howItWorksHeader>
                 <h2>How It Works</h2>
                 <p>Deployment to protection in minutes.</p>
             </div>
-            <div class="process-stepper">
 
-                <div class="step-item">
-                    <div class="step-circle">1</div>
-                    <h4>Deploy Agent</h4>
-                    <p>Lightweight sensor installs silently.</p>
+            <div class="dashboard-interface" #dashboardInterface>
+                <!-- Central Connector Line -->
+                <div class="connector-line">
+                    <div class="glow-path" #glowPath></div>
                 </div>
-                <div class="step-item">
-                    <div class="step-circle">2</div>
-                    <h4>Monitor</h4>
-                    <p>Activity is analyzed in real-time.</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-circle">3</div>
-                    <h4>Detect</h4>
-                    <p>AI identifies anomalous behavior.</p>
-                </div>
-                <div class="step-item">
-                    <div class="step-circle">4</div>
-                    <h4>Respond</h4>
-                    <p>Threats are contained instantly.</p>
+
+                <div class="process-stepper" #stepperRow>
+                    <div class="step-item" #stepNode>
+                        <div class="step-circle">
+                            <span class="number">1</span>
+                            <div class="circle-pulse"></div>
+                            <div class="circle-glow"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4>Deploy Agent</h4>
+                            <p>Lightweight sensor installs silently.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item" #stepNode>
+                        <div class="step-circle">
+                            <span class="number">2</span>
+                            <div class="circle-pulse"></div>
+                            <div class="circle-glow"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4>Monitor</h4>
+                            <p>Activity is analyzed in real-time.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item" #stepNode>
+                        <div class="step-circle">
+                            <span class="number">3</span>
+                            <div class="circle-pulse"></div>
+                            <div class="circle-glow"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4>Detect</h4>
+                            <p>AI identifies anomalous behavior.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item" #stepNode>
+                        <div class="step-circle">
+                            <span class="number">4</span>
+                            <div class="circle-pulse"></div>
+                            <div class="circle-glow"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4>Respond</h4>
+                            <p>Threats are contained instantly.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
