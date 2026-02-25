@@ -18,4 +18,3 @@ backend/.pytest_cache/
 # OS
 .DS_Store
 Thumbs.db
-firebase-service-account.json
