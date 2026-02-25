@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.api import firebase_test
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -15,6 +16,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(firebase_test.router, prefix=settings.API_V1_STR, tags=["firebase"])
 
 @app.get("/")
 def read_root():
