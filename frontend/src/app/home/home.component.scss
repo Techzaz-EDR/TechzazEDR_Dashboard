@@ -938,83 +938,170 @@
 
         /* --- 4. HOW IT WORKS (STEPPER) --- */
         .how-it-works {
-            padding: 100px 0;
-            background: #05070a;
+            padding: 120px 0;
+            background: #030508; // Deeper ultra-dark background
+            overflow: hidden;
+            position: relative;
 
             .container {
-                max-width: 1100px;
+                max-width: 1200px;
                 margin: 0 auto;
                 padding: 0 40px;
+            }
+
+            .dashboard-interface {
+                position: relative;
+                margin-top: 100px;
+                padding: 40px 0;
+            }
+
+            .connector-line {
+                position: absolute;
+                top: 72px; // Centered with circular nodes
+                left: 5%;
+                right: 5%;
+                height: 1px;
+                background: rgba(37, 99, 235, 0.1);
+                z-index: 1;
+
+                .glow-path {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 0%; // Animated via GSAP
+                    background: linear-gradient(90deg, transparent, #3b82f6, #60a5fa, #3b82f6);
+                    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+                    filter: blur(0.5px);
+                }
             }
 
             .process-stepper {
                 display: flex;
                 justify-content: space-between;
                 position: relative;
-                margin-top: 80px;
-
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 30px;
-                    left: 10%;
-                    right: 10%;
-                    height: 1px;
-                    background: linear-gradient(to right, transparent, rgba(37, 99, 235, 0.3), transparent);
-                    z-index: 1;
-                }
+                z-index: 2;
 
                 @media (max-width: 768px) {
                     flex-direction: column;
-                    gap: 60px;
+                    gap: 80px;
                     align-items: center;
-
-                    &::before {
-                        display: none;
-                    }
                 }
             }
 
             .step-item {
                 flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 text-align: center;
                 position: relative;
-                z-index: 2;
+                cursor: default;
 
                 .step-circle {
-                    width: 60px;
-                    height: 60px;
+                    width: 64px;
+                    height: 64px;
                     background: #080b12;
-                    border: 1px solid #2563eb;
+                    border: 2px solid rgba(59, 130, 246, 0.4);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 1.25rem;
-                    font-weight: 700;
-                    color: #fff;
-                    margin: 0 auto 24px;
-                    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
-                    transition: all 0.3s;
+                    position: relative;
+                    margin-bottom: 28px;
+                    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 
-                    &:hover {
-                        background: #2563eb;
-                        transform: scale(1.1);
-                        box-shadow: 0 0 30px rgba(37, 99, 235, 0.4);
+                    .number {
+                        font-size: 1.25rem;
+                        font-weight: 800;
+                        color: white;
+                        z-index: 3;
+                        letter-spacing: -0.5px;
+                    }
+
+                    .circle-pulse {
+                        position: absolute;
+                        inset: -6px;
+                        border: 1px solid rgba(59, 130, 246, 0.2);
+                        border-radius: 50%;
+                        animation: pulse-ring 3s infinite cubic-bezier(0.4, 0, 0.6, 1);
+                        pointer-events: none;
+                    }
+
+                    .circle-glow {
+                        position: absolute;
+                        inset: 0;
+                        border-radius: 50%;
+                        background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 70%);
+                        filter: blur(8px);
+                        opacity: 0.5;
+                        z-index: 1;
+                    }
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        inset: 0;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+                        z-index: 2;
+                        pointer-events: none;
                     }
                 }
 
-                h4 {
-                    color: white;
-                    margin-bottom: 12px;
+                &:hover {
+                    .step-circle {
+                        border-color: #3b82f6;
+                        transform: translateY(-5px);
+                        box-shadow: 0 0 30px rgba(59, 130, 246, 0.4), 0 20px 40px rgba(0, 0, 0, 0.6);
+                        background: #0f172a;
+
+                        .circle-glow {
+                            opacity: 1;
+                            transform: scale(1.2);
+                        }
+                    }
+
+                    .step-content h4 {
+                        color: #3b82f6;
+                    }
                 }
 
-                p {
-                    color: #94a3b8;
-                    font-size: 0.9rem;
-                    max-width: 200px;
-                    margin: 0 auto;
+                .step-content {
+                    h4 {
+                        color: white;
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                        margin-bottom: 12px;
+                        transition: color 0.3s;
+                    }
+
+                    p {
+                        color: #94a3b8;
+                        font-size: 0.95rem;
+                        max-width: 220px;
+                        line-height: 1.6;
+                        margin: 0 auto;
+                        opacity: 0.85;
+                    }
                 }
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
             }
         }
 

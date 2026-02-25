@@ -75,6 +75,9 @@ export class HomeComponent implements AfterViewInit {
     @ViewChild('finalFlash') finalFlash!: ElementRef;
     @ViewChild('particlesContainer') particlesContainer!: ElementRef;
     @ViewChild('centerAssembly') centerAssembly!: ElementRef;
+    @ViewChild('dashboardInterface') dashboardInterface!: ElementRef;
+    @ViewChild('stepperRow') stepperRow!: ElementRef;
+    @ViewChild('glowPath') glowPath!: ElementRef;
 
     constructor(private cdr: ChangeDetectorRef) { }
 
@@ -330,6 +333,11 @@ export class HomeComponent implements AfterViewInit {
             y: 50
         });
 
+        // Initialize How It Works states
+        gsap.set('.dashboard-interface', { opacity: 0 });
+        gsap.set('.step-item', { opacity: 0, x: -50 });
+        gsap.set('.glow-path', { width: 0 });
+
         gsap.set('.comparison-card', {
             opacity: 0,
             scale: 0.8,
@@ -384,6 +392,32 @@ export class HomeComponent implements AfterViewInit {
                         opacity: 1,
                         duration: 0.5
                     }, "-=0.2");
+            }
+        });
+
+        // 2.6 Futuristic "How It Works" Sequence
+        ScrollTrigger.create({
+            trigger: '.how-it-works',
+            start: "top 70%",
+            onEnter: () => {
+                const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+                tl.to('.dashboard-interface', {
+                    opacity: 1,
+                    duration: 0.5
+                })
+                    .to('.step-item', {
+                        opacity: 1,
+                        x: 0,
+                        stagger: 0.2,
+                        duration: 1.2,
+                        ease: "expo.out"
+                    }, "-=0.2")
+                    .to('.glow-path', {
+                        width: "100%",
+                        duration: 2.5,
+                        ease: "power2.inOut"
+                    }, "-=2.2");
             }
         });
 
