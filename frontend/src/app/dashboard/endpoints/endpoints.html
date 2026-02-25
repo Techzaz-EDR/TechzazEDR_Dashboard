@@ -31,20 +31,23 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Endpoint</th>
-                        <th>OS</th>
-                        <th>IP Address</th>
-                        <th>Status</th>
-                        <th>Threats</th>
-                        <th>Last Seen</th>
-                        <th>Actions</th>
+                        <th class="col-name">Endpoint</th>
+                        <th class="col-os">OS</th>
+                        <th class="col-ip">IP Address</th>
+                        <th class="col-status">Status</th>
+                        <th class="col-threats">Threats</th>
+                        <th class="col-seen">Last Seen</th>
+                        <th class="col-actions">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @for (ep of filteredEndpoints; track ep.id) {
                     <tr>
                         <td class="col-name">
-                            <lucide-icon [name]="ShieldIcon" [size]="18" class="os-icon"></lucide-icon> {{ ep.name }}
+                            <div class="name-wrapper">
+                                <lucide-icon [name]="ShieldIcon" [size]="18" class="os-icon"></lucide-icon>
+                                <span>{{ ep.name }}</span>
+                            </div>
                         </td>
                         <td class="col-os">{{ ep.os }}</td>
                         <td class="col-ip">{{ ep.ip }}</td>
