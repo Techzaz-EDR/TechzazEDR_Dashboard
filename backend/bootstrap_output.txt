@@ -1,0 +1,9 @@
+--- Bootstrapping Admin: INUKA.20240695@iit.ac.lk ---
+Created Tenant: Primary Organization (ID: KEqNWLAzbA501Vql97tM)
+User INUKA.20240695@iit.ac.lk already exists in Auth. Updating claims...
+Set Custom Claims: tenantId=KEqNWLAzbA501Vql97tM, role=Admin
+Created/Updated Firestore user document.
+
+--- DONE ---
+User UID: bZE5kjLBmobliRHbFggkQpPLwTH3
+Password Reset/Setup Link: https://techzazedr.firebaseapp.com/__/auth/action?mode=resetPassword&oobCode=jgjC06hkh0tXc3EGlkZsNx1LSTiWU6icZreghaEcM90AAAGcpIvmbA&apiKey=AIzaSyDWndJJ1YltOnmc6JIMEhAtwIdyNAC7SFY&lang=en

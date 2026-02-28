@@ -1,0 +1,37 @@
+
+> endpoint-project@0.0.0 start
+> ng serve
+
+[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m[36m354.82 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m               [2m | [22m  [36m3.67 kB[39m[2m | [22m
+[32mchunk-PZ5AY32C.js[39m  [2m | [22m[2m-[22m                    [2m | [22m[36m234 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m        [2m | [22m[1m358.72 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-OM7STLUA.js[39m  [2m | [22m[2manalytics[22m            [2m | [22m[36m107.95 kB[39m[2m | [22m
+[32mchunk-23O2OTTW.js[39m  [2m | [22m[2moverview[22m             [2m | [22m [36m84.70 kB[39m[2m | [22m
+[32mchunk-A4PSFEDT.js[39m  [2m | [22m[2mincidents[22m            [2m | [22m [36m64.83 kB[39m[2m | [22m
+[32mchunk-QPSN6WOS.js[39m  [2m | [22m[2mendpoints[22m            [2m | [22m [36m60.51 kB[39m[2m | [22m
+[32mchunk-I3DNLTFE.js[39m  [2m | [22m[2mprofile[22m              [2m | [22m [36m44.11 kB[39m[2m | [22m
+[32mchunk-VBMCMT2B.js[39m  [2m | [22m[2mthreats[22m              [2m | [22m [36m42.80 kB[39m[2m | [22m
+[32mchunk-HUHFXFBW.js[39m  [2m | [22m[2musers[22m                [2m | [22m [36m42.28 kB[39m[2m | [22m
+[32mchunk-SMGK343G.js[39m  [2m | [22m[2mreports[22m              [2m | [22m [36m23.41 kB[39m[2m | [22m
+[32mchunk-2YMRPKHH.js[39m  [2m | [22m[2mtopic[22m                [2m | [22m [36m21.19 kB[39m[2m | [22m
+[32mchunk-CC35WSQY.js[39m  [2m | [22m[2mnotifications[22m        [2m | [22m [36m13.12 kB[39m[2m | [22m
+[32mchunk-YEMSP6GQ.js[39m  [2m | [22m[2msecurity[22m             [2m | [22m [36m12.66 kB[39m[2m | [22m
+[32mchunk-GJ4BDGGX.js[39m  [2m | [22m[2msettings[22m             [2m | [22m [36m11.43 kB[39m[2m | [22m
+[32mchunk-CADMQG7N.js[39m  [2m | [22m[2morganization[22m         [2m | [22m  [36m8.05 kB[39m[2m | [22m
+[32mchunk-O6GYCT2Q.js[39m  [2m | [22m[2mapi-keys[22m             [2m | [22m  [36m7.70 kB[39m[2m | [22m
+[32mchunk-PWSTPUYS.js[39m  [2m | [22m[2mplaceholder-component[22m[2m | [22m  [36m2.56 kB[39m[2m | [22m
+
+Application bundle generation complete. [2.682 seconds] - 2026-02-28T15:17:45.929Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+[2m8:47:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
+  [32mΓ₧£[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4200[22m/[39m
+[2m[32m  Γ₧£[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m

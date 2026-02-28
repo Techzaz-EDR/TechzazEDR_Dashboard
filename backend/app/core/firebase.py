@@ -1,6 +1,6 @@
 import os
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, auth
 from app.core.config import settings
 
 def initialize_firebase():
@@ -15,10 +15,15 @@ def initialize_firebase():
             firebase_admin.initialize_app(cred)
             print("Firebase Admin SDK initialized successfully.")
         else:
-            print(f"WARNING: Firebase service account file not found at {settings.FIREBASE_SERVICE_ACCOUNT_PATH}. "
-                  "Firebase functionality will be disabled.")
-            return None
+            # Fallback to default credentials (useful for GCP environments)
+            try:
+                firebase_admin.initialize_app()
+                print("Firebase Admin SDK initialized with default credentials.")
+            except Exception as e:
+                print(f"CRITICAL: Firebase service account file not found and default credentials failed: {e}")
+                return None, None
     
-    return firestore.client()
+    return firestore.client(), auth
 
-db = initialize_firebase()
+# Initialize and export
+db, firebase_auth = initialize_firebase()

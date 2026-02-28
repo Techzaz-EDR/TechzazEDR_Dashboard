@@ -15,22 +15,26 @@
         <!-- Forms Container -->
         <div class="forms-wrapper">
             <!-- Sign In Form -->
-            <form class="sign-in-form">
+            <form class="sign-in-form" (submit)="signIn()">
                 <div class="form-header">
                     <h2>Platform Access</h2>
                 </div>
 
+                <div *ngIf="errorMessage" class="error-banner">
+                    {{ errorMessage }}
+                </div>
+
                 <div class="input-field">
                     <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                    <input type="text" placeholder="Work Email" />
+                    <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
                 </div>
                 <div class="input-field">
                     <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                    <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" />
+                    <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password" placeholder="Password" required />
                 </div>
 
                 <a href="#" class="forgot-password">Reset Credentials?</a>
-                <button type="button" class="btn solid" (click)="signIn()">Authenticate</button>
+                <button type="submit" class="btn solid">Authenticate</button>
             </form>
 
             <!-- Sign Up Form -->
