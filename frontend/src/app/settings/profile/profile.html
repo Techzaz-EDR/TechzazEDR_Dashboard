@@ -27,18 +27,6 @@
     <div class="profile-grid">
         <!-- Left Column: Details & Stats -->
         <div class="profile-left">
-            <!-- Stats Grid -->
-            <section class="stats-grid">
-                @for (stat of securityStats; track stat.label) {
-                <div class="stat-card" [style.border-bottom-color]="stat.color">
-                    <div class="stat-main">
-                        <span class="stat-value">{{ stat.value }}</span>
-                        <span class="stat-trend">{{ stat.trend }}</span>
-                    </div>
-                    <span class="stat-label">{{ stat.label }}</span>
-                </div>
-                }
-            </section>
 
             <!-- Personal Info Card -->
             <section class="info-card glass-panel">

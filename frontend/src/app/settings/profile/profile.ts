@@ -19,9 +19,9 @@ export class Profile {
     readonly User = User;
 
     user = {
-        firstName: 'Admin',
-        lastName: 'User',
-        email: 'admin@techzaz.com',
+        firstName: 'Inuka',
+        lastName: 'Wijerathna',
+        email: 'inuka.20240695@iit.ac.lk',
         role: 'Senior Security Operations Lead',
         phone: '+1 (555) 942-0101',
         bio: 'Overseeing global endpoint security and incident response protocols. Specialized in threat hunting and automated remediation at scale.',
@@ -32,11 +32,6 @@ export class Profile {
         status: 'Active'
     };
 
-    securityStats = [
-        { label: 'Incidents Resolved', value: '142', trend: '+12%', color: '#10b981' },
-        { label: 'Security Score', value: '98/100', trend: '+5%', color: '#8b5cf6' },
-        { label: 'Active Policies', value: '24', trend: 'Stable', color: '#6366f1' }
-    ];
 
     recentActivity = [
         { type: 'policy', action: 'Updated Firewall Policy', target: 'Global HQ', time: '2 hours ago', icon: Shield },

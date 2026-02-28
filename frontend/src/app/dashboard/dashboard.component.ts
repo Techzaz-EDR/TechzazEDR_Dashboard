@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../core/services/auth.service';
 import {
     LucideAngularModule,
     Shield, Activity, Zap, BarChart2, FileText, ShieldAlert, Wrench, Users, Clipboard, Settings,
@@ -25,8 +26,9 @@ export interface NavItem {
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
     isDropdownOpen = false;
+    userEmail: string | null = null;
 
     // Icons
     readonly Shield = Shield;
@@ -189,7 +191,16 @@ export class DashboardComponent {
         }
     }
 
+    constructor(private router: Router, private authService: AuthService) {
+        this.authService.user$.subscribe(user => {
+            this.userEmail = user?.email || 'Guest';
+        });
+    }
+
+    ngOnInit() { }
+
     logout() {
         console.log('Logging out...');
+        this.authService.logout();
     }
 }
