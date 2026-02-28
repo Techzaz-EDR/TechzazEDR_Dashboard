@@ -24,13 +24,16 @@
                     {{ errorMessage }}
                 </div>
 
-                <div class="input-field">
-                    <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                    <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
-                </div>
-                <div class="input-field">
-                    <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                    <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password" placeholder="Password" required />
+                <div class="inputs-group">
+                    <div class="input-field">
+                        <lucide-icon [name]="User" [size]="20"></lucide-icon>
+                        <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
+                    </div>
+                    <div class="input-field">
+                        <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
+                        <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
+                            placeholder="Password" required />
+                    </div>
                 </div>
 
                 <a href="#" class="forgot-password">Reset Credentials?</a>
@@ -43,17 +46,21 @@
                     <h2>Initialize Tenant</h2>
                 </div>
 
-                <div class="input-field">
-                    <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                    <input type="text" placeholder="Administrator Name" />
-                </div>
-                <div class="input-field">
-                    <lucide-icon [name]="Mail" [size]="20"></lucide-icon>
-                    <input type="email" placeholder="Work Email" />
-                </div>
-                <div class="input-field">
-                    <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                    <input type="password" placeholder="Master Password" />
+                <div class="inputs-group">
+                    <div class="input-field">
+                        <lucide-icon [name]="User" [size]="20"></lucide-icon>
+                        <input type="text" name="signupName" [(ngModel)]="signupName"
+                            placeholder="Administrator Name" />
+                    </div>
+                    <div class="input-field">
+                        <lucide-icon [name]="Mail" [size]="20"></lucide-icon>
+                        <input type="email" name="signupEmail" [(ngModel)]="signupEmail" placeholder="Work Email" />
+                    </div>
+                    <div class="input-field">
+                        <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
+                        <input type="password" name="signupPassword" [(ngModel)]="signupPassword"
+                            placeholder="Master Password" />
+                    </div>
                 </div>
 
                 <button type="button" class="btn solid" (click)="signIn()">Deploy Workspace</button>

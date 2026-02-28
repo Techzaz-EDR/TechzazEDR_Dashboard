@@ -20,6 +20,11 @@ export class LoginComponent implements AfterViewInit {
     isSignUpMode = false;
     errorMessage = '';
 
+    // Sign Up Fields
+    signupName = '';
+    signupEmail = '';
+    signupPassword = '';
+
     readonly Eye = Eye;
     readonly EyeOff = EyeOff;
     readonly User = User;

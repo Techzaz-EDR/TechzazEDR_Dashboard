@@ -183,28 +183,30 @@ form {
         animation: slide-up-fade 0.5s ease forwards;
     }
 
-    /* Staggered Inputs */
-    .input-field {
-        position: relative;
+    .inputs-group {
         width: 100%;
-        margin: 10px 0;
-        opacity: 0;
-        transform: translateY(20px);
-        /* Default animation for initial load, overridden by JS logic usually, but here fixed delay */
-    }
+        display: flex;
+        flex-direction: column;
 
-    /* Manual Stagger Delays for Inputs */
-    .input-field:nth-of-type(1) {
-        animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.9s forwards;
-    }
+        .input-field {
+            position: relative;
+            width: 100%;
+            margin: 10px 0;
+            opacity: 0;
+            transform: translateY(20px);
 
-    .input-field:nth-of-type(2) {
-        animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.02s forwards;
-    }
+            &:nth-of-type(1) {
+                animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.9s forwards;
+            }
 
-    /* +120ms */
-    .input-field:nth-of-type(3) {
-        animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.14s forwards;
+            &:nth-of-type(2) {
+                animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.02s forwards;
+            }
+
+            &:nth-of-type(3) {
+                animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.14s forwards;
+            }
+        }
     }
 
     /* +120ms */

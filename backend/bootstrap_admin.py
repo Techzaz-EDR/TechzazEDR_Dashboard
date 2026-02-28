@@ -5,8 +5,8 @@ from datetime import datetime, UTC
 
 # Configuration
 SERVICE_ACCOUNT_PATH = "firebase-service-account.json"
-ADMIN_EMAIL = "INUKA.20240695@iit.ac.lk"
-TENANT_NAME = "Primary Organization"
+ADMIN_EMAIL = "inuka.20240695@iit.ac.lk"
+TENANT_NAME = "orgtest1"
 
 def bootstrap():
     if not os.path.exists(SERVICE_ACCOUNT_PATH):
