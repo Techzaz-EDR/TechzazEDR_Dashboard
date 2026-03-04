@@ -880,8 +880,16 @@
 
             .grid-4 {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                grid-template-columns: repeat(3, 1fr);
                 gap: 30px;
+
+                @media (max-width: 1024px) {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                @media (max-width: 768px) {
+                    grid-template-columns: 1fr;
+                }
             }
 
             .feature-card {
@@ -902,6 +910,20 @@
                     height: 100px;
                     background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 70%);
                     pointer-events: none;
+                }
+
+                .card-badge {
+                    display: inline-block;
+                    padding: 4px 10px;
+                    background: rgba(59, 130, 246, 0.1);
+                    border: 1px solid rgba(59, 130, 246, 0.2);
+                    border-radius: 4px;
+                    color: #60a5fa;
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    letter-spacing: 1px;
+                    margin-bottom: 20px;
+                    text-transform: uppercase;
                 }
 
                 &:hover {
