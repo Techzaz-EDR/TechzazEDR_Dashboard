@@ -129,7 +129,7 @@
 
                 <div class="donut-legend">
                     @for (segment of donutSegments; track segment.label) {
-                    <div class="legend-item">
+                    <div class="legend-item" [style.--item-color]="segment.color">
                         <span class="dot" [style.background-color]="segment.color"></span>
                         <span class="label">{{ segment.label }}</span>
                         <span class="percent">{{ segment.percent }}%</span>

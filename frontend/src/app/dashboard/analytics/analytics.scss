@@ -507,7 +507,8 @@
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 3px solid var(--item-color); // Added colorful accent
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 0;
             animation: slideUpFade 0.5s ease-out forwards;
 
@@ -518,14 +519,19 @@
             }
 
             &:hover {
-                background: rgba(255, 255, 255, 0.08);
-                border-color: rgba(255, 255, 255, 0.1);
-                transform: scale(1.05) translateX(5px);
-                filter: brightness(1.2);
+                background: rgba(255, 255, 255, 0.05);
+                border-color: var(--item-color);
+                transform: scale(1.02) translateX(8px);
+                box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4), 0 0 15px var(--item-color);
                 cursor: pointer;
 
                 .dot {
-                    box-shadow: 0 0 12px currentColor;
+                    transform: scale(1.2);
+                    box-shadow: 0 0 15px var(--item-color);
+                }
+
+                .label {
+                    color: #fff;
                 }
             }
 
