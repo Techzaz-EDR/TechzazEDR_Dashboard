@@ -20,31 +20,49 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 2rem;
 
-        .form-group {
+        .settings-card-group {
+            border: 1px solid #2d3748;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            background: #000;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
 
-            label {
-                font-size: 0.9rem;
-                font-weight: 500;
-                color: #e2e8f0;
-            }
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1.5rem 0;
+                border-bottom: 1px solid #1a202c;
+                min-height: 100px;
+                justify-content: center;
 
-            input {
-                width: 100%;
-                padding: 0.75rem;
-                background: #1a202c;
-                border: 1px solid #2d3748;
-                border-radius: 0.5rem;
-                color: #fff;
-                font-size: 0.95rem;
+                &:last-of-type {
+                    border-bottom: none;
+                }
 
-                &:focus {
-                    outline: none;
-                    border-color: #4299e1;
+                label {
+                    font-size: 0.9rem;
+                    font-weight: 500;
+                    color: #e2e8f0;
+                }
+
+                input {
+                    width: 100%;
+                    padding: 0.75rem;
+                    background: #1a202c;
+                    border: 1px solid #2d3748;
+                    border-radius: 0.5rem;
+                    color: #fff;
+                    font-size: 0.95rem;
+
+                    &:focus {
+                        outline: none;
+                        border-color: #4299e1;
+                    }
                 }
             }
         }
@@ -53,11 +71,10 @@
             background: #4299e1;
             color: white;
             border: none;
-            padding: 0.75rem;
+            padding: 0.75rem 2rem;
             border-radius: 0.5rem;
             font-weight: 500;
             cursor: pointer;
-            margin-top: 1rem;
             width: fit-content;
 
             &:hover {

@@ -5,19 +5,21 @@
     </div>
 
     <form class="settings-form" (submit)="saveChanges($event)">
-        <div class="form-group">
-            <label>Organization Name</label>
-            <input type="text" placeholder="Acme Corporation">
-        </div>
+        <div class="settings-card-group">
+            <div class="form-group">
+                <label>Organization Name</label>
+                <input type="text" placeholder="Acme Corporation">
+            </div>
 
-        <div class="form-group">
-            <label>Organization Email</label>
-            <input type="email" placeholder="admin@acme.com">
-        </div>
+            <div class="form-group">
+                <label>Organization Email</label>
+                <input type="email" placeholder="admin@acme.com">
+            </div>
 
-        <div class="form-group">
-            <label>Phone Number</label>
-            <input type="tel" placeholder="+1 (555) 123-4567">
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" placeholder="+1 (555) 123-4567">
+            </div>
         </div>
 
         <button type="submit" class="btn-primary">Save Changes</button>
