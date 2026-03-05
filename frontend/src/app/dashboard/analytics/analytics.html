@@ -190,13 +190,6 @@
             <div class="log-list">
                 @for (log of detailedThreatLogs; track log.title; let i = $index) {
                 <div class="log-item" [style.animation-delay]="(i * 0.1) + 's'">
-                    <div class="log-icon">
-                        @if (log.severity === 'CRITICAL') { <lucide-icon [name]="AlertTriangleIcon" [size]="16"
-                            color="#ef4444"></lucide-icon> }
-                        @else if (log.severity === 'HIGH') { <lucide-icon [name]="OctagonIcon" [size]="16"
-                            color="#f97316"></lucide-icon> }
-                        @else { <lucide-icon [name]="SearchIcon" [size]="16" color="#3b82f6"></lucide-icon> }
-                    </div>
                     <div class="log-main">
                         <div class="log-top">
                             <h4>{{ log.title }}</h4>
@@ -212,8 +205,7 @@
                         <span class="severity-tag" [ngClass]="'severity-' + log.severity.toLowerCase()">
                             {{ log.severity }}
                         </span>
-                        <button class="view-button" title="View Details"><lucide-icon [name]="EyeIcon"
-                                [size]="16"></lucide-icon></button>
+                        <button class="view-button" title="View Details">View</button>
                     </div>
                 </div>
                 }

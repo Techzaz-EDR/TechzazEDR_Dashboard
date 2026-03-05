@@ -756,7 +756,7 @@
 
         .log-item {
             display: grid;
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: 1fr auto;
             align-items: center;
             gap: 1.5rem;
             padding: 1rem 1.5rem;
@@ -773,16 +773,6 @@
                 transform: translateX(5px);
             }
 
-            .log-icon {
-                background: rgba(59, 130, 246, 0.05);
-                border-radius: 10px;
-                width: 44px;
-                height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.2rem;
-            }
 
             .log-main {
                 display: flex;
@@ -814,10 +804,6 @@
                     font-size: 0.8rem;
                     color: var(--text-muted, #64748b);
 
-                    .device::before {
-                        content: '💻';
-                        margin-right: 4px;
-                    }
 
                     .category {
                         background: rgba(255, 255, 255, 0.05);
@@ -866,11 +852,13 @@
 
                 .view-button {
                     background: rgba(59, 130, 246, 0.05);
-                    border: none;
+                    border: 1px solid rgba(59, 130, 246, 0.2);
                     color: #fff;
-                    width: 32px;
+                    padding: 0 12px;
                     height: 32px;
                     border-radius: 8px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
                     cursor: pointer;
                     display: flex;
                     align-items: center;
