@@ -122,14 +122,17 @@
 
 /* Top Bar */
 .top-bar {
-    height: var(--header-height);
+    height: var(--header-height, 70px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
-    background-color: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
+    background-color: #0b0f19;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
+    position: relative;
+    z-index: 10;
 
     .search-bar {
         position: relative;
@@ -140,28 +143,29 @@
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
+            color: #94a3b8;
             pointer-events: none;
         }
 
         input {
             width: 100%;
             padding: 0.625rem 1rem 0.625rem 2.5rem;
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-light);
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 8px;
-            color: var(--text-primary);
+            color: #ffffff;
             font-size: 0.9rem;
             transition: all 0.2s;
 
             &::placeholder {
-                color: var(--text-muted);
+                color: #94a3b8;
             }
 
             &:focus {
                 outline: none;
                 border-color: var(--accent-primary);
-                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+                background-color: rgba(255, 255, 255, 0.06);
             }
         }
     }
@@ -177,21 +181,23 @@
             gap: 0.5rem;
 
             .icon {
-                color: var(--text-muted);
+                color: #94a3b8;
             }
 
             .time-select {
-                background-color: var(--bg-primary);
-                border: 1px solid var(--border-light);
-                color: var(--text-primary);
+                background-color: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                color: #ffffff;
                 padding: 0.5rem 1rem;
                 border-radius: 6px;
                 font-size: 0.85rem;
                 cursor: pointer;
                 outline: none;
+                transition: all 0.2s;
 
                 &:hover {
-                    border-color: var(--text-secondary);
+                    border-color: rgba(255, 255, 255, 0.2);
+                    background-color: rgba(255, 255, 255, 0.08);
                 }
 
                 &:focus {
