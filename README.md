@@ -19,9 +19,10 @@ A modern, high-performance Endpoint Detection and Response (EDR) dashboard built
 TechzazEDR Dashboard is designed to provide real-time monitoring and management of endpoint security. It features a sleek, responsive frontend and a robust, scalable backend API.
 
 ## Architecture
-The project follows a modern **Frontend-Backend (Decoupled)** architecture:
+The project follows a modern **Frontend-Backend (Decoupled)** and **Multi-Tenant SaaS** architecture:
 - **Frontend**: A single-page application (SPA) that communicates with the API.
 - **Backend**: A RESTful API that handles data processing, security logic, and database interactions.
+- **Database (Firestore)**: Implements rigid data isolation with hierarchical paths: `organizations/{organization_id}/agents/{agent_id}/alerts/{alert_id}`.
 
 ## Tech Stack
 
@@ -94,7 +95,11 @@ TechzazEDR_Dashboard/
    ```bash
    pip install -r requirements.txt
    ```
-4. Run the development server:
+4. Initialize the Multi-Tenant Database (Firestore):
+   ```bash
+   python initialize_orgs.py
+   ```
+5. Run the development server:
    ```bash
    python run.py
    ```
