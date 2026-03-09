@@ -6,14 +6,6 @@
             font-size: 1.25rem;
             margin-bottom: 0.5rem;
             color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-
-            &::before {
-                content: '🔓';
-                font-size: 1.2rem;
-            }
         }
 
         p {

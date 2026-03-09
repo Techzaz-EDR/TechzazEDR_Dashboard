@@ -167,26 +167,48 @@
                 <h2>Why Techzaz EDR?</h2>
                 <p>Advanced protection for the modern enterprise.</p>
             </div>
-            <div class="grid-4">
-                <div class="feature-card glass-panel">
-                    <div class="icon-box"><lucide-icon [name]="Eye" [size]="32"></lucide-icon></div>
-                    <h3>Real-Time Detection</h3>
-                    <p>Identify threats instantly with continuous monitoring and behavioral analysis.</p>
+            <div class="benefits-grid">
+                <div class="feature-card">
+                    <div class="card-category">REAL-TIME</div>
+                    <div class="icon-box"><lucide-icon [name]="Activity" [size]="28"></lucide-icon></div>
+                    <h3>Endpoint Monitoring</h3>
+                    <p>Continuous monitoring of all endpoints with lightweight agents that collect telemetry data and
+                        detect suspicious activities in real-time.</p>
                 </div>
-                <div class="feature-card glass-panel">
-                    <div class="icon-box"><lucide-icon [name]="Bot" [size]="32"></lucide-icon></div>
-                    <h3>Automated Response</h3>
-                    <p>Neutralize attacks automatically before they can spread laterally.</p>
+                <div class="feature-card">
+                    <div class="card-category">CENTRALIZED</div>
+                    <div class="icon-box"><lucide-icon [name]="BarChart" [size]="28"></lucide-icon></div>
+                    <h3>Security Dashboard</h3>
+                    <p>Role-based access control with comprehensive overview of security status, alerts, and analytics
+                        in one unified interface.</p>
                 </div>
-                <div class="feature-card glass-panel">
-                    <div class="icon-box"><lucide-icon [name]="Brain" [size]="32"></lucide-icon></div>
-                    <h3>Behavioral AI</h3>
-                    <p>Detect unknown zero-day threats using advanced machine learning models.</p>
+                <div class="feature-card">
+                    <div class="card-category">ADVANCED</div>
+                    <div class="icon-box"><lucide-icon [name]="Bug" [size]="28"></lucide-icon></div>
+                    <h3>Malware Detection</h3>
+                    <p>Comprehensive scanning to identify and categorize malware including ransomware, trojans, worms,
+                        and other malicious software.</p>
                 </div>
-                <div class="feature-card glass-panel">
-                    <div class="icon-box"><lucide-icon [name]="Globe" [size]="32"></lucide-icon></div>
-                    <h3>Central Visibility</h3>
-                    <p>Understand your entire security posture from a single pane of glass.</p>
+                <div class="feature-card">
+                    <div class="card-category">NETWORK</div>
+                    <div class="icon-box"><lucide-icon [name]="Network" [size]="28"></lucide-icon></div>
+                    <h3>Network Security</h3>
+                    <p>Scan IP logs and data packets to detect suspicious connections, port scanning activities, and
+                        potential intrusion attempts.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-category">AUTOMATED</div>
+                    <div class="icon-box"><lucide-icon [name]="Zap" [size]="28"></lucide-icon></div>
+                    <h3>Incident Response</h3>
+                    <p>Automated threat response actions and real-time alerting to minimize damage from security
+                        incidents and breaches.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-category">ANALYTICS</div>
+                    <div class="icon-box"><lucide-icon [name]="Search" [size]="28"></lucide-icon></div>
+                    <h3>Historical Analysis</h3>
+                    <p>Compare current security events with historical data to identify trends, patterns, and emerging
+                        threats.</p>
                 </div>
             </div>
         </div>
@@ -327,28 +349,50 @@
     <section class="capabilities" id="resources">
         <div class="container">
             <div class="section-header center">
-                <h2>Core Capabilities</h2>
+                <h2>Enterprise <span style="color: #8b5cf6;">Security Strategy</span></h2>
+                <p>We take security seriously. Techzaz EDR is designed to detect malware, suspicious<br>network
+                    activity, and unauthorized behaviour across organizational endpoints.</p>
             </div>
             <div class="capabilities-grid">
                 <div class="cap-item">
-                    <div class="icon"><lucide-icon [name]="Radar" [size]="32"></lucide-icon></div>
-                    <h4>Telemetry Collection</h4>
-                    <p>Granular data from every endpoint.</p>
+                    <div class="icon"><lucide-icon [name]="Bug" [size]="20"></lucide-icon></div>
+                    <h4>Malware Threats</h4>
+                    <p>Ransomware, trojans, spyware, and malicious executables</p>
                 </div>
                 <div class="cap-item">
-                    <div class="icon"><lucide-icon [name]="Globe" [size]="32"></lucide-icon></div>
-                    <h4>Threat Intelligence</h4>
-                    <p>Enriched context from global feeds.</p>
+                    <div class="icon"><lucide-icon [name]="Activity" [size]="20"></lucide-icon></div>
+                    <h4>Suspicious Network Activity</h4>
+                    <p>Abnormal IP connections and unusual port communication</p>
                 </div>
                 <div class="cap-item">
-                    <div class="icon"><lucide-icon [name]="Crosshair" [size]="32"></lucide-icon></div>
-                    <h4>MITRE Mapping</h4>
-                    <p>Techniques mapped to framework.</p>
+                    <div class="icon"><lucide-icon [name]="Globe" [size]="20"></lucide-icon></div>
+                    <h4>Command-and-Control Traffic</h4>
+                    <p>Repeated outbound connections to suspicious or untrusted hosts</p>
                 </div>
                 <div class="cap-item">
-                    <div class="icon"><lucide-icon [name]="BarChart" [size]="32"></lucide-icon></div>
-                    <h4>Severity Scoring</h4>
-                    <p>Focus on what matters most.</p>
+                    <div class="icon"><lucide-icon [name]="Lock" [size]="20"></lucide-icon></div>
+                    <h4>Unauthorized Network Access</h4>
+                    <p>Detection of unexpected devices and connection attempts</p>
+                </div>
+                <div class="cap-item">
+                    <div class="icon"><lucide-icon [name]="Share2" [size]="20"></lucide-icon></div>
+                    <h4>Lateral Movement Attempts</h4>
+                    <p>Unusual internal communication patterns between endpoints</p>
+                </div>
+                <div class="cap-item">
+                    <div class="icon"><lucide-icon [name]="Key" [size]="20"></lucide-icon></div>
+                    <h4>Privilege Abuse Indicators</h4>
+                    <p>Processes attempting unauthorized system-level actions</p>
+                </div>
+                <div class="cap-item">
+                    <div class="icon"><lucide-icon [name]="Cpu" [size]="20"></lucide-icon></div>
+                    <h4>Anomalous Process Behaviour</h4>
+                    <p>Unexpected process execution and abnormal runtime activity</p>
+                </div>
+                <div class="cap-item">
+                    <div class="icon"><lucide-icon [name]="Upload" [size]="20"></lucide-icon></div>
+                    <h4>Data Exfiltration Signals</h4>
+                    <p>High-volume or irregular outbound data transfers</p>
                 </div>
             </div>
         </div>
