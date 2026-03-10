@@ -51,7 +51,6 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     // State
     scrolled = false;
-    isYearly = true;
 
     // Hero animated background data streams
     dataStreams = Array.from({ length: 20 }, (_, i) => ({
