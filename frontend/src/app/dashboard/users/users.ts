@@ -50,8 +50,8 @@ export class Users implements OnInit, OnDestroy {
                         const data = doc.data();
                         return {
                             id: doc.id,
-                            name: data['name'] || data['email'],
-                            email: data['email'],
+                            name: data['name'] || data['email'] || 'Unknown User',
+                            email: data['email'] || 'No Email',
                             role: data['role'] || 'Unknown',
                             status: data['status'] || 'active',
                             lastLogin: this.formatLastLogin(data['last_login_at']),
@@ -79,10 +79,11 @@ export class Users implements OnInit, OnDestroy {
     }
 
     get filteredUsers() {
+        const term = this.searchTerm.toLowerCase();
         return this.users.filter(user =>
-            user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-            user.role.toLowerCase().includes(this.searchTerm.toLowerCase())
+            (user.name?.toLowerCase() || '').includes(term) ||
+            (user.email?.toLowerCase() || '').includes(term) ||
+            (user.role?.toLowerCase() || '').includes(term)
         );
     }
 
