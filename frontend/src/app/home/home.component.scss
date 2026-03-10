@@ -1474,22 +1474,25 @@
 
         /* --- 8. WHY EDR (COMPARISON) --- */
         .why-edr {
-            padding: 120px 0;
+            padding: 140px 0;
             background: #05070a;
+            border-top: 1px solid rgba(139, 92, 246, 0.05);
+            position: relative;
 
             .container.split-layout {
-                max-width: 1200px;
+                max-width: 1240px;
                 margin: 0 auto;
                 padding: 0 40px;
                 display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 80px;
+                grid-template-columns: 1.1fr 0.9fr;
+                gap: 120px;
                 align-items: center;
 
                 &.reverse {
                     @media (max-width: 1024px) {
                         display: flex;
                         flex-direction: column-reverse;
+                        gap: 60px;
                     }
                 }
 
@@ -1501,80 +1504,170 @@
             .edr-visual {
                 display: flex;
                 justify-content: center;
+                position: relative;
             }
 
             .comparison-card {
                 width: 100%;
-                max-width: 500px;
+                max-width: 540px;
                 display: flex;
-                gap: 16px;
-                perspective: 1000px;
+                gap: 24px;
+                perspective: 1200px;
 
                 .side {
                     flex: 1;
-                    padding: 40px 20px;
-                    border-radius: 20px;
+                    padding: 48px 24px;
+                    border-radius: 24px;
                     text-align: center;
-                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.03);
+                    background: rgba(255, 255, 255, 0.02);
+                    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                    position: relative;
+                    overflow: hidden;
+
+                    &:hover {
+                        transform: translateY(-12px);
+                    }
+
+                    .icon-bg {
+                        width: 90px;
+                        height: 90px;
+                        margin: 0 auto 24px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 20px;
+                        transition: all 0.5s ease;
+                    }
 
                     h5 {
-                        font-size: 1.2rem;
+                        font-size: 1.35rem;
                         color: white;
-                        margin: 20px 0 10px;
+                        margin-bottom: 12px;
+                        font-weight: 700;
                     }
 
                     p {
-                        font-size: 0.8rem;
-                        color: #94a3b8;
-                        margin-bottom: 6px;
-                    }
-
-                    .cross,
-                    .check {
-                        margin: 0 auto;
+                        font-size: 0.9rem;
+                        color: #64748b;
+                        margin-bottom: 8px;
+                        line-height: 1.5;
                     }
 
                     &.traditional {
-                        background: rgba(239, 68, 68, 0.03);
-                        border-color: rgba(239, 68, 68, 0.1);
+                        background: rgba(239, 68, 68, 0.01);
+                        border-color: rgba(239, 68, 68, 0.05);
+
+                        .icon-bg {
+                            background: rgba(239, 68, 68, 0.05);
+                        }
+
+                        &:hover {
+                            background: rgba(239, 68, 68, 0.03);
+                            border-color: rgba(239, 68, 68, 0.15);
+                        }
                     }
 
                     &.next-gen {
-                        background: rgba(16, 185, 129, 0.03);
-                        border-color: rgba(16, 185, 129, 0.3);
-                        box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.1);
-                        transform: translateY(-20px);
+                        background: rgba(139, 92, 246, 0.03);
+                        border-color: rgba(139, 92, 246, 0.3);
+                        box-shadow: 0 20px 50px -15px rgba(139, 92, 246, 0.15);
+                        z-index: 2;
+
+                        .icon-bg {
+                            background: rgba(139, 92, 246, 0.1);
+                            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.1);
+                        }
+
+                        .check lucide-icon {
+                            filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4));
+                        }
+
+                        &:hover {
+                            background: rgba(139, 92, 246, 0.06);
+                            border-color: #8b5cf6;
+                            box-shadow: 0 30px 60px -10px rgba(139, 92, 246, 0.25);
+
+                            .icon-bg {
+                                background: rgba(139, 92, 246, 0.15);
+                                transform: scale(1.05);
+                            }
+                        }
                     }
                 }
             }
 
             .edr-text {
                 h2 {
-                    font-size: 2.5rem;
+                    font-size: 2.6rem; // ~42px
+                    line-height: 1.2;
                     color: white;
-                    margin-bottom: 24px;
+                    margin-bottom: 32px;
+                    font-weight: 800;
+
+                    .accent-text {
+                        color: #8b5cf6;
+                        background: linear-gradient(135deg, #8b5cf6 0%, #d8b4fe 100%);
+                        -webkit-background-clip: text;
+                        background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
                 }
 
                 .lead {
-                    color: #94a3b8;
-                    margin-bottom: 40px;
+                    font-size: 1rem; // ~16px
+                    color: #64748b;
+                    margin-bottom: 56px;
+                    line-height: 1.6;
+                    max-width: 540px;
                 }
 
                 .point {
                     display: flex;
-                    gap: 16px;
-                    margin-bottom: 24px;
+                    gap: 20px;
+                    margin-bottom: 24px; // Spacing between feature blocks
+                    padding: 24px;
+                    background: rgba(255, 255, 255, 0.02);
+                    border-radius: 20px;
+                    border: 1px solid rgba(255, 255, 255, 0.03);
+                    transition: all 0.3s ease;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    &:hover {
+                        background: rgba(139, 92, 246, 0.03);
+                        border-color: rgba(139, 92, 246, 0.1);
+                        transform: translateX(8px);
+
+                        .icon {
+                            color: #a78bfa;
+                            transform: scale(1.1);
+                        }
+                    }
 
                     .icon {
-                        color: #3b82f6;
+                        color: #8b5cf6;
+                        transition: all 0.3s ease;
+                        margin-top: 4px;
                     }
 
                     p {
-                        color: #94a3b8;
+                        color: #64748b; // Muted gray for description
+                        font-size: 0.925rem; // ~14.8px
+                        line-height: 1.5;
 
                         strong {
-                            color: white;
                             display: block;
+                            margin-bottom: 6px;
+                            font-size: 1.125rem; // ~18px
+                            font-weight: 600;
+                            color: white;
+
+                            .accent-text {
+                                color: #8b5cf6;
+                            }
                         }
                     }
                 }

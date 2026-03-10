@@ -66,8 +66,7 @@
             </div>
             <div class="nav-actions">
                 <a routerLink="/login" class="link-text" #navItem>Sign In</a>
-                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started
-                    Free</button>
+                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started</button>
             </div>
         </div>
     </nav>
@@ -427,13 +426,17 @@
             <div class="edr-visual">
                 <div class="comparison-card">
                     <div class="side traditional">
-                        <div class="cross"><lucide-icon [name]="X" [size]="56" color="#ef4444"></lucide-icon></div>
+                        <div class="icon-bg">
+                            <div class="cross"><lucide-icon [name]="X" [size]="56" color="rgba(239, 68, 68, 0.5)"></lucide-icon></div>
+                        </div>
                         <h5>Traditional AV</h5>
                         <p>Signature-based</p>
                         <p>Misses new attacks</p>
                     </div>
                     <div class="side next-gen">
-                        <div class="check"><lucide-icon [name]="Check" [size]="56" color="#10b981"></lucide-icon></div>
+                        <div class="icon-bg">
+                            <div class="check"><lucide-icon [name]="Check" [size]="64" color="#8b5cf6"></lucide-icon></div>
+                        </div>
                         <h5>Techzaz EDR</h5>
                         <p>Behavior-based</p>
                         <p>Stops zero-days</p>
@@ -441,18 +444,18 @@
                 </div>
             </div>
             <div class="edr-text">
-                <h2>Beyond Traditional Antivirus</h2>
+                <h2>Beyond Traditional <span class="accent-text">Antivirus</span></h2>
                 <p class="lead">Signatures aren't enough anymore. You need behavior analysis to stop modern ransomware
                     and fileless attacks.</p>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Bug" [size]="24"></lucide-icon></span>
-                    <p><strong>Detect Unknowns:</strong> Analyze what software <em>does</em>, not just what it
+                    <p><strong><span class="accent-text">Detect Unknowns:</span></strong> Analyze what software <em>does</em>, not just what it
                         <em>is</em>.
                     </p>
                 </div>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Search" [size]="24"></lucide-icon></span>
-                    <p><strong>Deep Investigation:</strong> Root cause analysis for every incident.</p>
+                    <p><strong><span class="accent-text">Deep Investigation:</span></strong> Root cause analysis for every incident.</p>
                 </div>
             </div>
         </div>
