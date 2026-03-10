@@ -313,24 +313,14 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
             // Initial states for preloader elements
             gsap.set('.center-assembly', { opacity: 0, scale: 0.9 });
-            gsap.set('.wireframe-shield', { opacity: 0, scale: 0.8 });
-            gsap.set('.holographic-ring', { opacity: 0, rotationX: 70 });
             gsap.set('.brand-logo', { opacity: 0, y: 20 });
             gsap.set('.loader-metrics', { opacity: 0 });
 
             preTl
-                // 1. Background elements & Shield appear
+                // 1. Background elements appear
                 .to('.preloader-bg-ambient', { duration: 1.5, opacity: 1 })
-                .to('.wireframe-shield', { duration: 1.2, opacity: 1, scale: 1, ease: "power2.out" }, "-=0.5")
-                .to('.holographic-ring', { duration: 1.5, opacity: 1, rotationZ: 360, ease: "none" }, "-=1")
 
-                // 2. Continuous rotation for ring & shield (aesthetic only)
-                .add(() => {
-                    gsap.to('.holographic-ring', { rotationZ: 360, duration: 1.5, repeat: -1, ease: "none" });
-                    gsap.to('.wireframe-shield', { rotationY: 360, duration: 20, repeat: -1, ease: "none" });
-                }, "-=1")
-
-                // 3. Logo Reveal
+                // 2. Logo Reveal
                 .to('.center-assembly', { duration: 1, opacity: 1, scale: 1 }, "-=1")
                 .to('.brand-logo', { duration: 1, opacity: 1, y: 0, filter: 'blur(0px)', ease: "power2.out" }, "-=0.5")
 
