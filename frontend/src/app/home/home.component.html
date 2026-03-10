@@ -61,7 +61,7 @@
             </div>
             <div class="nav-links">
                 <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Platform</a>
-                <a href="#product-preview" (click)="scrollToSection('product-preview', $event)" #navItem>How it Works</a>
+                <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)" #navItem>How it Works</a>
                 <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Resources</a>
             </div>
             <div class="nav-actions">
@@ -213,6 +213,73 @@
         </div>
     </section>
 
+    <!-- 4. HOW IT WORKS -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header" #howItWorksHeader>
+                <h2>How It Works</h2>
+                <p>Deployment to protection in minutes.</p>
+            </div>
+
+            <div class="dashboard-interface" #dashboardInterface>
+                <!-- Central Connector Line -->
+                <div class="connector-line">
+                    <div class="glow-path" #glowPath></div>
+                </div>
+
+                <div class="process-stepper" #stepperRow>
+                    <div class="step-item" #stepNode>
+                        <div class="step-circle">
+                            <span class="number">1</span>
+                            <div class="circle-pulse"></div>
+                            <div class="circle-glow"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4>Deploy Agent</h4>
+                            <p>Lightweight sensor installs silently.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item" #stepNode>
+                        <div class="step-circle">
+                            <span class="number">2</span>
+                            <div class="circle-pulse"></div>
+                            <div class="circle-glow"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4>Monitor</h4>
+                            <p>Activity is analyzed in real-time.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item" #stepNode>
+                        <div class="step-circle">
+                            <span class="number">3</span>
+                            <div class="circle-pulse"></div>
+                            <div class="circle-glow"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4>Detect</h4>
+                            <p>AI identifies anomalous behavior.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item" #stepNode>
+                        <div class="step-circle">
+                            <span class="number">4</span>
+                            <div class="circle-pulse"></div>
+                            <div class="circle-glow"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4>Respond</h4>
+                            <p>Threats are contained instantly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 5. PRODUCT PREVIEW -->
     <section class="product-preview">
         <div class="container split-layout">
@@ -276,8 +343,6 @@
             </div>
         </div>
     </section>
-
-
 
     <!-- 6. CORE CAPABILITIES (RESOURCES) -->
     <section class="capabilities" id="resources">
