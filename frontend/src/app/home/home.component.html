@@ -63,11 +63,10 @@
                 <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Platform</a>
                 <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)" #navItem>How it Works</a>
                 <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Resources</a>
-                <a href="#pricing" (click)="scrollToSection('pricing', $event)" #navItem>Pricing</a>
             </div>
             <div class="nav-actions">
                 <a routerLink="/login" class="link-text" #navItem>Sign In</a>
-                <button class="btn btn-primary" (click)="scrollToSection('pricing', $event)" #ctaBtn>Get Started
+                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started
                     Free</button>
             </div>
         </div>
@@ -99,9 +98,9 @@
                 </p>
 
                 <div class="cta-actions">
-                    <button class="btn btn-primary-blue" (click)="scrollToSection('pricing', $event)">Get Started
+                    <button class="btn btn-primary-blue" (click)="scrollToSection('features', $event)">Get Started
                         Free</button>
-                    <button class="btn btn-outline-white" (click)="scrollToSection('pricing', $event)">Request a
+                    <button class="btn btn-outline-white" (click)="scrollToSection('features', $event)">Request a
                         Demo</button>
                 </div>
             </div>
@@ -236,8 +235,8 @@
                             <div class="circle-glow"></div>
                         </div>
                         <div class="step-content">
-                            <h4>Deploy Agent</h4>
-                            <p>Lightweight sensor installs silently.</p>
+                            <h4>Deploy</h4>
+                            <p>Zero-touch installation using a secure API enrollment token.</p>
                         </div>
                     </div>
 
@@ -249,7 +248,7 @@
                         </div>
                         <div class="step-content">
                             <h4>Monitor</h4>
-                            <p>Activity is analyzed in real-time.</p>
+                            <p>Real-time PCAP network capture and deep system scanning.</p>
                         </div>
                     </div>
 
@@ -261,7 +260,7 @@
                         </div>
                         <div class="step-content">
                             <h4>Detect</h4>
-                            <p>AI identifies anomalous behavior.</p>
+                            <p>Instantly catches malware (YARA) and network anomalies.</p>
                         </div>
                     </div>
 
@@ -272,8 +271,8 @@
                             <div class="circle-glow"></div>
                         </div>
                         <div class="step-content">
-                            <h4>Respond</h4>
-                            <p>Threats are contained instantly.</p>
+                            <h4>Report</h4>
+                            <p>Securely routes isolated alerts to the multi-tenant dashboard.</p>
                         </div>
                     </div>
                 </div>
@@ -459,96 +458,7 @@
         </div>
     </section>
 
-    <!-- 9. PRICING SECTION -->
-    <section class="pricing-section" id="pricing">
-        <div class="container">
-            <div class="section-header center">
-                <h2>Simple, Transparent Pricing</h2>
-                <p>Choose the defense level that fits your organization.</p>
 
-                <!-- Billing Toggle -->
-                <div class="billing-toggle">
-                    <span [class.active]="!isYearly">Monthly</span>
-                    <div class="toggle-switch" (click)="isYearly = !isYearly">
-                        <div class="switch-handle" [class.yearly]="isYearly"></div>
-                    </div>
-                    <span [class.active]="isYearly">Yearly <span class="save-badge">Save 20%</span></span>
-                </div>
-            </div>
-
-            <div class="pricing-grid">
-                <!-- STARTER -->
-                <div class="pricing-card glass-panel">
-                    <div class="card-header">
-                        <h3>Starter</h3>
-                        <p>Essential visibility for small teams.</p>
-                        <div class="price">
-                            <span class="currency">$</span>
-                            <span class="amount">{{ isYearly ? '8' : '10' }}</span>
-                            <span class="period">/endpoint/mo</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <button class="btn btn-outline full-width" routerLink="/login">Start Free Trial</button>
-                        <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Next-Gen Antivirus</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Device Control</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> 7-Day Data Retention</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Standard Support</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- PROFESSIONAL -->
-                <div class="pricing-card glass-panel popular">
-                    <div class="popular-badge">Most Popular</div>
-                    <div class="card-header">
-                        <h3>Professional</h3>
-                        <p>Full EDR capabilities for growing businesses.</p>
-                        <div class="price">
-                            <span class="currency">$</span>
-                            <span class="amount">{{ isYearly ? '18' : '22' }}</span>
-                            <span class="period">/endpoint/mo</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <button class="btn btn-primary glow full-width" routerLink="/login">Get Started</button>
-                        <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> <strong>Everything in
-                                    Starter</strong></li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Automated Remediation</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Threat Intel Feeds</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Network Isolation</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> 30-Day Data Retention</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- ENTERPRISE -->
-                <div class="pricing-card glass-panel">
-                    <div class="card-header">
-                        <h3>Enterprise</h3>
-                        <p>Advanced security operations at scale.</p>
-                        <div class="price">
-                            <span class="amount">Custom</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <button class="btn btn-outline full-width" routerLink="/login">Contact Sales</button>
-                        <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> <strong>Everything in
-                                    Pro</strong></li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Managed Threat Hunting</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> API Access & SIEM Integration
-                            </li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Unlimited Data Retention</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Dedicated Success Manager</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <section class="final-cta">
         <div class="container">
             <div class="cta-box glass-panel">
@@ -556,7 +466,7 @@
                 <p>Deploy in minutes. Gain visibility instantly. Respond with confidence.</p>
                 <div class="cta-group center">
                     <button class="btn btn-primary large glow" routerLink="/login">Get Started</button>
-                    <button class="btn btn-outline large" (click)="scrollToSection('pricing', $event)">Request
+                    <button class="btn btn-outline large" (click)="scrollToSection('features', $event)">Request
                         Demo</button>
                 </div>
             </div>
@@ -579,7 +489,6 @@
                 <div class="footer-links">
                     <h4>Product</h4>
                     <a [routerLink]="['/topic', 'features']">Features</a>
-                    <a [routerLink]="['/topic', 'pricing']">Pricing</a>
                     <a [routerLink]="['/topic', 'roadmap']">Roadmap</a>
                 </div>
                 <div class="footer-links">
