@@ -1,7 +1,7 @@
 import { Component, HostListener, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { LucideAngularModule, Shield, Activity, Cloud, Lock, Cpu, Radar, Zap, FileText, Youtube, Users, Check, Crosshair, Eye, Bot, Brain, Globe, BarChart, X, Bug, Twitter, Linkedin, Server, Network, Search, Fingerprint, Share2, Key, Upload } from 'lucide-angular';
+import { LucideAngularModule, Shield, Activity, Cloud, Lock, Cpu, Radar, Zap, FileText, Youtube, Users, Check, Crosshair, Eye, Bot, Brain, Globe, BarChart, X, Bug, Twitter, Linkedin, Server, Network, Search, Fingerprint, Share2, Key, Upload, Layout } from 'lucide-angular';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -48,6 +48,7 @@ export class HomeComponent implements AfterViewInit {
     readonly Share2 = Share2;
     readonly Key = Key;
     readonly Upload = Upload;
+    readonly Layout = Layout;
 
     // State
     scrolled = false;
