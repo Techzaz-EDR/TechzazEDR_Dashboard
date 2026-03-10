@@ -51,7 +51,6 @@ export class HomeComponent implements AfterViewInit {
 
     // State
     scrolled = false;
-    isYearly = true;
 
     // Hero Animation Data
     headlineLine1 = Array.from("Next-Gen Endpoint");
