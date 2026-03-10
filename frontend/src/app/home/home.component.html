@@ -445,11 +445,34 @@
         <div class="container">
             <div class="cta-box glass-panel">
                 <h2>Start Protecting Your Endpoints Today</h2>
-                <p>Deploy in minutes. Gain visibility instantly. Respond with confidence.</p>
+                <p>Deploy lightweight agents in minutes, monitor threats in real time, and respond instantly from a unified security dashboard.</p>
                 <div class="cta-group center">
-                    <button class="btn btn-primary large glow" routerLink="/login">Get Started</button>
-                    <button class="btn btn-outline large" (click)="scrollToSection('features', $event)">Request
-                        Demo</button>
+                    <button class="btn btn-primary large glow" routerLink="/login">
+                        <lucide-icon [name]="Rocket" [size]="18" class="btn-icon"></lucide-icon>
+                        Get Started
+                    </button>
+                    <button class="btn btn-outline large" (click)="scrollToSection('features', $event)">
+                        <lucide-icon [name]="Play" [size]="18" class="btn-icon"></lucide-icon>
+                        Request Demo
+                    </button>
+                </div>
+                <div class="cta-trust-indicators">
+                    <div class="indicator">
+                        <lucide-icon [name]="Shield" [size]="16" class="icon"></lucide-icon>
+                        <span>Lightweight Agents</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Zap" [size]="16" class="icon"></lucide-icon>
+                        <span>Real-time Detection</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Layout" [size]="16" class="icon"></lucide-icon>
+                        <span>Unified Dashboard</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Activity" [size]="16" class="icon"></lucide-icon>
+                        <span>Behavior Analysis</span>
+                    </div>
                 </div>
             </div>
         </div>
