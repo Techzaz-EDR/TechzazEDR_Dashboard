@@ -75,9 +75,11 @@
 
     <!-- 1. HERO SECTION (STABLE RENDER) -->
     <header class="hero-section">
+        <video class="hero-video" #heroVideo autoplay muted loop playsinline>
+            <source src="videos/hero-background.mp4" type="video/mp4">
+        </video>
+        <div class="hero-video-overlay"></div>
         <div class="hero-background">
-            <div class="ambient-glow glow-1"></div>
-            <div class="ambient-glow glow-2"></div>
             <div class="grid-overlay"></div>
         </div>
         <div class="hero-container">
@@ -99,10 +101,8 @@
                 </p>
 
                 <div class="cta-actions">
-                    <button class="btn btn-primary-blue" (click)="scrollToSection('pricing', $event)">Get Started
-                        Free</button>
-                    <button class="btn btn-outline-white" (click)="scrollToSection('pricing', $event)">Request a
-                        Demo</button>
+                    <a routerLink="/login" class="btn btn-primary-blue">Sign In</a>
+                    <a routerLink="/login" class="btn btn-outline-white">Sign Up</a>
                 </div>
             </div>
 
