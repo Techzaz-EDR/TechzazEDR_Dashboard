@@ -14,52 +14,62 @@
     <div class="users-card">
         <div class="card-header">
             <h3>Team Members</h3>
-            <span class="count">4 users</span>
+            <span class="count">{{ users.length }} users</span>
             <div class="search-wrapper">
                 <lucide-icon [name]="SearchIcon" [size]="18" class="search-icon"></lucide-icon>
                 <input type="text" placeholder="Search users..." [(ngModel)]="searchTerm" />
             </div>
         </div>
 
-        <div class="users-table">
-            <div class="table-header">
-                <div class="col name">Name</div>
-                <div class="col email">Email</div>
-                <div class="col role">Role</div>
-                <div class="col status">Status</div>
-                <div class="col last-login">Last Login</div>
-                <div class="col actions">Actions</div>
+        @if (isLoading) {
+            <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                Loading team members...
             </div>
-
-            <div class="table-body">
-                @for (user of filteredUsers; track user.id) {
-                <div class="table-row">
-                    <div class="col name">
-                        <div class="avatar" [style.background-color]="user.avatarColor">
-                            <lucide-icon [name]="ShieldIcon" [size]="16"></lucide-icon>
-                        </div>
-                        <span class="user-name">{{ user.name }}</span>
-                    </div>
-                    <div class="col email">{{ user.email }}</div>
-                    <div class="col role">
-                        <span class="badge" [class]="user.role.toLowerCase().replace(' ', '-')">{{ user.role }}</span>
-                    </div>
-                    <div class="col status">
-                        <span class="status-badge" [class]="user.status">{{ user.status }}</span>
-                    </div>
-                    <div class="col last-login">{{ user.lastLogin }}</div>
-                    <div class="col actions">
-                        <button class="icon-btn" title="Edit"><lucide-icon [name]="EditIcon"
-                                [size]="18"></lucide-icon></button>
-                        <button class="icon-btn" title="Delete"><lucide-icon [name]="TrashIcon"
-                                [size]="18"></lucide-icon></button>
-                        <button class="icon-btn" title="More"><lucide-icon [name]="MoreVerticalIcon"
-                                [size]="18"></lucide-icon></button>
-                    </div>
+        } @else {
+            <div class="users-table">
+                <div class="table-header">
+                    <div class="col name">Name</div>
+                    <div class="col email">Email</div>
+                    <div class="col role">Role</div>
+                    <div class="col status">Status</div>
+                    <div class="col last-login">Last Login</div>
+                    <div class="col actions">Actions</div>
                 </div>
-                }
+
+                <div class="table-body">
+                    @for (user of filteredUsers; track user.id) {
+                    <div class="table-row">
+                        <div class="col name">
+                            <div class="avatar" [style.background-color]="user.avatarColor">
+                                <lucide-icon [name]="ShieldIcon" [size]="16"></lucide-icon>
+                            </div>
+                            <span class="user-name">{{ user.name }}</span>
+                        </div>
+                        <div class="col email">{{ user.email }}</div>
+                        <div class="col role">
+                            <span class="badge" [class]="user.role.toLowerCase().replace(' ', '-')">{{ user.role }}</span>
+                        </div>
+                        <div class="col status">
+                            <span class="status-badge" [class]="user.status">{{ user.status }}</span>
+                        </div>
+                        <div class="col last-login">{{ user.lastLogin }}</div>
+                        <div class="col actions">
+                            <button class="icon-btn" title="Edit"><lucide-icon [name]="EditIcon"
+                                    [size]="18"></lucide-icon></button>
+                            <button class="icon-btn" title="Delete"><lucide-icon [name]="TrashIcon"
+                                    [size]="18"></lucide-icon></button>
+                            <button class="icon-btn" title="More"><lucide-icon [name]="MoreVerticalIcon"
+                                    [size]="18"></lucide-icon></button>
+                        </div>
+                    </div>
+                    } @empty {
+                    <div class="table-row" style="justify-content: center; padding: 2rem; color: var(--text-muted);">
+                        No users found in your organization.
+                    </div>
+                    }
+                </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 
