@@ -465,9 +465,14 @@
                 <h2>Start Protecting Your Endpoints Today</h2>
                 <p>Deploy lightweight agents in minutes, monitor threats in real time, and respond instantly from a unified security dashboard.</p>
                 <div class="cta-group center">
-                    <button class="btn btn-primary large glow" routerLink="/login">Get Started</button>
-                    <button class="btn btn-outline large" (click)="scrollToSection('features', $event)">Request
-                        Demo</button>
+                    <button class="btn btn-primary large glow" routerLink="/login">
+                        <lucide-icon [name]="Rocket" [size]="18" class="btn-icon"></lucide-icon>
+                        Get Started
+                    </button>
+                    <button class="btn btn-outline large" (click)="scrollToSection('features', $event)">
+                        <lucide-icon [name]="Play" [size]="18" class="btn-icon"></lucide-icon>
+                        Request Demo
+                    </button>
                 </div>
                 <div class="cta-trust-indicators">
                     <div class="indicator">
