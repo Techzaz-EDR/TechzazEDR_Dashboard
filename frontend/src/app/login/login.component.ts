@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -36,9 +36,78 @@ export class LoginComponent implements AfterViewInit, OnInit {
     readonly Github = Github;
     private glowElement: HTMLElement | null = null;
 
+    screenWidth = 1920;
+    screenHeight = 1080;
+    
+    // Dynamic Path Geometry properties
+    topLeftPath = '';
+    topRightPath = '';
+    bottomLeftPath = '';
+    bottomRightPath = '';
+    
+    // Dot coords
+    dotTL = {x: 0, y: 0};
+    dotTR = {x: 0, y: 0};
+    dotBL = {x: 0, y: 0};
+    dotBR = {x: 0, y: 0};
+
     constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
 
+    @HostListener('window:resize')
+    onResize() {
+        if (typeof window !== 'undefined') {
+            this.screenWidth = window.innerWidth;
+            this.screenHeight = window.innerHeight;
+            this.updateSvgPaths();
+        }
+    }
+
+    updateSvgPaths() {
+        const cx = this.screenWidth / 2;
+        const cy = this.screenHeight / 2;
+
+        const cardWidth = 380;
+        const halfCard = cardWidth / 2;
+        const cardLeft = cx - halfCard;
+        const cardRight = cx + halfCard;
+
+        // Connections slightly vertically inside the card bounds
+        const connectTopY = cy - 200;
+        const connectBotY = cy + 200;
+
+        // Top Left Route - 45 degree exact route from Node(140, 47) to card
+        const tlDy = connectTopY - 47;
+        const tlTurnX = cardLeft - tlDy - 20; 
+        this.topLeftPath = `M 140,47 L ${tlTurnX},47 L ${cardLeft - 20},${connectTopY} L ${cardLeft},${connectTopY}`;
+        this.dotTL = { x: cardLeft, y: connectTopY };
+
+        // Bottom Left Route - Node(140, screenHeight - 47)
+        const blNodeY = this.screenHeight - 47;
+        const blDy = blNodeY - connectBotY;
+        const blTurnX = cardLeft - blDy - 20;
+        this.bottomLeftPath = `M 140,${blNodeY} L ${blTurnX},${blNodeY} L ${cardLeft - 20},${connectBotY} L ${cardLeft},${connectBotY}`;
+        this.dotBL = { x: cardLeft, y: connectBotY };
+
+        // Top Right Route - Node(screenWidth - 140, 47)
+        const trNodeX = this.screenWidth - 140;
+        const trTurnX = cardRight + tlDy + 20;
+        this.topRightPath = `M ${trNodeX},47 L ${trTurnX},47 L ${cardRight + 20},${connectTopY} L ${cardRight},${connectTopY}`;
+        this.dotTR = { x: cardRight, y: connectTopY };
+
+        // Bottom Right Route
+        const brNodeX = this.screenWidth - 140;
+        const brTurnX = cardRight + blDy + 20;
+        this.bottomRightPath = `M ${brNodeX},${blNodeY} L ${brTurnX},${blNodeY} L ${cardRight + 20},${connectBotY} L ${cardRight},${connectBotY}`;
+        this.dotBR = { x: cardRight, y: connectBotY };
+    }
+
     ngOnInit() {
+        if (typeof window !== 'undefined') {
+            this.screenWidth = window.innerWidth;
+            this.screenHeight = window.innerHeight;
+            this.updateSvgPaths();
+        }
+
         this.route.queryParams.subscribe(params => {
             if (params['mode'] === 'signup') {
                 this.isSignUpMode = true;
