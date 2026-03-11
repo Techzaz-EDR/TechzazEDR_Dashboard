@@ -16,7 +16,6 @@
     background: var(--bg-primary);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px;
-    animation: fadeIn 0.8s var(--ease-out);
 }
 
 /* 1. Global Animations (Matching Overview/Home) */
@@ -107,12 +106,10 @@
     border: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
     border-radius: 20px;
     box-shadow: var(--shadow-card);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
 
     &:hover {
-        transform: translateY(-5px);
         border-color: var(--primary, #3b82f6);
     }
 }
@@ -129,26 +126,16 @@
         flex-direction: column;
         justify-content: space-between;
         min-height: 160px;
-        opacity: 0;
-        animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 1;
         cursor: pointer;
-
-        @for $i from 1 through 4 {
-            &:nth-child(#{$i}) {
-                animation-delay: #{$i * 0.15}s;
-            }
-        }
 
         &:hover {
             .stat-icon {
                 background: var(--primary, #3b82f6);
                 color: #fff;
-                transform: rotate(10deg) scale(1.1);
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
             }
 
             .value {
-                transform: scale(1.05);
                 color: #fff;
             }
         }
@@ -174,7 +161,6 @@
                 background: rgba(59, 130, 246, 0.08);
                 border-radius: 14px;
                 color: var(--primary, #3b82f6);
-                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
         }
 
@@ -186,7 +172,6 @@
                 line-height: 1;
                 margin-bottom: 0.5rem;
                 letter-spacing: -1.5px;
-                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 display: block;
             }
 
@@ -224,9 +209,7 @@
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    opacity: 0;
-    animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: 0.3s;
+    opacity: 1;
 
     &.large {
         grid-column: span 2;
@@ -285,10 +268,6 @@
             stroke-linecap: round;
             stroke-linejoin: round;
             fill: none;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: drawLine 2s ease-out forwards;
-            animation-delay: 0.5s;
         }
 
         .glow-path {
@@ -315,12 +294,6 @@
         &:hover {
             .chart-path {
                 filter: brightness(1.2);
-                stroke-width: 4;
-            }
-
-            .glow-path {
-                opacity: 0.8;
-                stroke-width: 12;
             }
         }
     }
@@ -367,8 +340,6 @@
         pointer-events: none;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         opacity: 0;
-        transform: translateY(10px);
-        transition: opacity 0.2s, transform 0.2s;
         min-width: 160px;
 
         &.visible {
@@ -438,8 +409,7 @@
             font-size: 0.75rem;
             color: var(--text-muted, #64748b);
             font-weight: 500;
-            opacity: 0;
-            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 1;
 
             @for $i from 1 through 7 {
                 &:nth-child(#{$i}) {
@@ -461,8 +431,7 @@
             gap: 0.75rem;
             font-size: 0.85rem;
             color: var(--text-secondary, #cbd5e1);
-            opacity: 0;
-            animation: slideUpFade 0.5s ease-out forwards;
+            opacity: 1;
 
             @for $i from 1 through 4 {
                 &:nth-child(#{$i}) {
@@ -514,10 +483,7 @@
         position: relative;
         width: 220px;
         height: 220px;
-        opacity: 0;
-        transform: scale(0.9);
-        animation: donutEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        animation-delay: 0.5s;
+        opacity: 1;
 
         .circle-svg {
             width: 100%;
@@ -530,7 +496,6 @@
                 stroke-width: 4;
                 /* Even smaller stroke width */
                 stroke-linecap: round;
-                transition: all 0.5s ease;
             }
 
             .track {
@@ -539,12 +504,10 @@
 
             .segment {
                 stroke-dasharray: 100 100;
-                stroke-dashoffset: 100;
-                animation: fillDonut 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                animation-delay: 0.4s;
+                stroke-dashoffset: 0;
+                /* Fully visible */
 
                 &:hover {
-                    stroke-width: 8;
                     cursor: pointer;
                 }
             }
@@ -599,9 +562,7 @@
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            opacity: 0;
-            animation: slideUpFade 0.5s ease-out forwards;
+            opacity: 1;
 
             @for $i from 1 through 3 {
                 &:nth-child(#{$i}) {
@@ -612,7 +573,6 @@
             &:hover {
                 background: rgba(255, 255, 255, 0.08);
                 border-color: rgba(255, 255, 255, 0.1);
-                transform: scale(1.05) translateX(5px);
                 filter: brightness(1.2);
                 cursor: pointer;
 
@@ -625,7 +585,6 @@
                 width: 12px;
                 height: 12px;
                 border-radius: 4px;
-                transition: all 0.3s ease;
             }
 
             .label {
@@ -692,14 +651,10 @@
                 .bar {
                     width: 100%;
                     border-radius: 12px;
-                    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
                     transform-origin: bottom;
-                    animation: growBarVertical 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                    animation-delay: 1.2s;
                     position: relative;
 
                     &:hover {
-                        transform: scaleX(1.1);
                         filter: brightness(1.1);
                         cursor: help;
                     }
@@ -717,9 +672,7 @@
                 margin-top: 1rem;
                 display: block; // Ensure it takes full width for center alignment
                 transform: none; // Remove any rotation
-                opacity: 0;
-                animation: slideUpFade 0.5s ease-out forwards;
-                animation-delay: 1.5s;
+                opacity: 1;
             }
         }
     }
@@ -732,8 +685,7 @@
             align-items: center;
             gap: 1.5rem;
             margin-bottom: 1.25rem;
-            opacity: 0;
-            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 1;
 
             @for $i from 1 through 5 {
                 &:nth-child(#{$i}) {
@@ -763,16 +715,13 @@
                 .bar {
                     height: 100%;
                     border-radius: 5px;
-                    width: 0;
+                    width: 100% !important;
+                    /* Fully filled for static */
                     background: #3b82f6;
                     /* Solid Blue instead of gradient */
-                    animation: growBarHorizontal 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                    animation-delay: 1.8s;
-                    transition: all 0.3s ease;
 
                     &:hover {
                         filter: brightness(1.1);
-                        transform: scaleY(1.3);
                         cursor: pointer;
                     }
                 }
@@ -1092,11 +1041,7 @@
         color: #3b82f6;
 
         .icon-pulse {
-            position: absolute;
-            inset: -4px;
-            border: 2px solid rgba(59, 130, 246, 0.3);
-            border-radius: 18px;
-            animation: pulseRing 2s infinite;
+            display: none;
         }
     }
 
@@ -1184,12 +1129,10 @@
                 align-items: center;
                 cursor: pointer;
                 font-weight: 600;
-                transition: all 0.3s;
 
                 &:hover {
                     background: rgba(255, 255, 255, 0.06);
                     border-color: rgba(59, 130, 246, 0.4);
-                    box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
                 }
             }
 
@@ -1204,7 +1147,6 @@
                 cursor: pointer;
                 font-weight: 600;
                 outline: none;
-                transition: all 0.3s;
 
                 &:hover {
                     background: rgba(255, 255, 255, 0.06);
@@ -1239,7 +1181,6 @@
     gap: 10px;
     cursor: pointer;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2); // shadow-lg shadow-blue-500/20
     white-space: nowrap;
     flex-shrink: 0;
@@ -1256,9 +1197,8 @@
     }
 
     &:hover {
-        transform: translateY(-4px) scale(1.02);
         background: #2563eb;
-        box-shadow: 0 20px 40px rgba(59, 130, 246, 0.6);
+        box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
 
         .btn-glow {
             left: 150%;

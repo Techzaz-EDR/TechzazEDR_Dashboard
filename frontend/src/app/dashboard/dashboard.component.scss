@@ -64,13 +64,11 @@
         margin-bottom: 4px;
         font-size: 0.9rem;
         font-weight: 500;
-        transition: all 0.2s ease;
         border: 1px solid transparent;
 
         .icon {
             font-size: 1.1rem;
             color: var(--text-muted);
-            transition: color 0.2s;
         }
 
         &:hover {
@@ -152,7 +150,6 @@
             border-radius: 8px;
             color: var(--text-primary);
             font-size: 0.9rem;
-            transition: all 0.2s;
 
             &::placeholder {
                 color: var(--text-muted);
@@ -161,7 +158,6 @@
             &:focus {
                 outline: none;
                 border-color: var(--accent-primary);
-                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
             }
         }
     }
@@ -212,8 +208,8 @@
             /* Dark circle bg, force override */
             border: 1px solid rgba(255, 255, 255, 0.05);
             /* Subtle border */
-            color: #fbbf24;
-            /* Gold/Yellow icon */
+            color: var(--text-muted, #8b949e);
+            /* Neutral basic color */
             font-size: 1.25rem;
             cursor: pointer;
             width: 40px;
@@ -222,15 +218,13 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.2s;
             padding: 0;
             /* Reset padding */
 
             &:hover {
                 background-color: var(--bg-hover);
-                color: #fcd34d;
-                /* Lighter gold on hover */
-                transform: translateY(-1px);
+                color: var(--text-primary, #ffffff);
+                /* Basic white on hover */
             }
 
             .badge-dot {
@@ -263,7 +257,6 @@
             z-index: 100;
             border: 1px solid var(--border-color);
             overflow: hidden;
-            animation: slideDown 0.2s ease-out;
 
             .dropdown-pointer {
                 position: absolute;
@@ -311,7 +304,6 @@
                 gap: 16px;
                 padding: 16px 24px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-                transition: background 0.2s;
                 cursor: pointer;
                 position: relative;
 
@@ -357,8 +349,8 @@
 
                         .user {
                             font-weight: 600;
-                            color: #60a5fa;
-                            /* Light blue for names */
+                            color: var(--text-primary, #ffffff);
+                            /* Neutral name */
                             font-size: 0.95rem;
                         }
 
@@ -402,8 +394,6 @@
             cursor: pointer;
             padding: 6px 8px;
             border-radius: 8px;
-            transition: background 0.2s;
-            position: relative;
 
             &:hover,
             &.active {
@@ -414,13 +404,14 @@
                 width: 36px;
                 height: 36px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+                background: var(--bg-primary, #0d1117);
+                border: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 font-weight: 600;
                 font-size: 0.9rem;
-                color: white;
+                color: var(--text-secondary, #cbd5e1);
             }
 
             .user-details {
@@ -456,7 +447,6 @@
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
                 z-index: 50;
                 padding: 0.5rem;
-                animation: slideDown 0.2s ease-out;
 
                 .user-info-dropdown {
                     padding: 0.75rem 1rem;
@@ -477,7 +467,6 @@
                     text-decoration: none;
                     font-size: 0.9rem;
                     border-radius: 6px;
-                    transition: all 0.2s;
 
                     &:hover {
                         background-color: var(--bg-hover);
@@ -501,6 +490,7 @@
             }
         }
     }
+}
 }
 
 .content-area {
@@ -528,12 +518,10 @@
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-8px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
@@ -549,7 +537,6 @@
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 500;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
     border: 1px solid transparent;
 
@@ -561,13 +548,11 @@
         .icon {
             font-size: 1.1rem;
             color: var(--text-muted);
-            transition: color 0.2s;
         }
     }
 
     .chevron {
         font-size: 0.7rem;
-        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 0.7;
     }
 
@@ -602,9 +587,6 @@
     /* Indent children */
     margin-bottom: 8px;
     overflow: hidden;
-
-    /* Animation definition */
-    animation: expandGroup 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     transform-origin: top;
 
     .nav-item.child-item {
@@ -620,15 +602,10 @@
 @keyframes expandGroup {
     from {
         opacity: 0;
-        transform: translateY(-4px);
-        max-height: 0;
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
-        max-height: 500px;
-        /* Arbitrary large height to allow expansion */
     }
 }
 
@@ -732,7 +709,6 @@
                     gap: 12px;
                     padding: 16px 20px;
                     cursor: pointer;
-                    transition: all 0.2s;
                     border-left: 3px solid transparent;
 
                     &:hover {

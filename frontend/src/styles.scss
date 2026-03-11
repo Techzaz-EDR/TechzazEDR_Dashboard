@@ -113,22 +113,22 @@ h6 {
     background-clip: text;
 }
 
-/* Animations */
+/* Animations - Disabled for Static UI */
 @keyframes slideUp {
     from {
-        opacity: 0;
-        transform: translateY(30px);
+        opacity: 1;
+        transform: none;
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: none;
     }
 }
 
 @keyframes fadeIn {
     from {
-        opacity: 0;
+        opacity: 1;
     }
 
     to {
@@ -154,12 +154,12 @@ h6 {
     }
 
     100% {
-        background-position: 50px 50px;
+        background-position: 0 0;
     }
 }
 
 .animate-entrance {
-    animation: slideUp 0.8s var(--ease-out) forwards;
+    animation: none;
 }
 
 .delay-100 {
