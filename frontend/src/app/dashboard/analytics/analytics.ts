@@ -77,9 +77,9 @@ export class Analytics {
     // Incident Status (Donut)
     // Segments: Contained (Orange), Investigating (Red), Resolved (Green)
     donutSegments = [
-        { color: '#F97316', percent: 20, label: 'Contained' },
-        { color: '#EF4444', percent: 15, label: 'Investigating' },
-        { color: '#22C55E', percent: 65, label: 'Resolved' }
+        { color: '#d97706', percent: 20, label: 'Contained' },
+        { color: '#dc2626', percent: 15, label: 'Investigating' },
+        { color: '#16a34a', percent: 65, label: 'Resolved' }
     ];
 
     // Detection Methods (Top Threat Types - Horizontal Bar)

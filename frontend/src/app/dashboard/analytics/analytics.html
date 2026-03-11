@@ -59,50 +59,6 @@
     </div>
 
     <div class="charts-grid">
-        <!-- Threat Trend -->
-        <div class="chart-card glass-card large">
-            <div class="card-header">
-                <h3>Threat Intelligence Trend</h3>
-                <p class="subtitle">Real-time analysis of threat detection over the past 7 days</p>
-            </div>
-            <div class="chart-content line-chart-container">
-                <svg viewBox="0 0 600 200" preserveAspectRatio="none">
-                    <defs>
-                        <linearGradient id="mediumGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.5" />
-                            <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
-                        </linearGradient>
-                        <linearGradient id="criticalGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#ef4444" stop-opacity="0.5" />
-                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
-                        </linearGradient>
-                    </defs>
-
-                    <!-- Grid Lines -->
-                    <line x1="0" y1="50" x2="600" y2="50" class="grid-line" />
-                    <line x1="0" y1="100" x2="600" y2="100" class="grid-line" />
-                    <line x1="0" y1="150" x2="600" y2="150" class="grid-line" />
-
-                    <!-- Medium Severity Path -->
-                    <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
-                    <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="6" />
-
-                    <!-- Critical Severity Path -->
-                    <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
-                    <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="6" />
-                </svg>
-
-                <div class="x-axis">
-                    <span>Monday</span><span>Tuesday</span><span>Wednesday</span><span>Thursday</span><span>Friday</span><span>Saturday</span><span>Sunday</span>
-                </div>
-
-                <div class="chart-legend">
-                    <div class="legend-item"><span class="dot critical"></span> Critical Threats</div>
-                    <div class="legend-item"><span class="dot medium"></span> System Alerts</div>
-                </div>
-            </div>
-        </div>
-
         <!-- Incident Status -->
         <div class="chart-card glass-card cyber-card">
             <div class="card-header">
@@ -113,14 +69,17 @@
                 <div class="donut-viz">
                     <svg class="circle-svg" viewBox="0 0 100 100">
                         <circle class="track" cx="50" cy="50" r="40" />
-                        <!-- Simplified segments as example, real logic would need SVG calculations -->
-                        <circle class="segment resolved" cx="50" cy="50" r="40" stroke="#3b82f6"
+                        <circle class="segment resolved" cx="50" cy="50" r="40"
                             style="--dash-offset: 35; stroke-dasharray: 65 100;" />
-                        <circle class="segment investigating" cx="50" cy="50" r="40" stroke="#EF4444"
+                        <circle class="segment investigating" cx="50" cy="50" r="40"
                             style="--dash-offset: 0; stroke-dasharray: 15 100; stroke-dashoffset: -65;" />
-                        <circle class="segment contained" cx="50" cy="50" r="40" stroke="#F97316"
+                        <circle class="segment contained" cx="50" cy="50" r="40"
                             style="--dash-offset: 0; stroke-dasharray: 20 100; stroke-dashoffset: -80;" />
                     </svg>
+                    <div class="donut-center">
+                        <span class="total">245</span>
+                        <span class="label">Total</span>
+                    </div>
                 </div>
 
                 <div class="donut-legend">
@@ -172,6 +131,46 @@
                     <span class="value">{{ threat.count }}</span>
                 </div>
                 }
+            </div>
+        </div>
+
+        <!-- Threat Trend (Minimized to Left Corner) -->
+        <div class="chart-card glass-card minimized-trend">
+            <div class="card-header">
+                <h3>Threat Trend</h3>
+                <p class="subtitle">Last 7 days analysis</p>
+            </div>
+            <div class="chart-content line-chart-container">
+                <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="mediumGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.5" />
+                            <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+                        </linearGradient>
+                        <linearGradient id="criticalGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#ef4444" stop-opacity="0.5" />
+                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Grid Lines -->
+                    <line x1="0" y1="50" x2="600" y2="50" class="grid-line" />
+                    <line x1="0" y1="100" x2="600" y2="100" class="grid-line" />
+                    <line x1="0" y1="150" x2="600" y2="150" class="grid-line" />
+
+                    <!-- Medium Severity Path -->
+                    <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
+                    <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="6" />
+
+                    <!-- Critical Severity Path -->
+                    <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
+                    <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="6" />
+                </svg>
+
+                <div class="chart-legend-mini">
+                    <div class="legend-item"><span class="dot critical"></span> Critical</div>
+                    <div class="legend-item"><span class="dot medium"></span> Alerts</div>
+                </div>
             </div>
         </div>
 
