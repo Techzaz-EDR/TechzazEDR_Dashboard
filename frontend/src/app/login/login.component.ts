@@ -173,11 +173,56 @@ export class LoginComponent implements AfterViewInit, OnInit {
         this.errorMessage = '';
         try {
             await this.authService.login(this.email, this.password);
+            await this.playLoginAnimation();
             this.router.navigate(['/dashboard']);
         } catch (error: any) {
             console.error('Login failed', error);
             this.errorMessage = error.message || 'Authentication failed. Please check your credentials.';
         }
+    }
+
+    playLoginAnimation(): Promise<void> {
+        return new Promise(resolve => {
+            const tl = gsap.timeline({ onComplete: resolve });
+            
+            // 1. Highlight line starts at the 3 edge trim lines and comes into the node
+            tl.to('.anim-trim', {
+                strokeDashoffset: 0,
+                duration: 0.5,
+                ease: 'power2.inOut'
+            });
+
+            // 2. The little dots in the nodes start glowing
+            tl.to('.anim-node-dots-glow', {
+                opacity: 1,
+                duration: 0.3,
+                ease: 'power1.inOut'
+            }, "-=0.2");
+
+            // 3. Highlight line comes out of the node and goes along the 4 connection lines
+            tl.to('.anim-conn', {
+                strokeDashoffset: 0,
+                duration: 0.8,
+                ease: 'power2.inOut'
+            });
+
+            // 4. Little 4 highlighted dots at the card connections glow
+            tl.to('.anim-card-dots', {
+                opacity: 1,
+                duration: 0.3,
+                ease: 'back.out(2)'
+            }, "-=0.2");
+
+            // 5. Highlight line goes around the border of the box
+            tl.to('.anim-card-border', {
+                strokeDashoffset: 0,
+                duration: 0.6,
+                ease: 'power2.inOut'
+            });
+
+            // Brief pause before dashboard opens
+            tl.to({}, { duration: 0.2 });
+        });
     }
 
     togglePassword() {
