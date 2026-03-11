@@ -81,7 +81,7 @@
         &:hover {
             transform: translateY(-2px);
             border-color: var(--border-hover);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .kpi-icon {
@@ -475,19 +475,22 @@
             &.impact-critical:hover {
                 border-left-color: var(--status-critical);
                 background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(239, 68, 68, 0.2);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
 
             &.impact-high:hover {
                 border-left-color: var(--status-high);
                 background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(245, 158, 11, 0.2);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
 
             &.impact-medium:hover {
                 border-left-color: var(--status-medium);
                 background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(59, 130, 246, 0.2);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
 
             .contributor-info {
@@ -581,26 +584,20 @@
 
         &.severity-critical:hover {
             background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), transparent);
-
-            td:first-child {
-                box-shadow: inset 3px 0 0 var(--chart-critical);
-            }
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         &.severity-high:hover {
             background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent);
-
-            td:first-child {
-                box-shadow: inset 3px 0 0 var(--chart-warning);
-            }
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         &.severity-medium:hover {
             background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
-
-            td:first-child {
-                box-shadow: inset 3px 0 0 var(--status-medium);
-            }
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
     }
 
@@ -679,7 +676,8 @@
 
             &:hover {
                 background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(239, 68, 68, 0.3);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
         }
 
@@ -688,7 +686,8 @@
 
             &:hover {
                 background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(245, 158, 11, 0.3);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
         }
 
@@ -697,7 +696,8 @@
 
             &:hover {
                 background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(59, 130, 246, 0.3);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
         }
 
@@ -706,7 +706,8 @@
 
             &:hover {
                 background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(16, 185, 129, 0.3);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
         }
 

@@ -196,8 +196,8 @@ form {
             &:hover {
                 background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
                 border-color: transparent;
-                box-shadow: 0 0 15px rgba(157, 0, 255, 0.5);
                 transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
         }
     }
@@ -335,8 +335,8 @@ form {
         }
 
         &:hover {
-            box-shadow: 0 0 30px rgba(37, 99, 235, 0.4);
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             background: linear-gradient(135deg, #3b82f6, #2563eb);
 
             &::before {
