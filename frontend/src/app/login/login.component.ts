@@ -1,6 +1,6 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X } from 'lucide-angular';
 import { gsap } from 'gsap';
@@ -13,7 +13,7 @@ import { AuthService } from '../core/services/auth.service';
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements AfterViewInit, OnInit {
     email = '';
     password = '';
     showPassword = false;
@@ -36,7 +36,15 @@ export class LoginComponent implements AfterViewInit {
     readonly Github = Github;
     private glowElement: HTMLElement | null = null;
 
-    constructor(private router: Router, private authService: AuthService) { }
+    constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
+
+    ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            if (params['mode'] === 'signup') {
+                this.isSignUpMode = true;
+            }
+        });
+    }
 
     ngAfterViewInit() {
         this.glowElement = document.querySelector('.hover-glow');

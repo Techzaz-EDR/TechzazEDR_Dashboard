@@ -25,7 +25,7 @@ def sync_users_to_demo_org():
     db = firestore.client()
     
     # Target Configuration
-    TARGET_TENANT = "demo-org"
+    TARGET_ORG = "demo-org"
     TARGET_ROLE = "Admin"
     
     try:
@@ -50,7 +50,7 @@ def sync_users_to_demo_org():
                 # Merge with existing claims if any exist to avoid overwriting unrelated claims,
                 # though usually it's fine to just overwrite.
                 current_claims = user.custom_claims or {}
-                current_claims["tenantId"] = TARGET_TENANT
+                current_claims["organizationId"] = TARGET_ORG
                 current_claims["role"] = TARGET_ROLE
                 
                 auth.set_custom_user_claims(uid, current_claims)
@@ -63,7 +63,7 @@ def sync_users_to_demo_org():
                 user_doc = {
                     "uid": uid,
                     "email": email,
-                    "tenantId": TARGET_TENANT,
+                    "organization_id": TARGET_ORG,
                     "role": TARGET_ROLE,
                     "status": "active",
                     # Using current time as a fallback if user creation time isn't explicitly available, 
@@ -88,7 +88,7 @@ def sync_users_to_demo_org():
                 print(f"  [ERROR] Failed to write Firestore document for {email}: {e}")
                 continue
                 
-        print(f"\nMigration Complete! Successfully synchronized {updated_count}/{len(users)} users to {TARGET_TENANT}.")
+        print(f"\nMigration Complete! Successfully synchronized {updated_count}/{len(users)} users to {TARGET_ORG}.")
         
     except Exception as e:
         print(f"CRITICAL ERROR during migration: {e}")

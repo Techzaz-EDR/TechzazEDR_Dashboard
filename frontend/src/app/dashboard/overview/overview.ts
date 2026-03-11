@@ -92,9 +92,42 @@ export class Overview implements OnInit, OnDestroy {
 
   private intervalId: any;
 
+  // Animation properties
+  animatedProtectionPct = 0;
+  animatedAtRiskPct = 0;
+  animatedOfflinePct = 0;
+
   ngOnInit() {
     this.setTrendPeriod('24h');
     this.initThreatSimulation();
+    this.animateDonutChart();
+  }
+
+  animateDonutChart() {
+    const duration = 1500;
+    const start = performance.now();
+
+    const targetProtected = this.protectionStats.protectedPct;
+    const targetAtRisk = Math.round((this.protectionStats.atRisk / this.protectionStats.total) * 100);
+    const targetOffline = Math.round((this.protectionStats.offline / this.protectionStats.total) * 100);
+
+    const animate = (time: number) => {
+      let progress = (time - start) / duration;
+      if (progress > 1) progress = 1;
+
+      // Easing function (easeOutQuart)
+      const easeProgress = 1 - Math.pow(1 - progress, 4);
+
+      this.animatedProtectionPct = Math.round(targetProtected * easeProgress);
+      this.animatedAtRiskPct = Math.round(targetAtRisk * easeProgress);
+      this.animatedOfflinePct = Math.round(targetOffline * easeProgress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
   }
 
   ngOnDestroy() {

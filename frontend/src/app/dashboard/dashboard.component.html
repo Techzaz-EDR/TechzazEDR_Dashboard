@@ -59,7 +59,36 @@
         <header class="top-bar">
             <div class="search-bar">
                 <span class="search-icon"><lucide-icon [name]="Search" [size]="18"></lucide-icon></span>
-                <input type="text" placeholder="Search endpoints, threats, hash..." />
+                <input type="text" placeholder="Search endpoints, threats, hash..." [(ngModel)]="searchQuery"
+                    (focus)="onSearchFocus()" (blur)="onSearchBlur()" />
+
+                @if (isSearchFocused && searchQuery.trim()) {
+                <div class="search-dropdown" (mousedown)="$event.preventDefault()">
+                    @if (filteredSearchResults.length > 0) {
+                    @for (result of filteredSearchResults; track result.title) {
+                    <a [routerLink]="result.route" class="search-result-item"
+                        (click)="searchQuery = ''; isSearchFocused = false">
+                        <div class="result-icon">
+                            @if (result.type === 'Endpoint') { <lucide-icon [name]="Shield" [size]="16"></lucide-icon> }
+                            @if (result.type === 'Threat') { <lucide-icon [name]="ShieldAlert"
+                                [size]="16"></lucide-icon> }
+                            @if (result.type === 'Incident') { <lucide-icon [name]="Zap" [size]="16"></lucide-icon> }
+                            @if (result.type === 'User') { <lucide-icon [name]="Users" [size]="16"></lucide-icon> }
+                            @if (result.type === 'Hash') { <lucide-icon [name]="FileText" [size]="16"></lucide-icon> }
+                        </div>
+                        <div class="result-details">
+                            <span class="result-title">{{ result.title }}</span>
+                            <span class="result-desc">{{ result.type }} &bull; {{ result.description }}</span>
+                        </div>
+                    </a>
+                    }
+                    } @else {
+                    <div class="search-no-results">
+                        <span>No results found for "{{ searchQuery }}"</span>
+                    </div>
+                    }
+                </div>
+                }
             </div>
 
             <div class="top-actions">
