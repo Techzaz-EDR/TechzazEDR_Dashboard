@@ -1,146 +1,141 @@
 <div class="super-auth-container">
     <!-- SVG Background matched exactly to the image -->
     <svg class="circuit-bg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
-        <!-- Connecting Lines -->
+        <!-- Edge horizontal connection lines -->
+        <g stroke="#2a2a2a" stroke-width="1.5" fill="none">
+            <!-- Left edge lines -->
+            <path d="M 0,40 L 30,40" />
+            <path d="M 0,50 L 30,50" />
+            <path d="M 0,60 L 30,60" />
+            
+            <path d="M 0,1020 L 30,1020" />
+            <path d="M 0,1030 L 30,1030" />
+            <path d="M 0,1040 L 30,1040" />
+            
+            <!-- Right edge lines -->
+            <path d="M 1920,40 L 1890,40" />
+            <path d="M 1920,50 L 1890,50" />
+            <path d="M 1920,60 L 1890,60" />
+            
+            <path d="M 1920,1020 L 1890,1020" />
+            <path d="M 1920,1030 L 1890,1030" />
+            <path d="M 1920,1040 L 1890,1040" />
+        </g>
+
+        <!-- Connecting Lines to Center Auth Box -->
         <g stroke="#2a2a2a" stroke-width="1.5" fill="none">
             <!-- Top Left corner line -->
-            <path d="M 120,200 L 250,200 L 350,300 L 770,300" />
+            <path d="M 120,50 L 250,50 L 350,300 L 770,300" />
             
             <!-- Top Right corner line -->
-            <path d="M 1800,200 L 1670,200 L 1570,300 L 1150,300" />
+            <path d="M 1800,50 L 1670,50 L 1570,300 L 1150,300" />
             
             <!-- Bottom Left corner line -->
-            <path d="M 120,880 L 250,880 L 350,780 L 770,780" />
+            <path d="M 120,1030 L 250,1030 L 350,780 L 770,780" />
             
             <!-- Bottom Right corner line -->
-            <path d="M 1800,880 L 1670,880 L 1570,780 L 1150,780" />
+            <path d="M 1800,1030 L 1670,1030 L 1570,780 L 1150,780" />
         </g>
 
-        <!-- Right edge lines -->
-        <g stroke="#333" stroke-width="1.5" fill="none">
-            <path d="M 1920,180 L 1800,180" />
-            <path d="M 1920,200 L 1800,200" />
-            <path d="M 1920,220 L 1800,220" />
-
-            <path d="M 1920,860 L 1800,860" />
-            <path d="M 1920,880 L 1800,880" />
-            <path d="M 1920,900 L 1800,900" />
-
-            <path d="M 0,180 L 120,180" />
-            <path d="M 0,200 L 120,200" />
-            <path d="M 0,220 L 120,220" />
-
-            <path d="M 0,860 L 120,860" />
-            <path d="M 0,880 L 120,880" />
-            <path d="M 0,900 L 120,900" />
+        <!-- The 4 Corner Nodes -->
+        <!-- Top Left -->
+        <g transform="translate(30, 30)">
+            <rect x="0" y="0" width="90" height="40" rx="4" fill="#171717" stroke="#000000" stroke-width="2" />
+            <rect x="1" y="1" width="88" height="38" rx="3" stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.1" fill="none" />
+            <g fill="#444">
+                <circle cx="45" cy="10" r="1" />
+                <circle cx="55" cy="10" r="1" />
+                <circle cx="65" cy="10" r="1" />
+                <circle cx="75" cy="10" r="1" />
+                <circle cx="55" cy="18" r="1.5" fill="#aaa" />
+                <circle cx="65" cy="18" r="1" />
+                <circle cx="75" cy="18" r="1.5" fill="#aaa" />
+                <circle cx="15" cy="28" r="1" />
+                <circle cx="25" cy="28" r="1" />
+                <circle cx="35" cy="28" r="1.5" fill="#aaa" />
+                <circle cx="45" cy="28" r="1" />
+                <circle cx="55" cy="28" r="1" />
+                <circle cx="15" cy="34" r="0.8" />
+            </g>
         </g>
 
-        <!-- Nodes Backgrounds -->
-        <g fill="#171717" stroke="#000000" stroke-width="2">
-            <!-- Top Left -->
-            <rect x="75" y="180" width="90" height="40" rx="4" />
-            <!-- Top Right -->
-            <rect x="1755" y="180" width="90" height="40" rx="4" />
-            <!-- Bottom Left -->
-            <rect x="75" y="860" width="90" height="40" rx="4" />
-            <!-- Bottom Right -->
-            <rect x="1755" y="860" width="90" height="40" rx="4" />
+        <!-- Top Right -->
+        <g transform="translate(1800, 30)">
+            <rect x="0" y="0" width="90" height="40" rx="4" fill="#171717" stroke="#000000" stroke-width="2" />
+            <rect x="1" y="1" width="88" height="38" rx="3" stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.1" fill="none" />
+            <g fill="#444">
+                <circle cx="45" cy="10" r="1" />
+                <circle cx="55" cy="10" r="1" />
+                <circle cx="65" cy="10" r="1" />
+                <circle cx="75" cy="10" r="1" />
+                <circle cx="55" cy="18" r="1.5" fill="#aaa" />
+                <circle cx="65" cy="18" r="1" />
+                <circle cx="75" cy="18" r="1.5" fill="#aaa" />
+                <circle cx="15" cy="28" r="1" />
+                <circle cx="25" cy="28" r="1" />
+                <circle cx="35" cy="28" r="1.5" fill="#aaa" />
+                <circle cx="45" cy="28" r="1" />
+                <circle cx="55" cy="28" r="1" />
+                <circle cx="15" cy="34" r="0.8" />
+            </g>
         </g>
 
-        <g stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.1" fill="none">
-            <!-- Top Left inner border -->
-            <rect x="76" y="181" width="88" height="38" rx="3" />
-            <!-- Top Right inner border -->
-            <rect x="1756" y="181" width="88" height="38" rx="3" />
-            <!-- Bottom Left inner border -->
-            <rect x="76" y="861" width="88" height="38" rx="3" />
-            <!-- Bottom Right inner border -->
-            <rect x="1756" y="861" width="88" height="38" rx="3" />
+        <!-- Bottom Left -->
+        <g transform="translate(30, 1010)">
+            <rect x="0" y="0" width="90" height="40" rx="4" fill="#171717" stroke="#000000" stroke-width="2" />
+            <rect x="1" y="1" width="88" height="38" rx="3" stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.1" fill="none" />
+            <g fill="#444">
+                <circle cx="45" cy="10" r="1" />
+                <circle cx="55" cy="10" r="1" />
+                <circle cx="65" cy="10" r="1" />
+                <circle cx="75" cy="10" r="1" />
+                <circle cx="55" cy="18" r="1.5" fill="#aaa" />
+                <circle cx="65" cy="18" r="1" />
+                <circle cx="75" cy="18" r="1.5" fill="#aaa" />
+                <circle cx="15" cy="28" r="1" />
+                <circle cx="25" cy="28" r="1" />
+                <circle cx="35" cy="28" r="1.5" fill="#aaa" />
+                <circle cx="45" cy="28" r="1" />
+                <circle cx="55" cy="28" r="1" />
+                <circle cx="15" cy="34" r="0.8" />
+            </g>
         </g>
 
-        <!-- Complex dots pattern inside each node -->
-        <g fill="#444">
-            <!-- Top Left -->
-            <circle cx="120" cy="190" r="1" />
-            <circle cx="130" cy="190" r="1" />
-            <circle cx="140" cy="190" r="1" />
-            <circle cx="150" cy="190" r="1" />
-            <circle cx="130" cy="198" r="1.5" fill="#aaa" />
-            <circle cx="140" cy="198" r="1" />
-            <circle cx="150" cy="198" r="1.5" fill="#aaa" />
-            <circle cx="90" cy="208" r="1" />
-            <circle cx="100" cy="208" r="1" />
-            <circle cx="110" cy="208" r="1.5" fill="#aaa" />
-            <circle cx="120" cy="208" r="1" />
-            <circle cx="130" cy="208" r="1" />
-            <circle cx="90" cy="214" r="0.8" />
-
-
-            <!-- Top Right -->
-            <circle cx="1800" cy="190" r="1" />
-            <circle cx="1810" cy="190" r="1" />
-            <circle cx="1820" cy="190" r="1" />
-            <circle cx="1830" cy="190" r="1" />
-            <circle cx="1810" cy="198" r="1.5" fill="#aaa" />
-            <circle cx="1820" cy="198" r="1" />
-            <circle cx="1830" cy="198" r="1.5" fill="#aaa" />
-            <circle cx="1770" cy="208" r="1" />
-            <circle cx="1780" cy="208" r="1" />
-            <circle cx="1790" cy="208" r="1.5" fill="#aaa" />
-            <circle cx="1800" cy="208" r="1" />
-            <circle cx="1810" cy="208" r="1" />
-            <circle cx="1770" cy="214" r="0.8" />
-
-            <!-- Bottom Left -->
-            <circle cx="120" cy="870" r="1" />
-            <circle cx="130" cy="870" r="1" />
-            <circle cx="140" cy="870" r="1" />
-            <circle cx="150" cy="870" r="1" />
-            <circle cx="130" cy="878" r="1.5" fill="#aaa" />
-            <circle cx="140" cy="878" r="1" />
-            <circle cx="150" cy="878" r="1.5" fill="#aaa" />
-            <circle cx="90" cy="888" r="1" />
-            <circle cx="100" cy="888" r="1" />
-            <circle cx="110" cy="888" r="1.5" fill="#aaa" />
-            <circle cx="120" cy="888" r="1" />
-            <circle cx="130" cy="888" r="1" />
-            <circle cx="90" cy="894" r="0.8" />
-
-            <!-- Bottom Right -->
-            <circle cx="1800" cy="870" r="1" />
-            <circle cx="1810" cy="870" r="1" />
-            <circle cx="1820" cy="870" r="1" />
-            <circle cx="1830" cy="870" r="1" />
-            <circle cx="1810" cy="878" r="1.5" fill="#aaa" />
-            <circle cx="1820" cy="878" r="1" />
-            <circle cx="1830" cy="878" r="1.5" fill="#aaa" />
-            <circle cx="1770" cy="888" r="1" />
-            <circle cx="1780" cy="888" r="1" />
-            <circle cx="1790" cy="888" r="1.5" fill="#aaa" />
-            <circle cx="1800" cy="888" r="1" />
-            <circle cx="1810" cy="888" r="1" />
-            <circle cx="1770" cy="894" r="0.8" />
+        <!-- Bottom Right -->
+        <g transform="translate(1800, 1010)">
+            <rect x="0" y="0" width="90" height="40" rx="4" fill="#171717" stroke="#000000" stroke-width="2" />
+            <rect x="1" y="1" width="88" height="38" rx="3" stroke="#ffffff" stroke-width="0.3" stroke-opacity="0.1" fill="none" />
+            <g fill="#444">
+                <circle cx="45" cy="10" r="1" />
+                <circle cx="55" cy="10" r="1" />
+                <circle cx="65" cy="10" r="1" />
+                <circle cx="75" cy="10" r="1" />
+                <circle cx="55" cy="18" r="1.5" fill="#aaa" />
+                <circle cx="65" cy="18" r="1" />
+                <circle cx="75" cy="18" r="1.5" fill="#aaa" />
+                <circle cx="15" cy="28" r="1" />
+                <circle cx="25" cy="28" r="1" />
+                <circle cx="35" cy="28" r="1.5" fill="#aaa" />
+                <circle cx="45" cy="28" r="1" />
+                <circle cx="55" cy="28" r="1" />
+                <circle cx="15" cy="34" r="0.8" />
+            </g>
         </g>
 
         <!-- Glow backing for light blocks -->
         <g fill="none" class="glow-squares">
-            <rect x="196" y="196" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8"
-                fill="#111" />
-            <rect x="1716" y="196" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8"
-                fill="#111" />
-            <rect x="196" y="876" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8"
-                fill="#111" />
-            <rect x="1716" y="876" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8"
-                fill="#111" />
+            <rect x="116" y="46" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="#111" />
+            <rect x="1796" y="46" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="#111" />
+            <rect x="116" y="1026" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="#111" />
+            <rect x="1796" y="1026" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="#111" />
         </g>
 
         <!-- White Connecting Squares -->
         <g fill="#FFFFFF" filter="drop-shadow(0px 0px 3px rgba(255,255,255,0.9))">
-            <!-- White square block outside connecting lines -->
-            <rect x="196" y="196" width="8" height="8" rx="2" />
-            <rect x="1716" y="196" width="8" height="8" rx="2" />
-            <rect x="196" y="876" width="8" height="8" rx="2" />
-            <rect x="1716" y="876" width="8" height="8" rx="2" />
+            <rect x="116" y="46" width="8" height="8" rx="2" />
+            <rect x="1796" y="46" width="8" height="8" rx="2" />
+            <rect x="116" y="1026" width="8" height="8" rx="2" />
+            <rect x="1796" y="1026" width="8" height="8" rx="2" />
         </g>
     </svg>
 
