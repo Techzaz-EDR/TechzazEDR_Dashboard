@@ -22,6 +22,7 @@ export class Users {
     readonly MoreVerticalIcon = MoreVertical;
     readonly PlusIcon = Plus;
 
+    isLoading = false;
     searchTerm = '';
 
     users = [
