@@ -15,11 +15,9 @@ class SecurityAlert(BaseModel):
     Category: str
     Severity: str
     Status: str
-    organization_id: str
     Details: Dict[str, Any]
 
-def process_alert_background(agent_id: str, alert: SecurityAlert):
-    organization_id = alert.organization_id
+def process_alert_background(agent_id: str, organization_id: str, alert: SecurityAlert):
     alert_dict = alert.dict()
     
     # We don't need organization_id inside the document if it's already in the path, but we keep it if the schema demands it
@@ -44,19 +42,23 @@ def process_alert_background(agent_id: str, alert: SecurityAlert):
     alerts_ref.set(alert_dict)
 
 @router.post("")
-async def receive_alert(agent_id: str, alert: SecurityAlert, background_tasks: BackgroundTasks):
+async def receive_alert(
+    agent_id: str, 
+    alert: SecurityAlert, 
+    background_tasks: BackgroundTasks
+):
     """
     Receive a security alert from an agent.
     - agent_id is passed as a query parameter (?agent_id=DESKTOP-ABC)
-    - organization_id is provided in the JSON body.
+    - API key has been temporarily removed to test agent connectivity
     """
-    if not alert.organization_id:
-        raise HTTPException(status_code=400, detail="organization_id is required in the alert payload")
-        
     if not agent_id:
         raise HTTPException(status_code=400, detail="agent_id query parameter is required")
 
+    # Hardcoding organization_id for testing as requested
+    organization_id = "default-org"
+
     # Add to background tasks so the agent gets an immediate 202 response
-    background_tasks.add_task(process_alert_background, agent_id, alert)
+    background_tasks.add_task(process_alert_background, agent_id, organization_id, alert)
     
     return {"status": "accepted", "message": "Alert queued for processing"}
