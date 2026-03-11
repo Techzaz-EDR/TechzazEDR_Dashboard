@@ -47,12 +47,27 @@ export class LoginComponent implements AfterViewInit, OnInit {
     ngOnInit() {
         if (typeof window !== 'undefined') {
             this.generateSpheres();
+            this.startAutomatedDrift();
         }
 
         this.route.queryParams.subscribe(params => {
             if (params['mode'] === 'signup') {
                 this.isSignUpMode = true;
             }
+        });
+    }
+
+    startAutomatedDrift() {
+        // Subtle drift for spheres so they don't just stay still
+        this.spheres.forEach((s, i) => {
+            gsap.to(`.sphere-${i}`, {
+                x: "+=20",
+                y: "-=30",
+                duration: 5 + Math.random() * 5,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
         });
     }
 
@@ -68,19 +83,11 @@ export class LoginComponent implements AfterViewInit, OnInit {
             width: Math.random() * 250 + 150 + 'px',
             initialLeft: Math.random() * 90 + -5,
             initialTop: Math.random() * 90 + -5,
-            left: 0, // Current left (will be updated by mouse move)
-            top: 0,  // Current top
             background: colors[i % colors.length],
             delay: (Math.random() * -30) + 's',
             duration: (Math.random() * 10 + 20) + 's',
             blur: (Math.random() * 4 + 1) + 'px'
         }));
-
-        // Set initial positions
-        this.spheres.forEach(s => {
-            s.left = s.initialLeft;
-            s.top = s.initialTop;
-        });
     }
 
     ngAfterViewInit() {
@@ -96,16 +103,14 @@ export class LoginComponent implements AfterViewInit, OnInit {
         const mouseX = (e.clientX / window.innerWidth) - 0.5;
         const mouseY = (e.clientY / window.innerHeight) - 0.5;
 
+        // Parallax effect for spheres - higher depth factors
         this.spheres.forEach((s, i) => {
-            const depth = (i + 1) * 20; // Different depth for parallax effect
-            const targetX = s.initialLeft + (mouseX * depth);
-            const targetY = s.initialTop + (mouseY * depth);
-
+            const factor = (i + 1) * 25; 
             gsap.to(`.sphere-${i}`, {
-                left: targetX + '%',
-                top: targetY + '%',
-                duration: 1,
-                ease: "power2.out"
+                x: mouseX * factor,
+                y: mouseY * factor,
+                duration: 1.5,
+                ease: "power1.out"
             });
         });
 
@@ -149,8 +154,20 @@ export class LoginComponent implements AfterViewInit, OnInit {
             await this.playLoginAnimation();
             this.router.navigate(['/dashboard']);
         } catch (error: any) {
-            console.error('Login failed', error);
+            console.error('Auth failed', error);
             this.errorMessage = error.message || 'Authentication failed. Please check your credentials.';
+        }
+    }
+
+    async signUp() {
+        this.errorMessage = '';
+        try {
+            await this.authService.register(this.signupName, this.signupEmail, this.signupPassword);
+            await this.playLoginAnimation();
+            this.router.navigate(['/dashboard']);
+        } catch (error: any) {
+            console.error('Registration failed', error);
+            this.errorMessage = error.message || 'Registration failed. Please try again.';
         }
     }
 
@@ -158,43 +175,24 @@ export class LoginComponent implements AfterViewInit, OnInit {
         return new Promise(resolve => {
             const tl = gsap.timeline({ onComplete: resolve });
 
-            // 1. Highlight line starts at the 3 edge trim lines and comes into the node
-            tl.to('.anim-trim', {
-                strokeDashoffset: 0,
-                duration: 1.2,
-                ease: 'power1.inOut'
-            });
-
-            // 2. The little dots in the nodes start glowing
-            tl.to('.anim-node-dots-glow', {
-                opacity: 1,
-                duration: 0.8,
-                ease: 'power1.inOut'
-            }, "-=0.4");
-
-            // 3. Highlight line comes out of the node and goes along the 4 connection lines
-            tl.to('.anim-conn', {
-                strokeDashoffset: 0,
-                duration: 4.5,
-                ease: 'power1.inOut'
-            });
-
-            // 4. Little 4 highlighted dots at the card connections glow
-            tl.to('.anim-card-dots', {
-                opacity: 1,
+            // Fade out the auth card
+            tl.to('.auth-card', {
+                opacity: 0,
+                y: 20,
                 duration: 0.6,
-                ease: 'power2.out'
-            }, "-=0.2");
-
-            // 5. Highlight line goes around the border of the box smoothly
-            tl.to('.anim-card-border', {
-                strokeDashoffset: 0,
-                duration: 2.0,
-                ease: 'power1.inOut'
+                ease: 'power2.in'
             });
 
-            // Brief pause before dashboard opens
-            tl.to({}, { duration: 0.6 });
+            // Disperse spheres
+            tl.to('.sphere', {
+                scale: 1.5,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.05,
+                ease: 'power2.inOut'
+            }, "-=0.3");
+
+            tl.to({}, { duration: 0.4 });
         });
     }
 
