@@ -121,10 +121,6 @@
                         <circle class="segment contained" cx="50" cy="50" r="40" stroke="#F97316"
                             style="--dash-offset: 0; stroke-dasharray: 20 100; stroke-dashoffset: -80;" />
                     </svg>
-                    <div class="donut-center">
-                        <span class="total">80</span>
-                        <span class="label">Total</span>
-                    </div>
                 </div>
 
                 <div class="donut-legend">
@@ -145,14 +141,15 @@
                 <h3>Detection Vectors</h3>
                 <p class="subtitle">Top performing security layers</p>
             </div>
-            <div class="chart-content bars-container vertical">
+            <div class="chart-content bars-container horizontal">
                 @for (item of detectionMethods; track item.label) {
-                <div class="bar-group">
-                    <div class="bar-wrapper">
-                        <div class="bar" [style.height]="item.height" [style.color]="item.color"
-                            [style.background]="'linear-gradient(to top, ' + item.color + ', transparent)'"></div>
-                    </div>
+                <div class="bar-row">
                     <span class="label">{{ item.label }}</span>
+                    <div class="bar-track">
+                        <div class="bar" [style.width]="item.width" [style.color]="item.color"
+                            [style.background]="'linear-gradient(to right, transparent, ' + item.color + ')'"></div>
+                    </div>
+                    <span class="value">{{ item.count }}</span>
                 </div>
                 }
             </div>
