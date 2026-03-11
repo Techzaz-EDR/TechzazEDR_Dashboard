@@ -33,9 +33,29 @@
     width: 380px;
     background-color: #1a1a1a;
     border-radius: 12px;
-    padding: 32px;
+    padding: 32px 0;
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 4px 60px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.forms-slider {
+    width: 100%;
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.68, -0.2, 0.265, 1.15);
+    
+    &.show-signup {
+        transform: translateX(-100%);
+    }
+}
+
+.form-panel {
+    min-width: 100%;
+    flex-shrink: 0;
+    padding: 0 32px;
     display: flex;
     flex-direction: column;
     align-items: center;
