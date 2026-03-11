@@ -26,9 +26,8 @@ export class Users implements OnInit, OnDestroy {
     readonly MoreVerticalIcon = MoreVertical;
     readonly PlusIcon = Plus;
 
-    isLoading = false;
-    searchTerm = '';
     isLoading = true;
+    searchTerm = '';
 
     private authService = inject(AuthService);
     private db = getFirestore(getAuth().app);
