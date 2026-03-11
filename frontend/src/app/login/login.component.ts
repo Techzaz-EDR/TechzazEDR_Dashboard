@@ -202,7 +202,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
             // 3. Highlight line comes out of the node and goes along the 4 connection lines
             tl.to('.anim-conn', {
                 strokeDashoffset: 0,
-                duration: 2.2,
+                duration: 4.5,
                 ease: 'power1.inOut'
             });
 
