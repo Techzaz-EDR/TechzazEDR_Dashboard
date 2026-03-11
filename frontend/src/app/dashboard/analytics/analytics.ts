@@ -93,10 +93,10 @@ export class Analytics {
 
     // Detection Methods Vertical
     detectionMethods = [
-        { label: 'Signature', count: 160, height: '80%', color: '#3b82f6' },
-        { label: 'Behavioral', count: 90, height: '45%', color: '#3b82f6' },
-        { label: 'Heuristic', count: 70, height: '35%', color: '#3b82f6' },
-        { label: 'ML-Based', count: 45, height: '22%', color: '#3b82f6' }
+        { label: 'Signature', count: 160, width: '100%', color: '#3b82f6' },
+        { label: 'Behavioral', count: 90, width: '56%', color: '#3b82f6' },
+        { label: 'Heuristic', count: 70, width: '44%', color: '#3b82f6' },
+        { label: 'ML-Based', count: 45, width: '28%', color: '#3b82f6' }
     ];
     // Detailed Threat Logs
     detailedThreatLogs = [
