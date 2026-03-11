@@ -16,43 +16,50 @@
     overflow: hidden;
 }
 
-.background-bubbles {
+.circuit-bg {
+    position: absolute;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.bg-floating-labels {
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
 
-    .bubble {
+    .floating-label {
         position: absolute;
-        white-space: nowrap;
-        color: #ffffff;
+        padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        color: rgba(255, 255, 255, 0.4);
         font-family: 'Inter', sans-serif;
-        font-size: 14px;
-        font-weight: 900;
-        letter-spacing: 2px;
-        filter: blur(1px);
-        user-select: none;
-        animation: drift linear infinite alternate;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        animation: float-around infinite ease-in-out;
+        backdrop-filter: blur(2px);
     }
 }
 
-@keyframes drift {
-    0% {
-        transform: translate(0, 0) scale(var(--scale, 1)) rotate(0deg);
+@keyframes float-around {
+    0%, 100% {
+        transform: translate(0, 0);
     }
-    100% {
-        transform: translate(100px, 100px) scale(var(--scale, 1)) rotate(5deg);
+    33% {
+        transform: translate(15px, -15px);
     }
-}
-
-.circuit-bg {
-    position: absolute;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1;
-    pointer-events: none;
+    66% {
+        transform: translate(-10px, 10px);
+    }
 }
 
 .auth-card {

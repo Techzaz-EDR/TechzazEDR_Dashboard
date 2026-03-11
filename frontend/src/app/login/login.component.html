@@ -1,16 +1,4 @@
 <div class="super-auth-container">
-    <div class="background-bubbles">
-        <div *ngFor="let bubble of backgroundBubbles" 
-             class="bubble" 
-             [style.left]="bubble.left" 
-             [style.top]="bubble.top" 
-             [style.opacity]="bubble.opacity"
-             [style.--scale]="bubble.scale"
-             [style.animationDuration]="bubble.duration"
-             [style.animationDelay]="bubble.delay">
-            TECHZAZ EDR
-        </div>
-    </div>
     <!-- SVG Background matched exactly to the image -->
     <svg class="circuit-bg" width="100%" height="100%" style="position:absolute; inset:0;">
         <!-- Connecting Lines to Center Auth Box (Orthogonal/45deg dynamic) -->
@@ -241,6 +229,19 @@
             <circle [attr.cx]="dotBR.x" [attr.cy]="dotBR.y" r="6" />
         </g>
     </svg>
+
+    <!-- Floating Background Text Labels -->
+    <div class="bg-floating-labels">
+        <div *ngFor="let label of backgroundLabels" 
+             class="floating-label"
+             [style.top]="label.y" 
+             [style.left]="label.x"
+             [style.opacity]="label.opacity"
+             [style.animation-delay]="label.delay"
+             [style.animation-duration]="label.duration">
+            techzaz edr
+        </div>
+    </div>
 
     <div class="auth-card">
         <svg class="card-border-svg"

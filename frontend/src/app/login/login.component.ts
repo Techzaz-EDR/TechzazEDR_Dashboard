@@ -51,7 +51,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     dotBL = {x: 0, y: 0};
     dotBR = {x: 0, y: 0};
 
-    backgroundBubbles: any[] = [];
+    backgroundLabels: any[] = [];
 
     constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
 
@@ -108,7 +108,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
             this.screenWidth = window.innerWidth;
             this.screenHeight = window.innerHeight;
             this.updateSvgPaths();
-            this.generateBubbles();
+            this.generateBackgroundLabels();
         }
 
         this.route.queryParams.subscribe(params => {
@@ -118,18 +118,15 @@ export class LoginComponent implements AfterViewInit, OnInit {
         });
     }
 
-    generateBubbles() {
+    generateBackgroundLabels() {
         const count = 12;
-        for (let i = 0; i < count; i++) {
-            this.backgroundBubbles.push({
-                left: Math.random() * 100 + '%',
-                top: Math.random() * 100 + '%',
-                opacity: Math.random() * 0.15 + 0.05,
-                scale: Math.random() * 0.5 + 0.5,
-                duration: Math.random() * 10 + 10 + 's',
-                delay: Math.random() * -20 + 's'
-            });
-        }
+        this.backgroundLabels = Array.from({ length: count }).map((_, i) => ({
+            x: Math.random() * 80 + 10 + '%',
+            y: Math.random() * 80 + 10 + '%',
+            delay: (Math.random() * 5).toFixed(1) + 's',
+            duration: (15 + Math.random() * 10).toFixed(1) + 's',
+            opacity: (0.1 + Math.random() * 0.2).toFixed(2)
+        }));
     }
 
     ngAfterViewInit() {
