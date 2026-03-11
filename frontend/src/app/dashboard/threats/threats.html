@@ -64,46 +64,24 @@
         </div>
 
         <!-- Timeline Chart (Mock) -->
-        <div class="timeline-card glass-card">
+        <div class="timeline-card">
             <h3>Threat Volume (Last 24h)</h3>
-            <div class="chart-container" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()">
-                <svg viewBox="0 0 600 120" preserveAspectRatio="none" class="threat-svg">
+            <div class="chart-container">
+                <svg viewBox="0 0 600 120" preserveAspectRatio="none">
                     <!-- Grid -->
                     <line x1="0" y1="100" x2="600" y2="100" stroke="#334155" stroke-width="1" />
-                    <line x1="0" y1="50" x2="600" y2="50" stroke="#334155" stroke-dasharray="4 4" opacity="0.3"
-                        stroke-dashoffset="0" />
+                    <line x1="0" y1="50" x2="600" y2="50" stroke="#334155" stroke-dasharray="4 4" opacity="0.5" />
 
                     <!-- Area Path (Fill) -->
-                    <path [attr.d]="areaPath" fill="url(#threatGradient)" class="area-path" />
+                    <path
+                        d="M0,100 L50,80 L100,90 L150,40 L200,60 L250,30 L300,50 L350,20 L400,60 L450,80 L500,70 L550,90 L600,80 L600,120 L0,120 Z"
+                        fill="rgba(239, 68, 68, 0.1)" stroke="none" />
 
                     <!-- Line Path -->
-                    <path [attr.d]="linePath" fill="none" class="trend-line" />
-
-                    <!-- Interaction Overlay -->
-                    <g [class.visible]="hovering" class="chart-interactions">
-                        <line [attr.x1]="hoverX" y1="0" [attr.x2]="hoverX" y2="120" stroke="rgba(239, 68, 68, 0.4)"
-                            stroke-width="1" stroke-dasharray="4" />
-                        <circle [attr.cx]="hoverX" [attr.cy]="hoverY" r="4" fill="#ef4444" stroke="#fff"
-                            stroke-width="2" />
-                    </g>
-
-                    <defs>
-                        <linearGradient id="threatGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#ef4444" stop-opacity="0.2" />
-                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
-                        </linearGradient>
-                    </defs>
+                    <path
+                        d="M0,100 L50,80 L100,90 L150,40 L200,60 L250,30 L300,50 L350,20 L400,60 L450,80 L500,70 L550,90 L600,80"
+                        fill="none" stroke="#ef4444" stroke-width="2" vector-effect="non-scaling-stroke" />
                 </svg>
-
-                <div class="chart-tooltip" [class.visible]="hovering" [style.left.px]="tooltipX"
-                    [style.top.px]="tooltipY">
-                    <div class="tooltip-time">{{ currentTime }}</div>
-                    <div class="tooltip-row">
-                        <span class="dot"></span>
-                        <span class="value">{{ currentValue }}</span>
-                        <span class="label">Threats</span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
