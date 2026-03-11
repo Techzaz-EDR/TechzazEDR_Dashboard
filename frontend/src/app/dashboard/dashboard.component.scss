@@ -64,11 +64,13 @@
         margin-bottom: 4px;
         font-size: 0.9rem;
         font-weight: 500;
+        transition: all 0.2s ease;
         border: 1px solid transparent;
 
         .icon {
             font-size: 1.1rem;
             color: var(--text-muted);
+            transition: color 0.2s;
         }
 
         &:hover {
@@ -120,14 +122,17 @@
 
 /* Top Bar */
 .top-bar {
-    height: var(--header-height);
+    height: var(--header-height, 70px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
-    background-color: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
+    background-color: #0b0f19;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
+    position: relative;
+    z-index: 10;
 
     .search-bar {
         position: relative;
@@ -138,26 +143,102 @@
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
+            color: #94a3b8;
             pointer-events: none;
         }
 
         input {
             width: 100%;
             padding: 0.625rem 1rem 0.625rem 2.5rem;
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-light);
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 8px;
-            color: var(--text-primary);
+            color: #ffffff;
             font-size: 0.9rem;
+            transition: all 0.2s;
 
             &::placeholder {
-                color: var(--text-muted);
+                color: #94a3b8;
             }
 
             &:focus {
                 outline: none;
                 border-color: var(--accent-primary);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+                background-color: rgba(255, 255, 255, 0.06);
+            }
+        }
+
+        /* Search Dropdown Panel */
+        .search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-card, #131520);
+            border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            overflow: hidden;
+            animation: slideDown 0.2s ease-out;
+
+            .search-result-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                text-decoration: none;
+                color: var(--text-primary, #fff);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+                transition: background 0.2s;
+                cursor: pointer;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                &:hover {
+                    background-color: var(--bg-hover, rgba(255, 255, 255, 0.05));
+                }
+
+                .result-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 32px;
+                    height: 32px;
+                    background-color: rgba(59, 130, 246, 0.1);
+                    color: var(--accent-primary, #3b82f6);
+                    border-radius: 8px;
+                    flex-shrink: 0;
+                }
+
+                .result-details {
+                    display: flex;
+                    flex-direction: column;
+                    min-width: 0;
+
+                    .result-title {
+                        font-weight: 500;
+                        font-size: 0.9rem;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .result-desc {
+                        font-size: 0.75rem;
+                        color: var(--text-muted, #9ca3af);
+                    }
+                }
+            }
+
+            .search-no-results {
+                padding: 20px;
+                text-align: center;
+                color: var(--text-muted, #9ca3af);
+                font-size: 0.9rem;
             }
         }
     }
@@ -173,21 +254,23 @@
             gap: 0.5rem;
 
             .icon {
-                color: var(--text-muted);
+                color: #94a3b8;
             }
 
             .time-select {
-                background-color: var(--bg-primary);
-                border: 1px solid var(--border-light);
-                color: var(--text-primary);
+                background-color: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                color: #ffffff;
                 padding: 0.5rem 1rem;
                 border-radius: 6px;
                 font-size: 0.85rem;
                 cursor: pointer;
                 outline: none;
+                transition: all 0.2s;
 
                 &:hover {
-                    border-color: var(--text-secondary);
+                    border-color: rgba(255, 255, 255, 0.2);
+                    background-color: rgba(255, 255, 255, 0.08);
                 }
 
                 &:focus {
@@ -208,8 +291,8 @@
             /* Dark circle bg, force override */
             border: 1px solid rgba(255, 255, 255, 0.05);
             /* Subtle border */
-            color: var(--text-muted, #8b949e);
-            /* Neutral basic color */
+            color: #fbbf24;
+            /* Gold/Yellow icon */
             font-size: 1.25rem;
             cursor: pointer;
             width: 40px;
@@ -218,13 +301,15 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            transition: all 0.2s;
             padding: 0;
             /* Reset padding */
 
             &:hover {
                 background-color: var(--bg-hover);
-                color: var(--text-primary, #ffffff);
-                /* Basic white on hover */
+                color: #fcd34d;
+                /* Lighter gold on hover */
+                transform: translateY(-1px);
             }
 
             .badge-dot {
@@ -250,13 +335,13 @@
             right: 180px;
             /* Position relative to bell roughly */
             width: 380px;
-            background-color: #0a0f1e;
-            /* Solid Navy */
+            background-color: var(--bg-card);
             border-radius: 16px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
             z-index: 100;
             border: 1px solid var(--border-color);
             overflow: hidden;
+            animation: slideDown 0.2s ease-out;
 
             .dropdown-pointer {
                 position: absolute;
@@ -265,8 +350,7 @@
                 /* Adjust to align with bell */
                 width: 12px;
                 height: 12px;
-                background-color: #0a0f1e;
-                /* Solid Navy */
+                background-color: var(--bg-card);
                 border-top: 1px solid var(--border-color);
                 border-left: 1px solid var(--border-color);
                 transform: rotate(45deg);
@@ -304,6 +388,7 @@
                 gap: 16px;
                 padding: 16px 24px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+                transition: background 0.2s;
                 cursor: pointer;
                 position: relative;
 
@@ -349,8 +434,8 @@
 
                         .user {
                             font-weight: 600;
-                            color: var(--text-primary, #ffffff);
-                            /* Neutral name */
+                            color: #60a5fa;
+                            /* Light blue for names */
                             font-size: 0.95rem;
                         }
 
@@ -394,6 +479,8 @@
             cursor: pointer;
             padding: 6px 8px;
             border-radius: 8px;
+            transition: background 0.2s;
+            position: relative;
 
             &:hover,
             &.active {
@@ -401,17 +488,17 @@
             }
 
             .avatar-circle {
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
-                background: var(--bg-primary, #0d1117);
-                border: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
+                background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-weight: 600;
-                font-size: 0.9rem;
-                color: var(--text-secondary, #cbd5e1);
+                font-weight: 700;
+                font-size: 1rem;
+                color: white;
+                box-shadow: 0 0 10px rgba(124, 92, 255, 0.2);
             }
 
             .user-details {
@@ -419,14 +506,16 @@
                 flex-direction: column;
 
                 .username {
-                    font-size: 0.9rem;
-                    font-weight: 500;
-                    color: var(--text-primary);
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                    color: white;
                 }
 
                 .role {
-                    font-size: 0.75rem;
-                    color: var(--text-muted);
+                    font-size: 0.8rem;
+                    color: #94a3b8;
+                    /* Brighter than muted, cleaner look */
+                    font-weight: 500;
                 }
             }
 
@@ -440,13 +529,13 @@
                 top: calc(100% + 8px);
                 right: 0;
                 width: 240px;
-                background-color: #0a0f1e;
-                /* Solid Navy */
+                background-color: var(--bg-card);
                 border: 1px solid var(--border-color);
                 border-radius: 12px;
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
                 z-index: 50;
                 padding: 0.5rem;
+                animation: slideDown 0.2s ease-out;
 
                 .user-info-dropdown {
                     padding: 0.75rem 1rem;
@@ -467,6 +556,7 @@
                     text-decoration: none;
                     font-size: 0.9rem;
                     border-radius: 6px;
+                    transition: all 0.2s;
 
                     &:hover {
                         background-color: var(--bg-hover);
@@ -490,7 +580,6 @@
             }
         }
     }
-}
 }
 
 .content-area {
@@ -518,10 +607,12 @@
 @keyframes slideDown {
     from {
         opacity: 0;
+        transform: translateY(-8px);
     }
 
     to {
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -537,6 +628,7 @@
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
     border: 1px solid transparent;
 
@@ -548,11 +640,13 @@
         .icon {
             font-size: 1.1rem;
             color: var(--text-muted);
+            transition: color 0.2s;
         }
     }
 
     .chevron {
         font-size: 0.7rem;
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 0.7;
     }
 
@@ -587,6 +681,9 @@
     /* Indent children */
     margin-bottom: 8px;
     overflow: hidden;
+
+    /* Animation definition */
+    animation: expandGroup 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     transform-origin: top;
 
     .nav-item.child-item {
@@ -602,10 +699,15 @@
 @keyframes expandGroup {
     from {
         opacity: 0;
+        transform: translateY(-4px);
+        max-height: 0;
     }
 
     to {
         opacity: 1;
+        transform: translateY(0);
+        max-height: 500px;
+        /* Arbitrary large height to allow expansion */
     }
 }
 
@@ -709,6 +811,7 @@
                     gap: 12px;
                     padding: 16px 20px;
                     cursor: pointer;
+                    transition: all 0.2s;
                     border-left: 3px solid transparent;
 
                     &:hover {
