@@ -7,23 +7,8 @@
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
             color: #fff;
-
-            &::before {
-                content: '🔔';
-                font-size: 1.2rem;
-                margin-right: 0.5rem;
-            }
         }
 
-        // Custom float icon for notifications page header
-        &::after {
-            content: '🔔';
-            position: absolute;
-            right: 2rem;
-            top: 0;
-            font-size: 2rem;
-            opacity: 0.1;
-        }
 
         p {
             color: #718096;

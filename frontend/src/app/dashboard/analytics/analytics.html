@@ -148,10 +148,6 @@
                         <circle class="segment contained" cx="50" cy="50" r="40" stroke="#eab308"
                             style="--dash-offset: 0; stroke-dasharray: 20 100; stroke-dashoffset: -80;" />
                     </svg>
-                    <div class="donut-center">
-                        <span class="total">80</span>
-                        <span class="label">Total</span>
-                    </div>
                 </div>
 
                 <div class="donut-legend">
@@ -172,14 +168,15 @@
                 <h3>Detection Vectors</h3>
                 <p class="subtitle">Top performing security layers</p>
             </div>
-            <div class="chart-content bars-container vertical">
+            <div class="chart-content bars-container horizontal">
                 @for (item of detectionMethods; track item.label) {
-                <div class="bar-group">
-                    <div class="bar-wrapper">
-                        <div class="bar" [style.height]="item.height" [style.color]="item.color"
-                            [style.background]="'linear-gradient(to top, ' + item.color + ', transparent)'"></div>
-                    </div>
+                <div class="bar-row">
                     <span class="label">{{ item.label }}</span>
+                    <div class="bar-track">
+                        <div class="bar" [style.width]="item.width" [style.color]="item.color"
+                            [style.background]="'linear-gradient(to right, transparent, ' + item.color + ')'"></div>
+                    </div>
+                    <span class="value">{{ item.count }}</span>
                 </div>
                 }
             </div>
@@ -217,13 +214,6 @@
             <div class="log-list">
                 @for (log of detailedThreatLogs; track log.title; let i = $index) {
                 <div class="log-item" [style.animation-delay]="(i * 0.1) + 's'">
-                    <div class="log-icon">
-                        @if (log.severity === 'CRITICAL') { <lucide-icon [name]="AlertTriangleIcon" [size]="16"
-                            color="#ef4444"></lucide-icon> }
-                        @else if (log.severity === 'HIGH') { <lucide-icon [name]="OctagonIcon" [size]="16"
-                            color="#f97316"></lucide-icon> }
-                        @else { <lucide-icon [name]="SearchIcon" [size]="16" color="#3b82f6"></lucide-icon> }
-                    </div>
                     <div class="log-main">
                         <div class="log-top">
                             <h4>{{ log.title }}</h4>

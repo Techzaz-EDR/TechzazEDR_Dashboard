@@ -1,19 +1,29 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X } from 'lucide-angular';
 import { gsap } from 'gsap';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [CommonModule, LucideAngularModule],
+    imports: [CommonModule, LucideAngularModule, FormsModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements AfterViewInit, OnInit {
+    email = '';
+    password = '';
     showPassword = false;
     isSignUpMode = false;
+    errorMessage = '';
+
+    // Sign Up Fields
+    signupName = '';
+    signupEmail = '';
+    signupPassword = '';
 
     readonly Eye = Eye;
     readonly EyeOff = EyeOff;
@@ -26,11 +36,18 @@ export class LoginComponent implements AfterViewInit {
     readonly Github = Github;
     private glowElement: HTMLElement | null = null;
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
+
+    ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            if (params['mode'] === 'signup') {
+                this.isSignUpMode = true;
+            }
+        });
+    }
 
     ngAfterViewInit() {
         this.glowElement = document.querySelector('.hover-glow');
-        // Initial state
         if (this.glowElement) {
             gsap.set(this.glowElement, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
         }
@@ -39,12 +56,10 @@ export class LoginComponent implements AfterViewInit {
     onMouseMove(e: MouseEvent) {
         if (!this.glowElement) return;
 
-        // Make visible on first move within container
         if (!this.glowElement.classList.contains('visible')) {
             this.glowElement.classList.add('visible');
         }
 
-        // Ultra-smooth cursor tracking using GSAP (Spring effect)
         gsap.to(this.glowElement, {
             x: e.clientX,
             y: e.clientY,
@@ -52,7 +67,6 @@ export class LoginComponent implements AfterViewInit {
             ease: "power2.out"
         });
 
-        // Eased Card Tilt
         const card = document.querySelector('.auth-card') as HTMLElement;
         if (card) {
             const rect = card.getBoundingClientRect();
@@ -86,8 +100,15 @@ export class LoginComponent implements AfterViewInit {
         }
     }
 
-    signIn() {
-        this.router.navigate(['/dashboard']);
+    async signIn() {
+        this.errorMessage = '';
+        try {
+            await this.authService.login(this.email, this.password);
+            this.router.navigate(['/dashboard']);
+        } catch (error: any) {
+            console.error('Login failed', error);
+            this.errorMessage = error.message || 'Authentication failed. Please check your credentials.';
+        }
     }
 
     togglePassword() {
@@ -96,5 +117,6 @@ export class LoginComponent implements AfterViewInit {
 
     toggleMode() {
         this.isSignUpMode = !this.isSignUpMode;
+        this.errorMessage = '';
     }
 }

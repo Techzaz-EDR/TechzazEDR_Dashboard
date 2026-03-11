@@ -7,10 +7,11 @@ frontend/.vscode/
 
 # Python
 backend/venv/
-backend/__pycache__/
-backend/*.pyc
-backend/*.pyo
-backend/*.pyd
+backend/.venv/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
 backend/.env
 backend/.pytest_cache/
 

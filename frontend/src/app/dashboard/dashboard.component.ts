@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../core/services/auth.service';
 import {
     LucideAngularModule,
     Shield, Activity, Zap, BarChart2, FileText, ShieldAlert, Wrench, Users, Clipboard, Settings,
@@ -25,8 +26,44 @@ export interface NavItem {
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
     isDropdownOpen = false;
+    userEmail: string | null = null;
+
+    // Search Functionality
+    searchQuery = '';
+    isSearchFocused = false;
+
+    // Mock Searchable Data
+    searchableItems = [
+        { title: 'Win10-Desktop-01', type: 'Endpoint', route: '/dashboard/endpoints', description: 'Windows 10 Pro Workstation' },
+        { title: 'MacBook-Pro-Dev', type: 'Endpoint', route: '/dashboard/endpoints', description: 'macOS Monterey 12.4' },
+        { title: 'Ubuntu-Server-DB', type: 'Endpoint', route: '/dashboard/endpoints', description: 'Linux Ubuntu 22.04 LTS' },
+        { title: 'Ransomware Detected on Win10-Desktop-01', type: 'Threat', route: '/dashboard/threats', description: 'Critical Severity Incident' },
+        { title: 'Suspicious Login Attempt', type: 'Incident', route: '/dashboard/incidents', description: 'Multiple failed logins' },
+        { title: '9a4dce5...', type: 'Hash', route: '/dashboard/threats', description: 'Associated with known malware' },
+        { title: 'Admin User', type: 'User', route: '/dashboard/users', description: 'Security Operations' }
+    ];
+
+    get filteredSearchResults() {
+        if (!this.searchQuery.trim()) return [];
+        const query = this.searchQuery.toLowerCase();
+        return this.searchableItems.filter(item =>
+            item.title.toLowerCase().includes(query) ||
+            item.type.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query)
+        );
+    }
+
+    onSearchFocus() {
+        this.isSearchFocused = true;
+    }
+
+    onSearchBlur() {
+        setTimeout(() => {
+            this.isSearchFocused = false;
+        }, 150);
+    }
 
     // Icons
     readonly Shield = Shield;
@@ -189,7 +226,16 @@ export class DashboardComponent {
         }
     }
 
+    constructor(private router: Router, private authService: AuthService) {
+        this.authService.user$.subscribe(user => {
+            this.userEmail = user?.email || 'Guest';
+        });
+    }
+
+    ngOnInit() { }
+
     logout() {
         console.log('Logging out...');
+        this.authService.logout();
     }
 }

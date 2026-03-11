@@ -142,6 +142,11 @@
     }
 
     .col {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
         &.name {
             flex: 2;
             display: flex;
@@ -149,6 +154,12 @@
             gap: 12px;
             color: #fff;
             font-weight: 500;
+
+            .user-name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
 
         &.email {

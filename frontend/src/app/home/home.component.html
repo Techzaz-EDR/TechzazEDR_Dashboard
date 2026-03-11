@@ -13,14 +13,6 @@
 
         <!-- Central Visualization -->
         <div class="center-assembly" #centerAssembly>
-            <div class="shield-wrapper">
-                <div class="wireframe-shield">
-                    <lucide-icon [name]="Shield" [size]="180" class="shield-icon"></lucide-icon>
-                </div>
-                <div class="holographic-ring"></div>
-                <div class="lens-flare"></div>
-            </div>
-
             <div class="brand-reveal">
                 <h1 class="brand-logo">
                     <span class="word-tech">TECHZAZ</span>
@@ -63,30 +55,26 @@
                 <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Platform</a>
                 <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)" #navItem>How it Works</a>
                 <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Resources</a>
-                <a href="#pricing" (click)="scrollToSection('pricing', $event)" #navItem>Pricing</a>
             </div>
             <div class="nav-actions">
                 <a routerLink="/login" class="link-text" #navItem>Sign In</a>
-                <button class="btn btn-primary" (click)="scrollToSection('pricing', $event)" #ctaBtn>Get Started
-                    Free</button>
+                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started</button>
             </div>
         </div>
     </nav>
 
     <!-- 1. HERO SECTION (STABLE RENDER) -->
     <header class="hero-section">
+        <video class="hero-video" #heroVideo autoplay muted loop playsinline>
+            <source src="videos/hero-background.mp4" type="video/mp4">
+        </video>
+        <div class="hero-video-overlay"></div>
         <div class="hero-background">
-            <div class="ambient-glow glow-1"></div>
-            <div class="ambient-glow glow-2"></div>
             <div class="grid-overlay"></div>
         </div>
         <div class="hero-container">
             <!-- Left Side: Messaging -->
             <div class="hero-messaging">
-                <div class="badge-container">
-                    <span class="badge-text">Next-Gen Cybersecurity</span>
-                    <div class="badge-glow"></div>
-                </div>
 
                 <h1 class="hero-headline">
                     Next-Gen Endpoint <br>
@@ -99,10 +87,8 @@
                 </p>
 
                 <div class="cta-actions">
-                    <button class="btn btn-primary-blue" (click)="scrollToSection('pricing', $event)">Get Started
-                        Free</button>
-                    <button class="btn btn-outline-white" (click)="scrollToSection('pricing', $event)">Request a
-                        Demo</button>
+                    <a routerLink="/login" class="btn btn-primary-blue">Sign In</a>
+                    <a routerLink="/login" [queryParams]="{mode: 'signup'}" class="btn btn-outline-white">Sign Up</a>
                 </div>
             </div>
 
@@ -110,12 +96,6 @@
             <div class="hero-visual">
                 <div class="visual-scene">
                     <div class="energy-core">
-                        <!-- Holographic Shield -->
-                        <div class="shield-container">
-                            <lucide-icon [name]="Shield" [size]="280" class="shield-vector"></lucide-icon>
-                            <div class="core-glow"></div>
-                        </div>
-
                         <!-- Rotating Rings -->
                         <div class="ring-system">
                             <div class="neon-ring ring-1"></div>
@@ -167,26 +147,48 @@
                 <h2>Why Techzaz EDR?</h2>
                 <p>Advanced protection for the modern enterprise.</p>
             </div>
-            <div class="grid-4">
-                <div class="feature-card glass-panel">
-                    <div class="icon-box"><lucide-icon [name]="Eye" [size]="32"></lucide-icon></div>
-                    <h3>Real-Time Detection</h3>
-                    <p>Identify threats instantly with continuous monitoring and behavioral analysis.</p>
+            <div class="benefits-grid">
+                <div class="feature-card">
+                    <div class="card-category">REAL-TIME</div>
+                    <div class="icon-box"><lucide-icon [name]="Activity" [size]="28"></lucide-icon></div>
+                    <h3>Endpoint Monitoring</h3>
+                    <p>Continuous monitoring of all endpoints with lightweight agents that collect telemetry data and
+                        detect suspicious activities in real-time.</p>
                 </div>
-                <div class="feature-card glass-panel">
-                    <div class="icon-box"><lucide-icon [name]="Bot" [size]="32"></lucide-icon></div>
-                    <h3>Automated Response</h3>
-                    <p>Neutralize attacks automatically before they can spread laterally.</p>
+                <div class="feature-card">
+                    <div class="card-category">CENTRALIZED</div>
+                    <div class="icon-box"><lucide-icon [name]="BarChart" [size]="28"></lucide-icon></div>
+                    <h3>Security Dashboard</h3>
+                    <p>Role-based access control with comprehensive overview of security status, alerts, and analytics
+                        in one unified interface.</p>
                 </div>
-                <div class="feature-card glass-panel">
-                    <div class="icon-box"><lucide-icon [name]="Brain" [size]="32"></lucide-icon></div>
-                    <h3>Behavioral AI</h3>
-                    <p>Detect unknown zero-day threats using advanced machine learning models.</p>
+                <div class="feature-card">
+                    <div class="card-category">ADVANCED</div>
+                    <div class="icon-box"><lucide-icon [name]="Bug" [size]="28"></lucide-icon></div>
+                    <h3>Malware Detection</h3>
+                    <p>Comprehensive scanning to identify and categorize malware including ransomware, trojans, worms,
+                        and other malicious software.</p>
                 </div>
-                <div class="feature-card glass-panel">
-                    <div class="icon-box"><lucide-icon [name]="Globe" [size]="32"></lucide-icon></div>
-                    <h3>Central Visibility</h3>
-                    <p>Understand your entire security posture from a single pane of glass.</p>
+                <div class="feature-card">
+                    <div class="card-category">NETWORK</div>
+                    <div class="icon-box"><lucide-icon [name]="Network" [size]="28"></lucide-icon></div>
+                    <h3>Network Security</h3>
+                    <p>Scan IP logs and data packets to detect suspicious connections, port scanning activities, and
+                        potential intrusion attempts.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-category">AUTOMATED</div>
+                    <div class="icon-box"><lucide-icon [name]="Zap" [size]="28"></lucide-icon></div>
+                    <h3>Incident Response</h3>
+                    <p>Automated threat response actions and real-time alerting to minimize damage from security
+                        incidents and breaches.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="card-category">ANALYTICS</div>
+                    <div class="icon-box"><lucide-icon [name]="Search" [size]="28"></lucide-icon></div>
+                    <h3>Historical Analysis</h3>
+                    <p>Compare current security events with historical data to identify trends, patterns, and emerging
+                        threats.</p>
                 </div>
             </div>
         </div>
@@ -214,8 +216,8 @@
                             <div class="circle-glow"></div>
                         </div>
                         <div class="step-content">
-                            <h4>Deploy Agent</h4>
-                            <p>Lightweight sensor installs silently.</p>
+                            <h4>Deploy</h4>
+                            <p>Zero-touch installation using a secure API enrollment token.</p>
                         </div>
                     </div>
 
@@ -227,7 +229,7 @@
                         </div>
                         <div class="step-content">
                             <h4>Monitor</h4>
-                            <p>Activity is analyzed in real-time.</p>
+                            <p>Real-time PCAP network capture and deep system scanning.</p>
                         </div>
                     </div>
 
@@ -239,7 +241,7 @@
                         </div>
                         <div class="step-content">
                             <h4>Detect</h4>
-                            <p>AI identifies anomalous behavior.</p>
+                            <p>Instantly catches malware (YARA) and network anomalies.</p>
                         </div>
                     </div>
 
@@ -250,8 +252,8 @@
                             <div class="circle-glow"></div>
                         </div>
                         <div class="step-content">
-                            <h4>Respond</h4>
-                            <p>Threats are contained instantly.</p>
+                            <h4>Report</h4>
+                            <p>Securely routes isolated alerts to the multi-tenant dashboard.</p>
                         </div>
                     </div>
                 </div>
@@ -291,32 +293,75 @@
             </div>
             <div class="preview-visual glass-panel">
                 <!-- CSS-only UI representation -->
-                <div class="ui-header">
-                    <div class="search-bar">Search endpoints...</div>
-                    <div class="user-profile">Admin</div>
-                </div>
                 <div class="ui-grid">
                     <div class="ui-card big">
-                        <div class="chart-placeholder">
-                            <div class="bar-1"></div>
-                            <div class="bar-2"></div>
-                            <div class="bar-3"></div>
-                            <div class="bar-4"></div>
+                        <div class="dashboard-metrics">
+                            <div class="metric-item">
+                                <span class="label">Threats Detected Today</span>
+                                <span class="value critical">14</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Active Endpoints</span>
+                                <span class="value">1,284</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Blocked Attacks</span>
+                                <span class="value success">428</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Active Alerts</span>
+                                <span class="value warning">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="threat-activity">
+                            <h4 class="activity-title">Threat Activity</h4>
+                            <div class="mini-graph">
+                                <div class="graph-line"></div>
+                                <div class="graph-dots">
+                                    <div class="dot" style="bottom: 20%; left: 0%;"></div>
+                                    <div class="dot" style="bottom: 45%; left: 20%;"></div>
+                                    <div class="dot" style="bottom: 30%; left: 40%;"></div>
+                                    <div class="dot" style="bottom: 70%; left: 60%;"></div>
+                                    <div class="dot highlight" style="bottom: 50%; left: 80%;"></div>
+                                    <div class="dot" style="bottom: 40%; left: 100%;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="ui-card small">
                         <div class="threat-stream">
-                            <div class="feed-item target"><span>Targeted attack</span></div>
-                            <div class="feed-item block"><span>Infection blocked</span></div>
-                            <div class="feed-item warn"><span>Anomalous login</span></div>
+                            <div class="feed-item target">
+                                <lucide-icon [name]="Crosshair" [size]="14"></lucide-icon>
+                                <span>Targeted attack</span>
+                            </div>
+                            <div class="feed-item block">
+                                <lucide-icon [name]="Shield" [size]="14"></lucide-icon>
+                                <span>Infection blocked</span>
+                            </div>
+                            <div class="feed-item warn">
+                                <lucide-icon [name]="Activity" [size]="14"></lucide-icon>
+                                <span>Anomalous login</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="ui-card small centered">
-                        <div class="health-shield-mini">
-                            <div class="shield-core"></div>
-                            <div class="shield-ring"></div>
+                    <div class="ui-card small status-card">
+                        <div class="status-summary">
+                            <div class="status-indicator">
+                                <div class="pumping-circle"></div>
+                                <span class="status-text">Protected</span>
+                            </div>
+                            <div class="status-details">
+                                <div class="detail-row">
+                                    <span>Endpoints Protected</span>
+                                    <strong>100%</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Active Threats</span>
+                                    <strong>0</strong>
+                                </div>
+                            </div>
                         </div>
-                        <span class="shield-percent">98% Secure</span>
                     </div>
                 </div>
             </div>
@@ -327,28 +372,50 @@
     <section class="capabilities" id="resources">
         <div class="container">
             <div class="section-header center">
-                <h2>Core Capabilities</h2>
+                <h2>Enterprise <span style="color: #8b5cf6;">Security Strategy</span></h2>
+                <p>We take security seriously. Techzaz EDR is designed to detect malware, suspicious<br>network
+                    activity, and unauthorized behaviour across organizational endpoints.</p>
             </div>
             <div class="capabilities-grid">
                 <div class="cap-item">
-                    <div class="icon"><lucide-icon [name]="Radar" [size]="32"></lucide-icon></div>
-                    <h4>Telemetry Collection</h4>
-                    <p>Granular data from every endpoint.</p>
+                    <div class="icon"><lucide-icon [name]="Bug" [size]="20"></lucide-icon></div>
+                    <h4>Malware Threats</h4>
+                    <p>Ransomware, trojans, spyware, and malicious executables</p>
                 </div>
                 <div class="cap-item">
-                    <div class="icon"><lucide-icon [name]="Globe" [size]="32"></lucide-icon></div>
-                    <h4>Threat Intelligence</h4>
-                    <p>Enriched context from global feeds.</p>
+                    <div class="icon"><lucide-icon [name]="Activity" [size]="20"></lucide-icon></div>
+                    <h4>Suspicious Network Activity</h4>
+                    <p>Abnormal IP connections and unusual port communication</p>
                 </div>
                 <div class="cap-item">
-                    <div class="icon"><lucide-icon [name]="Crosshair" [size]="32"></lucide-icon></div>
-                    <h4>MITRE Mapping</h4>
-                    <p>Techniques mapped to framework.</p>
+                    <div class="icon"><lucide-icon [name]="Globe" [size]="20"></lucide-icon></div>
+                    <h4>Command-and-Control Traffic</h4>
+                    <p>Repeated outbound connections to suspicious or untrusted hosts</p>
                 </div>
                 <div class="cap-item">
-                    <div class="icon"><lucide-icon [name]="BarChart" [size]="32"></lucide-icon></div>
-                    <h4>Severity Scoring</h4>
-                    <p>Focus on what matters most.</p>
+                    <div class="icon"><lucide-icon [name]="Lock" [size]="20"></lucide-icon></div>
+                    <h4>Unauthorized Network Access</h4>
+                    <p>Detection of unexpected devices and connection attempts</p>
+                </div>
+                <div class="cap-item">
+                    <div class="icon"><lucide-icon [name]="Share2" [size]="20"></lucide-icon></div>
+                    <h4>Lateral Movement Attempts</h4>
+                    <p>Unusual internal communication patterns between endpoints</p>
+                </div>
+                <div class="cap-item">
+                    <div class="icon"><lucide-icon [name]="Key" [size]="20"></lucide-icon></div>
+                    <h4>Privilege Abuse Indicators</h4>
+                    <p>Processes attempting unauthorized system-level actions</p>
+                </div>
+                <div class="cap-item">
+                    <div class="icon"><lucide-icon [name]="Cpu" [size]="20"></lucide-icon></div>
+                    <h4>Anomalous Process Behaviour</h4>
+                    <p>Unexpected process execution and abnormal runtime activity</p>
+                </div>
+                <div class="cap-item">
+                    <div class="icon"><lucide-icon [name]="Upload" [size]="20"></lucide-icon></div>
+                    <h4>Data Exfiltration Signals</h4>
+                    <p>High-volume or irregular outbound data transfers</p>
                 </div>
             </div>
         </div>
@@ -384,13 +451,17 @@
             <div class="edr-visual">
                 <div class="comparison-card">
                     <div class="side traditional">
-                        <div class="cross"><lucide-icon [name]="X" [size]="56" color="#ef4444"></lucide-icon></div>
+                        <div class="icon-bg">
+                            <div class="cross"><lucide-icon [name]="X" [size]="56" color="rgba(239, 68, 68, 0.5)"></lucide-icon></div>
+                        </div>
                         <h5>Traditional AV</h5>
                         <p>Signature-based</p>
                         <p>Misses new attacks</p>
                     </div>
                     <div class="side next-gen">
-                        <div class="check"><lucide-icon [name]="Check" [size]="56" color="#10b981"></lucide-icon></div>
+                        <div class="icon-bg">
+                            <div class="check"><lucide-icon [name]="Check" [size]="64" color="#8b5cf6"></lucide-icon></div>
+                        </div>
                         <h5>Techzaz EDR</h5>
                         <p>Behavior-based</p>
                         <p>Stops zero-days</p>
@@ -398,122 +469,56 @@
                 </div>
             </div>
             <div class="edr-text">
-                <h2>Beyond Traditional Antivirus</h2>
+                <h2>Beyond Traditional <span class="accent-text">Antivirus</span></h2>
                 <p class="lead">Signatures aren't enough anymore. You need behavior analysis to stop modern ransomware
                     and fileless attacks.</p>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Bug" [size]="24"></lucide-icon></span>
-                    <p><strong>Detect Unknowns:</strong> Analyze what software <em>does</em>, not just what it
+                    <p><strong><span class="accent-text">Detect Unknowns:</span></strong> Analyze what software <em>does</em>, not just what it
                         <em>is</em>.
                     </p>
                 </div>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Search" [size]="24"></lucide-icon></span>
-                    <p><strong>Deep Investigation:</strong> Root cause analysis for every incident.</p>
+                    <p><strong><span class="accent-text">Deep Investigation:</span></strong> Root cause analysis for every incident.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 9. PRICING SECTION -->
-    <section class="pricing-section" id="pricing">
-        <div class="container">
-            <div class="section-header center">
-                <h2>Simple, Transparent Pricing</h2>
-                <p>Choose the defense level that fits your organization.</p>
 
-                <!-- Billing Toggle -->
-                <div class="billing-toggle">
-                    <span [class.active]="!isYearly">Monthly</span>
-                    <div class="toggle-switch" (click)="isYearly = !isYearly">
-                        <div class="switch-handle" [class.yearly]="isYearly"></div>
-                    </div>
-                    <span [class.active]="isYearly">Yearly <span class="save-badge">Save 20%</span></span>
-                </div>
-            </div>
-
-            <div class="pricing-grid">
-                <!-- STARTER -->
-                <div class="pricing-card glass-panel">
-                    <div class="card-header">
-                        <h3>Starter</h3>
-                        <p>Essential visibility for small teams.</p>
-                        <div class="price">
-                            <span class="currency">$</span>
-                            <span class="amount">{{ isYearly ? '8' : '10' }}</span>
-                            <span class="period">/endpoint/mo</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <button class="btn btn-outline full-width" routerLink="/login">Start Free Trial</button>
-                        <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Next-Gen Antivirus</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Device Control</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> 7-Day Data Retention</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Standard Support</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- PROFESSIONAL -->
-                <div class="pricing-card glass-panel popular">
-                    <div class="popular-badge">Most Popular</div>
-                    <div class="card-header">
-                        <h3>Professional</h3>
-                        <p>Full EDR capabilities for growing businesses.</p>
-                        <div class="price">
-                            <span class="currency">$</span>
-                            <span class="amount">{{ isYearly ? '18' : '22' }}</span>
-                            <span class="period">/endpoint/mo</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <button class="btn btn-primary glow full-width" routerLink="/login">Get Started</button>
-                        <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> <strong>Everything in
-                                    Starter</strong></li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Automated Remediation</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Threat Intel Feeds</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Network Isolation</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> 30-Day Data Retention</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- ENTERPRISE -->
-                <div class="pricing-card glass-panel">
-                    <div class="card-header">
-                        <h3>Enterprise</h3>
-                        <p>Advanced security operations at scale.</p>
-                        <div class="price">
-                            <span class="amount">Custom</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <button class="btn btn-outline full-width" routerLink="/login">Contact Sales</button>
-                        <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> <strong>Everything in
-                                    Pro</strong></li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Managed Threat Hunting</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> API Access & SIEM Integration
-                            </li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Unlimited Data Retention</li>
-                            <li><lucide-icon [name]="Check" [size]="18"></lucide-icon> Dedicated Success Manager</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <section class="final-cta">
         <div class="container">
             <div class="cta-box glass-panel">
                 <h2>Start Protecting Your Endpoints Today</h2>
-                <p>Deploy in minutes. Gain visibility instantly. Respond with confidence.</p>
+                <p>Deploy lightweight agents in minutes, monitor threats in real time, and respond instantly from a unified security dashboard.</p>
                 <div class="cta-group center">
-                    <button class="btn btn-primary large glow" routerLink="/login">Get Started</button>
-                    <button class="btn btn-outline large" (click)="scrollToSection('pricing', $event)">Request
-                        Demo</button>
+                    <button class="btn btn-primary large glow" routerLink="/login">
+                        <lucide-icon [name]="Rocket" [size]="18" class="btn-icon"></lucide-icon>
+                        Get Started
+                    </button>
+                    <button class="btn btn-outline large" (click)="scrollToSection('features', $event)">
+                        <lucide-icon [name]="Play" [size]="18" class="btn-icon"></lucide-icon>
+                        Request Demo
+                    </button>
+                </div>
+                <div class="cta-trust-indicators">
+                    <div class="indicator">
+                        <lucide-icon [name]="Shield" [size]="16" class="icon"></lucide-icon>
+                        <span>Lightweight Agents</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Zap" [size]="16" class="icon"></lucide-icon>
+                        <span>Real-time Detection</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Layout" [size]="16" class="icon"></lucide-icon>
+                        <span>Unified Dashboard</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Activity" [size]="16" class="icon"></lucide-icon>
+                        <span>Behavior Analysis</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -524,7 +529,10 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="logo">TECHZAZ <strong>EDR</strong></div>
+                    <div class="logo">
+                        <span class="logo-icon"><lucide-icon [name]="Shield" [size]="20"></lucide-icon></span>
+                        TECHZAZ <strong>EDR</strong>
+                    </div>
                     <p>Next-generation endpoint security for the modern enterprise.</p>
                     <div class="socials">
                         <a href="#"><lucide-icon [name]="Twitter" [size]="20"></lucide-icon></a>
@@ -535,7 +543,6 @@
                 <div class="footer-links">
                     <h4>Product</h4>
                     <a [routerLink]="['/topic', 'features']">Features</a>
-                    <a [routerLink]="['/topic', 'pricing']">Pricing</a>
                     <a [routerLink]="['/topic', 'roadmap']">Roadmap</a>
                 </div>
                 <div class="footer-links">

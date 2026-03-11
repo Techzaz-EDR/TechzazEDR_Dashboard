@@ -1,0 +1,107 @@
+# Firebase Auth & RBAC Verification Guide
+
+This document provides the necessary steps to configure the Firebase Console and verify the RBAC implementation in the FastAPI backend.
+
+---
+
+## 1. Firebase Console Setup Checklist
+
+1.  **Create Project**: Go to [Firebase Console](https://console.firebase.google.com/) and create a new project (e.g., `techzazedr`).
+2.  **Enable Authentication**:
+    *   Navigate to **Build > Authentication**.
+    *   Click **Get Started**.
+    *   Enable the **Email/Password** sign-in provider.
+3.  **Create Firestore Database**:
+    *   Navigate to **Build > Firestore Database**.
+    *   Click **Create database**.
+    *   Start in **Production mode**.
+    *   Choose a location close to your users.
+4.  **Service Account JSON**:
+    *   Go to **Project Settings (cog icon) > Service accounts**.
+    *   Click **Generate new private key**.
+    *   Save this file as [backend/firebase-service-account.json](file:///d:/Documents/GitHub/TechzazEDR_Dashboard/backend/firebase-service-account.json).
+
+---
+
+## 2. Firestore Security Rules
+
+Copy these rules into the **Rules** tab of your Firestore Database. They prevent direct access except for users reading their own profile, while ensuring tenant isolation.
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default: Deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User Profile: Allow users to read their own doc
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      // Writes are restricted to the Backend (Admin SDK)
+    }
+
+    // Tenant Data: Strict isolation
+    // Even though FastAPI handles this, these rules provide a second layer of defense.
+    match /tenants/{tenantId}/{document=**} {
+      allow read: if request.auth != null && request.auth.token.tenantId == tenantId;
+    }
+    
+    // Audit Logs: Read-only for Admins
+    match /audit_logs/{id} {
+      allow read: if request.auth != null && request.auth.token.role == "Admin";
+    }
+  }
+}
+```
+
+---
+
+## 3. Example API Verification (cURL)
+
+### A. Invite a new User (Admin Only)
+Requires a valid Admin ID Token.
+```bash
+curl -X POST "http://localhost:8000/api/v1/admin/users/invite" \
+     -H "Authorization: Bearer <ADMIN_ID_TOKEN>" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "email": "new.analyst@example.com",
+           "role": "Analyst"
+         }'
+```
+
+### B. Access Alerts (Viewer+)
+```bash
+curl -X GET "http://localhost:8000/api/v1/alerts" \
+     -H "Authorization: Bearer <USER_ID_TOKEN>"
+```
+
+### C. Update Alert (Analyst+)
+```bash
+curl -X PATCH "http://localhost:8000/api/v1/alerts/alert_1" \
+     -H "Authorization: Bearer <ANALYST_ID_TOKEN>"
+```
+
+### D. Access Service Diagnostics (Service+)
+```bash
+curl -X GET "http://localhost:8000/api/v1/service/health" \
+     -H "Authorization: Bearer <SERVICE_ID_TOKEN>"
+```
+
+---
+
+## 4. Multi-Tenant Query Pattern
+In your FastAPI code, always use this pattern to ensure data isolation:
+
+```python
+# GOOD: Tenant Scoped
+results = db.collection("alerts") \
+            .where("tenantId", "==", ctx.tenant_id) \
+            .stream()
+
+# BAD: Global Access
+results = db.collection("alerts").stream()
+```
