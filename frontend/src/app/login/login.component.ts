@@ -42,6 +42,8 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
 
 
+
+
     ngOnInit() {
         if (typeof window !== 'undefined') {
             this.generateSpheres();
@@ -56,18 +58,29 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
     generateSpheres() {
         const colors = [
-            'radial-gradient(circle at 30% 30%, #a5f3fc, #0891b2)', // Cyan
-            'radial-gradient(circle at 30% 30%, #c084fc, #7e22ce)', // Purple
-            'radial-gradient(circle at 30% 30%, #60a5fa, #1d4ed8)', // Blue
+            'radial-gradient(circle at 30% 30%, #4facfe, #00f2fe)', // Cyan-ish Blue
+            'radial-gradient(circle at 30% 30%, #a18cd1, #fbc2eb)', // Purple-ish Pink
+            'radial-gradient(circle at 30% 30%, #2575fc, #6a11cb)', // Deep Blue/Purple
         ];
 
-        this.spheres = Array.from({ length: 6 }).map((_, i) => ({
-            width: Math.random() * 200 + 150 + 'px',
-            left: Math.random() * 80 + 10 + '%',
-            top: Math.random() * 80 + 10 + '%',
+        this.spheres = Array.from({ length: 8 }).map((_, i) => ({
+            id: i,
+            width: Math.random() * 250 + 150 + 'px',
+            initialLeft: Math.random() * 90 + -5,
+            initialTop: Math.random() * 90 + -5,
+            left: 0, // Current left (will be updated by mouse move)
+            top: 0,  // Current top
             background: colors[i % colors.length],
-            delay: Math.random() * -20 + 's'
+            delay: (Math.random() * -30) + 's',
+            duration: (Math.random() * 10 + 20) + 's',
+            blur: (Math.random() * 4 + 1) + 'px'
         }));
+
+        // Set initial positions
+        this.spheres.forEach(s => {
+            s.left = s.initialLeft;
+            s.top = s.initialTop;
+        });
     }
 
     ngAfterViewInit() {
@@ -78,17 +91,22 @@ export class LoginComponent implements AfterViewInit, OnInit {
     }
 
     onMouseMove(e: MouseEvent) {
-        if (!this.glowElement) return;
+        if (typeof window === 'undefined') return;
 
-        if (!this.glowElement.classList.contains('visible')) {
-            this.glowElement.classList.add('visible');
-        }
+        const mouseX = (e.clientX / window.innerWidth) - 0.5;
+        const mouseY = (e.clientY / window.innerHeight) - 0.5;
 
-        gsap.to(this.glowElement, {
-            x: e.clientX,
-            y: e.clientY,
-            duration: 0.8,
-            ease: "power2.out"
+        this.spheres.forEach((s, i) => {
+            const depth = (i + 1) * 20; // Different depth for parallax effect
+            const targetX = s.initialLeft + (mouseX * depth);
+            const targetY = s.initialTop + (mouseY * depth);
+
+            gsap.to(`.sphere-${i}`, {
+                left: targetX + '%',
+                top: targetY + '%',
+                duration: 1,
+                ease: "power2.out"
+            });
         });
 
         const card = document.querySelector('.auth-card') as HTMLElement;
@@ -96,8 +114,8 @@ export class LoginComponent implements AfterViewInit, OnInit {
             const rect = card.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            const rotateX = (e.clientY - centerY) / 25;
-            const rotateY = (centerX - e.clientX) / 25;
+            const rotateX = (e.clientY - centerY) / 50;
+            const rotateY = (centerX - e.clientX) / 50;
 
             gsap.to(card, {
                 rotateX: rotateX,

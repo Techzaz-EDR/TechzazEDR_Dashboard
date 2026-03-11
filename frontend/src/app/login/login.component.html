@@ -1,42 +1,74 @@
 <div class="super-auth-container">
 
 
-    <!-- Floating Orbs Background -->
-    <div class="background-orbs">
-        <div *ngFor="let orb of spheres" 
-             class="orb"
-             [style.width]="orb.width"
-             [style.height]="orb.width"
-             [style.left]="orb.left"
-             [style.top]="orb.top"
-             [style.background]="orb.background"
-             [style.animation-delay]="orb.delay">
+    <!-- 3D Moving Spheres Background -->
+    <div class="background-spheres">
+        <div *ngFor="let s of spheres; let i = index" 
+             [class]="'sphere sphere-' + i"
+             [style.width]="s.width"
+             [style.height]="s.width"
+             [style.left]="s.left + '%'"
+             [style.top]="s.top + '%'"
+             [style.background]="s.background"
+             [style.animation-delay]="s.delay"
+             [style.animation-duration]="s.duration"
+             [style.filter]="'blur(' + s.blur + ')'">
         </div>
     </div>
 
-    <div class="auth-card">
-        <h2 class="auth-title">Sign In</h2>
-        
-        <form (submit)="signIn()">
-            <div class="inputs-group">
-                <div class="input-field">
-                    <input type="email" name="email" [(ngModel)]="email" placeholder="Email" required />
-                </div>
-                
-                <div class="input-field">
-                    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required />
-                </div>
-            </div>
-            
-            <div class="auth-options">
-                <a href="javascript:void(0)" class="forgot-link">Forgot password?</a>
-            </div>
+    <div class="auth-card" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()">
+        <!-- Sign In Mode -->
+        <ng-container *ngIf="!isSignUpMode">
+            <h2 class="auth-title">Sign In</h2>
+            <form (submit)="signIn()">
+                <div class="form-container">
+                    <div class="input-wrap">
+                        <input type="email" name="email" [(ngModel)]="email" placeholder="Email" required />
+                    </div>
+                    
+                    <div class="input-wrap">
+                        <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required />
+                    </div>
+                    
+                    <div class="forgot-password">
+                        <a href="javascript:void(0)" class="link-small">Forgot password?</a>
+                    </div>
 
-            <button type="submit" class="btn-login">Login</button>
-            
-            <p class="auth-footer">
-                Don't have an account? <a href="javascript:void(0)" (click)="toggleMode()">Sign up</a>
-            </p>
-        </form>
+                    <button type="submit" class="btn-primary">Login</button>
+                    
+                    <div class="signup-prompt">
+                        <span>Don't have an account? </span>
+                        <a href="javascript:void(0)" (click)="toggleMode()" class="link-bold">Sign up</a>
+                    </div>
+                </div>
+            </form>
+        </ng-container>
+
+        <!-- Sign Up Mode -->
+        <ng-container *ngIf="isSignUpMode">
+            <h2 class="auth-title">Sign Up</h2>
+            <form (submit)="signIn()">
+                <div class="form-container">
+                    <div class="input-wrap">
+                        <input type="text" name="signupName" [(ngModel)]="signupName" placeholder="Username" required />
+                    </div>
+
+                    <div class="input-wrap">
+                        <input type="email" name="signupEmail" [(ngModel)]="signupEmail" placeholder="Email" required />
+                    </div>
+                    
+                    <div class="input-wrap">
+                        <input type="password" name="signupPassword" [(ngModel)]="signupPassword" placeholder="Password" required />
+                    </div>
+
+                    <button type="submit" class="btn-primary">Create Account</button>
+                    
+                    <div class="signup-prompt">
+                        <span>Already have an account? </span>
+                        <a href="javascript:void(0)" (click)="toggleMode()" class="link-bold">Login</a>
+                    </div>
+                </div>
+            </form>
+        </ng-container>
     </div>
 </div>
