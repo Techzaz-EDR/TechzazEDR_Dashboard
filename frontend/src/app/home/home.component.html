@@ -311,32 +311,75 @@
             </div>
             <div class="preview-visual glass-panel">
                 <!-- CSS-only UI representation -->
-                <div class="ui-header">
-                    <div class="search-bar">Search endpoints...</div>
-                    <div class="user-profile">Admin</div>
-                </div>
                 <div class="ui-grid">
                     <div class="ui-card big">
-                        <div class="chart-placeholder">
-                            <div class="bar-1"></div>
-                            <div class="bar-2"></div>
-                            <div class="bar-3"></div>
-                            <div class="bar-4"></div>
+                        <div class="dashboard-metrics">
+                            <div class="metric-item">
+                                <span class="label">Threats Detected Today</span>
+                                <span class="value critical">14</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Active Endpoints</span>
+                                <span class="value">1,284</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Blocked Attacks</span>
+                                <span class="value success">428</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Active Alerts</span>
+                                <span class="value warning">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="threat-activity">
+                            <h4 class="activity-title">Threat Activity</h4>
+                            <div class="mini-graph">
+                                <div class="graph-line"></div>
+                                <div class="graph-dots">
+                                    <div class="dot" style="bottom: 20%; left: 0%;"></div>
+                                    <div class="dot" style="bottom: 45%; left: 20%;"></div>
+                                    <div class="dot" style="bottom: 30%; left: 40%;"></div>
+                                    <div class="dot" style="bottom: 70%; left: 60%;"></div>
+                                    <div class="dot highlight" style="bottom: 50%; left: 80%;"></div>
+                                    <div class="dot" style="bottom: 40%; left: 100%;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="ui-card small">
                         <div class="threat-stream">
-                            <div class="feed-item target"><span>Targeted attack</span></div>
-                            <div class="feed-item block"><span>Infection blocked</span></div>
-                            <div class="feed-item warn"><span>Anomalous login</span></div>
+                            <div class="feed-item target">
+                                <lucide-icon [name]="Crosshair" [size]="14"></lucide-icon>
+                                <span>Targeted attack</span>
+                            </div>
+                            <div class="feed-item block">
+                                <lucide-icon [name]="Shield" [size]="14"></lucide-icon>
+                                <span>Infection blocked</span>
+                            </div>
+                            <div class="feed-item warn">
+                                <lucide-icon [name]="Activity" [size]="14"></lucide-icon>
+                                <span>Anomalous login</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="ui-card small centered">
-                        <div class="health-shield-mini">
-                            <div class="shield-core"></div>
-                            <div class="shield-ring"></div>
+                    <div class="ui-card small status-card">
+                        <div class="status-summary">
+                            <div class="status-indicator">
+                                <div class="pumping-circle"></div>
+                                <span class="status-text">Protected</span>
+                            </div>
+                            <div class="status-details">
+                                <div class="detail-row">
+                                    <span>Endpoints Protected</span>
+                                    <strong>100%</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Active Threats</span>
+                                    <strong>0</strong>
+                                </div>
+                            </div>
                         </div>
-                        <span class="shield-percent">98% Secure</span>
                     </div>
                 </div>
             </div>
