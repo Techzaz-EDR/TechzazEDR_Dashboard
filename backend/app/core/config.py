@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     
     # Auth Settings
     ALGORITHM: str = "RS256"
+    ALERTS_API_KEY: str = "tz_demo_d3m00rgk3y"
     
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 
