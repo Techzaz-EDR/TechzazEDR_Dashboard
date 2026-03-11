@@ -58,8 +58,7 @@
             </div>
             <div class="nav-actions">
                 <a routerLink="/login" class="link-text" #navItem>Sign In</a>
-                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started
-                    Free</button>
+                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started</button>
             </div>
         </div>
     </nav>
@@ -294,32 +293,75 @@
             </div>
             <div class="preview-visual glass-panel">
                 <!-- CSS-only UI representation -->
-                <div class="ui-header">
-                    <div class="search-bar">Search endpoints...</div>
-                    <div class="user-profile">Admin</div>
-                </div>
                 <div class="ui-grid">
                     <div class="ui-card big">
-                        <div class="chart-placeholder">
-                            <div class="bar-1"></div>
-                            <div class="bar-2"></div>
-                            <div class="bar-3"></div>
-                            <div class="bar-4"></div>
+                        <div class="dashboard-metrics">
+                            <div class="metric-item">
+                                <span class="label">Threats Detected Today</span>
+                                <span class="value critical">14</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Active Endpoints</span>
+                                <span class="value">1,284</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Blocked Attacks</span>
+                                <span class="value success">428</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Active Alerts</span>
+                                <span class="value warning">7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="threat-activity">
+                            <h4 class="activity-title">Threat Activity</h4>
+                            <div class="mini-graph">
+                                <div class="graph-line"></div>
+                                <div class="graph-dots">
+                                    <div class="dot" style="bottom: 20%; left: 0%;"></div>
+                                    <div class="dot" style="bottom: 45%; left: 20%;"></div>
+                                    <div class="dot" style="bottom: 30%; left: 40%;"></div>
+                                    <div class="dot" style="bottom: 70%; left: 60%;"></div>
+                                    <div class="dot highlight" style="bottom: 50%; left: 80%;"></div>
+                                    <div class="dot" style="bottom: 40%; left: 100%;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="ui-card small">
                         <div class="threat-stream">
-                            <div class="feed-item target"><span>Targeted attack</span></div>
-                            <div class="feed-item block"><span>Infection blocked</span></div>
-                            <div class="feed-item warn"><span>Anomalous login</span></div>
+                            <div class="feed-item target">
+                                <lucide-icon [name]="Crosshair" [size]="14"></lucide-icon>
+                                <span>Targeted attack</span>
+                            </div>
+                            <div class="feed-item block">
+                                <lucide-icon [name]="Shield" [size]="14"></lucide-icon>
+                                <span>Infection blocked</span>
+                            </div>
+                            <div class="feed-item warn">
+                                <lucide-icon [name]="Activity" [size]="14"></lucide-icon>
+                                <span>Anomalous login</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="ui-card small centered">
-                        <div class="health-shield-mini">
-                            <div class="shield-core"></div>
-                            <div class="shield-ring"></div>
+                    <div class="ui-card small status-card">
+                        <div class="status-summary">
+                            <div class="status-indicator">
+                                <div class="pumping-circle"></div>
+                                <span class="status-text">Protected</span>
+                            </div>
+                            <div class="status-details">
+                                <div class="detail-row">
+                                    <span>Endpoints Protected</span>
+                                    <strong>100%</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Active Threats</span>
+                                    <strong>0</strong>
+                                </div>
+                            </div>
                         </div>
-                        <span class="shield-percent">98% Secure</span>
                     </div>
                 </div>
             </div>
@@ -409,13 +451,17 @@
             <div class="edr-visual">
                 <div class="comparison-card">
                     <div class="side traditional">
-                        <div class="cross"><lucide-icon [name]="X" [size]="56" color="#ef4444"></lucide-icon></div>
+                        <div class="icon-bg">
+                            <div class="cross"><lucide-icon [name]="X" [size]="56" color="rgba(239, 68, 68, 0.5)"></lucide-icon></div>
+                        </div>
                         <h5>Traditional AV</h5>
                         <p>Signature-based</p>
                         <p>Misses new attacks</p>
                     </div>
                     <div class="side next-gen">
-                        <div class="check"><lucide-icon [name]="Check" [size]="56" color="#10b981"></lucide-icon></div>
+                        <div class="icon-bg">
+                            <div class="check"><lucide-icon [name]="Check" [size]="64" color="#8b5cf6"></lucide-icon></div>
+                        </div>
                         <h5>Techzaz EDR</h5>
                         <p>Behavior-based</p>
                         <p>Stops zero-days</p>
@@ -423,18 +469,18 @@
                 </div>
             </div>
             <div class="edr-text">
-                <h2>Beyond Traditional Antivirus</h2>
+                <h2>Beyond Traditional <span class="accent-text">Antivirus</span></h2>
                 <p class="lead">Signatures aren't enough anymore. You need behavior analysis to stop modern ransomware
                     and fileless attacks.</p>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Bug" [size]="24"></lucide-icon></span>
-                    <p><strong>Detect Unknowns:</strong> Analyze what software <em>does</em>, not just what it
+                    <p><strong><span class="accent-text">Detect Unknowns:</span></strong> Analyze what software <em>does</em>, not just what it
                         <em>is</em>.
                     </p>
                 </div>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Search" [size]="24"></lucide-icon></span>
-                    <p><strong>Deep Investigation:</strong> Root cause analysis for every incident.</p>
+                    <p><strong><span class="accent-text">Deep Investigation:</span></strong> Root cause analysis for every incident.</p>
                 </div>
             </div>
         </div>
@@ -483,7 +529,10 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="logo">TECHZAZ <strong>EDR</strong></div>
+                    <div class="logo">
+                        <span class="logo-icon"><lucide-icon [name]="Shield" [size]="20"></lucide-icon></span>
+                        TECHZAZ <strong>EDR</strong>
+                    </div>
                     <p>Next-generation endpoint security for the modern enterprise.</p>
                     <div class="socials">
                         <a href="#"><lucide-icon [name]="Twitter" [size]="20"></lucide-icon></a>
