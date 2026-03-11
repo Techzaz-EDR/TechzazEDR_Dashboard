@@ -66,20 +66,43 @@
             </div>
             <div class="card-body donut-layout">
                 <div class="donut-chart-container">
-                    <svg viewBox="0 0 36 36" class="circular-chart">
+                    <svg viewBox="0 0 36 36" class="circular-chart" 
+                         [style.--target-protected]="targetProtected"
+                         [style.--target-at-risk]="targetAtRisk"
+                         [style.--target-offline]="targetOffline"
+                         [style.--offset-at-risk]="'-' + targetProtected"
+                         [style.--offset-offline]="'-' + (targetProtected + targetAtRisk)">
                         <path class="circle-bg"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle protected" [attr.stroke-dasharray]="animatedProtectionPct + ', 100'"
+                        <path class="circle protected" stroke-dasharray="0, 100"
+                            [style.animation]="'fillProtected 1.5s ease-out forwards'"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle at-risk" 
-                              [attr.stroke-dasharray]="animatedAtRiskPct + ', 100'" 
-                              [attr.stroke-dashoffset]="'-' + animatedProtectionPct"
+                        <path class="circle at-risk" stroke-dasharray="0, 100"
+                              [style.animation]="'fillAtRisk 1.5s ease-out forwards'"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle offline" 
-                              [attr.stroke-dasharray]="animatedOfflinePct + ', 100'" 
-                              [attr.stroke-dashoffset]="'-' + (animatedProtectionPct + animatedAtRiskPct)"
+                        <path class="circle offline" stroke-dasharray="0, 100"
+                              [style.animation]="'fillOffline 1.5s ease-out forwards'"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <text x="18" y="20.35" class="percentage">{{ animatedProtectionPct }}%</text>
+                        
+                        <!-- Dynamic CSS Animations based on CSS variables -->
+                        <style>
+                            @keyframes fillProtected {
+                                to { stroke-dasharray: var(--target-protected), 100; }
+                            }
+                            @keyframes fillAtRisk {
+                                to { 
+                                    stroke-dasharray: var(--target-at-risk), 100; 
+                                    stroke-dashoffset: var(--offset-at-risk); 
+                                }
+                            }
+                            @keyframes fillOffline {
+                                to { 
+                                    stroke-dasharray: var(--target-offline), 100; 
+                                    stroke-dashoffset: var(--offset-offline); 
+                                }
+                            }
+                        </style>
+                        <text x="18" y="20.35" class="percentage">{{ protectionStats.protectedPct }}%</text>
                     </svg>
                 </div>
                 <div class="chart-legend">
