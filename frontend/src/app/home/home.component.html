@@ -485,7 +485,94 @@
             </div>
         </div>
     </section>
+    <!-- 9. PRICING SECTION -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Flexible <span style="color: #8b5cf6;">Pricing Plans</span></h2>
+                <p>Choose the perfect level of endpoints protection for your enterprise.</p>
+            </div>
 
+            <div class="billing-toggle">
+                <span class="active">Monthly</span>
+                <div class="toggle-switch">
+                    <div class="switch-handle"></div>
+                </div>
+                <span>Annually <span class="save-badge">Save 20%</span></span>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Basic Plan -->
+                <div class="pricing-card" #pricingCard>
+                    <div class="card-header">
+                        <h3>Starter</h3>
+                        <p>Essential protection for small teams</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">29</span>
+                            <span class="period">/mo per user</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Complete Endpoint Defense</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Next-Gen Antivirus (NGAV)</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Cloud-Native Architecture</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> 7 Days Data Retention</li>
+                        </ul>
+                        <button class="btn btn-outline full-width">Start Free Trial</button>
+                    </div>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="pricing-card popular" #pricingCard>
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="card-header">
+                        <h3>Professional</h3>
+                        <p>Advanced hunting for growing organizations</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">49</span>
+                            <span class="period">/mo per user</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Everything in Starter</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Automated Threat Hunting</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Zero Trust Network Access</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> 30 Days Data Retention</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> MITRE ATT&CK Mapping</li>
+                        </ul>
+                        <button class="btn btn-primary full-width">Get Professional</button>
+                    </div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card" #pricingCard>
+                    <div class="card-header">
+                        <h3>Enterprise</h3>
+                        <p>Limitless protection for large enterprises</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">99</span>
+                            <span class="period">/mo per user</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Everything in Professional</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> 24/7 Managed Threat Hunting</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Custom Threat Intelligence API</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Unlimited Data Retention</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Dedicated Support</li>
+                        </ul>
+                        <button class="btn btn-outline full-width">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="final-cta">
         <div class="container">
