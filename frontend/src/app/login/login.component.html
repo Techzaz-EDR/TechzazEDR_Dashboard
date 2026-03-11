@@ -1,73 +1,151 @@
-<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" (mousemove)="onMouseMove($event)"
-    (mouseleave)="onMouseLeave()">
-    <div class="hover-glow"></div>
+<div class="super-auth-container">
+    <!-- SVG Background matched exactly to the image -->
+    <svg class="circuit-bg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+        <!-- Connecting Lines -->
+        <g stroke="#2a2a2a" stroke-width="1.5" fill="none">
+            <!-- Top Left -->
+            <path d="M 120,200 L 250,200 L 350,300 L 350,540 L 700,540" />
+            
+            <!-- Top Right -->
+            <path d="M 1800,200 L 1670,200 L 1570,300 L 1570,540 L 1220,540" />
+            
+            <!-- Bottom Left -->
+            <path d="M 120,880 L 250,880 L 350,780 L 350,540" />
+            
+            <!-- Bottom Right -->
+            <path d="M 1800,880 L 1670,880 L 1570,780 L 1570,540" />
+        </g>
 
-    <!-- Background Data Fragments -->
-    <div class="data-fragments">
-        <div class="fragment" style="--top: 15%; --left: 10%; --delay: 0s">Techzaz EDR</div>
-        <div class="fragment" style="--top: 25%; --left: 80%; --delay: 3s">Techzaz EDR</div>
-        <div class="fragment" style="--top: 65%; --left: 15%; --delay: 6s">Techzaz EDR</div>
-        <div class="fragment" style="--top: 80%; --left: 70%; --delay: 1.5s">Techzaz EDR</div>
-    </div>
+        <!-- Right edge lines -->
+        <g stroke="#333" stroke-width="1.5" fill="none">
+            <path d="M 1920,180 L 1800,180" />
+            <path d="M 1920,200 L 1800,200" />
+            <path d="M 1920,220 L 1800,220" />
+
+            <path d="M 1920,860 L 1800,860" />
+            <path d="M 1920,880 L 1800,880" />
+            <path d="M 1920,900 L 1800,900" />
+            
+            <path d="M 0,180 L 120,180" />
+            <path d="M 0,200 L 120,200" />
+            <path d="M 0,220 L 120,220" />
+
+            <path d="M 0,860 L 120,860" />
+            <path d="M 0,880 L 120,880" />
+            <path d="M 0,900 L 120,900" />
+        </g>
+        
+        <!-- Nodes Backgrounds -->
+        <g fill="#1a1a1a" stroke="#222" stroke-width="1">
+            <rect x="-10" y="160" width="130" height="80" rx="8" />
+            <rect x="1800" y="160" width="130" height="80" rx="8" />
+            <rect x="-10" y="840" width="130" height="80" rx="8" />
+            <rect x="1800" y="840" width="130" height="80" rx="8" />
+        </g>
+
+        <!-- 8 dots inside each node -->
+        <g fill="#444">
+            <!-- Top Left -->
+            <circle cx="50" cy="190" r="1.5"/> <circle cx="70" cy="190" r="1.5"/> <circle cx="90" cy="190" r="1.5"/> <circle cx="110" cy="190" r="1.5"/>
+            <circle cx="50" cy="210" r="1.5"/> <circle cx="70" cy="210" r="1.5"/> <circle cx="90" cy="210" r="1.5"/> <circle cx="110" cy="210" r="1.5"/>
+            <!-- Top Right -->
+            <circle cx="1810" cy="190" r="1.5"/> <circle cx="1830" cy="190" r="1.5"/> <circle cx="1850" cy="190" r="1.5"/> <circle cx="1870" cy="190" r="1.5"/>
+            <circle cx="1810" cy="210" r="1.5"/> <circle cx="1830" cy="210" r="1.5"/> <circle cx="1850" cy="210" r="1.5"/> <circle cx="1870" cy="210" r="1.5"/>
+            <!-- Bottom Left -->
+            <circle cx="50" cy="870" r="1.5"/> <circle cx="70" cy="870" r="1.5"/> <circle cx="90" cy="870" r="1.5"/> <circle cx="110" cy="870" r="1.5"/>
+            <circle cx="50" cy="890" r="1.5"/> <circle cx="70" cy="890" r="1.5"/> <circle cx="90" cy="890" r="1.5"/> <circle cx="110" cy="890" r="1.5"/>
+            <!-- Bottom Right -->
+            <circle cx="1810" cy="870" r="1.5"/> <circle cx="1830" cy="870" r="1.5"/> <circle cx="1850" cy="870" r="1.5"/> <circle cx="1870" cy="870" r="1.5"/>
+            <circle cx="1810" cy="890" r="1.5"/> <circle cx="1830" cy="890" r="1.5"/> <circle cx="1850" cy="890" r="1.5"/> <circle cx="1870" cy="890" r="1.5"/>
+        </g>
+        
+        <!-- White Connecting Rects between line and box -->
+        <g fill="#FFFFFF" filter="drop-shadow(0px 0px 4px rgba(255,255,255,0.8))">
+            <!-- White dots outside boxes connecting lines -->
+            <rect x="247" y="197" width="6" height="6" rx="1" />
+            <rect x="1667" y="197" width="6" height="6" rx="1" />
+            <rect x="247" y="877" width="6" height="6" rx="1" />
+            <rect x="1667" y="877" width="6" height="6" rx="1" />
+        </g>
+    </svg>
 
     <div class="auth-card">
-        <!-- Sign In View -->
-        <div class="auth-view sign-in-view">
-            <form (submit)="signIn()">
-                <div class="form-header">
-                    <h2>Platform Access</h2>
-                </div>
-
-                <div *ngIf="errorMessage" class="error-banner">
-                    {{ errorMessage }}
-                </div>
-
-                <div class="inputs-group">
-                    <div class="input-field">
-                        <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                        <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
-                    </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                        <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
-                            placeholder="Password" required />
-                    </div>
-                </div>
-
-                <a href="#" class="forgot-password">Reset Credentials?</a>
-                <button type="submit" class="btn solid">Authenticate</button>
-                <p class="toggle-link">New here? <a (click)="toggleMode()">Initialize Tenant</a></p>
-            </form>
+        <div class="logo-box-group">
+            <div class="dots-left">
+                <div class="dot-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="dot-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+            </div>
+            <div class="logo-box">
+                <svg viewBox="0 0 24 24" fill="none" class="brand-icon">
+                    <circle cx="12" cy="12" r="3" fill="#60a5fa" />
+                    <path d="M10 5 C6 8 6 16 10 19" stroke="#f1f5f9" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M14 5 C18 8 18 16 14 19" stroke="#f1f5f9" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="dots-right">
+                <div class="dot-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="dot-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+            </div>
         </div>
 
-        <!-- Sign Up View -->
-        <div class="auth-view sign-up-view">
-            <form>
-                <div class="form-header">
-                    <h2>Initialize Tenant</h2>
-                </div>
+        <h2 class="welcome-title">Welcome Back</h2>
+        <p class="subtitle">Don't have an account yet? <a href="#" class="signup-link" (click)="toggleMode()">Sing up</a></p>
 
-                <div class="inputs-group">
-                    <div class="input-field">
-                        <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                        <input type="text" name="signupName" [(ngModel)]="signupName"
-                            placeholder="Administrator Name" />
-                    </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Mail" [size]="20"></lucide-icon>
-                        <input type="email" name="signupEmail" [(ngModel)]="signupEmail"
-                            placeholder="Work Email" />
-                    </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                        <input type="password" name="signupPassword" [(ngModel)]="signupPassword"
-                            placeholder="Master Password" />
-                    </div>
+        <form (submit)="signIn()" *ngIf="!isSignUpMode">
+            <div class="inputs-group">
+                <div class="input-field">
+                    <lucide-icon name="mail" [size]="18" class="icon"></lucide-icon>
+                    <input type="email" name="email" [(ngModel)]="email" placeholder="email address" required />
                 </div>
+                <div class="input-field">
+                    <lucide-icon name="lock" [size]="18" class="icon"></lucide-icon>
+                    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required />
+                </div>
+            </div>
 
-                <button type="button" class="btn solid" (click)="signIn()">Deploy Workspace</button>
-                <p class="toggle-link">Already have an account? <a (click)="toggleMode()">Log In</a></p>
-            </form>
-        </div>
+            <button type="submit" class="btn-login">Login</button>
+            <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <div class="social-grid">
+                <button type="button" class="social-btn">
+                    <svg viewBox="0 0 384 512" width="16" height="16" fill="#f8fafc"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+                </button>
+                <button type="button" class="social-btn">
+                    <svg viewBox="0 0 48 48" width="16" height="16">
+                      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                    </svg>
+                </button>
+                <button type="button" class="social-btn">
+                    <svg viewBox="0 0 512 512" width="16" height="16" fill="#f8fafc"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L273.2 181.7 389.2 48z M364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+                </button>
+            </div>
+        </form>
+
+        <form (submit)="signIn()" *ngIf="isSignUpMode">
+            <div class="inputs-group">
+                <div class="input-field">
+                    <lucide-icon name="user" [size]="18" class="icon"></lucide-icon>
+                    <input type="text" name="signupName" [(ngModel)]="signupName" placeholder="Name" required />
+                </div>
+                <div class="input-field">
+                    <lucide-icon name="mail" [size]="18" class="icon"></lucide-icon>
+                    <input type="email" name="signupEmail" [(ngModel)]="signupEmail" placeholder="email address" required />
+                </div>
+                <div class="input-field">
+                    <lucide-icon name="lock" [size]="18" class="icon"></lucide-icon>
+                    <input type="password" name="signupPassword" [(ngModel)]="signupPassword" placeholder="Password" required />
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login">Sign up</button>
+            <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+        </form>
     </div>
 </div>
