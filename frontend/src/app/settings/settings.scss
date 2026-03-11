@@ -65,8 +65,19 @@
                 }
 
                 &.active {
-                    color: var(--text-primary, #f8fafc);
-                    border-bottom: 2px solid #8b5cf6;
+                    color: var(--text-primary);
+                    background-color: var(--bg-card);
+                    /* Exact deep purple from screenshot */
+                    padding-left: 16px;
+                    padding-right: 16px;
+                    border-radius: 8px 8px 0 0;
+                    border-bottom: none;
+                    border: 1px solid var(--border-color);
+                    /* Add border to match card */
+                    border-bottom-color: var(--bg-card);
+                    /* Hide bottom border to merge */
+
+                    /* Remove the simple border-bottom and use full background */
                 }
             }
         }
