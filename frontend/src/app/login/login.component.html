@@ -2,7 +2,7 @@
     <!-- SVG Background matched exactly to the image -->
     <svg class="circuit-bg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
         <!-- Edge horizontal connection lines -->
-        <g stroke="#2a2a2a" stroke-width="1.5" fill="none">
+        <g stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none">
             <!-- Left edge lines -->
             <path d="M 0,40 L 30,40" />
             <path d="M 0,50 L 30,50" />
@@ -22,19 +22,19 @@
             <path d="M 1920,1040 L 1890,1040" />
         </g>
 
-        <!-- Connecting Lines to Center Auth Box -->
-        <g stroke="#2a2a2a" stroke-width="1.5" fill="none">
+        <!-- Connecting Lines to Center Auth Box (Orthogonal/45deg only) -->
+        <g stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none">
             <!-- Top Left corner line -->
-            <path d="M 120,50 L 250,50 L 350,300 L 770,300" />
+            <path d="M 120,50 L 250,50 L 500,300 L 770,300" />
             
             <!-- Top Right corner line -->
-            <path d="M 1800,50 L 1670,50 L 1570,300 L 1150,300" />
+            <path d="M 1800,50 L 1670,50 L 1420,300 L 1150,300" />
             
             <!-- Bottom Left corner line -->
-            <path d="M 120,1030 L 250,1030 L 350,780 L 770,780" />
+            <path d="M 120,1030 L 250,1030 L 500,780 L 770,780" />
             
             <!-- Bottom Right corner line -->
-            <path d="M 1800,1030 L 1670,1030 L 1570,780 L 1150,780" />
+            <path d="M 1800,1030 L 1670,1030 L 1420,780 L 1150,780" />
         </g>
 
         <!-- The 4 Corner Nodes -->
@@ -122,20 +122,27 @@
             </g>
         </g>
 
-        <!-- Glow backing for light blocks -->
-        <g fill="none" class="glow-squares">
-            <rect x="116" y="46" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="#111" />
-            <rect x="1796" y="46" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="#111" />
-            <rect x="116" y="1026" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="#111" />
-            <rect x="1796" y="1026" width="8" height="8" rx="2" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="#111" />
+        <!-- Inner glow rings at connection points to the auth card -->
+        <g fill="none" class="inner-glow-rings" stroke="rgba(255,255,255,0.08)" stroke-width="6">
+            <rect x="760" y="290" width="20" height="20" rx="4" />
+            <rect x="1140" y="290" width="20" height="20" rx="4" />
+            <rect x="760" y="770" width="20" height="20" rx="4" />
+            <rect x="1140" y="770" width="20" height="20" rx="4" />
         </g>
 
-        <!-- White Connecting Squares -->
-        <g fill="#FFFFFF" filter="drop-shadow(0px 0px 3px rgba(255,255,255,0.9))">
-            <rect x="116" y="46" width="8" height="8" rx="2" />
-            <rect x="1796" y="46" width="8" height="8" rx="2" />
-            <rect x="116" y="1026" width="8" height="8" rx="2" />
-            <rect x="1796" y="1026" width="8" height="8" rx="2" />
+        <g fill="none" class="inner-glow-rings" stroke="rgba(255,255,255,0.15)" stroke-width="2">
+            <rect x="764" y="294" width="12" height="12" rx="3" />
+            <rect x="1144" y="294" width="12" height="12" rx="3" />
+            <rect x="764" y="774" width="12" height="12" rx="3" />
+            <rect x="1144" y="774" width="12" height="12" rx="3" />
+        </g>
+
+        <!-- White Connecting Squares directly touching the Auth Box -->
+        <g fill="#FFFFFF" filter="drop-shadow(0px 0px 8px rgba(255,255,255,0.9))">
+            <rect x="766" y="296" width="8" height="8" rx="2" />
+            <rect x="1146" y="296" width="8" height="8" rx="2" />
+            <rect x="766" y="776" width="8" height="8" rx="2" />
+            <rect x="1146" y="776" width="8" height="8" rx="2" />
         </g>
     </svg>
 
