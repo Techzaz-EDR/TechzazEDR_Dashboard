@@ -60,26 +60,23 @@ export class Analytics {
     // Threat Trend (Line Chart Points - SVG Polyline)
     // Mapping numbers 0-40 to SVG coordinate space 0-100 height
     get trendPoints() {
-        // Mock data points
-        const data = [28, 26, 32, 30, 36, 39, 29];
         // Convert to SVG points string "x,y x,y..."
         // Width 100% -> viewbox 0 0 600 200
         // x step = 100
-        return data.map((val, i) => `${i * 100},${200 - (val * 4)} `).join(' ');
+        return this.mediumData.map((val, i) => `${i * 100},${200 - (val * 4)} `).join(' ');
     }
 
     // Critical Trend
     get criticalPoints() {
-        const data = [5, 4, 8, 6, 9, 8, 5];
-        return data.map((val, i) => `${i * 100},${200 - (val * 4)} `).join(' ');
+        return this.criticalData.map((val, i) => `${i * 100},${200 - (val * 4)} `).join(' ');
     }
 
     // Incident Status (Donut)
     // Segments: Contained (Orange), Investigating (Red), Resolved (Green)
     donutSegments = [
-        { color: '#F97316', percent: 20, label: 'Contained' },
-        { color: '#EF4444', percent: 15, label: 'Investigating' },
-        { color: '#22C55E', percent: 65, label: 'Resolved' }
+        { color: '#eab308', percent: 20, label: 'Contained' },
+        { color: '#ef4444', percent: 15, label: 'Investigating' },
+        { color: '#3b82f6', percent: 65, label: 'Resolved' }
     ];
 
     // Detection Methods (Top Threat Types - Horizontal Bar)
@@ -164,4 +161,56 @@ export class Analytics {
             severity: 'HIGH'
         }
     ];
+
+    // Chart Interaction State
+    hoveringChart = false;
+    hoverX = 0;
+    hoverYMedium = 0;
+    hoverYCritical = 0;
+    tooltipX = 0;
+    tooltipY = 0;
+    hoverDay = '';
+    hoverValMedium = 0;
+    hoverValCritical = 0;
+
+    private readonly days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    private readonly mediumData = [28, 26, 32, 30, 36, 39, 29];
+    private readonly criticalData = [5, 4, 8, 6, 9, 8, 5];
+
+    onChartMouseMove(event: MouseEvent) {
+        const svg = (event.currentTarget as HTMLElement).querySelector('.main-chart-svg') as SVGSVGElement;
+        if (!svg) return;
+
+        const rect = svg.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        // Convert pixel X to SVG viewbox X (0-600)
+        const svgX = (x / rect.width) * 600;
+
+        this.hoveringChart = true;
+        this.hoverX = svgX;
+
+        // Find nearest data index (x-axis steps are 100)
+        const index = Math.max(0, Math.min(6, Math.round(svgX / 100)));
+
+        this.hoverDay = this.days[index];
+        this.hoverValMedium = this.mediumData[index];
+        this.hoverValCritical = this.criticalData[index];
+
+        // Highlight dots follow the exact points
+        this.hoverYMedium = 200 - (this.hoverValMedium * 4);
+        this.hoverYCritical = 200 - (this.hoverValCritical * 4);
+
+        // Tooltip position
+        this.tooltipX = x + 20;
+        this.tooltipY = y - 40;
+
+        // Keep tooltip inside chart bounds
+        if (this.tooltipX > rect.width - 150) this.tooltipX = x - 170;
+    }
+
+    onChartMouseLeave() {
+        this.hoveringChart = false;
+    }
 }

@@ -60,13 +60,14 @@
 
     <div class="charts-grid">
         <!-- Threat Trend -->
-        <div class="chart-card glass-card large">
+        <div class="chart-card glass-card compact">
             <div class="card-header">
                 <h3>Threat Intelligence Trend</h3>
                 <p class="subtitle">Real-time analysis of threat detection over the past 7 days</p>
             </div>
-            <div class="chart-content line-chart-container">
-                <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+            <div class="chart-content line-chart-container" (mousemove)="onChartMouseMove($event)"
+                (mouseleave)="onChartMouseLeave()">
+                <svg viewBox="0 0 600 200" preserveAspectRatio="none" class="main-chart-svg">
                     <defs>
                         <linearGradient id="mediumGradient" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stop-color="#10b981" stop-opacity="0.5" />
@@ -90,7 +91,33 @@
                     <!-- Critical Severity Path -->
                     <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
                     <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="6" />
+
+                    <!-- Interactive Elements -->
+                    <g class="interactive-overlay" [class.visible]="hoveringChart">
+                        <line [attr.x1]="hoverX" y1="0" [attr.x2]="hoverX" y2="200" class="hover-line" />
+
+                        <!-- Dots on paths -->
+                        <circle [attr.cx]="hoverX" [attr.cy]="hoverYMedium" r="5" class="hover-dot medium" />
+                        <circle [attr.cx]="hoverX" [attr.cy]="hoverYCritical" r="5" class="hover-dot critical" />
+                    </g>
                 </svg>
+
+                <div class="chart-tooltip" [class.visible]="hoveringChart" [style.left.px]="tooltipX"
+                    [style.top.px]="tooltipY">
+                    <div class="tooltip-header">{{ hoverDay }}</div>
+                    <div class="tooltip-body">
+                        <div class="tooltip-row">
+                            <span class="dot medium"></span>
+                            <span class="label">System Alerts:</span>
+                            <span class="value">{{ hoverValMedium }}</span>
+                        </div>
+                        <div class="tooltip-row">
+                            <span class="dot critical"></span>
+                            <span class="label">Critical Threats:</span>
+                            <span class="value">{{ hoverValCritical }}</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="x-axis">
                     <span>Monday</span><span>Tuesday</span><span>Wednesday</span><span>Thursday</span><span>Friday</span><span>Saturday</span><span>Sunday</span>
@@ -118,7 +145,7 @@
                             style="--dash-offset: 35; stroke-dasharray: 65 100;" />
                         <circle class="segment investigating" cx="50" cy="50" r="40" stroke="#EF4444"
                             style="--dash-offset: 0; stroke-dasharray: 15 100; stroke-dashoffset: -65;" />
-                        <circle class="segment contained" cx="50" cy="50" r="40" stroke="#F97316"
+                        <circle class="segment contained" cx="50" cy="50" r="40" stroke="#eab308"
                             style="--dash-offset: 0; stroke-dasharray: 20 100; stroke-dashoffset: -80;" />
                     </svg>
                 </div>
