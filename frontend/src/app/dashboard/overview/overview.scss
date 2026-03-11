@@ -5,6 +5,7 @@
     flex-direction: column;
     gap: 24px;
     padding-bottom: 40px;
+    animation: fadeIn 0.8s var(--ease-out);
 }
 
 /* 1. Header */
@@ -49,6 +50,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.2s;
 
             &:hover {
                 background-color: var(--bg-hover);
@@ -72,10 +74,12 @@
         display: flex;
         align-items: center;
         gap: 16px;
+        transition: transform 0.2s, box-shadow 0.2s;
         box-shadow: var(--shadow-card);
         cursor: pointer;
 
         &:hover {
+            transform: translateY(-2px);
             border-color: var(--border-hover);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
         }
@@ -111,21 +115,18 @@
 
         /* Status Variants */
         &.status-safe .kpi-icon {
-            color: var(--status-low, #3b82f6);
-            background: transparent;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--status-low);
+            background: var(--status-low-bg);
         }
 
         &.status-warning .kpi-icon {
-            color: var(--status-high, #eab308);
-            background: transparent;
-            border: 1px solid rgba(234, 179, 8, 0.2);
+            color: var(--status-high);
+            background: var(--status-high-bg);
         }
 
         &.status-critical .kpi-icon {
-            color: var(--status-critical, #ef4444);
-            background: transparent;
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--status-critical);
+            background: var(--status-critical-bg);
         }
     }
 }
@@ -195,11 +196,13 @@
         fill: none;
         stroke-width: 2.5;
         stroke-linecap: round;
+        animation: progress 1s ease-out forwards;
         transform: rotate(-90deg);
         transform-origin: center;
 
         &.protected {
             stroke: var(--chart-primary);
+            filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.3));
         }
 
         &.at-risk {
@@ -333,6 +336,10 @@
                 stroke-width: 3;
                 stroke-linejoin: round;
                 stroke-linecap: round;
+                filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.4));
+                animation: drawLine 1.5s ease-out forwards;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
             }
         }
     }
@@ -354,6 +361,7 @@
         padding: 8px;
         margin: 0 -8px;
         border-radius: 8px;
+        transition: all 0.2s ease;
         cursor: pointer;
         border-left: 3px solid transparent;
 
@@ -372,8 +380,8 @@
         }
 
         &.status-neutral:hover {
-            border-left-color: var(--chart-primary);
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
+            border-left-color: var(--chart-neutral);
+            background: linear-gradient(90deg, rgba(148, 163, 184, 0.1), transparent);
         }
 
         .bar-info {
@@ -458,6 +466,7 @@
             border: 1px solid transparent;
             border-left: 3px solid transparent;
             cursor: pointer;
+            transition: all 0.2s ease;
 
             &:hover {
                 background: var(--bg-hover);
@@ -509,8 +518,8 @@
                     }
 
                     &.impact-medium {
-                        color: var(--status-low);
-                        background: var(--status-low-bg);
+                        color: var(--status-medium);
+                        background: var(--status-medium-bg);
                     }
                 }
             }
@@ -524,6 +533,7 @@
                 font-size: 0.8rem;
                 font-weight: 500;
                 cursor: pointer;
+                transition: opacity 0.2s;
 
                 &:hover {
                     opacity: 0.9;
@@ -561,6 +571,7 @@
 
     tbody tr {
         cursor: pointer;
+        transition: all 0.2s ease;
         position: relative;
 
         /* Border left doesn't work well on tr, so we use box-shadow or background */
@@ -614,23 +625,20 @@
     }
 
     .status-badge {
-        padding: 3px 8px;
-        border-radius: 4px;
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        background: transparent !important;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        background: var(--bg-dark);
+        border: 1px solid var(--border-color);
 
         &.active {
-            color: #3b82f6;
-            /* Blue */
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--chart-critical);
+            border-color: var(--chart-critical);
         }
 
         &.investigating {
-            color: #eab308;
-            /* Yellow */
-            border: 1px solid rgba(234, 179, 8, 0.3);
+            color: var(--chart-warning);
+            border-color: var(--chart-warning);
         }
     }
 }
@@ -639,6 +647,7 @@
     .live-pulse {
         font-size: 0.75rem;
         color: var(--status-critical);
+        animation: pulse 2s infinite;
         font-weight: 600;
         text-transform: uppercase;
     }
@@ -655,7 +664,9 @@
         padding: 12px;
         border-left: 2px solid transparent;
         border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        animation: slideIn 0.3s ease-out;
         cursor: pointer;
+        transition: all 0.2s ease;
 
         &:hover {
             background: rgba(255, 255, 255, 0.03);
@@ -694,8 +705,8 @@
             border-left-color: var(--status-low);
 
             &:hover {
-                background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(59, 130, 246, 0.3);
+                background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), transparent);
+                box-shadow: -5px 0 10px -5px rgba(16, 185, 129, 0.3);
             }
         }
 
@@ -753,26 +764,114 @@
     }
 }
 
-/* Staggered Entry Animations - Disabled */
-.kpi-card {
-    opacity: 1;
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.visual-row .card,
-.secondary-row .card,
+/* Staggered Entry Animations */
+.kpi-card {
+    opacity: 0;
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.kpi-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.kpi-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.kpi-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.kpi-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.visual-row .card {
+    opacity: 0;
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.5s;
+}
+
+.secondary-row .card {
+    opacity: 0;
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.6s;
+}
+
 .bottom-row .card {
-    opacity: 1;
+    opacity: 0;
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.7s;
 }
 
 /* List Item Stagger within cards */
 .health-bar-row {
-    opacity: 1;
+    opacity: 0;
+    animation: slideUpFade 0.5s ease-out forwards;
+}
+
+.health-bar-row:nth-child(1) {
+    animation-delay: 0.7s;
+}
+
+.health-bar-row:nth-child(2) {
+    animation-delay: 0.8s;
+}
+
+.health-bar-row:nth-child(3) {
+    animation-delay: 0.9s;
 }
 
 .risk-contributors-card .contributor-row {
-    opacity: 1;
+    opacity: 0;
+    animation: slideUpFade 0.5s ease-out forwards;
+}
+
+.risk-contributors-card .contributor-row:nth-child(1) {
+    animation-delay: 0.7s;
+}
+
+.risk-contributors-card .contributor-row:nth-child(2) {
+    animation-delay: 0.8s;
+}
+
+.risk-contributors-card .contributor-row:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+.risk-contributors-card .contributor-row:nth-child(4) {
+    animation-delay: 1.0s;
 }
 
 tbody tr {
-    opacity: 1;
+    opacity: 0;
+    animation: slideUpFade 0.5s ease-out forwards;
+}
+
+tbody tr:nth-child(1) {
+    animation-delay: 0.8s;
+}
+
+tbody tr:nth-child(2) {
+    animation-delay: 0.9s;
+}
+
+tbody tr:nth-child(3) {
+    animation-delay: 1.0s;
+}
+
+tbody tr:nth-child(4) {
+    animation-delay: 1.1s;
 }

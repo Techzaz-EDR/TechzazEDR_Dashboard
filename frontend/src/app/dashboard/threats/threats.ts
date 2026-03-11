@@ -46,7 +46,8 @@ export class Threats {
             time: '2 minutes ago',
             severity: 'critical',
             type: 'Malware',
-            status: 'active'
+            status: 'active',
+            icon: '⚡'
         },
         {
             id: 2,
@@ -56,7 +57,8 @@ export class Threats {
             time: '15 minutes ago',
             severity: 'high',
             type: 'Network',
-            status: 'investigating'
+            status: 'investigating',
+            icon: '🌐'
         },
         {
             id: 3,
@@ -66,7 +68,8 @@ export class Threats {
             time: '1 hour ago',
             severity: 'high',
             type: 'Malware',
-            status: 'quarantined'
+            status: 'quarantined',
+            icon: '⚠️'
         },
         {
             id: 4,
@@ -76,7 +79,8 @@ export class Threats {
             time: '3 hours ago',
             severity: 'high',
             type: 'Privilege Esc',
-            status: 'blocked'
+            status: 'blocked',
+            icon: '🔒'
         },
         {
             id: 5,
@@ -86,7 +90,8 @@ export class Threats {
             time: '5 hours ago',
             severity: 'medium',
             type: 'Network',
-            status: 'investigating'
+            status: 'investigating',
+            icon: '🌐'
         },
         {
             id: 6,
@@ -96,7 +101,8 @@ export class Threats {
             time: '2 days ago',
             severity: 'medium',
             type: 'Policy',
-            status: 'resolved'
+            status: 'resolved',
+            icon: '⚠️'
         },
         {
             id: 7,
@@ -106,7 +112,8 @@ export class Threats {
             time: '2 weeks ago',
             severity: 'high',
             type: 'Account',
-            status: 'investigating'
+            status: 'investigating',
+            icon: '👤'
         }
     ];
 
@@ -142,64 +149,5 @@ export class Threats {
         if (timeString.includes('day')) return value * 24;
         if (timeString.includes('week')) return value * 24 * 7;
         return 0; // Just now or unknown
-    }
-
-    // Interactive Chart Logic
-    readonly chartData = [20, 40, 30, 80, 60, 90, 70, 100, 60, 40, 50, 30, 40];
-    readonly svgWidth = 600;
-    readonly svgHeight = 120;
-
-    hovering = false;
-    hoverX = 0;
-    hoverY = 0;
-    tooltipX = 0;
-    tooltipY = 0;
-    currentValue = 0;
-    currentTime = '';
-
-    get linePath() {
-        const step = this.svgWidth / (this.chartData.length - 1);
-        return this.chartData.map((val, i) => `${i === 0 ? 'M' : 'L'}${i * step},${this.svgHeight - val}`).join(' ');
-    }
-
-    get areaPath() {
-        const step = this.svgWidth / (this.chartData.length - 1);
-        const points = this.chartData.map((val, i) => `L${i * step},${this.svgHeight - val}`).join(' ');
-        // Area includes bottom corners
-        return `M0,${this.svgHeight} ${points} L${this.svgWidth},${this.svgHeight} Z`;
-    }
-
-    onMouseMove(event: MouseEvent) {
-        const container = event.currentTarget as HTMLElement;
-        const svg = container.querySelector('svg');
-        if (!svg) return;
-
-        const rect = svg.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-
-        const step = rect.width / (this.chartData.length - 1);
-        const index = Math.round(x / step);
-        const clampedIndex = Math.max(0, Math.min(this.chartData.length - 1, index));
-
-        this.hovering = true;
-        this.hoverX = clampedIndex * (this.svgWidth / (this.chartData.length - 1));
-        this.currentValue = this.chartData[clampedIndex];
-        this.hoverY = this.svgHeight - this.currentValue;
-
-        this.tooltipX = x + 15;
-        this.tooltipY = y - 40;
-
-        // Mock time based on 24h index
-        const hour = clampedIndex * 2;
-        this.currentTime = `${hour}:00 ${hour < 12 ? 'AM' : 'PM'}`;
-
-        if (this.tooltipX > rect.width - 120) {
-            this.tooltipX = x - 130;
-        }
-    }
-
-    onMouseLeave() {
-        this.hovering = false;
     }
 }
