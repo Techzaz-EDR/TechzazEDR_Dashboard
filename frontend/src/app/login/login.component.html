@@ -1,49 +1,51 @@
-<div class="super-auth-container">
+<div class="super-auth-container" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()">
+    <!-- 1. Central Halo Glow -->
+    <div class="background-halo"></div>
 
+    <!-- 2. Network Diagram Layer -->
+    <div class="network-diagram">
+        <svg width="100%" height="100%" class="cyber-network-svg">
+            <g class="network-links">
+                <line *ngFor="let link of networkLinks" 
+                      [attr.x1]="networkNodes[link.source].x + '%'" 
+                      [attr.y1]="networkNodes[link.source].y + '%'"
+                      [attr.x2]="networkNodes[link.target].x + '%'" 
+                      [attr.y2]="networkNodes[link.target].y + '%'"
+                      [attr.stroke-opacity]="link.opacity"
+                      stroke="#60a5fa" stroke-width="1" />
+            </g>
+            <g class="network-nodes">
+                <circle *ngFor="let node of networkNodes" 
+                        [attr.cx]="node.x + '%'" 
+                        [attr.cy]="node.y + '%'" 
+                        [attr.r]="node.size"
+                        [attr.fill-opacity]="node.opacity"
+                        fill="#60a5fa" class="pulsing-node">
+                    <animate attributeName="r" [attr.from]="node.size" [attr.to]="node.size + 2" 
+                             [attr.dur]="node.duration + 's'" repeatCount="indefinite" />
+                </circle>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 3. Binary Streams Layer -->
+    <div class="binary-streams">
+        <div *ngFor="let stream of binaryStreams; let i = index" class="binary-column" 
+             [style.left]="(i * 5) + '%'" [style.animation-delay]="(i * 0.4) + 's'">
+            <span *ngFor="let char of stream">{{char}}</span>
+        </div>
+    </div>
+
+    <!-- 4. Mouse Glow Effect -->
+    <div class="hover-glow"></div>
 
     <div class="auth-card">
-        <svg class="card-border-svg"
-            style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 20; pointer-events: none; border-radius: 16px;">
-            <rect width="100%" height="100%" rx="16" fill="none" stroke="#fff" stroke-width="2" class="anim-card-border"
-                pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"
-                filter="drop-shadow(0 0 8px rgba(255,255,255,0.8))" />
-        </svg>
-        <div class="logo-box-group">
-            <div class="dots-left">
-                <div class="dot-row">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-                <div class="dot-row">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-            </div>
-            <div class="logo-box">
-                <svg viewBox="0 0 24 24" fill="none" class="brand-icon">
-                    <circle cx="12" cy="12" r="3" fill="#60a5fa" />
-                    <path d="M10 5 C6 8 6 16 10 19" stroke="#f1f5f9" stroke-width="2.5" stroke-linecap="round" />
-                    <path d="M14 5 C18 8 18 16 14 19" stroke="#f1f5f9" stroke-width="2.5" stroke-linecap="round" />
-                </svg>
-            </div>
-            <div class="dots-right">
-                <div class="dot-row">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-                <div class="dot-row">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-            </div>
+
+        <div class="techzaz-logo">
+            <svg viewBox="0 0 24 24" fill="none" class="brand-shield">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="brand-text">TECHZAZ</span>
         </div>
 
         <div class="forms-slider" [class.show-signup]="isSignUpMode">
