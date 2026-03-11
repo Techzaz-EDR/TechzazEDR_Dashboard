@@ -51,6 +51,8 @@ export class LoginComponent implements AfterViewInit, OnInit {
     dotBL = {x: 0, y: 0};
     dotBR = {x: 0, y: 0};
 
+    backgroundBubbles: any[] = [];
+
     constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
 
     @HostListener('window:resize')
@@ -106,6 +108,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
             this.screenWidth = window.innerWidth;
             this.screenHeight = window.innerHeight;
             this.updateSvgPaths();
+            this.generateBubbles();
         }
 
         this.route.queryParams.subscribe(params => {
@@ -113,6 +116,20 @@ export class LoginComponent implements AfterViewInit, OnInit {
                 this.isSignUpMode = true;
             }
         });
+    }
+
+    generateBubbles() {
+        const count = 12;
+        for (let i = 0; i < count; i++) {
+            this.backgroundBubbles.push({
+                left: Math.random() * 100 + '%',
+                top: Math.random() * 100 + '%',
+                opacity: Math.random() * 0.15 + 0.05,
+                scale: Math.random() * 0.5 + 0.5,
+                duration: Math.random() * 10 + 10 + 's',
+                delay: Math.random() * -20 + 's'
+            });
+        }
     }
 
     ngAfterViewInit() {
