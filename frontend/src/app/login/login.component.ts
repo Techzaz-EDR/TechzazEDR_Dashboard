@@ -47,27 +47,12 @@ export class LoginComponent implements AfterViewInit, OnInit {
     ngOnInit() {
         if (typeof window !== 'undefined') {
             this.generateSpheres();
-            this.startAutomatedDrift();
         }
 
         this.route.queryParams.subscribe(params => {
             if (params['mode'] === 'signup') {
                 this.isSignUpMode = true;
             }
-        });
-    }
-
-    startAutomatedDrift() {
-        // Subtle drift for spheres so they don't just stay still
-        this.spheres.forEach((s, i) => {
-            gsap.to(`.sphere-${i}`, {
-                x: "+=20",
-                y: "-=30",
-                duration: 5 + Math.random() * 5,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut"
-            });
         });
     }
 
@@ -79,10 +64,9 @@ export class LoginComponent implements AfterViewInit, OnInit {
         ];
 
         this.spheres = Array.from({ length: 8 }).map((_, i) => ({
-            id: i,
             width: Math.random() * 250 + 150 + 'px',
-            initialLeft: Math.random() * 90 + -5,
-            initialTop: Math.random() * 90 + -5,
+            left: Math.random() * 90 + -5 + '%',
+            top: Math.random() * 90 + -5 + '%',
             background: colors[i % colors.length],
             delay: (Math.random() * -30) + 's',
             duration: (Math.random() * 10 + 20) + 's',
@@ -98,20 +82,17 @@ export class LoginComponent implements AfterViewInit, OnInit {
     }
 
     onMouseMove(e: MouseEvent) {
-        if (typeof window === 'undefined') return;
+        if (!this.glowElement) return;
 
-        const mouseX = (e.clientX / window.innerWidth) - 0.5;
-        const mouseY = (e.clientY / window.innerHeight) - 0.5;
+        if (!this.glowElement.classList.contains('visible')) {
+            this.glowElement.classList.add('visible');
+        }
 
-        // Parallax effect for spheres - higher depth factors
-        this.spheres.forEach((s, i) => {
-            const factor = (i + 1) * 25; 
-            gsap.to(`.sphere-${i}`, {
-                x: mouseX * factor,
-                y: mouseY * factor,
-                duration: 1.5,
-                ease: "power1.out"
-            });
+        gsap.to(this.glowElement, {
+            x: e.clientX,
+            y: e.clientY,
+            duration: 0.8,
+            ease: "power2.out"
         });
 
         const card = document.querySelector('.auth-card') as HTMLElement;
@@ -119,8 +100,8 @@ export class LoginComponent implements AfterViewInit, OnInit {
             const rect = card.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            const rotateX = (e.clientY - centerY) / 50;
-            const rotateY = (centerX - e.clientX) / 50;
+            const rotateX = (e.clientY - centerY) / 25;
+            const rotateY = (centerX - e.clientX) / 25;
 
             gsap.to(card, {
                 rotateX: rotateX,
@@ -154,7 +135,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
             await this.playLoginAnimation();
             this.router.navigate(['/dashboard']);
         } catch (error: any) {
-            console.error('Auth failed', error);
+            console.error('Login failed', error);
             this.errorMessage = error.message || 'Authentication failed. Please check your credentials.';
         }
     }
@@ -175,24 +156,43 @@ export class LoginComponent implements AfterViewInit, OnInit {
         return new Promise(resolve => {
             const tl = gsap.timeline({ onComplete: resolve });
 
-            // Fade out the auth card
-            tl.to('.auth-card', {
-                opacity: 0,
-                y: 20,
-                duration: 0.6,
-                ease: 'power2.in'
+            // 1. Highlight line starts at the 3 edge trim lines and comes into the node
+            tl.to('.anim-trim', {
+                strokeDashoffset: 0,
+                duration: 1.2,
+                ease: 'power1.inOut'
             });
 
-            // Disperse spheres
-            tl.to('.sphere', {
-                scale: 1.5,
-                opacity: 0,
-                duration: 1,
-                stagger: 0.05,
-                ease: 'power2.inOut'
-            }, "-=0.3");
+            // 2. The little dots in the nodes start glowing
+            tl.to('.anim-node-dots-glow', {
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power1.inOut'
+            }, "-=0.4");
 
-            tl.to({}, { duration: 0.4 });
+            // 3. Highlight line comes out of the node and goes along the 4 connection lines
+            tl.to('.anim-conn', {
+                strokeDashoffset: 0,
+                duration: 4.5,
+                ease: 'power1.inOut'
+            });
+
+            // 4. Little 4 highlighted dots at the card connections glow
+            tl.to('.anim-card-dots', {
+                opacity: 1,
+                duration: 0.6,
+                ease: 'power2.out'
+            }, "-=0.2");
+
+            // 5. Highlight line goes around the border of the box smoothly
+            tl.to('.anim-card-border', {
+                strokeDashoffset: 0,
+                duration: 2.0,
+                ease: 'power1.inOut'
+            });
+
+            // Brief pause before dashboard opens
+            tl.to({}, { duration: 0.6 });
         });
     }
 

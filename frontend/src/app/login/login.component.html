@@ -14,24 +14,24 @@
         <!-- Sign In Mode -->
         <ng-container *ngIf="!isSignUpMode">
             <h2 class="auth-title">Sign In</h2>
-
+            
             <form (submit)="signIn()">
                 <div class="form-container">
                     <div class="input-wrap">
                         <input type="email" name="email" [(ngModel)]="email" placeholder="Email" required />
                     </div>
-
+                    
                     <div class="input-wrap">
                         <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required />
                     </div>
-
+                    
                     <div class="forgot-password">
                         <a href="javascript:void(0)" class="link-small">Forgot password?</a>
                     </div>
 
                     <button type="submit" class="btn-primary">Login</button>
-                    <div *ngIf="errorMessage && !isSignUpMode" class="error-banner">{{ errorMessage }}</div>
-
+                    <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+                    
                     <div class="signup-prompt">
                         <span>Don't have an account? </span>
                         <a href="javascript:void(0)" (click)="toggleMode()" class="link-bold">Sign up</a>
@@ -43,6 +43,7 @@
         <!-- Sign Up Mode -->
         <ng-container *ngIf="isSignUpMode">
             <h2 class="auth-title">Sign Up</h2>
+            
             <form (submit)="signUp()">
                 <div class="form-container">
                     <div class="input-wrap">
@@ -52,14 +53,14 @@
                     <div class="input-wrap">
                         <input type="email" name="signupEmail" [(ngModel)]="signupEmail" placeholder="Email" required />
                     </div>
-
+                    
                     <div class="input-wrap">
                         <input type="password" name="signupPassword" [(ngModel)]="signupPassword" placeholder="Password" required />
                     </div>
 
                     <button type="submit" class="btn-primary">Create Account</button>
-                    <div *ngIf="errorMessage && isSignUpMode" class="error-banner">{{ errorMessage }}</div>
-
+                    <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+                    
                     <div class="signup-prompt">
                         <span>Already have an account? </span>
                         <a href="javascript:void(0)" (click)="toggleMode()" class="link-bold">Login</a>

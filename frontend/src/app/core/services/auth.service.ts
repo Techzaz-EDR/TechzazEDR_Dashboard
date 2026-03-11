@@ -28,12 +28,12 @@ export class AuthService {
             this.userSubject.next(user);
             if (user) {
                 this.refreshClaims(user);
-                
+
                 // Fetch the user's profile from the users collection
                 try {
                     const userDocRef = doc(this.db, 'users', user.uid);
                     const userDocSnap = await getDoc(userDocRef);
-                    
+
                     if (userDocSnap.exists()) {
                         this.userProfileSubject.next({ uid: user.uid, ...userDocSnap.data() });
                         console.log('User profile fetched:', userDocSnap.data());
@@ -58,7 +58,7 @@ export class AuthService {
     async login(email: string, pass: string) {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, pass);
         const user = userCredential.user;
-        
+
         // Update last login timestamp in Firestore
         try {
             const userDocRef = doc(this.db, 'users', user.uid);
