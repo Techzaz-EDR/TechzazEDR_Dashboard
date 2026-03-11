@@ -55,11 +55,9 @@
                 <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Platform</a>
                 <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)" #navItem>How it Works</a>
                 <a href="#architecture" (click)="scrollToSection('architecture', $event)" #navItem>Architecture</a>
-                <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Resources</a>
+                <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Security</a>
             </div>
-            <div class="nav-actions">
-                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started</button>
-            </div>
+
         </div>
     </nav>
 
@@ -82,8 +80,7 @@
                 </h1>
 
                 <p class="hero-subheadline">
-                    Protect your modern enterprise with intelligent, AI-driven detection that neutralizes threats at the
-                    source before they can evolve.
+                    Techzaz EDR continuously monitors every endpoint, detects malicious behavior in real time, and gives your security team the intelligence to respond before damage is done.
                 </p>
 
                 <div class="cta-actions">
@@ -118,27 +115,7 @@
         </div>
     </header>
 
-    <!-- 2. TRUST STRIP -->
-    <section class="trust-strip">
-        <div class="container">
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Shield" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Secure-by-Design</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Cloud" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Cloud-Native Scaling</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Crosshair" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>MITRE ATT&CK Aligned</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Zap" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Real-Time Telemetry</span>
-            </div>
-        </div>
-    </section>
+
 
     <!-- 3. WHY TECHZAZ (Benefits) -->
     <section class="features-grid" id="features">
@@ -154,12 +131,7 @@
                     <h3>Endpoint Monitoring</h3>
                     <p>Real-time monitoring of endpoint activity and suspicious behavior.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="card-category">CENTRALIZED</div>
-                    <div class="icon-box"><lucide-icon [name]="BarChart" [size]="28"></lucide-icon></div>
-                    <h3>Security Dashboard</h3>
-                    <p>Centralized security dashboard with alerts and analytics.</p>
-                </div>
+
                 <div class="feature-card">
                     <div class="card-category">ADVANCED</div>
                     <div class="icon-box"><lucide-icon [name]="Bug" [size]="28"></lucide-icon></div>
@@ -370,7 +342,7 @@
                 <div class="arch-left">
                     <div class="section-badge">PLATFORM ARCHITECTURE</div>
                     <h2>Architecture <span class="arch-accent">Overview</span></h2>
-                    <p class="arch-desc">Our multi-tenant, microservice-based architecture ensures scalability, reliability, and security. Each component is designed to work independently while maintaining seamless communication.</p>
+                    <p class="arch-desc">Scalable microservice architecture built for real-time threat detection and response.</p>
                     <ul class="arch-points">
                         <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Multi-tenant isolation for data security</li>
                         <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Endpoint agents for telemetry collection</li>
@@ -422,7 +394,7 @@
     <section class="capabilities" id="resources">
         <div class="container">
             <div class="section-header center">
-                <h2>Enterprise <span style="color: #8b5cf6;">Security Strategy</span></h2>
+                <h2>Threat <span style="color: #8b5cf6;">Detection Coverage</span></h2>
                 <p>We take security seriously. Techzaz EDR is designed to detect malware, suspicious<br>network
                     activity, and unauthorized behaviour across organizational endpoints.</p>
             </div>
@@ -471,31 +443,7 @@
         </div>
     </section>
 
-    <!-- 7. WHO IT'S FOR -->
-    <section class="audience-section">
-        <div class="container">
-            <div class="grid-4">
-                <div class="audience-card">
-                    <h4>Enterprises</h4>
-                    <p>Scale to 100k+ endpoints.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>SOC Teams</h4>
-                    <p>Advanced hunting tools.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>IT Security</h4>
-                    <p>Simplified management.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>Healthcare</h4>
-                    <p>HIPAA compliant security.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 8. WHY EDR -->
+    <!-- 7. WHY EDR -->
     <section class="why-edr" id="why-edr">
         <div class="container split-layout reverse">
             <div class="edr-visual">
@@ -520,8 +468,7 @@
             </div>
             <div class="edr-text">
                 <h2>Beyond Traditional <span class="accent-text">Antivirus</span></h2>
-                <p class="lead">Signatures aren't enough anymore. You need behavior analysis to stop modern ransomware
-                    and fileless attacks.</p>
+                <p class="lead">Traditional antivirus relies on signatures. Techzaz EDR detects threats based on behavior.</p>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Bug" [size]="24"></lucide-icon></span>
                     <p><strong><span class="accent-text">Detect Unknowns:</span></strong> Analyze what software <em>does</em>, not just what it
@@ -531,6 +478,33 @@
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Search" [size]="24"></lucide-icon></span>
                     <p><strong><span class="accent-text">Deep Investigation:</span></strong> Root cause analysis for every incident.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. WHO IT'S FOR -->
+    <section class="audience-section">
+        <div class="container">
+            <div class="section-header center audience-heading">
+                <h2>Designed for Modern <span style="color: #8b5cf6;">Security Operations</span></h2>
+            </div>
+            <div class="grid-4">
+                <div class="audience-card">
+                    <h4>Enterprises</h4>
+                    <p>Scale to 100k+ endpoints.</p>
+                </div>
+                <div class="audience-card">
+                    <h4>SOC Teams</h4>
+                    <p>Advanced hunting tools.</p>
+                </div>
+                <div class="audience-card">
+                    <h4>IT Security</h4>
+                    <p>Simplified management.</p>
+                </div>
+                <div class="audience-card">
+                    <h4>Healthcare</h4>
+                    <p>HIPAA compliant security.</p>
                 </div>
             </div>
         </div>

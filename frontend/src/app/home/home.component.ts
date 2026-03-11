@@ -78,7 +78,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild('navbar') navbar!: ElementRef;
     @ViewChildren('navItem') navItems!: QueryList<ElementRef>;
-    @ViewChild('ctaBtn') ctaBtn!: ElementRef;
+
     @ViewChild('coreScene') coreScene!: ElementRef;
     @ViewChild('coreAssembly') coreAssembly!: ElementRef;
     @ViewChild('preloader') preloader!: ElementRef;
@@ -652,33 +652,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
             });
         });
 
-        // 3. CTA Pulse & Scale
-        const btn = this.ctaBtn.nativeElement;
-        btn.addEventListener('mouseenter', () => {
-            gsap.to(btn, {
-                duration: 0.3,
-                scale: 1.05,
-                boxShadow: "0 10px 25px rgba(37, 99, 235, 0.6)",
-                ease: "back.out(1.5)"
-            });
-        });
 
-        btn.addEventListener('mouseleave', () => {
-            gsap.to(btn, {
-                duration: 0.3,
-                scale: 1,
-                boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
-                ease: "power2.out"
-            });
-        });
-
-        btn.addEventListener('mousedown', () => {
-            gsap.to(btn, { duration: 0.1, scale: 0.95 });
-        });
-
-        btn.addEventListener('mouseup', () => {
-            gsap.to(btn, { duration: 0.1, scale: 1.05 });
-        });
     }
 
     @HostListener('window:scroll', [])
