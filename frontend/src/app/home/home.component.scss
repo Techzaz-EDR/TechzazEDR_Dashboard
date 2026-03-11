@@ -342,7 +342,7 @@
 
                     &:hover {
                         color: #ffffff;
-                        transform: translateY(-2px) translateZ(10px);
+                        transform: translateY(-2px);
                         text-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
 
                         &::after {
@@ -396,8 +396,8 @@
                     }
 
                     &:hover {
-                        transform: translateY(-3px);
-                        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 
                         &::before {
                             left: 100%;
@@ -585,8 +585,8 @@
 
                             &:hover {
                                 background: #1d4ed8;
-                                transform: translateY(-3px);
-                                box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+                                transform: translateY(-2px);
+                                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                             }
                         }
 
@@ -598,7 +598,8 @@
                             &:hover {
                                 background: rgba(255, 255, 255, 0.05);
                                 border-color: white;
-                                transform: translateY(-3px);
+                                transform: translateY(-2px);
+                                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                             }
                         }
                     }
@@ -815,10 +816,10 @@
                 }
 
                 &:hover {
-                    transform: translateY(-4px);
+                    transform: translateY(-2px);
                     background: linear-gradient(180deg, rgba(25, 31, 48, 0.7) 0%, rgba(13, 17, 28, 0.95) 100%);
                     border-color: rgba(59, 130, 246, 0.2);
-                    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 
                     .icon-box {
                         color: #60a5fa;
@@ -979,14 +980,9 @@
                 &:hover {
                     .step-circle {
                         border-color: #3b82f6;
-                        transform: translateY(-5px);
-                        box-shadow: 0 0 30px rgba(59, 130, 246, 0.4), 0 20px 40px rgba(0, 0, 0, 0.6);
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                         background: #0f172a;
-
-                        .circle-glow {
-                            opacity: 1;
-                            transform: scale(1.2);
-                        }
                     }
 
                     .step-content h4 {
@@ -1408,7 +1404,8 @@
                 &:hover {
                     background: rgba(255, 255, 255, 0.04);
                     border-color: rgba(255, 255, 255, 0.15);
-                    transform: translateY(-5px);
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 
                     .icon {
                         color: #a78bfa;
@@ -1710,7 +1707,8 @@
                 &:hover {
                     background: rgba(255, 255, 255, 0.04);
                     border-color: rgba(255, 255, 255, 0.1);
-                    transform: translateY(-12px);
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                 }
 
                 &.popular {
@@ -1931,7 +1929,7 @@
                         }
 
                         &:hover .btn-icon {
-                            transform: translateX(2px) scale(1.1);
+                            transform: translateY(-2px);
                         }
                     }
 
@@ -1941,9 +1939,8 @@
                         box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
                         &:hover {
-                            transform: translateY(-3px);
-                            box-shadow: 0 12px 30px rgba(139, 92, 246, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-                            filter: brightness(1.1);
+                            transform: translateY(-2px);
+                            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                         }
                     }
 
@@ -1957,15 +1954,11 @@
                         }
 
                         &:hover {
-                            transform: translateY(-3px);
+                            transform: translateY(-2px);
                             border-color: #8b5cf6;
                             background: rgba(139, 92, 246, 0.1);
                             color: #ffffff;
-
-                            .btn-icon {
-                                color: #a78bfa;
-                                filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
-                            }
+                            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                         }
                     }
                 }
@@ -2000,12 +1993,8 @@
 
                         &:hover {
                             color: #94a3b8;
-
-                            .icon {
-                                opacity: 1;
-                                transform: scale(1.1);
-                                filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
-                            }
+                            transform: translateY(-2px);
+                            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                         }
                     }
                 }
