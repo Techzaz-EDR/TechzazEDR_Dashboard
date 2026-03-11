@@ -256,7 +256,8 @@
             right: 180px;
             /* Position relative to bell roughly */
             width: 380px;
-            background-color: var(--bg-card);
+            background-color: #0a0f1e;
+            /* Solid Navy */
             border-radius: 16px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
             z-index: 100;
@@ -271,7 +272,8 @@
                 /* Adjust to align with bell */
                 width: 12px;
                 height: 12px;
-                background-color: var(--bg-card);
+                background-color: #0a0f1e;
+                /* Solid Navy */
                 border-top: 1px solid var(--border-color);
                 border-left: 1px solid var(--border-color);
                 transform: rotate(45deg);
@@ -447,7 +449,8 @@
                 top: calc(100% + 8px);
                 right: 0;
                 width: 240px;
-                background-color: var(--bg-card);
+                background-color: #0a0f1e;
+                /* Solid Navy */
                 border: 1px solid var(--border-color);
                 border-radius: 12px;
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
