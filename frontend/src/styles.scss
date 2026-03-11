@@ -16,14 +16,16 @@
 
     --primary: #3b82f6;
     /* Blue 500 */
-    --primary-glow: rgba(59, 130, 246, 0.5);
-    --secondary: #8b5cf6;
-    /* Violet 500 */
-    --secondary-glow: rgba(139, 92, 246, 0.5);
+    --primary-glow: transparent;
+    --secondary: #3b82f6;
+    /* Simplified to Blue */
+    --secondary-glow: transparent;
 
-    --accent-cyan: #06b6d4;
-    --accent-purple: #7c3aed;
-    --accent-glow: rgba(59, 130, 246, 0.4);
+    --accent-cyan: #3b82f6;
+    /* Simplified to Blue */
+    --accent-purple: #ef4444;
+    /* Simplified to Red */
+    --accent-glow: transparent;
 
     --text-primary: #f8fafc;
     /* Slate 50 */
@@ -42,28 +44,36 @@
 
     /* Chart & Status Colors */
     --chart-primary: #3b82f6;
-    --chart-warning: #f59e0b;
+    /* Blue */
+    --chart-warning: #eab308;
+    /* Yellow */
     --chart-critical: #ef4444;
+    /* Red */
     --chart-neutral: #64748b;
 
     --status-critical: #ef4444;
     --status-critical-bg: rgba(239, 68, 68, 0.1);
-    --status-high: #f97316;
-    --status-high-bg: rgba(249, 115, 22, 0.1);
-    --status-medium: #f59e0b;
-    --status-medium-bg: rgba(245, 158, 11, 0.1);
-    --status-low: #10b981;
-    --status-low-bg: rgba(16, 185, 129, 0.1);
+    --status-high: #eab308;
+    /* Yellow (Replaces Orange) */
+    --status-high-bg: rgba(234, 179, 8, 0.1);
+    --status-medium: #eab308;
+    /* Yellow */
+    --status-medium-bg: rgba(234, 179, 8, 0.1);
+    --status-low: #3b82f6;
+    /* Blue (Replaces Green) */
+    --status-low-bg: rgba(59, 130, 246, 0.1);
     --status-info-bg: rgba(59, 130, 246, 0.1);
 
     /* Shadows */
-    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-    --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.15);
+    --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.5);
+    --shadow-glow: none;
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, #080b12 0%, #0f1219 100%);
-    --gradient-text: linear-gradient(90deg, #60a5fa, #a78bfa);
-    --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+    --gradient-hero: #080b12;
+    /* No gradient */
+    --gradient-text: #f8fafc;
+    /* Solid white */
+    --gradient-card: transparent;
 
     /* Transitions */
     --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -130,11 +140,11 @@ h6 {
 
     0%,
     100% {
-        box-shadow: 0 0 15px var(--primary-glow);
+        box-shadow: none;
     }
 
     50% {
-        box-shadow: 0 0 25px var(--primary-glow);
+        box-shadow: none;
     }
 }
 

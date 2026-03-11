@@ -115,18 +115,21 @@
 
         /* Status Variants */
         &.status-safe .kpi-icon {
-            color: var(--status-low);
-            background: var(--status-low-bg);
+            color: var(--status-low, #3b82f6);
+            background: transparent;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         &.status-warning .kpi-icon {
-            color: var(--status-high);
-            background: var(--status-high-bg);
+            color: var(--status-high, #eab308);
+            background: transparent;
+            border: 1px solid rgba(234, 179, 8, 0.2);
         }
 
         &.status-critical .kpi-icon {
-            color: var(--status-critical);
-            background: var(--status-critical-bg);
+            color: var(--status-critical, #ef4444);
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
     }
 }
@@ -202,7 +205,6 @@
 
         &.protected {
             stroke: var(--chart-primary);
-            filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.3));
         }
 
         &.at-risk {
@@ -336,7 +338,6 @@
                 stroke-width: 3;
                 stroke-linejoin: round;
                 stroke-linecap: round;
-                filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.4));
                 animation: drawLine 1.5s ease-out forwards;
                 stroke-dasharray: 1000;
                 stroke-dashoffset: 1000;
@@ -380,8 +381,8 @@
         }
 
         &.status-neutral:hover {
-            border-left-color: var(--chart-neutral);
-            background: linear-gradient(90deg, rgba(148, 163, 184, 0.1), transparent);
+            border-left-color: var(--chart-primary);
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
         }
 
         .bar-info {
@@ -518,8 +519,8 @@
                     }
 
                     &.impact-medium {
-                        color: var(--status-medium);
-                        background: var(--status-medium-bg);
+                        color: var(--status-low);
+                        background: var(--status-low-bg);
                     }
                 }
             }
@@ -625,20 +626,23 @@
     }
 
     .status-badge {
-        padding: 4px 8px;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        background: var(--bg-dark);
-        border: 1px solid var(--border-color);
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        background: transparent !important;
 
         &.active {
-            color: var(--chart-critical);
-            border-color: var(--chart-critical);
+            color: #3b82f6;
+            /* Blue */
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         &.investigating {
-            color: var(--chart-warning);
-            border-color: var(--chart-warning);
+            color: #eab308;
+            /* Yellow */
+            border: 1px solid rgba(234, 179, 8, 0.3);
         }
     }
 }
@@ -705,8 +709,8 @@
             border-left-color: var(--status-low);
 
             &:hover {
-                background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), transparent);
-                box-shadow: -5px 0 10px -5px rgba(16, 185, 129, 0.3);
+                background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
+                box-shadow: -5px 0 10px -5px rgba(59, 130, 246, 0.3);
             }
         }
 

@@ -46,8 +46,7 @@ export class Threats {
             time: '2 minutes ago',
             severity: 'critical',
             type: 'Malware',
-            status: 'active',
-            icon: '⚡'
+            status: 'active'
         },
         {
             id: 2,
@@ -57,8 +56,7 @@ export class Threats {
             time: '15 minutes ago',
             severity: 'high',
             type: 'Network',
-            status: 'investigating',
-            icon: '🌐'
+            status: 'investigating'
         },
         {
             id: 3,
@@ -68,8 +66,7 @@ export class Threats {
             time: '1 hour ago',
             severity: 'high',
             type: 'Malware',
-            status: 'quarantined',
-            icon: '⚠️'
+            status: 'quarantined'
         },
         {
             id: 4,
@@ -79,8 +76,7 @@ export class Threats {
             time: '3 hours ago',
             severity: 'high',
             type: 'Privilege Esc',
-            status: 'blocked',
-            icon: '🔒'
+            status: 'blocked'
         },
         {
             id: 5,
@@ -90,8 +86,7 @@ export class Threats {
             time: '5 hours ago',
             severity: 'medium',
             type: 'Network',
-            status: 'investigating',
-            icon: '🌐'
+            status: 'investigating'
         },
         {
             id: 6,
@@ -101,8 +96,7 @@ export class Threats {
             time: '2 days ago',
             severity: 'medium',
             type: 'Policy',
-            status: 'resolved',
-            icon: '⚠️'
+            status: 'resolved'
         },
         {
             id: 7,
@@ -112,8 +106,7 @@ export class Threats {
             time: '2 weeks ago',
             severity: 'high',
             type: 'Account',
-            status: 'investigating',
-            icon: '👤'
+            status: 'investigating'
         }
     ];
 

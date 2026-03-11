@@ -32,7 +32,7 @@ export class Users {
             role: 'Administrator',
             status: 'active',
             lastLogin: '2 minutes ago',
-            avatarColor: '#8b5cf6' // Purple
+            avatarColor: '#ef4444' // Red
         },
         {
             id: 2,
@@ -41,7 +41,7 @@ export class Users {
             role: 'Security Analyst',
             status: 'active',
             lastLogin: '1 hour ago',
-            avatarColor: '#f97316' // Orange
+            avatarColor: '#eab308' // Yellow
         },
         {
             id: 3,
@@ -59,7 +59,7 @@ export class Users {
             role: 'Viewer',
             status: 'inactive',
             lastLogin: '5 days ago',
-            avatarColor: '#10b981' // Green
+            avatarColor: '#eab308' // Yellow
         }
     ];
 
