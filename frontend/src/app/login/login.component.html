@@ -1,107 +1,42 @@
-<div class="super-auth-container" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()">
-    <!-- 1. Central Halo Glow -->
-    <div class="background-halo"></div>
+<div class="super-auth-container">
 
-    <!-- 2. Network Diagram Layer -->
-    <div class="network-diagram">
-        <svg width="100%" height="100%" class="cyber-network-svg">
-            <g class="network-links">
-                <line *ngFor="let link of networkLinks" 
-                      [attr.x1]="networkNodes[link.source].x + '%'" 
-                      [attr.y1]="networkNodes[link.source].y + '%'"
-                      [attr.x2]="networkNodes[link.target].x + '%'" 
-                      [attr.y2]="networkNodes[link.target].y + '%'"
-                      [attr.stroke-opacity]="link.opacity"
-                      stroke="#60a5fa" stroke-width="1" />
-            </g>
-            <g class="network-nodes">
-                <circle *ngFor="let node of networkNodes" 
-                        [attr.cx]="node.x + '%'" 
-                        [attr.cy]="node.y + '%'" 
-                        [attr.r]="node.size"
-                        [attr.fill-opacity]="node.opacity"
-                        fill="#60a5fa" class="pulsing-node">
-                    <animate attributeName="r" [attr.from]="node.size" [attr.to]="node.size + 2" 
-                             [attr.dur]="node.duration + 's'" repeatCount="indefinite" />
-                </circle>
-            </g>
-        </svg>
-    </div>
 
-    <!-- 3. Binary Streams Layer -->
-    <div class="binary-streams">
-        <div *ngFor="let stream of binaryStreams; let i = index" class="binary-column" 
-             [style.left]="(i * 5) + '%'" [style.animation-delay]="(i * 0.4) + 's'">
-            <span *ngFor="let char of stream">{{char}}</span>
+    <!-- Floating Orbs Background -->
+    <div class="background-orbs">
+        <div *ngFor="let orb of spheres" 
+             class="orb"
+             [style.width]="orb.width"
+             [style.height]="orb.width"
+             [style.left]="orb.left"
+             [style.top]="orb.top"
+             [style.background]="orb.background"
+             [style.animation-delay]="orb.delay">
         </div>
     </div>
-
-    <!-- 4. Mouse Glow Effect -->
-    <div class="hover-glow"></div>
 
     <div class="auth-card">
-
-        <div class="techzaz-logo">
-            <svg viewBox="0 0 24 24" fill="none" class="brand-shield">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="brand-text">TECHZAZ</span>
-        </div>
-
-        <div class="forms-slider" [class.show-signup]="isSignUpMode">
-            <div class="form-panel">
-                <h2 class="welcome-title">Welcome Back</h2>
-                <p class="subtitle">Don't have an account yet? <a href="javascript:void(0)" class="signup-link"
-                        (click)="toggleMode()">Sign up</a></p>
-
-                <form (submit)="signIn()">
-                    <div class="inputs-group">
-                        <div class="input-field">
-                            <lucide-icon name="mail" [size]="18" class="icon"></lucide-icon>
-                            <input type="email" name="email" [(ngModel)]="email" placeholder="email address" required />
-                        </div>
-                        <div class="input-field">
-                            <lucide-icon name="lock" [size]="18" class="icon"></lucide-icon>
-                            <input type="password" name="password" [(ngModel)]="password" placeholder="Password"
-                                required />
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-login">Login</button>
-                    <div *ngIf="errorMessage && !isSignUpMode" class="error-banner">{{ errorMessage }}</div>
-
-
-                </form>
+        <h2 class="auth-title">Sign In</h2>
+        
+        <form (submit)="signIn()">
+            <div class="inputs-group">
+                <div class="input-field">
+                    <input type="email" name="email" [(ngModel)]="email" placeholder="Email" required />
+                </div>
+                
+                <div class="input-field">
+                    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required />
+                </div>
+            </div>
+            
+            <div class="auth-options">
+                <a href="javascript:void(0)" class="forgot-link">Forgot password?</a>
             </div>
 
-            <div class="form-panel">
-                <h2 class="welcome-title">Create Account</h2>
-                <p class="subtitle">Already have an account? <a href="javascript:void(0)" class="signup-link"
-                        (click)="toggleMode()">Login</a></p>
-
-                <form (submit)="signIn()">
-                    <div class="inputs-group">
-                        <div class="input-field">
-                            <lucide-icon name="user" [size]="18" class="icon"></lucide-icon>
-                            <input type="text" name="signupName" [(ngModel)]="signupName" placeholder="Username"
-                                required />
-                        </div>
-                        <div class="input-field">
-                            <lucide-icon name="mail" [size]="18" class="icon"></lucide-icon>
-                            <input type="email" name="signupEmail" [(ngModel)]="signupEmail" placeholder="email address"
-                                required />
-                        </div>
-                        <div class="input-field">
-                            <lucide-icon name="lock" [size]="18" class="icon"></lucide-icon>
-                            <input type="password" name="signupPassword" [(ngModel)]="signupPassword"
-                                placeholder="Password" required />
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-login">Sign up</button>
-                    <div *ngIf="errorMessage && isSignUpMode" class="error-banner">{{ errorMessage }}</div>
-                </form>
-            </div>
-        </div>
+            <button type="submit" class="btn-login">Login</button>
+            
+            <p class="auth-footer">
+                Don't have an account? <a href="javascript:void(0)" (click)="toggleMode()">Sign up</a>
+            </p>
+        </form>
     </div>
 </div>

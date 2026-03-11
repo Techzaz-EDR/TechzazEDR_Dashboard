@@ -34,32 +34,17 @@ export class LoginComponent implements AfterViewInit, OnInit {
     readonly Linkedin = Linkedin;
     readonly Globe = Globe;
     readonly Github = Github;
-    public screenWidth = 1920;
-    public screenHeight = 1080;
     private glowElement: HTMLElement | null = null;
 
-    // Cybersecurity Background Data
-    binaryStreams: string[][] = [];
-    networkNodes: any[] = [];
-    networkLinks: any[] = [];
+    spheres: any[] = [];
 
     constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
-
-    @HostListener('window:resize')
-    onResize() {
-        if (typeof window !== 'undefined') {
-            this.screenWidth = window.innerWidth;
-            this.screenHeight = window.innerHeight;
-        }
-    }
 
 
 
     ngOnInit() {
         if (typeof window !== 'undefined') {
-            this.screenWidth = window.innerWidth;
-            this.screenHeight = window.innerHeight;
-            this.generateCyberBackground();
+            this.generateSpheres();
         }
 
         this.route.queryParams.subscribe(params => {
@@ -69,39 +54,20 @@ export class LoginComponent implements AfterViewInit, OnInit {
         });
     }
 
-    generateCyberBackground() {
-        // Binary Streams
-        const streamCount = 20;
-        for (let i = 0; i < streamCount; i++) {
-            const length = Math.floor(Math.random() * 20) + 10;
-            const chars = Array.from({ length }, () => Math.random() > 0.5 ? '1' : '0');
-            this.binaryStreams.push(chars);
-        }
+    generateSpheres() {
+        const colors = [
+            'radial-gradient(circle at 30% 30%, #a5f3fc, #0891b2)', // Cyan
+            'radial-gradient(circle at 30% 30%, #c084fc, #7e22ce)', // Purple
+            'radial-gradient(circle at 30% 30%, #60a5fa, #1d4ed8)', // Blue
+        ];
 
-        // Network Nodes
-        const nodeCount = 15;
-        for (let i = 0; i < nodeCount; i++) {
-            this.networkNodes.push({
-                x: Math.random() * 100,
-                y: Math.random() * 100,
-                size: Math.random() * 3 + 2,
-                opacity: Math.random() * 0.5 + 0.2,
-                duration: Math.random() * 10 + 10,
-                delay: Math.random() * -20
-            });
-        }
-
-        // Links between nodes (simple random links)
-        for (let i = 0; i < nodeCount; i++) {
-            const targets = [ (i + 1) % nodeCount, (i + 3) % nodeCount ];
-            targets.forEach(t => {
-                this.networkLinks.push({
-                    source: i,
-                    target: t,
-                    opacity: Math.random() * 0.2 + 0.1
-                });
-            });
-        }
+        this.spheres = Array.from({ length: 6 }).map((_, i) => ({
+            width: Math.random() * 200 + 150 + 'px',
+            left: Math.random() * 80 + 10 + '%',
+            top: Math.random() * 80 + 10 + '%',
+            background: colors[i % colors.length],
+            delay: Math.random() * -20 + 's'
+        }));
     }
 
     ngAfterViewInit() {
