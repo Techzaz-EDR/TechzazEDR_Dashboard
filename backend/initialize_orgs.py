@@ -35,6 +35,12 @@ def main():
             "name": "Acme Corporation",
             "tier": "Pro",
             "agents": ["LAPTOP-HQ123", "SERVER-01"]
+        },
+        {
+            "id": "demo-org",
+            "name": "Demo Organization",
+            "tier": "Free",
+            "agents": ["DESKTOP-TEST1"]
         }
     ]
 
