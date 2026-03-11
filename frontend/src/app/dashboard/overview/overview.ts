@@ -97,6 +97,11 @@ export class Overview implements OnInit, OnDestroy {
   animatedAtRiskPct = 0;
   animatedOfflinePct = 0;
 
+  // CSS Target Properties
+  targetProtected = 0;
+  targetAtRisk = 0;
+  targetOffline = 0;
+
   ngOnInit() {
     this.setTrendPeriod('24h');
     this.initThreatSimulation();
@@ -105,22 +110,23 @@ export class Overview implements OnInit, OnDestroy {
 
   animateDonutChart() {
     const duration = 1500;
-    const start = performance.now();
+    let start: number | null = null;
 
-    const targetProtected = this.protectionStats.protectedPct;
-    const targetAtRisk = Math.round((this.protectionStats.atRisk / this.protectionStats.total) * 100);
-    const targetOffline = Math.round((this.protectionStats.offline / this.protectionStats.total) * 100);
+    this.targetProtected = this.protectionStats.protectedPct;
+    this.targetAtRisk = Math.round((this.protectionStats.atRisk / this.protectionStats.total) * 100);
+    this.targetOffline = Math.round((this.protectionStats.offline / this.protectionStats.total) * 100);
 
     const animate = (time: number) => {
+      if (!start) start = time;
       let progress = (time - start) / duration;
       if (progress > 1) progress = 1;
 
       // Easing function (easeOutQuart)
       const easeProgress = 1 - Math.pow(1 - progress, 4);
 
-      this.animatedProtectionPct = Math.round(targetProtected * easeProgress);
-      this.animatedAtRiskPct = Math.round(targetAtRisk * easeProgress);
-      this.animatedOfflinePct = Math.round(targetOffline * easeProgress);
+      this.animatedProtectionPct = Math.round(this.targetProtected * easeProgress);
+      this.animatedAtRiskPct = Math.round(this.targetAtRisk * easeProgress);
+      this.animatedOfflinePct = Math.round(this.targetOffline * easeProgress);
 
       if (progress < 1) {
         requestAnimationFrame(animate);
