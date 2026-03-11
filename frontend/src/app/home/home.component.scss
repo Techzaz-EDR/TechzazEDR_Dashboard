@@ -853,23 +853,26 @@
 
         /* --- 3. FEATURES GRID --- */
         .features-grid {
-            padding: 120px 0;
+            min-height: 100vh;
+            padding: 32px 0 80px;
             background: #080b12;
+            position: relative;
 
             .container {
                 max-width: 1300px;
                 margin: 0 auto;
                 padding: 0 40px;
+                width: 100%;
             }
 
             .section-header {
                 text-align: center;
-                margin-bottom: 80px;
+                margin-bottom: 48px;
 
                 h2 {
                     font-size: 3rem;
                     color: white;
-                    margin-bottom: 16px;
+                    margin-bottom: 12px;
                 }
 
                 p {
@@ -881,7 +884,7 @@
             .benefits-grid {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
-                gap: 30px;
+                gap: 24px;
 
                 @media (max-width: 1024px) {
                     grid-template-columns: repeat(2, 1fr);
@@ -893,37 +896,40 @@
             }
 
             .feature-card {
-                padding: 40px;
-                background: linear-gradient(180deg, rgba(20, 25, 40, 0.6) 0%, rgba(13, 17, 28, 0.9) 100%);
-                border: 1px solid rgba(255, 255, 255, 0.05);
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 32px 24px;
+                background: linear-gradient(145deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
+                border: 1px solid rgba(255, 255, 255, 0.03);
                 border-radius: 20px;
-                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 position: relative;
                 overflow: hidden;
                 text-align: left;
                 display: flex;
                 flex-direction: column;
+                box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.3);
 
                 &::before {
                     content: '';
                     position: absolute;
                     top: 0;
                     right: 0;
-                    width: 150px;
-                    height: 150px;
-                    background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 70%);
+                    width: 140px;
+                    height: 140px;
+                    background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.08), transparent 70%);
                     pointer-events: none;
                 }
 
                 &:hover {
-                    transform: translateY(-4px);
-                    background: linear-gradient(180deg, rgba(25, 31, 48, 0.7) 0%, rgba(13, 17, 28, 0.95) 100%);
-                    border-color: rgba(59, 130, 246, 0.2);
-                    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+                    transform: translateY(-6px);
+                    background: linear-gradient(145deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%);
+                    border-color: rgba(139, 92, 246, 0.3);
+                    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.1);
 
                     .icon-box {
-                        color: #60a5fa;
+                        background: rgba(139, 92, 246, 0.2);
+                        color: #a78bfa;
+                        box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+                        transform: scale(1.05);
                     }
                 }
 
@@ -932,33 +938,42 @@
                     align-self: flex-start;
                     font-size: 0.65rem;
                     font-weight: 700;
-                    letter-spacing: 1px;
+                    letter-spacing: 1.2px;
                     text-transform: uppercase;
-                    color: #60a5fa;
-                    background: rgba(59, 130, 246, 0.1);
-                    border: 1px solid rgba(59, 130, 246, 0.2);
-                    padding: 4px 12px;
+                    color: #8b5cf6;
+                    background: rgba(139, 92, 246, 0.08);
+                    border: 1px solid rgba(139, 92, 246, 0.15);
+                    padding: 3px 10px;
                     border-radius: 4px;
                     margin-bottom: 24px;
                 }
 
                 .icon-box {
+                    width: 52px;
+                    height: 52px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 12px;
                     color: #94a3b8;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
                     margin-bottom: 24px;
-                    transition: all 0.3s;
+                    transition: all 0.4s ease;
                 }
 
                 h3 {
-                    font-size: 1.4rem;
+                    font-size: 1.35rem;
                     color: white;
-                    margin-bottom: 16px;
+                    margin-bottom: 12px;
                     font-weight: 700;
+                    letter-spacing: -0.01em;
                 }
 
                 p {
                     color: #94a3b8;
                     line-height: 1.6;
-                    font-size: 0.95rem;
+                    font-size: 0.925rem;
                     margin: 0;
                 }
             }
