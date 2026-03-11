@@ -62,6 +62,7 @@
             <div class="nav-links">
                 <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Platform</a>
                 <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)" #navItem>How it Works</a>
+                <a href="#architecture" (click)="scrollToSection('architecture', $event)" #navItem>Architecture</a>
                 <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Resources</a>
             </div>
             <div class="nav-actions">
@@ -372,6 +373,62 @@
                                     <strong>0</strong>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: ARCHITECTURE OVERVIEW -->
+    <section class="architecture-overview" id="architecture">
+        <div class="container">
+            <div class="arch-layout">
+                <!-- Left: Text Content -->
+                <div class="arch-left">
+                    <div class="section-badge">PLATFORM ARCHITECTURE</div>
+                    <h2>Architecture <span class="arch-accent">Overview</span></h2>
+                    <p class="arch-desc">Our multi-tenant, microservice-based architecture ensures scalability, reliability, and security. Each component is designed to work independently while maintaining seamless communication.</p>
+                    <ul class="arch-points">
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Multi-tenant isolation for data security</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Endpoint agents for telemetry collection</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Centralized analysis for threat detection</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Secure channels for agent communication</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Role-based access for system control</li>
+                    </ul>
+                </div>
+                <!-- Right: 6 Architecture Cards in 3x2 Grid -->
+                <div class="arch-right">
+                    <div class="arch-cards-grid">
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Cpu" [size]="20"></lucide-icon></div>
+                            <h4>Endpoint Agent</h4>
+                            <p>Telemetry and local scanning</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Network" [size]="20"></lucide-icon></div>
+                            <h4>Network Analysis</h4>
+                            <p>IP and port activity monitoring</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Upload" [size]="20"></lucide-icon></div>
+                            <h4>Telemetry Ingestion</h4>
+                            <p>Secure data intake</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Brain" [size]="20"></lucide-icon></div>
+                            <h4>Detection Engine</h4>
+                            <p>Malware and threat analysis</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Zap" [size]="20"></lucide-icon></div>
+                            <h4>Alerting Service</h4>
+                            <p>Security alerts and reports</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Layout" [size]="20"></lucide-icon></div>
+                            <h4>Management Dashboard</h4>
+                            <p>Role-based visibility</p>
                         </div>
                     </div>
                 </div>
