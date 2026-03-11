@@ -781,21 +781,15 @@
             }
 
             .benefits-grid {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
                 gap: 24px;
-
-                @media (max-width: 1024px) {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-
-                @media (max-width: 768px) {
-                    grid-template-columns: 1fr;
-                }
             }
 
             .feature-card {
-                padding: 32px 24px;
+                width: calc(33.333% - 16px);
+                padding: 24px 20px;
                 background: linear-gradient(145deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
                 border: 1px solid rgba(255, 255, 255, 0.03);
                 border-radius: 20px;
@@ -806,6 +800,14 @@
                 display: flex;
                 flex-direction: column;
                 box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.3);
+
+                @media (max-width: 1024px) {
+                    width: calc(50% - 12px);
+                }
+
+                @media (max-width: 768px) {
+                    width: 100%;
+                }
 
                 &::before {
                     content: '';
@@ -1479,18 +1481,20 @@
                 background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(17, 24, 39, 0.6) 100%);
                 border: 1px solid rgba(139, 92, 246, 0.15);
                 border-radius: 16px;
-                transition: all 0.3s ease;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 cursor: default;
 
                 &:hover {
-                    transform: translateY(-4px);
-                    border-color: rgba(139, 92, 246, 0.4);
-                    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+                    transform: translateY(-6px) scale(1.03);
+                    border-color: rgba(139, 92, 246, 0.3);
+                    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.1);
                     background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(17, 24, 39, 0.8) 100%);
 
                     .arch-icon {
                         background: rgba(139, 92, 246, 0.2);
                         color: #a78bfa;
+                        box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+                        transform: scale(1.05);
                     }
                 }
 
@@ -1504,7 +1508,7 @@
                     border-radius: 10px;
                     color: #8b5cf6;
                     margin-bottom: 14px;
-                    transition: all 0.3s ease;
+                    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 }
 
                 h4 {
@@ -1587,17 +1591,19 @@
                 border: 1px solid rgba(255, 255, 255, 0.06);
                 border-radius: 20px;
                 text-align: left;
-                transition: all 0.3s;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
                 &:hover {
-                    background: rgba(255, 255, 255, 0.04);
-                    border-color: rgba(255, 255, 255, 0.15);
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+                    background: linear-gradient(145deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%);
+                    border-color: rgba(139, 92, 246, 0.3);
+                    transform: translateY(-6px) scale(1.03);
+                    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.1);
 
                     .icon {
                         color: #a78bfa;
-                        background: rgba(139, 92, 246, 0.15);
+                        background: rgba(139, 92, 246, 0.2);
+                        box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+                        transform: scale(1.05);
                     }
                 }
 
@@ -1611,7 +1617,7 @@
                     border-radius: 12px;
                     color: #8b5cf6;
                     margin-bottom: 24px;
-                    transition: 0.3s;
+                    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 }
 
                 h4 {
@@ -1633,6 +1639,10 @@
         .audience-section {
             padding: 80px 0;
             background: #080b12;
+
+            .audience-heading {
+                margin-bottom: 60px;
+            }
 
             .grid-4 {
                 display: grid;
