@@ -2,7 +2,7 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X } from 'lucide-angular';
+import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X, ShieldCheck } from 'lucide-angular';
 import { gsap } from 'gsap';
 import { AuthService } from '../core/services/auth.service';
 
@@ -34,6 +34,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     readonly Linkedin = Linkedin;
     readonly Globe = Globe;
     readonly Github = Github;
+    readonly ShieldCheck = ShieldCheck;
     private glowElement: HTMLElement | null = null;
 
     constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
