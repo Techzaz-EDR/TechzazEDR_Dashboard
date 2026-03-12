@@ -94,12 +94,12 @@
 
 /* Form Styles */
 .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 20px;
 
     .full-width {
-        grid-column: 1 / -1;
+        width: 100%;
     }
 
     .form-group {
