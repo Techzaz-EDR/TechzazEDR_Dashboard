@@ -1,48 +1,76 @@
 <div class="settings-section">
+
     <div class="section-header">
         <h2>Security Settings</h2>
         <p>Configure security policies and protection</p>
     </div>
 
-    <div class="settings-card-group">
+    <div class="settings-card">
+
         <div class="card-title">
             <h3>Security Policies</h3>
             <p>Manage your organization's security settings</p>
         </div>
 
+        <div class="divider"></div>
+
         <div class="setting-item">
             <div class="setting-info">
-                <h4>Require 2FA for all users</h4>
-                <p>Enforce two-factor authentication</p>
+                <h4>Require 2FA for All Users</h4>
+                <p>Enforce two-factor authentication across the organization</p>
             </div>
-            <label class="toggle-switch">
-                <input type="checkbox" checked>
-                <span class="slider"></span>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="settings.twofa">
+                <span class="track"><span class="thumb"></span></span>
             </label>
         </div>
 
         <div class="setting-item">
             <div class="setting-info">
                 <h4>IP Whitelisting</h4>
-                <p>Restrict access to specific IPs</p>
+                <p>Restrict access to specific trusted IP addresses</p>
             </div>
-            <label class="toggle-switch">
-                <input type="checkbox">
-                <span class="slider"></span>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="settings.ipwhitelist">
+                <span class="track"><span class="thumb"></span></span>
             </label>
         </div>
 
         <div class="setting-item">
             <div class="setting-info">
                 <h4>Session Timeout</h4>
-                <p>Auto-logout after 30 minutes</p>
+                <p>Auto-logout after 30 minutes of inactivity</p>
             </div>
-            <label class="toggle-switch">
-                <input type="checkbox" checked>
-                <span class="slider"></span>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="settings.sessionTimeout">
+                <span class="track"><span class="thumb"></span></span>
+            </label>
+        </div>
+
+        <div class="setting-item">
+            <div class="setting-info">
+                <h4>Audit Logging</h4>
+                <p>Record all administrative actions and access events</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="settings.auditLog">
+                <span class="track"><span class="thumb"></span></span>
+            </label>
+        </div>
+
+        <div class="setting-item last">
+            <div class="setting-info">
+                <h4>Brute Force Protection</h4>
+                <p>Block accounts after 5 consecutive failed login attempts</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="settings.bruteForce">
+                <span class="track"><span class="thumb"></span></span>
             </label>
         </div>
 
     </div>
-    <button class="btn-primary" style="margin-top: 2rem;" (click)="saveSettings()">Save Security Settings</button>
+
+    <button class="btn-save" (click)="saveSettings()">Save Security Settings</button>
+
 </div>

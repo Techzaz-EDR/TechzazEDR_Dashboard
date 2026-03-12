@@ -1,125 +1,137 @@
+/* Security Settings — Clean Minimal */
+
 .settings-section {
     .section-header {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
 
         h2 {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: #fff;
+            margin: 0 0 4px 0;
         }
 
         p {
-            color: #718096;
-            font-size: 0.9rem;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin: 0;
         }
     }
 
-    .settings-card-group {
-        border: 1px solid #2d3748;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        background: #000;
-        width: 100%;
-        position: relative;
+    .settings-card {
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+        background: #0f172a;
         overflow: hidden;
 
         .card-title {
-            margin-bottom: 2rem;
+            padding: 1.25rem 1.5rem;
 
             h3 {
-                font-size: 1.1rem;
-                color: #fff;
-                margin-bottom: 0.25rem;
+                font-size: 0.95rem;
+                font-weight: 600;
+                color: #e2e8f0;
+                margin: 0 0 3px 0;
             }
 
             p {
-                font-size: 0.85rem;
-                color: #718096;
+                font-size: 0.8rem;
+                color: #64748b;
+                margin: 0;
             }
+        }
+
+        .divider {
+            height: 1px;
+            background: #1e293b;
         }
 
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid #1a202c;
+            padding: 1.1rem 1.5rem;
+            border-bottom: 1px solid #1e293b;
 
-            &:last-of-type {
+            &.last {
                 border-bottom: none;
             }
 
             .setting-info {
                 h4 {
-                    color: #fff;
-                    margin-bottom: 0.25rem;
-                    font-size: 0.95rem;
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    color: #e2e8f0;
+                    margin: 0 0 3px 0;
                 }
 
                 p {
-                    color: #718096;
-                    font-size: 0.85rem;
+                    font-size: 0.8rem;
+                    color: #64748b;
+                    margin: 0;
                 }
             }
         }
     }
 
-    .toggle-switch {
+    /* Toggle */
+    .toggle {
         position: relative;
         display: inline-block;
-        width: 44px;
-        height: 24px;
+        cursor: pointer;
+        flex-shrink: 0;
 
         input {
             opacity: 0;
             width: 0;
             height: 0;
-
-            &:checked+.slider {
-                background-color: #4299e1;
-            }
-
-            &:checked+.slider:before {
-                transform: translateX(20px);
-            }
-        }
-
-        .slider {
             position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #4a5568;
-            transition: .4s;
-            border-radius: 34px;
 
-            &:before {
-                position: absolute;
-                content: "";
-                height: 18px;
-                width: 18px;
-                left: 3px;
-                bottom: 3px;
-                background-color: white;
-                transition: .4s;
-                border-radius: 50%;
+            &:checked ~ .track {
+                background: #4f46e5;
+            }
+
+            &:checked ~ .track .thumb {
+                transform: translateX(22px);
             }
         }
     }
 
-    .btn-primary {
-        background: #4299e1;
-        color: white;
+    .track {
+        display: block;
+        width: 46px;
+        height: 24px;
+        border-radius: 999px;
+        background: #334155;
+        position: relative;
+        transition: background 0.25s;
+    }
+
+    .thumb {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.25s;
+    }
+
+    /* Save button */
+    .btn-save {
+        margin-top: 1.5rem;
+        padding: 0.65rem 1.5rem;
+        background: #4f46e5;
+        color: #fff;
         border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
 
         &:hover {
-            background: #3182ce;
+            background: #4338ca;
         }
     }
 }
