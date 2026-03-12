@@ -74,6 +74,7 @@
         }
     }
 
+
     /* Toggle */
     .toggle {
         position: relative;
@@ -88,7 +89,7 @@
             position: absolute;
 
             &:checked ~ .track {
-                background: #4f46e5;
+                background: #7c3aed;
             }
 
             &:checked ~ .track .thumb {
@@ -102,7 +103,8 @@
         width: 46px;
         height: 24px;
         border-radius: 999px;
-        background: #334155;
+        background: #1e293b;
+        border: 1px solid #334155;
         position: relative;
         transition: background 0.25s;
     }
@@ -114,16 +116,17 @@
         width: 18px;
         height: 18px;
         border-radius: 50%;
-        background: #fff;
+        background: #94a3b8;
         transition: transform 0.25s;
     }
 
     /* Save button */
     .btn-save {
+        display: inline-block;
         margin-top: 1.5rem;
-        padding: 0.65rem 1.5rem;
-        background: #4f46e5;
-        color: #fff;
+        padding: 0.65rem 1.75rem;
+        background-color: #7c3aed;
+        color: #ffffff;
         border: none;
         border-radius: 8px;
         font-size: 0.875rem;
@@ -131,7 +134,7 @@
         cursor: pointer;
 
         &:hover {
-            background: #4338ca;
+            background-color: #6d28d9;
         }
     }
 }
