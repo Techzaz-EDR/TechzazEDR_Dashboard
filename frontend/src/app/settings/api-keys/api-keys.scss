@@ -1,100 +1,135 @@
-/* src/app/settings/api-keys/api-keys.scss */
+/* API Keys — matches Security page style */
 
-.api-keys-container {
-    max-width: 800px;
-}
+.settings-section {
+    .section-header {
+        margin-bottom: 1.5rem;
 
-.section-title {
-    margin-bottom: 24px;
-
-    h2 {
-        font-size: 1.1rem;
-        color: #fff;
-        margin: 0 0 4px 0;
-        font-weight: 600;
-    }
-
-    p {
-        color: #9ca3af;
-        margin: 0;
-        font-size: 0.9rem;
-    }
-}
-
-.api-key-card {
-    background-color: #110c1d;
-    /* Exact deep purple from screenshot */
-    border-top-left-radius: 0;
-    /* Optional: if we want to visually merge perfectly with a left-aligned tab, but API Keys is 4th. Keeping rounded is safer unless we do complex logic. */
-    border-radius: 12px;
-    border-top-left-radius: 12px;
-    /* Reset */
-    /* Dark background */
-    border: 1px solid #262626;
-    border-radius: 12px;
-    padding: 24px;
-    /* Optional: subtle purple tint/glow if desired from screenshot main bg,
-       but typically card bg is neutral dark */
-
-    .label {
-        display: block;
-        color: #e5e7eb;
-        font-size: 0.9rem;
-        font-weight: 500;
-        margin-bottom: 12px;
-    }
-
-    .key-field {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #050505;
-        border: 1px solid #262626;
-        border-radius: 8px;
-        padding: 12px 16px;
-        margin-bottom: 24px;
-
-        .key-value {
-            color: #9ca3af;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
+        h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0 0 4px 0;
         }
 
-        .btn-revoke {
-            background: #8b5cf6;
-            /* Primary Purple based on screenshot 'Revoke' button usually red but screenshot looks purple/blue? */
-            /* Wait, screenshot shows 'Revoke' as purple button inside input? Or beside?
-               Screenshot: "sk_live..." ... [Revoke]
-               Revoke looks purple/pink gradient button in screenshot.
-            */
-            background-color: #8b5cf6;
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 6px;
+        p {
+            color: #64748b;
             font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
+            margin: 0;
+        }
+    }
 
-            &:hover {
-                background-color: #7c3aed;
+    .settings-card {
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+        background: #0f172a;
+        overflow: hidden;
+
+        .card-title {
+            padding: 1.25rem 1.5rem;
+
+            h3 {
+                font-size: 0.95rem;
+                font-weight: 600;
+                color: #e2e8f0;
+                margin: 0 0 3px 0;
+            }
+
+            p {
+                font-size: 0.8rem;
+                color: #64748b;
+                margin: 0;
+            }
+        }
+
+        .divider {
+            height: 1px;
+            background: #1e293b;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.1rem 1.5rem;
+            border-bottom: 1px solid #1e293b;
+            gap: 1rem;
+
+            &.last {
+                border-bottom: none;
+            }
+
+            .setting-info {
+                flex: 1;
+                min-width: 0;
+
+                h4 {
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    color: #e2e8f0;
+                    margin: 0 0 3px 0;
+                }
+
+                p {
+                    font-size: 0.8rem;
+                    color: #64748b;
+                    margin: 0;
+                }
+            }
+
+            .key-actions {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                flex-shrink: 0;
             }
         }
     }
 
-    .btn-generate {
-        background-color: #8b5cf6;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 600;
+    /* Key code display */
+    .key-value {
+        font-family: 'Courier New', monospace;
+        font-size: 0.78rem;
+        color: #94a3b8;
+        background: #0a1120;
+        border: 1px solid #1e293b;
+        border-radius: 6px;
+        padding: 5px 10px;
+        letter-spacing: 0.03em;
+    }
+
+    /* Revoke button */
+    .btn-revoke {
+        padding: 0.35rem 0.9rem;
+        background: transparent;
+        color: #94a3b8;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 500;
         cursor: pointer;
-        transition: background 0.2s;
+        transition: color 0.2s, border-color 0.2s;
 
         &:hover {
-            background-color: #7c3aed;
+            color: #f87171;
+            border-color: #f87171;
+        }
+    }
+
+    /* Generate / Save button */
+    .btn-save {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.65rem 1.75rem;
+        background-color: #7c3aed;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #6d28d9;
         }
     }
 }
