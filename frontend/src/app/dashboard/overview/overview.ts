@@ -29,7 +29,7 @@ export class Overview implements OnInit, OnDestroy {
 
   // 1. Top KPI Strip
   kpiData = {
-    securityStatus: { label: 'Security Status', value: 'Secure', status: 'secure', icon: Info }, // secure, degraded, critical
+    securityStatus: { label: 'Security Score', value: '85%', subtitle: 'Overall Security Posture', status: 'secure', icon: Info },
     activeIncidents: { label: 'Active Incidents', value: 3, status: 'critical', icon: AlertTriangle },
     atRiskEndpoints: { label: 'At-Risk Endpoints', value: 12, status: 'critical', icon: XCircle },
     unmanagedDevices: { label: 'Unmanaged Devices', value: 8, status: 'neutral', icon: Ban }
