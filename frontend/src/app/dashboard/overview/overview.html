@@ -23,6 +23,7 @@
             <div class="kpi-info">
                 <span class="value">{{ kpiData.securityStatus.value }}</span>
                 <span class="label">{{ kpiData.securityStatus.label }}</span>
+                <span class="subtitle">{{ kpiData.securityStatus.subtitle }}</span>
             </div>
         </div>
 
@@ -109,22 +110,22 @@
                     <div class="legend-item">
                         <span class="dot protected"></span>
                         <div class="legend-info">
+                            <span class="label">Protected:</span>
                             <span class="count">{{ protectionStats.protected }}</span>
-                            <span class="label">Protected</span>
                         </div>
                     </div>
                     <div class="legend-item">
                         <span class="dot at-risk"></span>
                         <div class="legend-info">
+                            <span class="label">At Risk:</span>
                             <span class="count">{{ protectionStats.atRisk }}</span>
-                            <span class="label">At Risk</span>
                         </div>
                     </div>
                     <div class="legend-item">
                         <span class="dot offline"></span>
                         <div class="legend-info">
+                            <span class="label">Offline:</span>
                             <span class="count">{{ protectionStats.offline }}</span>
-                            <span class="label">Offline</span>
                         </div>
                     </div>
                 </div>
@@ -234,7 +235,7 @@
         <div class="card incidents-table-card">
             <div class="card-header">
                 <h3>Recent Incidents</h3>
-                <a routerLink="/dashboard/incidents" class="view-all">View All</a>
+                <a routerLink="/dashboard/incidents" class="view-all-btn">View All</a>
             </div>
             <div class="card-body">
                 <table class="clean-table">
