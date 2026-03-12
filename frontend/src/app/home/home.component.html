@@ -56,6 +56,7 @@
                 <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)" #navItem>How it Works</a>
                 <a href="#architecture" (click)="scrollToSection('architecture', $event)" #navItem>Architecture</a>
                 <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Security</a>
+                <a href="#pricing" (click)="scrollToSection('pricing', $event)" #navItem>Pricing</a>
             </div>
 
         </div>
@@ -509,6 +510,159 @@
             </div>
         </div>
     </section>
+
+    <!-- 9. PRICING SECTION -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Pricing</h2>
+                <p>Flexible security plans tailored for teams of all sizes.<br>
+                Contact us to schedule a guided product demo.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- Starter Plan -->
+                <div class="pricing-card">
+                    <div class="card-content">
+                        <div class="plan-header">
+                            <h3>Starter</h3>
+                            <p class="subtitle">Best for small teams</p>
+                        </div>
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Up to 50 endpoints</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Real-time malware detection</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Basic threat alerts</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Security dashboard</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Email support</li>
+                        </ul>
+                        <button class="btn btn-outline full-width" (click)="openDemoModal()">Request Demo</button>
+                    </div>
+                </div>
+
+                <!-- Professional Plan (Most Popular) -->
+                <div class="pricing-card popular">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="card-content">
+                        <div class="plan-header">
+                            <h3>Professional</h3>
+                            <p class="subtitle">Best for growing companies</p>
+                        </div>
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Up to 500 endpoints</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Behavioral threat detection</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Incident response automation</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Threat timeline analytics</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Risk scoring</li>
+                        </ul>
+                        <button class="btn btn-primary-blue full-width" (click)="openDemoModal()">Request Demo</button>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <div class="card-content">
+                        <div class="plan-header">
+                            <h3>Enterprise</h3>
+                            <p class="subtitle">For large organizations</p>
+                        </div>
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Unlimited endpoints</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Advanced threat intelligence</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Compliance monitoring</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Role-based access control</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Dedicated security support</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Custom integrations</li>
+                        </ul>
+                        <button class="btn btn-outline full-width" (click)="openDemoModal()">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO REQUEST MODAL -->
+    <div class="modal-overlay" *ngIf="showDemoModal" (click)="closeDemoModal()">
+        <div class="modal-card" (click)="$event.stopPropagation()">
+            <button class="modal-close" (click)="closeDemoModal()">
+                <lucide-icon [name]="X" [size]="20"></lucide-icon>
+            </button>
+
+            <div class="modal-body" *ngIf="!formSubmitted">
+                <div class="modal-header">
+                    <h2>Request a Guided Demo</h2>
+                    <p>Experience the power of Techzaz EDR. Our experts will show you how to secure your enterprise.</p>
+                </div>
+
+                <form class="demo-form" (submit)="submitDemoForm($event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="firstName" [(ngModel)]="demoFormData.firstName" placeholder="Jane" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="lastName" [(ngModel)]="demoFormData.lastName" placeholder="Doe" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Work Email</label>
+                        <input type="email" name="workEmail" [(ngModel)]="demoFormData.workEmail" placeholder="jane@company.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" name="companyName" [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Inc." required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" name="country" [(ngModel)]="demoFormData.country" placeholder="United States" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" [(ngModel)]="demoFormData.phone" placeholder="+1 (555) 000-0000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Size (Optional)</label>
+                        <select name="companySize" [(ngModel)]="demoFormData.companySize">
+                            <option value="">Select size</option>
+                            <option value="1-50">1-50 employees</option>
+                            <option value="51-200">51-200 employees</option>
+                            <option value="201-500">201-500 employees</option>
+                            <option value="501-1000">501-1000 employees</option>
+                            <option value="1000+">1000+ employees</option>
+                        </select>
+                    </div>
+
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="agreed" name="agreed" [(ngModel)]="demoFormData.agreed" required>
+                        <label for="agreed">I agree to be contacted by Techzaz regarding product demonstrations and platform access.</label>
+                    </div>
+
+                    <p class="legal-text">
+                        By submitting this form, you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
+                    </p>
+
+                    <button type="submit" class="btn btn-primary-blue full-width">Request Demo</button>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div class="modal-success" *ngIf="formSubmitted">
+                <div class="success-icon">
+                    <lucide-icon [name]="Check" [size]="48"></lucide-icon>
+                </div>
+                <h2>Thank you!</h2>
+                <p>Our team will contact you shortly to schedule your Techzaz EDR demo.</p>
+                <button class="btn btn-outline" (click)="closeDemoModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
 
     <section class="final-cta">
