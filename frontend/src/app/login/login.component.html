@@ -15,7 +15,12 @@
         <div class="auth-view sign-in-view">
             <form (submit)="signIn()">
                 <div class="form-header">
-                    <h2>Platform Access</h2>
+                    <div class="status-line">
+                        <span class="status-dot"></span>
+                        <lucide-icon [name]="ShieldCheck" [size]="14"></lucide-icon>
+                        Secure Console Access
+                    </div>
+                    <h2>Sign in to Techzaz EDR</h2>
                 </div>
 
                 <div *ngIf="errorMessage" class="error-banner">
@@ -34,9 +39,9 @@
                     </div>
                 </div>
 
-                <a href="#" class="forgot-password">Reset Credentials?</a>
-                <button type="submit" class="btn solid">Authenticate</button>
-                <p class="toggle-link">New here? <a (click)="toggleMode()">Initialize Tenant</a></p>
+                <a href="#" class="forgot-password">Forgot password?</a>
+                <button type="submit" class="btn solid">Sign In</button>
+                <p class="toggle-link">New here? <a (click)="toggleMode()">Create account</a></p>
             </form>
         </div>
 
