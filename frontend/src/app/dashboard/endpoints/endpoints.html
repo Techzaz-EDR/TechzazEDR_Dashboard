@@ -23,7 +23,9 @@
 
             <div class="search-box">
                 <lucide-icon [name]="SearchIcon" [size]="18" class="search-icon"></lucide-icon>
-                <input type="text" placeholder="Search endpoints..." [(ngModel)]="searchTerm">
+                <input type="text" placeholder="Search endpoints..." 
+                       [(ngModel)]="searchQuery" 
+                       (input)="onSearch()">
             </div>
         </div>
 
