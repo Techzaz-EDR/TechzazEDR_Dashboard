@@ -239,7 +239,13 @@
                                 [class.fill-neutral]="item.color === 'neutral'"
                                 [style.width.%]="(item.count / 50) * 100"></div> <!-- Mock pct -->
                         </div>
-                        <button class="action-sm">{{ item.action }}</button>
+                        <button class="action-sm" 
+                                (click)="handleHealthAction(item)"
+                                [disabled]="item.isProcessing || item.count === 0"
+                                [class.processing]="item.isProcessing">
+                            <lucide-icon *ngIf="item.isProcessing" [name]="RefreshCw" class="spin-icon"></lucide-icon>
+                            <span>{{ item.isProcessing ? 'Processing' : item.action }}</span>
+                        </button>
                     </div>
                     }
                 </div>

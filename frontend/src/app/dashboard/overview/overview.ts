@@ -98,11 +98,26 @@ export class Overview implements OnInit, OnDestroy {
 
   // 3. Secondary Row
   // Agent Health & Updates
-  agentHealth = [
-    { label: 'Outdated Agents', count: 42, color: 'warning', action: 'Update' },
-    { label: 'Failed Updates', count: 3, color: 'critical', action: 'Retry' },
-    { label: 'Pending Restart', count: 12, color: 'neutral', action: 'Reboot' }
+  agentHealth: any[] = [
+    { label: 'Outdated Agents', count: 42, color: 'warning', action: 'Update', isProcessing: false },
+    { label: 'Failed Updates', count: 3, color: 'critical', action: 'Retry', isProcessing: false },
+    { label: 'Pending Restart', count: 12, color: 'neutral', action: 'Reboot', isProcessing: false }
   ];
+
+  handleHealthAction(item: any) {
+    if (item.isProcessing || item.count === 0) return;
+
+    item.isProcessing = true;
+
+    // Simulate background process
+    const duration = 1500 + Math.random() * 1500;
+    setTimeout(() => {
+      item.isProcessing = false;
+      if (item.count > 0) {
+        item.count--;
+      }
+    }, duration);
+  }
 
   // Top Risk Contributors
   riskContributors = [
