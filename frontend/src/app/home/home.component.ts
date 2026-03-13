@@ -58,6 +58,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     scrolled = false;
     showDemoModal = false;
     formSubmitted = false;
+    isPlanDropdownMode = false;
 
     // Form Data
     demoFormData = {
@@ -68,8 +69,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         country: '',
         phone: '',
         companySize: '',
-        selectedPlan: '',
-        agreed: false
+        agreed: false,
+        selectedPlan: ''
     };
 
     // Hero animated background data streams
@@ -122,11 +123,14 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     openDemoModal(plan: string = '') {
         this.showDemoModal = true;
         this.formSubmitted = false;
-        // Reset form but retain standard fields, update plan
+        this.isPlanDropdownMode = !plan;
+        
+        // Reset form
         this.demoFormData = {
             firstName: '', lastName: '', workEmail: '',
             companyName: '', country: '', phone: '',
-            companySize: '', selectedPlan: plan, agreed: false
+            companySize: '', agreed: false,
+            selectedPlan: plan
         };
         document.body.style.overflow = 'hidden'; // Prevent scroll
     }
@@ -139,10 +143,10 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     submitDemoForm(event: Event) {
         event.preventDefault();
 
-        const { firstName, lastName, workEmail, companyName, country, phone, agreed } = this.demoFormData;
+        const { firstName, lastName, workEmail, companyName, country, phone, agreed, selectedPlan } = this.demoFormData;
 
         // Basic Required Validation
-        if (!firstName || !lastName || !workEmail || !companyName || !country || !phone || !agreed) {
+        if (!firstName || !lastName || !workEmail || !companyName || !country || !phone || !selectedPlan || !agreed) {
             console.warn('Validation failed: Missing required fields.');
             return;
         }
