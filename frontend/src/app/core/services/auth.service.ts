@@ -17,6 +17,9 @@ export class AuthService {
     private userProfileSubject = new BehaviorSubject<any | null>(null);
     public userProfile$ = this.userProfileSubject.asObservable();
 
+    private tenantIdSubject = new BehaviorSubject<string | null>(null);
+    public tenantId$ = this.tenantIdSubject.asObservable();
+
     public role: string | null = null;
     public tenantId: string | null = null;
 
@@ -27,7 +30,7 @@ export class AuthService {
             console.log('Auth State Changed:', user ? `User ${user.email}` : 'No User');
             this.userSubject.next(user);
             if (user) {
-                this.refreshClaims(user);
+                await this.refreshClaims(user);
                 
                 // Fetch the user's profile from the users collection
                 try {
@@ -39,7 +42,6 @@ export class AuthService {
                         console.log('User profile fetched:', userDocSnap.data());
                     } else {
                         console.warn('User document not found in Firestore for uid:', user.uid);
-                        // Fallback or handle missing profile
                         this.userProfileSubject.next(null);
                     }
                 } catch (error) {
@@ -50,6 +52,7 @@ export class AuthService {
             } else {
                 this.role = null;
                 this.tenantId = null;
+                this.tenantIdSubject.next(null);
                 this.userProfileSubject.next(null);
             }
         });
@@ -67,7 +70,6 @@ export class AuthService {
             });
         } catch (error) {
             console.error('Error updating last_login_at:', error);
-            // Non-blocking error, allow login to proceed
         }
 
         return userCredential;
@@ -75,6 +77,7 @@ export class AuthService {
 
     async logout() {
         await signOut(this.auth);
+        this.tenantIdSubject.next(null);
         this.router.navigate(['/login']);
     }
 
@@ -87,6 +90,7 @@ export class AuthService {
         const result = await getIdTokenResult(user);
         this.role = (result.claims['role'] as string) || null;
         this.tenantId = (result.claims['tenantId'] as string) || null;
+        this.tenantIdSubject.next(this.tenantId);
     }
 
     get isLoggedIn(): boolean {

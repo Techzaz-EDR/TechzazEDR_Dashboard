@@ -68,40 +68,38 @@ export class AgentComponent implements OnInit, OnDestroy {
   }
 
   private loadAgentData(agentId: string) {
-    // Mock Data Fallbacks
-    this.agentDetails = {
-      status: 'active',
-      ip: '192.168.1.101',
-      os: 'Windows 10 Pro',
-      last_seen: { toDate: () => new Date() }
-    };
-
-    const now = Date.now();
-    this.alerts = [
-      { name: 'Unauthorized PowerShell Execution', severity: 'High', description: 'Encoded command detected in user context', timestamp: { toDate: () => new Date(now - 1000 * 60 * 15) } },
-      { name: 'Suspicious Network Connection', severity: 'Medium', description: 'Connection attempt to known C2 IP', timestamp: { toDate: () => new Date(now - 1000 * 60 * 60 * 2) } }
-    ];
-
-    this.commands = [
-      { command: 'run_hids_scan', status: 'completed', timestamp: { toDate: () => new Date(now - 1000 * 60 * 30) } }
-    ];
+    this.agentDetails = null; // Reset
+    this.alerts = [];
+    this.commands = [];
 
     // Real-time Firestore Subscriptions
     this.subscriptions.add(
       this.firestoreService.getAgentDetails(agentId).subscribe(details => {
-        if (details) this.agentDetails = details;
+        if (details) {
+          this.agentDetails = {
+            ...details,
+            name: details.hostname || details.id,
+            os: details.os || 'Unknown OS',
+            ip: details.ip || '0.0.0.0',
+            status: details.status || 'offline',
+            last_seen: details.last_seen
+          };
+        } else {
+          // No data found in Firestore
+          this.agentDetails = { id: agentId, status: 'unknown' };
+        }
       })
     );
 
     this.subscriptions.add(
       this.firestoreService.getAgentAlerts(agentId).subscribe(alerts => {
-        if (alerts && alerts.length > 0) this.alerts = alerts;
+        this.alerts = alerts;
       })
     );
 
     this.subscriptions.add(
       this.firestoreService.getAgentCommands(agentId).subscribe(commands => {
-        if (commands && commands.length > 0) this.commands = commands;
+        this.commands = commands;
       })
     );
   }
