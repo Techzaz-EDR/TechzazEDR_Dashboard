@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { 
@@ -50,7 +50,8 @@ export class AgentComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -82,24 +83,35 @@ export class AgentComponent implements OnInit, OnDestroy {
             os: details.os || 'Unknown OS',
             ip: details.ip || '0.0.0.0',
             status: details.status || 'offline',
-            last_seen: details.last_seen
+            last_seen: this.formatLastSeen(details.last_seen)
           };
+          this.cdr.detectChanges();
         } else {
           // No data found in Firestore
           this.agentDetails = { id: agentId, status: 'unknown' };
+          this.cdr.detectChanges();
         }
       })
     );
 
     this.subscriptions.add(
       this.firestoreService.getAgentAlerts(agentId).subscribe(alerts => {
-        this.alerts = alerts;
+        this.alerts = alerts.map(a => ({
+          ...a,
+          severity: a.Severity || a.severity || 'Medium',
+          name: a.Category || a.RuleId || a.name || 'Security Alert',
+          description: a.Details?.description || a.description || (a.Details ? JSON.stringify(a.Details) : 'Alert details not available'),
+          // Handle both Firestore Timestamp and ISO string
+          displayTime: this.formatAlertTime(a.Timestamp || a.timestamp)
+        }));
+        this.cdr.detectChanges();
       })
     );
 
     this.subscriptions.add(
       this.firestoreService.getAgentCommands(agentId).subscribe(commands => {
         this.commands = commands;
+        this.cdr.detectChanges();
       })
     );
   }
@@ -150,5 +162,52 @@ export class AgentComponent implements OnInit, OnDestroy {
 
   backToEndpoints() {
     this.router.navigate(['/dashboard/endpoints']);
+  }
+
+  public formatAlertTime(timestamp: any): string {
+    if (!timestamp) return 'Just now';
+    
+    // If it's a Firestore Timestamp
+    if (timestamp && typeof timestamp.toDate === 'function') {
+      const date = timestamp.toDate();
+      return this.formatDate(date);
+    }
+    
+    // If it's an ISO string or other date format
+    const date = new Date(timestamp);
+    if (!isNaN(date.getTime())) {
+      return this.formatDate(date);
+    }
+    
+    return String(timestamp);
+  }
+
+  public formatLastSeen(timestamp: any): string {
+    if (!timestamp) return 'Never';
+    
+    if (timestamp && typeof timestamp.toDate === 'function') {
+      return this.formatRelativeTime(timestamp.toDate());
+    }
+    
+    const date = new Date(timestamp);
+    if (!isNaN(date.getTime())) {
+      return this.formatRelativeTime(date);
+    }
+    
+    return String(timestamp);
+  }
+
+  private formatDate(date: Date): string {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  private formatRelativeTime(date: Date): string {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    return date.toLocaleDateString();
   }
 }

@@ -61,6 +61,8 @@ def main():
             agent_ref = org_ref.collection("agents").document(agent_id)
             agent_ref.set({
                 "hostname": agent_id,
+                "ip": "192.168.1.101" if agent_id == "DESKTOP-TEST1" else "192.168.1.x",
+                "os": "Windows 10 Pro" if agent_id == "DESKTOP-TEST1" else "Windows 11",
                 "status": "offline",
                 "last_seen": firestore.SERVER_TIMESTAMP
             })

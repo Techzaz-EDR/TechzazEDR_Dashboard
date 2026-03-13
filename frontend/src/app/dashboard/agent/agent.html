@@ -23,7 +23,7 @@
       </div>
       <div class="meta-item">
         <lucide-icon [name]="ClockIcon" class="meta-icon"></lucide-icon>
-        <span>Last check-in: {{ agentDetails?.last_seen?.toDate() | date:'medium' }}</span>
+        <span>Last check-in: {{ agentDetails?.last_seen }}</span>
       </div>
     </div>
   </header>
@@ -75,7 +75,7 @@
               </td>
               <td class="alert-name">{{ alert.name }}</td>
               <td class="alert-desc" [title]="alert.description">{{ alert.description }}</td>
-              <td class="alert-time">{{ alert.timestamp?.toDate() | date:'shortTime' }}</td>
+              <td class="alert-time">{{ alert.displayTime }}</td>
             </tr>
             <tr *ngIf="alerts.length === 0">
               <td colspan="4" class="no-data">No alerts found for this agent.</td>
@@ -91,7 +91,7 @@
       <div class="queue-list">
         <div class="queue-item" *ngFor="let cmd of commands">
           <div class="cmd-info">
-            <span class="cmd-time">{{ cmd.timestamp?.toDate() | date:'shortTime' }}</span>
+            <span class="cmd-time">{{ formatAlertTime(cmd.timestamp) }}</span>
             <span class="cmd-name">{{ cmd.command }}</span>
           </div>
           <div class="cmd-status" [ngClass]="cmd.status">
