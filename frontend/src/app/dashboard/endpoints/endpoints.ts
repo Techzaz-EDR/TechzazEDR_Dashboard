@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { FirestoreService } from '../../core/services/firestore.service';
 import {
     LucideAngularModule,
     Shield, Plus, Download, Search, AlertTriangle, Eye, MoreVertical
@@ -9,11 +11,11 @@ import {
 @Component({
     selector: 'app-endpoints',
     standalone: true,
-    imports: [CommonModule, FormsModule, LucideAngularModule],
+    imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink],
     templateUrl: './endpoints.html',
     styleUrl: './endpoints.scss'
 })
-export class Endpoints {
+export class Endpoints implements OnInit {
     // Icons
     readonly ShieldIcon = Shield;
     readonly PlusIcon = Plus;
@@ -23,7 +25,8 @@ export class Endpoints {
     readonly EyeIcon = Eye;
     readonly MoreVerticalIcon = MoreVertical;
 
-    searchTerm = '';
+    filteredEndpoints: any[] = [];
+    searchQuery: string = '';
 
     endpoints = [
         {
@@ -73,10 +76,30 @@ export class Endpoints {
         }
     ];
 
-    get filteredEndpoints() {
-        return this.endpoints.filter(ep =>
-            ep.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-            ep.ip.includes(this.searchTerm)
+    constructor(
+        private firestoreService: FirestoreService,
+        private router: Router
+    ) {}
+
+    ngOnInit() {
+        this.filteredEndpoints = this.endpoints;
+    }
+
+    navigateToAgent(id: string) {
+        this.firestoreService.setSelectedAgent(id);
+        this.router.navigate(['/dashboard/agent']);
+    }
+
+    onSearch() {
+        if (!this.searchQuery) {
+            this.filteredEndpoints = this.endpoints;
+            return;
+        }
+        const query = this.searchQuery.toLowerCase();
+        this.filteredEndpoints = this.endpoints.filter(ep => 
+            ep.name.toLowerCase().includes(query) || 
+            ep.ip.toLowerCase().includes(query) ||
+            ep.os.toLowerCase().includes(query)
         );
     }
 

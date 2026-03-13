@@ -44,10 +44,12 @@
                     @for (ep of filteredEndpoints; track ep.id) {
                     <tr>
                         <td class="col-name">
-                            <div class="name-cell">
-                                <lucide-icon [name]="ShieldIcon" [size]="18" class="os-icon"></lucide-icon>
-                                <span>{{ ep.name }}</span>
-                            </div>
+                            <a (click)="navigateToAgent(ep.name)" class="name-cell-link" style="cursor: pointer;">
+                                <div class="name-cell">
+                                    <lucide-icon [name]="ShieldIcon" [size]="18" class="os-icon"></lucide-icon>
+                                    <span>{{ ep.name }}</span>
+                                </div>
+                            </a>
                         </td>
                         <td class="col-os">{{ ep.os }}</td>
                         <td class="col-ip">{{ ep.ip }}</td>
@@ -69,8 +71,9 @@
                         <td class="col-seen">{{ ep.lastSeen }}</td>
                         <td class="col-actions">
 
-                            <button class="btn-icon" title="View"><lucide-icon [name]="EyeIcon"
-                                    [size]="18"></lucide-icon></button>
+                            <button class="btn-icon" title="View" (click)="navigateToAgent(ep.name)">
+                                <lucide-icon [name]="EyeIcon" [size]="18"></lucide-icon>
+                            </button>
                             <button class="btn-icon" title="More"><lucide-icon [name]="MoreVerticalIcon"
                                     [size]="18"></lucide-icon></button>
                         </td>
