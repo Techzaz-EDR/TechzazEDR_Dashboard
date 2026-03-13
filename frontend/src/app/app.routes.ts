@@ -16,6 +16,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'overview', pathMatch: 'full' },
             { path: 'overview', loadComponent: () => import('./dashboard/overview/overview').then(m => m.Overview) },
             { path: 'endpoints', loadComponent: () => import('./dashboard/endpoints/endpoints').then(m => m.Endpoints) },
+            { path: 'agent', loadComponent: () => import('./dashboard/agent/agent').then(m => m.AgentComponent) },
             { path: 'users', loadComponent: () => import('./dashboard/users/users').then(m => m.Users) },
             { path: 'incidents', loadComponent: () => import('./dashboard/incidents/incidents').then(m => m.Incidents) },
             { path: 'analytics', loadComponent: () => import('./dashboard/analytics/analytics').then(m => m.Analytics) },
