@@ -25,42 +25,42 @@ export class AboutComponent implements OnInit, AfterViewInit {
         {
             name: 'Inuka Wijerathna',
             role: 'Project Lead',
-            avatar: 'assets/team/inuka.jpg',
+            avatar: '/assets/team/avatar-male.svg',
             linkedin: '#',
             github: '#'
         },
         {
             name: 'Imesh Silva',
             role: 'Technical Lead',
-            avatar: 'assets/team/imesh.jpg',
+            avatar: '/assets/team/avatar-male.svg',
             linkedin: '#',
             github: '#'
         },
         {
             name: 'Kavya Dissanayake',
             role: 'Frontend Lead',
-            avatar: 'assets/team/kavya.jpg',
+            avatar: '/assets/team/avatar-female.svg',
             linkedin: '#',
             github: '#'
         },
         {
             name: 'Limuthu Lohiru',
             role: 'Backend Lead',
-            avatar: 'assets/team/limuthu.jpg',
+            avatar: '/assets/team/avatar-male.svg',
             linkedin: '#',
             github: '#'
         },
         {
             name: 'Tharuki Jayasuriya',
             role: 'Architecture & Documentation Lead',
-            avatar: 'assets/team/tharuki.jpg',
+            avatar: '/assets/team/avatar-female.svg',
             linkedin: '#',
             github: '#'
         },
         {
             name: 'Yeheni Alwis',
             role: 'QA & Validation Lead',
-            avatar: 'assets/team/yeheni.jpg',
+            avatar: '/assets/team/avatar-female.svg',
             linkedin: '#',
             github: '#'
         }

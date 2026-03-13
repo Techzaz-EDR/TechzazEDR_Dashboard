@@ -75,7 +75,7 @@
 
     /* Hero Section */
     .about-hero {
-        padding: 180px 0 100px;
+        padding: 80px 0 48px;
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -83,7 +83,7 @@
         h1 {
             font-size: 4rem;
             font-weight: 900;
-            margin-bottom: 16px;
+            margin-bottom: 48px;
             letter-spacing: -2px;
         }
 
@@ -96,11 +96,11 @@
         }
 
         .hero-desc {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: #94a3b8;
-            max-width: 800px;
+            max-width: 1050px;
             margin: 0 auto;
-            line-height: 1.7;
+            line-height: 1.6;
         }
 
         .hero-glow {
@@ -133,13 +133,13 @@
 
     /* Mission & Vision grid */
     .mission-vision {
-        padding: 60px 0 100px;
+        padding: 80px 0 120px;
         position: relative;
 
         .mission-vision-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
+            gap: 24px;
 
             @media (max-width: 992px) {
                 gap: 24px;
@@ -151,11 +151,11 @@
         }
 
         .card {
-            padding: 48px 40px;
+            padding: 32px 40px;
             text-align: left;
             position: relative;
             overflow: hidden;
-            min-height: 240px;
+            min-height: 200px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -180,11 +180,11 @@
 
     /* Team Section */
     .team-section {
-        padding: 40px 0 100px;
+        padding: 60px 0;
 
         .section-header {
             text-align: center;
-            margin-bottom: 64px;
+            margin-bottom: 32px;
 
             h2 {
                 font-size: 2.75rem;
@@ -202,20 +202,14 @@
                 line-height: 1.6;
                 opacity: 0.8;
             }
-
-            .highlight-purple {
-                color: #a78bfa;
-                background: linear-gradient(135deg, #8b5cf6, #d8b4fe);
-                -webkit-background-clip: text;
-                background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
         }
 
         .team-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
 
             @media (max-width: 1024px) {
                 grid-template-columns: repeat(2, 1fr);
@@ -227,20 +221,20 @@
         }
 
         .team-card {
-            padding: 48px 32px;
+            padding: 24px 24px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 380px;
+            min-height: 230px;
             justify-content: center;
 
             .avatar-container {
-                margin-bottom: 32px;
+                margin-bottom: 16px;
 
                 .avatar-placeholder {
-                    width: 80px;
-                    height: 80px;
+                    width: 70px;
+                    height: 70px;
                     border-radius: 50%;
                     background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.8));
                     border: 1px solid rgba(139, 92, 246, 0.2);
@@ -248,6 +242,13 @@
                     align-items: center;
                     justify-content: center;
                     color: rgba(139, 92, 246, 0.8);
+                    overflow: hidden;
+
+                    .avatar-img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
                     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                     box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
                 }
@@ -306,32 +307,38 @@
 
     /* Product Statement Section */
     .product-statement {
-        padding: 80px 0;
+        padding: 40px 0;
         
         .statement-box {
-            padding: 60px;
+            padding: 50px 60px;
             max-width: 900px;
+            text-align: center;
+            margin: 0 auto;
             
             h2 {
-                font-size: 2.25rem;
+                font-size: 2.5rem;
                 margin-bottom: 24px;
                 background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
                 -webkit-background-clip: text;
                 background-clip: text;
                 -webkit-text-fill-color: transparent;
+                font-weight: 800;
+                letter-spacing: -1px;
             }
             
             p {
-                font-size: 1.25rem;
+                font-size: 1.2rem;
                 color: #94a3b8;
-                line-height: 1.6;
+                line-height: 1.7;
+                max-width: 750px;
+                margin: 0 auto;
             }
         }
     }
 
     /* Final CTA mini */
     .final-cta.mini {
-        padding: 60px 0 100px;
+        padding: 40px 0 80px;
 
         .cta-box {
             padding: 60px;
@@ -357,6 +364,21 @@
     /* Global Utils Reused */
     .gradient-text {
         background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .highlight-purple {
+        color: #a78bfa;
+        background: linear-gradient(135deg, #8b5cf6, #d8b4fe);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-purple-text {
+        background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
