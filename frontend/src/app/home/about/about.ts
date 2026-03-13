@@ -79,24 +79,5 @@ export class AboutComponent implements OnInit, AfterViewInit {
 
         tl.from('.about-hero h1', { opacity: 0, y: 30, duration: 1 })
           .from('.about-hero p', { opacity: 0, y: 20, duration: 0.8 }, '-=0.6')
-          .from('.mission-vision-grid .card', { 
-              opacity: 0, 
-              y: 40, 
-              stagger: 0.2, 
-              duration: 1 
-          }, '-=0.4')
-          .from('.team-section h2, .team-section .section-desc', { 
-              opacity: 0, 
-              y: 20, 
-              stagger: 0.1, 
-              duration: 0.8 
-          }, '-=0.6')
-          .from('.team-grid .team-card', { 
-              opacity: 0, 
-              scale: 0.9, 
-              stagger: 0.1, 
-              duration: 0.8,
-              ease: 'back.out(1.7)'
-          }, '-=0.4');
     }
 }

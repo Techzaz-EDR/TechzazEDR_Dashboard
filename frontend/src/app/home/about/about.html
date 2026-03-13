@@ -14,10 +14,11 @@
 
     <!-- 1. HERO SECTION -->
     <header class="about-hero">
-        <div class="container">
+        <div class="container center-content">
             <h1 class="gradient-text">About Techzaz</h1>
+            <p class="hero-subtitle">Next-generation endpoint detection and response built for modern security teams.</p>
             <p class="hero-desc">
-                Techzaz builds next-generation endpoint detection and response solutions designed for modern security teams. Our goal is to help organizations monitor endpoints, detect advanced threats, and respond quickly through a unified security platform.
+                Techzaz EDR is developed by a team of cybersecurity engineers focused on building powerful and accessible endpoint detection and response technology. Our platform enables organizations to monitor endpoints, detect advanced threats, and respond rapidly through a unified security operations dashboard.
             </p>
         </div>
         <div class="hero-glow"></div>
@@ -28,17 +29,11 @@
         <div class="container">
             <div class="mission-vision-grid">
                 <div class="card glass-panel">
-                    <div class="card-icon">
-                        <lucide-icon [name]="Target" [size]="32"></lucide-icon>
-                    </div>
                     <h3>Our Mission</h3>
                     <p>To provide accessible, enterprise-grade endpoint security solutions that protect businesses of all sizes from evolving cyber threats, ensuring peace of mind and operational continuity.</p>
                 </div>
 
                 <div class="card glass-panel">
-                    <div class="card-icon">
-                        <lucide-icon [name]="Eye" [size]="32"></lucide-icon>
-                    </div>
                     <h3>Our Vision</h3>
                     <p>To become the leading cloud-based EDR platform that sets the standard for proactive threat detection and automated incident response, making cybersecurity accessible to everyone.</p>
                 </div>
@@ -52,7 +47,7 @@
             <div class="section-header center">
                 <h2>Meet the <span class="highlight-purple">Developers</span></h2>
                 <p class="section-desc">
-                    We are a group of passionate innovators from Informatics Institute of Technology (IIT), building Techzaz EDR in partnership with Techzaz Networks to address real-world cybersecurity challenges.
+                    A team of engineers and security specialists building Techzaz EDR to address modern cybersecurity challenges.
                 </p>
             </div>
 
@@ -60,7 +55,7 @@
                 <div class="team-card glass-panel" *ngFor="let member of teamMembers">
                     <div class="avatar-container">
                         <div class="avatar-placeholder">
-                            <lucide-icon [name]="Users" [size]="40"></lucide-icon>
+                            <lucide-icon [name]="Users" [size]="32"></lucide-icon>
                         </div>
                     </div>
                     <div class="member-info">
@@ -76,6 +71,16 @@
                         </a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. PRODUCT STATEMENT -->
+    <section class="product-statement">
+        <div class="container center-content">
+            <div class="statement-box glass-panel">
+                <h2>Building the Future of Endpoint Security</h2>
+                <p>Techzaz EDR combines behavioral threat detection, real-time monitoring, and automated incident response to help organizations defend against modern cyber threats.</p>
             </div>
         </div>
     </section>

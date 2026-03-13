@@ -11,6 +11,13 @@
         padding: 0 40px;
     }
 
+    .center-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
     /* Navbar Styling */
     .navbar {
         position: fixed;
@@ -76,16 +83,24 @@
         h1 {
             font-size: 4rem;
             font-weight: 900;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             letter-spacing: -2px;
         }
 
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #8b5cf6;
+            font-weight: 600;
+            margin-bottom: 32px;
+            max-width: 800px;
+        }
+
         .hero-desc {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             color: #94a3b8;
             max-width: 800px;
             margin: 0 auto;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .hero-glow {
@@ -103,26 +118,32 @@
 
     /* Cards & Panels */
     .glass-panel {
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 24px;
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.3) 0%, rgba(15, 23, 42, 0.6) 100%);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 20px;
         transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.05);
 
         &:hover {
-            border-color: rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.5);
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 92, 246, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(139, 92, 246, 0.2);
         }
     }
 
     /* Mission & Vision grid */
     .mission-vision {
-        padding: 60px 0;
+        padding: 60px 0 100px;
+        position: relative;
 
         .mission-vision-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
+            gap: 32px;
+
+            @media (max-width: 992px) {
+                gap: 24px;
+            }
 
             @media (max-width: 768px) {
                 grid-template-columns: 1fr;
@@ -130,54 +151,56 @@
         }
 
         .card {
-            padding: 48px;
-            text-align: center;
-
-            .card-icon {
-                width: 64px;
-                height: 64px;
-                background: rgba(139, 92, 246, 0.1);
-                color: #8b5cf6;
-                border-radius: 16px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto 24px;
-            }
+            padding: 48px 40px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
 
             h3 {
                 font-size: 1.75rem;
                 margin-bottom: 20px;
-                color: white;
+                font-weight: 700;
+                color: #ffffff;
+                letter-spacing: -0.5px;
             }
 
             p {
                 color: #94a3b8;
-                line-height: 1.7;
-                font-size: 1.05rem;
+                line-height: 1.6;
+                font-size: 1.1rem;
+                margin: 0;
+                opacity: 0.9;
             }
         }
     }
 
     /* Team Section */
     .team-section {
-        padding: 100px 0;
+        padding: 40px 0 100px;
 
         .section-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 64px;
 
             h2 {
-                font-size: 3rem;
+                font-size: 2.75rem;
                 margin-bottom: 16px;
+                font-weight: 800;
+                color: #ffffff;
+                letter-spacing: -1px;
             }
 
             .section-desc {
                 color: #94a3b8;
-                max-width: 700px;
+                max-width: 650px;
                 margin: 0 auto;
                 font-size: 1.1rem;
                 line-height: 1.6;
+                opacity: 0.8;
             }
 
             .highlight-purple {
@@ -191,69 +214,117 @@
 
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
+
+            @media (max-width: 1024px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @media (max-width: 640px) {
+                grid-template-columns: 1fr;
+            }
         }
 
         .team-card {
-            padding: 32px;
+            padding: 48px 32px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 380px;
+            justify-content: center;
 
             .avatar-container {
-                margin-bottom: 24px;
+                margin-bottom: 32px;
 
                 .avatar-placeholder {
-                    width: 100px;
-                    height: 100px;
+                    width: 80px;
+                    height: 80px;
                     border-radius: 50%;
-                    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
-                    border: 2px solid rgba(139, 92, 246, 0.2);
+                    background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.8));
+                    border: 1px solid rgba(139, 92, 246, 0.2);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: rgba(139, 92, 246, 0.6);
-                    transition: all 0.3s;
+                    color: rgba(139, 92, 246, 0.8);
+                    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
                 }
             }
 
             &:hover .avatar-placeholder {
                 border-color: #8b5cf6;
-                transform: scale(1.05);
+                transform: scale(1.1) rotate(5deg);
                 color: #8b5cf6;
-                box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+                box-shadow: 0 0 25px rgba(139, 92, 246, 0.3);
             }
 
             h4 {
-                font-size: 1.25rem;
-                margin-bottom: 8px;
+                font-size: 1.4rem;
+                margin-bottom: 12px;
+                font-weight: 700;
                 color: white;
             }
 
             .role {
-                color: #8b5cf6;
-                font-size: 0.9rem;
-                font-weight: 600;
-                margin-bottom: 24px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
+                color: #94a3b8;
+                font-size: 0.95rem;
+                font-weight: 500;
+                margin-bottom: 32px;
+                opacity: 0.7;
             }
 
             .member-socials {
                 display: flex;
-                gap: 16px;
+                gap: 20px;
 
                 .social-link {
                     color: #64748b;
-                    transition: all 0.3s;
+                    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                    padding: 8px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.02);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
 
                     &:hover {
-                        color: white;
-                        transform: translateY(-2px);
+                        color: #ffffff;
+                        transform: translateY(-3px);
+                        background: rgba(139, 92, 246, 0.1);
+                        border-color: rgba(139, 92, 246, 0.3);
+                        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
                     }
                 }
+            }
+        }
+    }
+
+    /* Team Section update for card alignment */
+    .team-grid .team-card {
+        text-align: center;
+    }
+
+    /* Product Statement Section */
+    .product-statement {
+        padding: 80px 0;
+        
+        .statement-box {
+            padding: 60px;
+            max-width: 900px;
+            
+            h2 {
+                font-size: 2.25rem;
+                margin-bottom: 24px;
+                background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            
+            p {
+                font-size: 1.25rem;
+                color: #94a3b8;
+                line-height: 1.6;
             }
         }
     }
