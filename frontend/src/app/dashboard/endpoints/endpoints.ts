@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -7,15 +7,16 @@ import {
     LucideAngularModule,
     Shield, Plus, Download, Search, AlertTriangle, Eye, MoreVertical
 } from 'lucide-angular';
+import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-endpoints',
-    standalone: true,
-    imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink],
-    templateUrl: './endpoints.html',
-    styleUrl: './endpoints.scss'
+  selector: 'app-endpoints',
+  standalone: true,
+  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink],
+  templateUrl: './endpoints.html',
+  styleUrl: './endpoints.scss'
 })
-export class Endpoints implements OnInit {
+export class Endpoints implements OnInit, OnDestroy {
     // Icons
     readonly ShieldIcon = Shield;
     readonly PlusIcon = Plus;
@@ -27,62 +28,50 @@ export class Endpoints implements OnInit {
 
     filteredEndpoints: any[] = [];
     searchQuery: string = '';
-
-    endpoints = [
-        {
-            id: 1,
-            name: 'DESKTOP-001',
-            os: 'Windows 10',
-            ip: '192.168.1.101',
-            status: 'protected',
-            threats: 0,
-            lastSeen: '2 minutes ago'
-        },
-        {
-            id: 2,
-            name: 'LAPTOP-042',
-            os: 'macOS 13.5',
-            ip: '192.168.1.102',
-            status: 'at-risk',
-            threats: 2,
-            lastSeen: '5 minutes ago'
-        },
-        {
-            id: 3,
-            name: 'SERVER-005',
-            os: 'Ubuntu 22.04',
-            ip: '192.168.1.50',
-            status: 'protected',
-            threats: 0,
-            lastSeen: '1 minute ago'
-        },
-        {
-            id: 4,
-            name: 'WORKSTATION-023',
-            os: 'Windows 11',
-            ip: '192.168.1.103',
-            status: 'compromised',
-            threats: 5,
-            lastSeen: '30 minutes ago'
-        },
-        {
-            id: 5,
-            name: 'MOBILE-001',
-            os: 'iOS 17',
-            ip: '192.168.1.200',
-            status: 'protected',
-            threats: 0,
-            lastSeen: '10 minutes ago'
-        }
-    ];
+    endpoints: any[] = [];
+    private subscriptions: Subscription = new Subscription();
 
     constructor(
         private firestoreService: FirestoreService,
-        private router: Router
+        private router: Router,
+        private cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit() {
-        this.filteredEndpoints = this.endpoints;
+        console.log('Endpoints Component Initialized');
+        this.subscriptions.add(
+            this.firestoreService.getAgents().subscribe(agents => {
+                console.log('Agents received in component:', agents.length);
+                this.endpoints = agents.map(a => ({
+                    ...a,
+                    name: a.hostname || a.id,
+                    os: a.os || 'Unknown OS',
+                    ip: a.ip || '0.0.0.0',
+                    status: a.status || 'offline',
+                    threats: a.threats_count || 0,
+                    lastSeen: a.last_seen ? this.formatLastSeen(a.last_seen) : 'Never'
+                }));
+                this.onSearch();
+                this.cdr.detectChanges(); // Force refresh
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
+    private formatLastSeen(timestamp: any): string {
+        if (!timestamp) return 'Never';
+        const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+        const now = new Date();
+        const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / 60000);
+        
+        if (diffInMinutes < 1) return 'Just now';
+        if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+        const diffInHours = Math.floor(diffInMinutes / 60);
+        if (diffInHours < 24) return `${diffInHours} hours ago`;
+        return date.toLocaleDateString();
     }
 
     navigateToAgent(id: string) {
@@ -131,17 +120,9 @@ export class Endpoints implements OnInit {
 
     addEndpoint() {
         if (!this.newEndpoint.name || !this.newEndpoint.ip) return;
-
-        this.endpoints.push({
-            id: this.endpoints.length + 1,
-            name: this.newEndpoint.name,
-            os: this.newEndpoint.os,
-            ip: this.newEndpoint.ip,
-            status: this.newEndpoint.status,
-            threats: 0,
-            lastSeen: 'Just now'
-        });
-
+        // In a real app, this would write to Firestore
+        // For now, we'll just log or implement the write if we want it to be "real"
+        console.log('Adding endpoint:', this.newEndpoint);
         this.closeModal();
     }
 }
