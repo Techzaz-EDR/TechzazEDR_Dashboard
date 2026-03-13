@@ -2,28 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-    /* Techzaz Enterprise Palette - Redesigned Dark Theme */
-    --bg-primary: #080b12;
-    /* Deepest Navy (Home Page Match) */
-    --bg-dark: #0d1117;
-    /* Legacy/Alt Dark */
+    /* Techzaz Enterprise Palette - Unified Theme */
+    --bg-primary: #080b12; /* Deepest Navy Base */
+    --bg-dark: #080b12;
     --bg-secondary: #0f1219;
-    /* Slightly lighter than primary */
-
     --bg-card: rgba(13, 17, 23, 0.75);
-    /* Matches bg-dark with opacity */
-    --bg-hover: rgba(59, 130, 246, 0.1);
-
-    --primary: #3b82f6;
-    /* Blue 500 */
-    --primary-glow: rgba(59, 130, 246, 0.5);
-    --secondary: #8b5cf6;
-    /* Violet 500 */
-    --secondary-glow: rgba(139, 92, 246, 0.5);
+    
+    --primary: #3b82f6; /* Electric Blue Accent */
+    --primary-glow: rgba(59, 130, 246, 0.4);
+    --secondary: #8b5cf6; /* Violet Accent */
+    --secondary-glow: rgba(139, 92, 246, 0.4);
 
     --accent-cyan: #06b6d4;
     --accent-purple: #7c3aed;
-    --accent-glow: rgba(59, 130, 246, 0.4);
+    --accent-glow: rgba(59, 130, 246, 0.3);
 
     --text-primary: #f8fafc;
     /* Slate 50 */
@@ -61,7 +53,7 @@
     --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.15);
 
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, #080b12 0%, #0f1219 100%);
+    --gradient-hero: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     --gradient-text: linear-gradient(90deg, #60a5fa, #a78bfa);
     --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
 
@@ -101,6 +93,114 @@ h6 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* Global Forms */
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+
+    label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 14px 16px;
+        border-radius: 8px;
+        color: var(--text-white);
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.3s;
+
+        &:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        &::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+        }
+    }
+
+    .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            color: #a78bfa;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        &.textarea-wrapper {
+            align-items: flex-start;
+            .input-icon {
+                top: 16px;
+            }
+        }
+
+        input, select, textarea {
+            padding-left: 48px;
+        }
+    }
+}
+
+/* Global Buttons */
+.btn {
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    
+    &.full-width {
+        width: 100%;
+    }
+
+    &.btn-primary {
+        background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+        color: white;
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+
+        &.glow:hover {
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+    }
+
+    &.btn-outline {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+    }
 }
 
 /* Animations */
@@ -172,10 +272,11 @@ h6 {
 }
 
 .glass-panel {
-    background: var(--bg-card);
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
     backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.05);
 }
 
 /* Scrollbar */

@@ -1,5 +1,5 @@
 .about-page {
-    background: #03040b;
+    /* Inherit background from global var(--bg-primary) or var(--bg-dark) */
     min-height: 100vh;
     color: white;
     font-family: 'Inter', sans-serif;
@@ -116,13 +116,9 @@
         }
     }
 
-    /* Cards & Panels */
+    /* Cards & Panels - utilizing global .glass-panel */
     .glass-panel {
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.3) 0%, rgba(15, 23, 42, 0.6) 100%);
-        border: 1px solid rgba(139, 92, 246, 0.2);
-        border-radius: 20px;
         transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 0 20px rgba(139, 92, 246, 0.05);
 
         &:hover {
             border-color: rgba(139, 92, 246, 0.5);
@@ -384,44 +380,5 @@
         -webkit-text-fill-color: transparent;
     }
 
-    .btn {
-        padding: 14px 32px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s;
-        border: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-
-        &.btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-
-            &.glow:hover {
-                box-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
-            }
-
-            &:hover {
-                transform: translateY(-2px);
-                background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            }
-        }
-
-        &.btn-outline {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-
-            &:hover {
-                background: rgba(255, 255, 255, 0.05);
-                border-color: white;
-                transform: translateY(-2px);
-            }
-        }
-    }
+    /* End About Page */
 }

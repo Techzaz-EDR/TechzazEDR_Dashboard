@@ -123,13 +123,9 @@
         }
     }
 
-    /* Glass Panels */
+    /* Info Cards Form Specific Customizations */
     .glass-panel {
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
-        border: 1px solid rgba(139, 92, 246, 0.2);
-        border-radius: 20px;
         padding: 56px;
-        box-shadow: 0 0 20px rgba(139, 92, 246, 0.05);
         height: 100%;
 
         h3 {
@@ -145,6 +141,10 @@
             font-size: 1.1rem;
             margin-bottom: 40px;
             line-height: 1.6;
+        }
+
+        &.form-card {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(8, 11, 18, 0.9) 100%);
         }
     }
 
@@ -210,67 +210,6 @@
 
             @media (max-width: 600px) {
                 grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-
-            label {
-                font-size: 0.9rem;
-                font-weight: 600;
-                color: #cbd5e1;
-            }
-
-            .input-wrapper {
-                position: relative;
-                display: flex;
-                align-items: center;
-
-                .input-icon {
-                    position: absolute;
-                    left: 16px;
-                    color: #a78bfa;
-                    opacity: 0.7;
-                    pointer-events: none;
-                }
-
-                &.textarea-wrapper {
-                    align-items: flex-start;
-                    .input-icon {
-                        top: 16px;
-                    }
-                }
-
-                input, select, textarea {
-                    width: 100%;
-                    background: rgba(15, 23, 42, 0.6);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    padding: 14px 16px 14px 48px;
-                    border-radius: 8px;
-                    color: white;
-                    font-size: 1rem;
-                    font-family: inherit;
-                    transition: all 0.3s;
-
-                    &:focus {
-                        outline: none;
-                        border-color: #8b5cf6;
-                        background: rgba(15, 23, 42, 0.8);
-                        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-                    }
-
-                    &::placeholder {
-                        color: rgba(148, 163, 184, 0.5);
-                    }
-                }
-                
-                textarea {
-                    resize: vertical;
-                    min-height: 120px;
-                }
             }
         }
     }
@@ -349,60 +288,6 @@
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
-    }
-
-    .btn {
-        padding: 14px 32px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s;
-        border: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-
-        &.full-width {
-            width: 100%;
-        }
-
-        &.btn-primary-blue {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-
-            &.glow:hover {
-                box-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
-            }
-
-            &:hover {
-                transform: translateY(-2px);
-                background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            }
-        }
-
-        &.btn-outline {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-
-            &:hover {
-                background: rgba(255, 255, 255, 0.05);
-                border-color: white;
-                transform: translateY(-2px);
-            }
-        }
-
-        .btn-icon-right {
-            margin-left: 8px;
-            transition: transform 0.3s;
-        }
-
-        &:hover .btn-icon-right {
-            transform: translateX(4px);
-        }
     }
 
     /* Pre-Footer CTA */
