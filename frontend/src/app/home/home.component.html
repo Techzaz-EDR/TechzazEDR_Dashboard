@@ -61,6 +61,7 @@
                 <a routerLink="/login" class="link-text" #navItem>Sign In</a>
                 <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started</button>
             </div>
+
         </div>
     </nav>
 
@@ -83,12 +84,11 @@
                 </h1>
 
                 <p class="hero-subheadline">
-                    Protect your modern enterprise with intelligent, AI-driven detection that neutralizes threats at the
-                    source before they can evolve.
+                    Techzaz EDR continuously monitors every endpoint, detects malicious behavior in real time, and gives your security team the intelligence to respond before damage is done.
                 </p>
 
                 <div class="cta-actions">
-                    <a routerLink="/login" class="btn btn-primary-blue">Sign In</a>
+                    <a routerLink="/login" class="btn btn-primary-blue">Log In</a>
                     <a routerLink="/login" [queryParams]="{mode: 'signup'}" class="btn btn-outline-white">Sign Up</a>
                 </div>
             </div>
@@ -97,18 +97,6 @@
             <div class="hero-visual">
                 <div class="visual-scene">
                     <div class="energy-core">
-                        <!-- Rotating Rings -->
-                        <div class="ring-system">
-                            <div class="neon-ring ring-1"></div>
-                            <div class="neon-ring ring-2"></div>
-                            <div class="neon-ring ring-3"></div>
-                        </div>
-
-                        <!-- Particles -->
-                        <div class="particle-field">
-                            <i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i>
-                            <i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i>
-                        </div>
                     </div>
 
                     <!-- Ground Reflection -->
@@ -119,27 +107,7 @@
         </div>
     </header>
 
-    <!-- 2. TRUST STRIP -->
-    <section class="trust-strip">
-        <div class="container">
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Shield" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Secure-by-Design</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Cloud" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Cloud-Native Scaling</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Crosshair" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>MITRE ATT&CK Aligned</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Zap" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Real-Time Telemetry</span>
-            </div>
-        </div>
-    </section>
+
 
     <!-- 3. WHY TECHZAZ (Benefits) -->
     <section class="features-grid" id="features">
@@ -153,43 +121,32 @@
                     <div class="card-category">REAL-TIME</div>
                     <div class="icon-box"><lucide-icon [name]="Activity" [size]="28"></lucide-icon></div>
                     <h3>Endpoint Monitoring</h3>
-                    <p>Continuous monitoring of all endpoints with lightweight agents that collect telemetry data and
-                        detect suspicious activities in real-time.</p>
+                    <p>Real-time monitoring of endpoint activity and suspicious behavior.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="card-category">CENTRALIZED</div>
-                    <div class="icon-box"><lucide-icon [name]="BarChart" [size]="28"></lucide-icon></div>
-                    <h3>Security Dashboard</h3>
-                    <p>Role-based access control with comprehensive overview of security status, alerts, and analytics
-                        in one unified interface.</p>
-                </div>
+
                 <div class="feature-card">
                     <div class="card-category">ADVANCED</div>
                     <div class="icon-box"><lucide-icon [name]="Bug" [size]="28"></lucide-icon></div>
                     <h3>Malware Detection</h3>
-                    <p>Comprehensive scanning to identify and categorize malware including ransomware, trojans, worms,
-                        and other malicious software.</p>
+                    <p>Detect ransomware, trojans, and other malicious software.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-category">NETWORK</div>
                     <div class="icon-box"><lucide-icon [name]="Network" [size]="28"></lucide-icon></div>
                     <h3>Network Security</h3>
-                    <p>Scan IP logs and data packets to detect suspicious connections, port scanning activities, and
-                        potential intrusion attempts.</p>
+                    <p>Monitor network traffic to detect intrusions and suspicious connections.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-category">AUTOMATED</div>
                     <div class="icon-box"><lucide-icon [name]="Zap" [size]="28"></lucide-icon></div>
                     <h3>Incident Response</h3>
-                    <p>Automated threat response actions and real-time alerting to minimize damage from security
-                        incidents and breaches.</p>
+                    <p>Automated responses to contain and mitigate security threats.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-category">ANALYTICS</div>
                     <div class="icon-box"><lucide-icon [name]="Search" [size]="28"></lucide-icon></div>
                     <h3>Historical Analysis</h3>
-                    <p>Compare current security events with historical data to identify trends, patterns, and emerging
-                        threats.</p>
+                    <p>Identify trends using historical security data.</p>
                 </div>
             </div>
         </div>
@@ -299,7 +256,7 @@
                         <div class="dashboard-metrics">
                             <div class="metric-item">
                                 <span class="label">Threats Detected Today</span>
-                                <span class="value critical">14</span>
+                                <span class="value critical">12</span>
                             </div>
                             <div class="metric-item">
                                 <span class="label">Active Endpoints</span>
@@ -307,16 +264,16 @@
                             </div>
                             <div class="metric-item">
                                 <span class="label">Blocked Attacks</span>
-                                <span class="value success">428</span>
+                                <span class="value success">97</span>
                             </div>
                             <div class="metric-item">
                                 <span class="label">Active Alerts</span>
-                                <span class="value warning">7</span>
+                                <span class="value warning">2</span>
                             </div>
                         </div>
                         
                         <div class="threat-activity">
-                            <h4 class="activity-title">Threat Activity</h4>
+                            <h4 class="activity-title">Threat Activity (Last 24h)</h4>
                             <div class="mini-graph">
                                 <div class="graph-line"></div>
                                 <div class="graph-dots">
@@ -369,11 +326,67 @@
         </div>
     </section>
 
+    <!-- NEW: ARCHITECTURE OVERVIEW -->
+    <section class="architecture-overview" id="architecture">
+        <div class="container">
+            <div class="arch-layout">
+                <!-- Left: Text Content -->
+                <div class="arch-left">
+                    <div class="section-badge">PLATFORM ARCHITECTURE</div>
+                    <h2>Architecture <span class="arch-accent">Overview</span></h2>
+                    <p class="arch-desc">Scalable microservice architecture built for real-time threat detection and response.</p>
+                    <ul class="arch-points">
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Multi-tenant isolation for data security</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Endpoint agents for telemetry collection</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Centralized analysis for threat detection</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Secure channels for agent communication</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Role-based access for system control</li>
+                    </ul>
+                </div>
+                <!-- Right: 6 Architecture Cards in 3x2 Grid -->
+                <div class="arch-right">
+                    <div class="arch-cards-grid">
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Cpu" [size]="20"></lucide-icon></div>
+                            <h4>Endpoint Agent</h4>
+                            <p>Telemetry and local scanning</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Network" [size]="20"></lucide-icon></div>
+                            <h4>Network Analysis</h4>
+                            <p>IP and port activity monitoring</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Upload" [size]="20"></lucide-icon></div>
+                            <h4>Telemetry Ingestion</h4>
+                            <p>Secure data intake</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Brain" [size]="20"></lucide-icon></div>
+                            <h4>Detection Engine</h4>
+                            <p>Malware and threat analysis</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Zap" [size]="20"></lucide-icon></div>
+                            <h4>Alerting Service</h4>
+                            <p>Security alerts and reports</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Layout" [size]="20"></lucide-icon></div>
+                            <h4>Management Dashboard</h4>
+                            <p>Role-based visibility</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 6. CORE CAPABILITIES (RESOURCES) -->
     <section class="capabilities" id="resources">
         <div class="container">
             <div class="section-header center">
-                <h2>Enterprise <span style="color: #8b5cf6;">Security Strategy</span></h2>
+                <h2>Threat <span style="color: #8b5cf6;">Detection Coverage</span></h2>
                 <p>We take security seriously. Techzaz EDR is designed to detect malware, suspicious<br>network
                     activity, and unauthorized behaviour across organizational endpoints.</p>
             </div>
@@ -422,31 +435,7 @@
         </div>
     </section>
 
-    <!-- 7. WHO IT'S FOR -->
-    <section class="audience-section">
-        <div class="container">
-            <div class="grid-4">
-                <div class="audience-card">
-                    <h4>Enterprises</h4>
-                    <p>Scale to 100k+ endpoints.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>SOC Teams</h4>
-                    <p>Advanced hunting tools.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>IT Security</h4>
-                    <p>Simplified management.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>Healthcare</h4>
-                    <p>HIPAA compliant security.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 8. WHY EDR -->
+    <!-- 7. WHY EDR -->
     <section class="why-edr" id="why-edr">
         <div class="container split-layout reverse">
             <div class="edr-visual">
@@ -471,8 +460,7 @@
             </div>
             <div class="edr-text">
                 <h2>Beyond Traditional <span class="accent-text">Antivirus</span></h2>
-                <p class="lead">Signatures aren't enough anymore. You need behavior analysis to stop modern ransomware
-                    and fileless attacks.</p>
+                <p class="lead">Traditional antivirus relies on signatures. Techzaz EDR detects threats based on behavior.</p>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Bug" [size]="24"></lucide-icon></span>
                     <p><strong><span class="accent-text">Detect Unknowns:</span></strong> Analyze what software <em>does</em>, not just what it

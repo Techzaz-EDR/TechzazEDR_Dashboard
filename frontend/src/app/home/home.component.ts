@@ -1,6 +1,7 @@
 import { Component, HostListener, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Shield, Activity, Cloud, Lock, Cpu, Radar, Zap, FileText, Youtube, Users, Check, Crosshair, Eye, Bot, Brain, Globe, BarChart, X, Bug, Twitter, Linkedin, Server, Network, Search, Fingerprint, Share2, Key, Upload, Layout, Rocket, Play } from 'lucide-angular';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,7 +14,8 @@ gsap.registerPlugin(ScrollTrigger);
     imports: [
         CommonModule,
         RouterLink,
-        LucideAngularModule
+        LucideAngularModule,
+        FormsModule
     ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
@@ -54,6 +56,20 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     // State
     scrolled = false;
+    showDemoModal = false;
+    formSubmitted = false;
+
+    // Form Data
+    demoFormData = {
+        firstName: '',
+        lastName: '',
+        workEmail: '',
+        companyName: '',
+        country: '',
+        phone: '',
+        companySize: '',
+        agreed: false
+    };
 
     // Hero animated background data streams
     dataStreams = Array.from({ length: 20 }, (_, i) => ({
@@ -78,7 +94,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild('navbar') navbar!: ElementRef;
     @ViewChildren('navItem') navItems!: QueryList<ElementRef>;
-    @ViewChild('ctaBtn') ctaBtn!: ElementRef;
+
     @ViewChild('coreScene') coreScene!: ElementRef;
     @ViewChild('coreAssembly') coreAssembly!: ElementRef;
     @ViewChild('preloader') preloader!: ElementRef;
@@ -100,6 +116,55 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         cancelAnimationFrame(this.cyberAnimId);
+    }
+
+    openDemoModal() {
+        this.showDemoModal = true;
+        this.formSubmitted = false;
+        // Reset form
+        this.demoFormData = {
+            firstName: '', lastName: '', workEmail: '',
+            companyName: '', country: '', phone: '',
+            companySize: '', agreed: false
+        };
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+    }
+
+    closeDemoModal() {
+        this.showDemoModal = false;
+        document.body.style.overflow = 'auto'; // Restore scroll
+    }
+
+    submitDemoForm(event: Event) {
+        event.preventDefault();
+
+        const { firstName, lastName, workEmail, companyName, country, phone, agreed } = this.demoFormData;
+
+        // Basic Required Validation
+        if (!firstName || !lastName || !workEmail || !companyName || !country || !phone || !agreed) {
+            console.warn('Validation failed: Missing required fields.');
+            return;
+        }
+
+        // Prepare Form Data payload
+        const submissionPayload = {
+            ...this.demoFormData,
+            submittedAt: new Date().toISOString()
+        };
+
+        // TODO: [BACKEND INTEGRATION]
+        // Implement API call here to send the `submissionPayload` to your backend processing service.
+        // The service should route the demonstration request to the following business emails:
+        // - security@techzaz.com
+        // - sales@techzaz.com
+
+        console.group('=== Demo Request Form Submitted ===');
+        console.log('Routing to: security@techzaz.com, sales@techzaz.com');
+        console.log('Payload:', submissionPayload);
+        console.groupEnd();
+
+        // Show success message
+        this.formSubmitted = true;
     }
 
     scrollToSection(sectionId: string, event: Event) {
@@ -652,33 +717,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
             });
         });
 
-        // 3. CTA Pulse & Scale
-        const btn = this.ctaBtn.nativeElement;
-        btn.addEventListener('mouseenter', () => {
-            gsap.to(btn, {
-                duration: 0.3,
-                scale: 1.05,
-                boxShadow: "0 10px 25px rgba(37, 99, 235, 0.6)",
-                ease: "back.out(1.5)"
-            });
-        });
 
-        btn.addEventListener('mouseleave', () => {
-            gsap.to(btn, {
-                duration: 0.3,
-                scale: 1,
-                boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
-                ease: "power2.out"
-            });
-        });
-
-        btn.addEventListener('mousedown', () => {
-            gsap.to(btn, { duration: 0.1, scale: 0.95 });
-        });
-
-        btn.addEventListener('mouseup', () => {
-            gsap.to(btn, { duration: 0.1, scale: 1.05 });
-        });
     }
 
     @HostListener('window:scroll', [])
