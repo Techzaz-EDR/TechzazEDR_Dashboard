@@ -1,0 +1,211 @@
+<div class="contact-page">
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <div class="logo" routerLink="/">
+                <span class="logo-icon"><lucide-icon [name]="Shield" [size]="24"></lucide-icon></span>
+                TECHZAZ <span class="highlight">EDR</span>
+            </div>
+            <div class="nav-links">
+                <a routerLink="/">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="contact-hero">
+        <div class="container center-content">
+            <h1 class="gradient-text">Contact Techzaz EDR</h1>
+            <p class="hero-desc">
+                Talk to our team about deploying Techzaz EDR, security integrations, or enterprise endpoint protection.
+            </p>
+        </div>
+        <div class="hero-glow"></div>
+    </header>
+
+    <!-- Content Grid -->
+    <section class="contact-content">
+        <div class="container">
+            <div class="contact-grid">
+                
+                <!-- Left: Contact Information -->
+                <div class="contact-info">
+                    <div class="info-card glass-panel">
+                        <h3>Contact Information</h3>
+                        <p class="info-desc">Reach out directly or visit our headquarters.</p>
+
+                        <div class="info-list">
+                            <div class="info-item">
+                                <div class="icon-box"><lucide-icon [name]="MapPin" [size]="20"></lucide-icon></div>
+                                <div class="details">
+                                    <h4>Office Address</h4>
+                                    <p>476/2 Sri Rajasinghe Mawatha<br>Wattala 11104<br>Sri Lanka</p>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="icon-box"><lucide-icon [name]="Phone" [size]="20"></lucide-icon></div>
+                                <div class="details">
+                                    <h4>Phone</h4>
+                                    <p>+974 3994 9696</p>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="icon-box"><lucide-icon [name]="Clock" [size]="20"></lucide-icon></div>
+                                <div class="details">
+                                    <h4>Business Hours</h4>
+                                    <p>Open 24 hours</p>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="icon-box"><lucide-icon [name]="Mail" [size]="20"></lucide-icon></div>
+                                <div class="details">
+                                    <h4>Sales Inquiries</h4>
+                                    <p><a href="mailto:sales@techzaz.com">sales@techzaz.com</a></p>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="icon-box"><lucide-icon [name]="Shield" [size]="20"></lucide-icon></div>
+                                <div class="details">
+                                    <h4>Security & Support</h4>
+                                    <p><a href="mailto:security@techzaz.com">security@techzaz.com</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Contact Form -->
+                <div class="contact-form-container">
+                    <div class="form-card glass-panel">
+                        <ng-container *ngIf="!formSubmitted">
+                            <h3>Talk to Our Security Team</h3>
+                            <p class="form-desc">Fill out the form below and we'll get back to you shortly.</p>
+
+                            <form class="demo-form" (submit)="submitContactForm($event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <div class="input-wrapper">
+                                            <lucide-icon [name]="User" [size]="18" class="input-icon"></lucide-icon>
+                                            <input type="text" name="firstName" [(ngModel)]="contactForm.firstName" placeholder="John" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <div class="input-wrapper">
+                                            <lucide-icon [name]="User" [size]="18" class="input-icon"></lucide-icon>
+                                            <input type="text" name="lastName" [(ngModel)]="contactForm.lastName" placeholder="Doe" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Work Email</label>
+                                    <div class="input-wrapper">
+                                        <lucide-icon [name]="Mail" [size]="18" class="input-icon"></lucide-icon>
+                                        <input type="email" name="workEmail" [(ngModel)]="contactForm.workEmail" placeholder="john@company.com" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <div class="input-wrapper">
+                                        <lucide-icon [name]="Phone" [size]="18" class="input-icon"></lucide-icon>
+                                        <input type="tel" name="phone" [(ngModel)]="contactForm.phone" placeholder="+94 XX XXXXXXX" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Message</label>
+                                    <div class="input-wrapper textarea-wrapper">
+                                        <lucide-icon [name]="MessageSquare" [size]="18" class="input-icon"></lucide-icon>
+                                        <textarea name="message" [(ngModel)]="contactForm.message" rows="4" placeholder="Tell us about your security requirements..." required></textarea>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary-blue full-width">Submit Inquiry</button>
+                            </form>
+                            
+                            <!-- Trust Indicators -->
+                            <div class="trust-indicators">
+                                <p class="trust-title">Trusted by teams building modern security infrastructure</p>
+                                <div class="trust-badges">
+                                    <span class="badge"><lucide-icon [name]="Shield" [size]="14"></lucide-icon> Endpoint Security</span>
+                                    <span class="badge"><lucide-icon [name]="Clock" [size]="14"></lucide-icon> Cloud-Ready Architecture</span>
+                                    <span class="badge"><lucide-icon [name]="Shield" [size]="14"></lucide-icon> AI Threat Detection</span>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <!-- Success State -->
+                        <div class="form-success" *ngIf="formSubmitted">
+                            <div class="success-icon">
+                                <lucide-icon [name]="Shield" [size]="48"></lucide-icon>
+                            </div>
+                            <h3>Message Received!</h3>
+                            <p>Thank you for contacting Techzaz EDR. A member of our team will reach out to you shortly.</p>
+                            <button class="btn btn-outline" (click)="formSubmitted = false">Send Another Message</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Pre-Footer CTA -->
+    <section class="pre-footer-cta">
+        <div class="container">
+            <div class="cta-card glass-panel center-content">
+                <h2>Not ready to contact us yet?</h2>
+                <p>Explore the Techzaz EDR platform and learn how modern endpoint detection and response works.</p>
+                <div class="cta-actions">
+                    <a routerLink="/" fragment="features" class="btn btn-primary-blue glow">
+                        Explore the Techzaz Platform
+                        <lucide-icon [name]="ArrowRight" [size]="18" class="btn-icon-right"></lucide-icon>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon"><lucide-icon [name]="Shield" [size]="20"></lucide-icon></span>
+                        TECHZAZ <strong>EDR</strong>
+                    </div>
+                    <p>Next-generation endpoint detection and response for modern security operations.</p>
+                    <div class="socials">
+                        <a href="#"><lucide-icon [name]="Twitter" [size]="20"></lucide-icon></a>
+                        <a href="#"><lucide-icon [name]="Instagram" [size]="20"></lucide-icon></a>
+                        <a href="#"><lucide-icon [name]="Youtube" [size]="20"></lucide-icon></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <a routerLink="/about">About</a>
+                    <a routerLink="/contact">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Access</h4>
+                    <a routerLink="/login">Get Started</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Techzaz EDR Platform. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
