@@ -535,7 +535,7 @@
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Security dashboard</li>
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Email support</li>
                         </ul>
-                        <button class="btn btn-outline full-width" (click)="openDemoModal()">Request Demo</button>
+                        <button class="btn btn-outline full-width" (click)="openDemoModal('Starter')">Request Demo</button>
                     </div>
                 </div>
 
@@ -554,7 +554,7 @@
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Threat timeline analytics</li>
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Risk scoring</li>
                         </ul>
-                        <button class="btn btn-primary-blue full-width" (click)="openDemoModal()">Request Demo</button>
+                        <button class="btn btn-primary-blue full-width" (click)="openDemoModal('Professional')">Request Demo</button>
                     </div>
                     <div class="card-glow"></div>
                 </div>
@@ -574,7 +574,7 @@
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Dedicated security support</li>
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Custom integrations</li>
                         </ul>
-                        <button class="btn btn-outline full-width" (click)="openDemoModal()">Contact Sales</button>
+                        <button class="btn btn-outline full-width" (click)="openDemoModal('Enterprise')">Contact Sales</button>
                     </div>
                 </div>
             </div>
@@ -590,47 +590,53 @@
 
             <div class="modal-body" *ngIf="!formSubmitted">
                 <div class="modal-header">
-                    <h2>Request a Guided Demo</h2>
+                    <h2>{{ demoFormData.selectedPlan === 'Enterprise' ? 'Contact Enterprise Sales' : 'Request a Guided Demo' }}</h2>
                     <p>Experience the power of Techzaz EDR. Our experts will show you how to secure your enterprise.</p>
                 </div>
 
                 <form class="demo-form" (submit)="submitDemoForm($event)">
+                    
+                    <div class="form-group">
+                        <label>Requested Plan</label>
+                        <input type="text" name="selectedPlan" [(ngModel)]="demoFormData.selectedPlan" readonly class="readonly-input">
+                    </div>
+
                     <div class="form-row">
                         <div class="form-group">
                             <label>First Name</label>
-                            <input type="text" name="firstName" [(ngModel)]="demoFormData.firstName" placeholder="Jane" required>
+                            <input type="text" name="firstName" [(ngModel)]="demoFormData.firstName" placeholder="John" required>
                         </div>
                         <div class="form-group">
                             <label>Last Name</label>
-                            <input type="text" name="lastName" [(ngModel)]="demoFormData.lastName" placeholder="Doe" required>
+                            <input type="text" name="lastName" [(ngModel)]="demoFormData.lastName" placeholder="Deo" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Work Email</label>
-                        <input type="email" name="workEmail" [(ngModel)]="demoFormData.workEmail" placeholder="jane@company.com" required>
+                        <input type="email" name="workEmail" [(ngModel)]="demoFormData.workEmail" placeholder="john@company.lk" required>
                     </div>
 
                     <div class="form-group">
                         <label>Company Name</label>
-                        <input type="text" name="companyName" [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Inc." required>
+                        <input type="text" name="companyName" [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Networks" required>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label>Country</label>
-                            <input type="text" name="country" [(ngModel)]="demoFormData.country" placeholder="United States" required>
+                            <input type="text" name="country" [(ngModel)]="demoFormData.country" placeholder="Sri Lanka" required>
                         </div>
                         <div class="form-group">
                             <label>Phone Number</label>
-                            <input type="tel" name="phone" [(ngModel)]="demoFormData.phone" placeholder="+1 (555) 000-0000" required>
+                            <input type="tel" name="phone" [(ngModel)]="demoFormData.phone" placeholder="+94 77 123 4567" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Company Size (Optional)</label>
                         <select name="companySize" [(ngModel)]="demoFormData.companySize">
-                            <option value="">Select size</option>
+                            <option value="">Select company size</option>
                             <option value="1-50">1-50 employees</option>
                             <option value="51-200">51-200 employees</option>
                             <option value="201-500">201-500 employees</option>

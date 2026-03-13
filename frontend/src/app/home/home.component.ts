@@ -68,6 +68,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         country: '',
         phone: '',
         companySize: '',
+        selectedPlan: '',
         agreed: false
     };
 
@@ -118,14 +119,14 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         cancelAnimationFrame(this.cyberAnimId);
     }
 
-    openDemoModal() {
+    openDemoModal(plan: string = '') {
         this.showDemoModal = true;
         this.formSubmitted = false;
-        // Reset form
+        // Reset form but retain standard fields, update plan
         this.demoFormData = {
             firstName: '', lastName: '', workEmail: '',
             companyName: '', country: '', phone: '',
-            companySize: '', agreed: false
+            companySize: '', selectedPlan: plan, agreed: false
         };
         document.body.style.overflow = 'hidden'; // Prevent scroll
     }

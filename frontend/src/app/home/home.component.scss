@@ -2155,6 +2155,19 @@
                         &::placeholder {
                             color: #475569;
                         }
+
+                        &[readonly] {
+                            background: rgba(255, 255, 255, 0.02);
+                            color: #94a3b8;
+                            border-color: rgba(255, 255, 255, 0.05);
+                            cursor: not-allowed;
+                            pointer-events: none;
+
+                            &:focus {
+                                border-color: rgba(255, 255, 255, 0.05);
+                                box-shadow: none;
+                            }
+                        }
                     }
 
                     select {
