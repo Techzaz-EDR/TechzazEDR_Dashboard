@@ -1,0 +1,99 @@
+<div class="about-page">
+    <!-- Navbar (Simplified) -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <div class="logo" routerLink="/">
+                <span class="logo-icon"><lucide-icon [name]="Shield" [size]="24"></lucide-icon></span>
+                TECHZAZ <span class="highlight">EDR</span>
+            </div>
+            <div class="nav-links">
+                <a routerLink="/" #navItem>Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 1. HERO SECTION -->
+    <header class="about-hero">
+        <div class="container">
+            <h1 class="gradient-text">About Techzaz</h1>
+            <p class="hero-desc">
+                Techzaz builds next-generation endpoint detection and response solutions designed for modern security teams. Our goal is to help organizations monitor endpoints, detect advanced threats, and respond quickly through a unified security platform.
+            </p>
+        </div>
+        <div class="hero-glow"></div>
+    </header>
+
+    <!-- 2. MISSION & VISION -->
+    <section class="mission-vision">
+        <div class="container">
+            <div class="mission-vision-grid">
+                <div class="card glass-panel">
+                    <div class="card-icon">
+                        <lucide-icon [name]="Target" [size]="32"></lucide-icon>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To provide accessible, enterprise-grade endpoint security solutions that protect businesses of all sizes from evolving cyber threats, ensuring peace of mind and operational continuity.</p>
+                </div>
+
+                <div class="card glass-panel">
+                    <div class="card-icon">
+                        <lucide-icon [name]="Eye" [size]="32"></lucide-icon>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>To become the leading cloud-based EDR platform that sets the standard for proactive threat detection and automated incident response, making cybersecurity accessible to everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. MEET THE TEAM -->
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Meet the <span class="highlight-purple">Developers</span></h2>
+                <p class="section-desc">
+                    We are a group of passionate innovators from Informatics Institute of Technology (IIT), building Techzaz EDR in partnership with Techzaz Networks to address real-world cybersecurity challenges.
+                </p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card glass-panel" *ngFor="let member of teamMembers">
+                    <div class="avatar-container">
+                        <div class="avatar-placeholder">
+                            <lucide-icon [name]="Users" [size]="40"></lucide-icon>
+                        </div>
+                    </div>
+                    <div class="member-info">
+                        <h4>{{ member.name }}</h4>
+                        <p class="role">{{ member.role }}</p>
+                    </div>
+                    <div class="member-socials">
+                        <a [href]="member.linkedin" class="social-link" target="_blank">
+                            <lucide-icon [name]="Linkedin" [size]="20"></lucide-icon>
+                        </a>
+                        <a [href]="member.github" class="social-link" target="_blank">
+                            <lucide-icon [name]="Github" [size]="20"></lucide-icon>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FOOTER (REUSED STYLE) -->
+    <section class="final-cta mini">
+        <div class="container">
+            <div class="cta-box glass-panel">
+                <h2>Ready to secure your endpoints?</h2>
+                <div class="cta-group center">
+                    <button class="btn btn-primary large glow" routerLink="/login">
+                        Get Started
+                    </button>
+                    <a routerLink="/" class="btn btn-outline large">
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

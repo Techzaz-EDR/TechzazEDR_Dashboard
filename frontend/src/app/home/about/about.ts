@@ -1,0 +1,102 @@
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { LucideAngularModule, Shield, Target, Eye, Users, Linkedin, Github, Layout, ArrowRight } from 'lucide-angular';
+import { gsap } from 'gsap';
+
+@Component({
+    selector: 'app-about',
+    standalone: true,
+    imports: [CommonModule, RouterLink, LucideAngularModule],
+    templateUrl: './about.html',
+    styleUrls: ['./about.scss']
+})
+export class AboutComponent implements OnInit, AfterViewInit {
+    readonly Shield = Shield;
+    readonly Target = Target;
+    readonly Eye = Eye;
+    readonly Users = Users;
+    readonly Linkedin = Linkedin;
+    readonly Github = Github;
+    readonly Layout = Layout;
+    readonly ArrowRight = ArrowRight;
+
+    teamMembers = [
+        {
+            name: 'Inuka Wijerathna',
+            role: 'Project Lead',
+            avatar: 'assets/team/inuka.jpg',
+            linkedin: '#',
+            github: '#'
+        },
+        {
+            name: 'Imesh Silva',
+            role: 'Technical Lead',
+            avatar: 'assets/team/imesh.jpg',
+            linkedin: '#',
+            github: '#'
+        },
+        {
+            name: 'Kavya Dissanayake',
+            role: 'Frontend Lead',
+            avatar: 'assets/team/kavya.jpg',
+            linkedin: '#',
+            github: '#'
+        },
+        {
+            name: 'Limuthu Lohiru',
+            role: 'Backend Lead',
+            avatar: 'assets/team/limuthu.jpg',
+            linkedin: '#',
+            github: '#'
+        },
+        {
+            name: 'Tharuki Jayasuriya',
+            role: 'Architecture & Documentation Lead',
+            avatar: 'assets/team/tharuki.jpg',
+            linkedin: '#',
+            github: '#'
+        },
+        {
+            name: 'Yeheni Alwis',
+            role: 'QA & Validation Lead',
+            avatar: 'assets/team/yeheni.jpg',
+            linkedin: '#',
+            github: '#'
+        }
+    ];
+
+    constructor() { }
+
+    ngOnInit(): void { }
+
+    ngAfterViewInit(): void {
+        this.initAnimations();
+    }
+
+    private initAnimations() {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+        tl.from('.about-hero h1', { opacity: 0, y: 30, duration: 1 })
+          .from('.about-hero p', { opacity: 0, y: 20, duration: 0.8 }, '-=0.6')
+          .from('.mission-vision-grid .card', { 
+              opacity: 0, 
+              y: 40, 
+              stagger: 0.2, 
+              duration: 1 
+          }, '-=0.4')
+          .from('.team-section h2, .team-section .section-desc', { 
+              opacity: 0, 
+              y: 20, 
+              stagger: 0.1, 
+              duration: 0.8 
+          }, '-=0.6')
+          .from('.team-grid .team-card', { 
+              opacity: 0, 
+              scale: 0.9, 
+              stagger: 0.1, 
+              duration: 0.8,
+              ease: 'back.out(1.7)'
+          }, '-=0.4');
+    }
+}
