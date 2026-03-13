@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, getIdTokenResult } from 'firebase/auth';
-import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, getIdTokenResult } from 'firebase/auth';
+import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
@@ -28,12 +28,12 @@ export class AuthService {
             this.userSubject.next(user);
             if (user) {
                 this.refreshClaims(user);
-                
+
                 // Fetch the user's profile from the users collection
                 try {
                     const userDocRef = doc(this.db, 'users', user.uid);
                     const userDocSnap = await getDoc(userDocRef);
-                    
+
                     if (userDocSnap.exists()) {
                         this.userProfileSubject.next({ uid: user.uid, ...userDocSnap.data() });
                         console.log('User profile fetched:', userDocSnap.data());
@@ -58,7 +58,7 @@ export class AuthService {
     async login(email: string, pass: string) {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, pass);
         const user = userCredential.user;
-        
+
         // Update last login timestamp in Firestore
         try {
             const userDocRef = doc(this.db, 'users', user.uid);
@@ -68,6 +68,29 @@ export class AuthService {
         } catch (error) {
             console.error('Error updating last_login_at:', error);
             // Non-blocking error, allow login to proceed
+        }
+
+        return userCredential;
+    }
+
+    async register(name: string, email: string, pass: string) {
+        const userCredential = await createUserWithEmailAndPassword(this.auth, email, pass);
+        const user = userCredential.user;
+
+        // Create user document in Firestore
+        try {
+            const userDocRef = doc(this.db, 'users', user.uid);
+            await setDoc(userDocRef, {
+                uid: user.uid,
+                display_name: name,
+                email: email,
+                role: 'user', // Default role
+                created_at: serverTimestamp(),
+                last_login_at: serverTimestamp()
+            });
+        } catch (error) {
+            console.error('Error creating user document:', error);
+            // Even if setDoc fails, the user is created in Auth
         }
 
         return userCredential;

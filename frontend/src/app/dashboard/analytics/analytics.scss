@@ -224,10 +224,14 @@
 /* Charts Sections */
 .charts-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1400px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 900px) {
         grid-template-columns: 1fr;
     }
 }
@@ -241,10 +245,22 @@
     animation-delay: 0.3s;
 
     &.large {
-        grid-column: span 2;
+        grid-column: span 3;
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 900px) {
             grid-column: span 1;
+        }
+    }
+
+    &.minimized-trend {
+        grid-column: span 1;
+        
+        .chart-content {
+            min-height: 220px;
         }
     }
 
@@ -345,43 +361,26 @@
         }
     }
 
-    .chart-legend {
+    .chart-legend-mini {
         display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin-top: 2rem;
+        justify-content: flex-start;
+        gap: 1rem;
+        margin-top: 1rem;
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary, #cbd5e1);
-            opacity: 0;
-            animation: slideUpFade 0.5s ease-out forwards;
-
-            @for $i from 1 through 4 {
-                &:nth-child(#{$i}) {
-                    animation-delay: #{1.5 + ($i * 0.1)}s;
-                }
-            }
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted, #64748b);
 
             .dot {
-                width: 12px;
-                height: 12px;
-                border-radius: 4px;
-                box-shadow: 0 0 10px currentColor;
-
-                &.critical {
-                    color: var(--status-critical, #ef4444);
-                    background: var(--status-critical, #ef4444);
-                }
-
-                &.medium {
-                    color: var(--primary, #3b82f6);
-                    background: var(--primary, #3b82f6);
-                    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
-                }
+                width: 8px;
+                height: 8px;
+                border-radius: 2px;
+                
+                &.critical { background: #ef4444; }
+                &.medium { background: #3b82f6; }
             }
         }
     }
@@ -397,19 +396,18 @@
 /* Donut Chart */
 .donut-chart-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    gap: 3rem;
+    justify-content: center;
+    gap: 2rem;
     padding: 1rem;
-
-    @media (max-width: 600px) {
-        flex-direction: column;
-    }
+    height: 100%;
 
     .donut-viz {
         position: relative;
-        width: 220px;
-        height: 220px;
+        width: 180px;
+        height: 180px;
+        flex-shrink: 0;
         opacity: 0;
         transform: scale(0.9);
         animation: donutEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -419,17 +417,16 @@
             width: 100%;
             height: 100%;
             transform: rotate(-90deg);
-            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.4));
 
             circle {
                 fill: none;
-                stroke-width: 14;
+                stroke-width: 8;
                 stroke-linecap: round;
                 transition: all 0.5s ease;
             }
 
             .track {
-                stroke: rgba(255, 255, 255, 0.02);
+                stroke: rgba(255, 255, 255, 0.05);
             }
 
             .segment {
@@ -439,20 +436,21 @@
                 animation-delay: 0.4s;
 
                 &.contained {
-                    filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.4));
+                    stroke: #d97706; // Matte Orange
                 }
 
                 &.investigating {
-                    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
+                    stroke: #dc2626; // Matte Red
                 }
 
                 &.resolved {
-                    filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.4));
+                    stroke: #16a34a; // Matte Green
                 }
 
                 &:hover {
-                    stroke-width: 16;
+                    stroke-width: 9;
                     cursor: pointer;
+                    filter: brightness(1.1);
                 }
             }
         }
@@ -494,9 +492,9 @@
     .donut-legend {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
-        flex: 1;
-        max-width: 200px;
+        gap: 0.5rem;
+        width: 100%;
+        max-width: 280px;
 
         .legend-item {
             display: flex;
@@ -646,13 +644,16 @@
             }
 
             .label {
-                width: 100px;
-                font-size: 0.8rem;
+                width: 80px;
+                font-size: 0.75rem;
                 color: var(--text-muted, #64748b);
                 font-weight: 600;
                 text-align: right;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .bar-track {
@@ -668,7 +669,8 @@
                     height: 100%;
                     border-radius: 5px;
                     width: 0;
-                    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+                    background: #3b82f6;
+                    /* Solid Blue instead of gradient */
                     animation: growBarHorizontal 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                     animation-delay: 1.8s;
                     box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
@@ -699,7 +701,11 @@
     padding: 0 !important;
     overflow: hidden;
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1400px) {
+        grid-column: span 2;
+    }
+
+    @media (max-width: 900px) {
         grid-column: span 1;
     }
 
@@ -755,9 +761,7 @@
             border-radius: 12px;
             background: transparent;
             border: 1px solid transparent;
-            opacity: 0;
-            animation: fadeInRight 0.5s ease-out forwards;
-            transition: all 0.2s;
+            opacity: 1;
 
             &:hover {
                 background: rgba(59, 130, 246, 0.03);
@@ -1132,13 +1136,7 @@
     height: 42px;
 
     .btn-glow {
-        position: absolute;
-        width: 150%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        left: -150%;
-        transform: skewX(-30deg);
-        transition: 0.5s;
+        display: none;
     }
 
     &:hover {
@@ -1160,10 +1158,10 @@
 
     0%,
     100% {
-        transform: translateY(0);
+        opacity: 1;
     }
 
     50% {
-        transform: translateY(3px);
+        opacity: 1;
     }
 }

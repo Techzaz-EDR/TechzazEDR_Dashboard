@@ -1,78 +1,72 @@
-<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" (mousemove)="onMouseMove($event)"
-    (mouseleave)="onMouseLeave()">
-    <div class="hover-glow"></div>
+<div class="super-auth-container">
 
-    <!-- Background Data Fragments -->
-    <div class="data-fragments">
-        <div class="fragment" style="--top: 15%; --left: 10%; --delay: 0s">Techzaz EDR</div>
-        <div class="fragment" style="--top: 25%; --left: 80%; --delay: 3s">Techzaz EDR</div>
-        <div class="fragment" style="--top: 65%; --left: 15%; --delay: 6s">Techzaz EDR</div>
-        <div class="fragment" style="--top: 80%; --left: 70%; --delay: 1.5s">Techzaz EDR</div>
+
+    <!-- 3D Moving Spheres Background -->
+    <div class="background-spheres">
+        <div *ngFor="let s of spheres" class="sphere" [style.width]="s.width" [style.height]="s.width"
+            [style.left]="s.left" [style.top]="s.top" [style.background]="s.background"
+            [style.animation-delay]="s.delay" [style.animation-duration]="s.duration"
+            [style.filter]="'blur(' + s.blur + ')'">
+        </div>
     </div>
 
     <div class="auth-card">
-        <!-- Sign In View -->
-        <div class="auth-view sign-in-view">
+        <!-- Sign In Mode -->
+        <ng-container *ngIf="!isSignUpMode">
+            <h2 class="auth-title">Sign In</h2>
+            
             <form (submit)="signIn()">
-                <div class="form-header">
-                    <div class="status-line">
-                        <span class="status-dot"></span>
-                        <lucide-icon [name]="ShieldCheck" [size]="14"></lucide-icon>
-                        Secure Console Access
+                <div class="form-container">
+                    <div class="input-wrap">
+                        <input type="email" name="email" [(ngModel)]="email" placeholder="Email" required />
                     </div>
-                    <h2>Sign in to Techzaz EDR</h2>
-                </div>
-
-                <div *ngIf="errorMessage" class="error-banner">
-                    {{ errorMessage }}
-                </div>
-
-                <div class="inputs-group">
-                    <div class="input-field">
-                        <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                        <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
+                    
+                    <div class="input-wrap">
+                        <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required />
                     </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                        <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
-                            placeholder="Password" required />
+                    
+                    <div class="forgot-password">
+                        <a href="javascript:void(0)" class="link-small">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Login</button>
+                    <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+                    
+                    <div class="signup-prompt">
+                        <span>Don't have an account? </span>
+                        <a href="javascript:void(0)" (click)="toggleMode()" class="link-bold">Sign up</a>
                     </div>
                 </div>
-
-                <a href="#" class="forgot-password">Forgot password?</a>
-                <button type="submit" class="btn solid">Sign In</button>
-                <p class="toggle-link">New here? <a (click)="toggleMode()">Create account</a></p>
             </form>
-        </div>
+        </ng-container>
 
-        <!-- Sign Up View -->
-        <div class="auth-view sign-up-view">
-            <form>
-                <div class="form-header">
-                    <h2>Initialize Tenant</h2>
+        <!-- Sign Up Mode -->
+        <ng-container *ngIf="isSignUpMode">
+            <h2 class="auth-title">Sign Up</h2>
+            
+            <form (submit)="signUp()">
+                <div class="form-container">
+                    <div class="input-wrap">
+                        <input type="text" name="signupName" [(ngModel)]="signupName" placeholder="Username" required />
+                    </div>
+
+                    <div class="input-wrap">
+                        <input type="email" name="signupEmail" [(ngModel)]="signupEmail" placeholder="Email" required />
+                    </div>
+                    
+                    <div class="input-wrap">
+                        <input type="password" name="signupPassword" [(ngModel)]="signupPassword" placeholder="Password" required />
+                    </div>
+
+                    <button type="submit" class="btn-primary">Create Account</button>
+                    <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+                    
+                    <div class="signup-prompt">
+                        <span>Already have an account? </span>
+                        <a href="javascript:void(0)" (click)="toggleMode()" class="link-bold">Login</a>
+                    </div>
                 </div>
-
-                <div class="inputs-group">
-                    <div class="input-field">
-                        <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                        <input type="text" name="signupName" [(ngModel)]="signupName"
-                            placeholder="Administrator Name" />
-                    </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Mail" [size]="20"></lucide-icon>
-                        <input type="email" name="signupEmail" [(ngModel)]="signupEmail"
-                            placeholder="Work Email" />
-                    </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                        <input type="password" name="signupPassword" [(ngModel)]="signupPassword"
-                            placeholder="Master Password" />
-                    </div>
-                </div>
-
-                <button type="button" class="btn solid" (click)="signIn()">Deploy Workspace</button>
-                <p class="toggle-link">Already have an account? <a (click)="toggleMode()">Log In</a></p>
             </form>
-        </div>
+        </ng-container>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -37,14 +37,42 @@ export class LoginComponent implements AfterViewInit, OnInit {
     readonly ShieldCheck = ShieldCheck;
     private glowElement: HTMLElement | null = null;
 
+    spheres: any[] = [];
+
     constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
 
+
+
+
+
     ngOnInit() {
+        if (typeof window !== 'undefined') {
+            this.generateSpheres();
+        }
+
         this.route.queryParams.subscribe(params => {
             if (params['mode'] === 'signup') {
                 this.isSignUpMode = true;
             }
         });
+    }
+
+    generateSpheres() {
+        const colors = [
+            'radial-gradient(circle at 30% 30%, #4facfe, #00f2fe)', // Cyan-ish Blue
+            'radial-gradient(circle at 30% 30%, #a18cd1, #fbc2eb)', // Purple-ish Pink
+            'radial-gradient(circle at 30% 30%, #2575fc, #6a11cb)', // Deep Blue/Purple
+        ];
+
+        this.spheres = Array.from({ length: 8 }).map((_, i) => ({
+            width: Math.random() * 250 + 150 + 'px',
+            left: Math.random() * 90 + -5 + '%',
+            top: Math.random() * 90 + -5 + '%',
+            background: colors[i % colors.length],
+            delay: (Math.random() * -30) + 's',
+            duration: (Math.random() * 10 + 20) + 's',
+            blur: (Math.random() * 4 + 1) + 'px'
+        }));
     }
 
     ngAfterViewInit() {
@@ -105,11 +133,68 @@ export class LoginComponent implements AfterViewInit, OnInit {
         this.errorMessage = '';
         try {
             await this.authService.login(this.email, this.password);
+            await this.playLoginAnimation();
             this.router.navigate(['/dashboard']);
         } catch (error: any) {
             console.error('Login failed', error);
             this.errorMessage = error.message || 'Authentication failed. Please check your credentials.';
         }
+    }
+
+    async signUp() {
+        this.errorMessage = '';
+        try {
+            await this.authService.register(this.signupName, this.signupEmail, this.signupPassword);
+            await this.playLoginAnimation();
+            this.router.navigate(['/dashboard']);
+        } catch (error: any) {
+            console.error('Registration failed', error);
+            this.errorMessage = error.message || 'Registration failed. Please try again.';
+        }
+    }
+
+    playLoginAnimation(): Promise<void> {
+        return new Promise(resolve => {
+            const tl = gsap.timeline({ onComplete: resolve });
+
+            // 1. Highlight line starts at the 3 edge trim lines and comes into the node
+            tl.to('.anim-trim', {
+                strokeDashoffset: 0,
+                duration: 1.2,
+                ease: 'power1.inOut'
+            });
+
+            // 2. The little dots in the nodes start glowing
+            tl.to('.anim-node-dots-glow', {
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power1.inOut'
+            }, "-=0.4");
+
+            // 3. Highlight line comes out of the node and goes along the 4 connection lines
+            tl.to('.anim-conn', {
+                strokeDashoffset: 0,
+                duration: 4.5,
+                ease: 'power1.inOut'
+            });
+
+            // 4. Little 4 highlighted dots at the card connections glow
+            tl.to('.anim-card-dots', {
+                opacity: 1,
+                duration: 0.6,
+                ease: 'power2.out'
+            }, "-=0.2");
+
+            // 5. Highlight line goes around the border of the box smoothly
+            tl.to('.anim-card-border', {
+                strokeDashoffset: 0,
+                duration: 2.0,
+                ease: 'power1.inOut'
+            });
+
+            // Brief pause before dashboard opens
+            tl.to({}, { duration: 0.6 });
+        });
     }
 
     togglePassword() {

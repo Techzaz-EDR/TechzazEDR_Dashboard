@@ -52,11 +52,14 @@
                 TECHZAZ <span class="highlight">EDR</span>
             </div>
             <div class="nav-links">
-                <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Platform</a>
+                <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Why Techzaz EDR</a>
                 <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)" #navItem>How it Works</a>
-                <a href="#architecture" (click)="scrollToSection('architecture', $event)" #navItem>Architecture</a>
-                <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Security</a>
+                <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Resources</a>
                 <a href="#pricing" (click)="scrollToSection('pricing', $event)" #navItem>Pricing</a>
+            </div>
+            <div class="nav-actions">
+                <a routerLink="/login" class="link-text" #navItem>Sign In</a>
+                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started</button>
             </div>
 
         </div>
@@ -471,187 +474,94 @@
             </div>
         </div>
     </section>
-
-    <!-- 8. WHO IT'S FOR -->
-    <section class="audience-section">
-        <div class="container">
-            <div class="section-header center audience-heading">
-                <h2>Designed for Modern <span style="color: #8b5cf6;">Security Operations</span></h2>
-            </div>
-            <div class="grid-4">
-                <div class="audience-card">
-                    <h4>Enterprises</h4>
-                    <p>Scale to 100k+ endpoints.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>SOC Teams</h4>
-                    <p>Advanced hunting tools.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>IT Security</h4>
-                    <p>Simplified management.</p>
-                </div>
-                <div class="audience-card">
-                    <h4>Healthcare</h4>
-                    <p>HIPAA compliant security.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- 9. PRICING SECTION -->
     <section class="pricing-section" id="pricing">
         <div class="container">
             <div class="section-header center">
-                <h2>Pricing</h2>
-                <p>Flexible security plans tailored for teams of all sizes.<br>
-                Contact us to schedule a guided product demo.</p>
+                <h2>Flexible <span style="color: #8b5cf6;">Pricing Plans</span></h2>
+                <p>Choose the perfect level of endpoints protection for your enterprise.</p>
             </div>
-            
+
+            <div class="billing-toggle">
+                <span class="active">Monthly</span>
+                <div class="toggle-switch">
+                    <div class="switch-handle"></div>
+                </div>
+                <span>Annually <span class="save-badge">Save 20%</span></span>
+            </div>
+
             <div class="pricing-grid">
-                <!-- Starter Plan -->
-                <div class="pricing-card">
-                    <div class="card-content">
-                        <div class="plan-header">
-                            <h3>Starter</h3>
-                            <p class="subtitle">Best for small teams</p>
+                <!-- Basic Plan -->
+                <div class="pricing-card" #pricingCard>
+                    <div class="card-header">
+                        <h3>Starter</h3>
+                        <p>Essential protection for small teams</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">29</span>
+                            <span class="period">/mo per user</span>
                         </div>
+                    </div>
+                    <div class="card-body">
                         <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Up to 50 endpoints</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Real-time malware detection</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Basic threat alerts</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Security dashboard</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Email support</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Complete Endpoint Defense</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Next-Gen Antivirus (NGAV)</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Cloud-Native Architecture</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> 7 Days Data Retention</li>
                         </ul>
-                        <button class="btn btn-outline full-width" (click)="openDemoModal()">Request Demo</button>
+                        <button class="btn btn-outline full-width">Start Free Trial</button>
                     </div>
                 </div>
 
-                <!-- Professional Plan (Most Popular) -->
-                <div class="pricing-card popular">
+                <!-- Pro Plan -->
+                <div class="pricing-card popular" #pricingCard>
                     <div class="popular-badge">Most Popular</div>
-                    <div class="card-content">
-                        <div class="plan-header">
-                            <h3>Professional</h3>
-                            <p class="subtitle">Best for growing companies</p>
+                    <div class="card-header">
+                        <h3>Professional</h3>
+                        <p>Advanced hunting for growing organizations</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">49</span>
+                            <span class="period">/mo per user</span>
                         </div>
-                        <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Up to 500 endpoints</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Behavioral threat detection</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Incident response automation</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Threat timeline analytics</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Risk scoring</li>
-                        </ul>
-                        <button class="btn btn-primary-blue full-width" (click)="openDemoModal()">Request Demo</button>
                     </div>
-                    <div class="card-glow"></div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Everything in Starter</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Automated Threat Hunting</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Zero Trust Network Access</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> 30 Days Data Retention</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> MITRE ATT&CK Mapping</li>
+                        </ul>
+                        <button class="btn btn-primary full-width">Get Professional</button>
+                    </div>
                 </div>
 
                 <!-- Enterprise Plan -->
-                <div class="pricing-card">
-                    <div class="card-content">
-                        <div class="plan-header">
-                            <h3>Enterprise</h3>
-                            <p class="subtitle">For large organizations</p>
+                <div class="pricing-card" #pricingCard>
+                    <div class="card-header">
+                        <h3>Enterprise</h3>
+                        <p>Limitless protection for large enterprises</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">99</span>
+                            <span class="period">/mo per user</span>
                         </div>
+                    </div>
+                    <div class="card-body">
                         <ul class="feature-list">
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Unlimited endpoints</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Advanced threat intelligence</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Compliance monitoring</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Role-based access control</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Dedicated security support</li>
-                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Custom integrations</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Everything in Professional</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> 24/7 Managed Threat Hunting</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Custom Threat Intelligence API</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Unlimited Data Retention</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Dedicated Support</li>
                         </ul>
-                        <button class="btn btn-outline full-width" (click)="openDemoModal()">Contact Sales</button>
+                        <button class="btn btn-outline full-width">Contact Sales</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- DEMO REQUEST MODAL -->
-    <div class="modal-overlay" *ngIf="showDemoModal" (click)="closeDemoModal()">
-        <div class="modal-card" (click)="$event.stopPropagation()">
-            <button class="modal-close" (click)="closeDemoModal()">
-                <lucide-icon [name]="X" [size]="20"></lucide-icon>
-            </button>
-
-            <div class="modal-body" *ngIf="!formSubmitted">
-                <div class="modal-header">
-                    <h2>Request a Guided Demo</h2>
-                    <p>Experience the power of Techzaz EDR. Our experts will show you how to secure your enterprise.</p>
-                </div>
-
-                <form class="demo-form" (submit)="submitDemoForm($event)">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" name="firstName" [(ngModel)]="demoFormData.firstName" placeholder="Jane" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" name="lastName" [(ngModel)]="demoFormData.lastName" placeholder="Doe" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Work Email</label>
-                        <input type="email" name="workEmail" [(ngModel)]="demoFormData.workEmail" placeholder="jane@company.com" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Company Name</label>
-                        <input type="text" name="companyName" [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Inc." required>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Country</label>
-                            <input type="text" name="country" [(ngModel)]="demoFormData.country" placeholder="United States" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <input type="tel" name="phone" [(ngModel)]="demoFormData.phone" placeholder="+1 (555) 000-0000" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Company Size (Optional)</label>
-                        <select name="companySize" [(ngModel)]="demoFormData.companySize">
-                            <option value="">Select size</option>
-                            <option value="1-50">1-50 employees</option>
-                            <option value="51-200">51-200 employees</option>
-                            <option value="201-500">201-500 employees</option>
-                            <option value="501-1000">501-1000 employees</option>
-                            <option value="1000+">1000+ employees</option>
-                        </select>
-                    </div>
-
-                    <div class="form-checkbox">
-                        <input type="checkbox" id="agreed" name="agreed" [(ngModel)]="demoFormData.agreed" required>
-                        <label for="agreed">I agree to be contacted by Techzaz regarding product demonstrations and platform access.</label>
-                    </div>
-
-                    <p class="legal-text">
-                        By submitting this form, you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
-                    </p>
-
-                    <button type="submit" class="btn btn-primary-blue full-width">Request Demo</button>
-                </form>
-            </div>
-
-            <!-- Success Message -->
-            <div class="modal-success" *ngIf="formSubmitted">
-                <div class="success-icon">
-                    <lucide-icon [name]="Check" [size]="48"></lucide-icon>
-                </div>
-                <h2>Thank you!</h2>
-                <p>Our team will contact you shortly to schedule your Techzaz EDR demo.</p>
-                <button class="btn btn-outline" (click)="closeDemoModal()">Close</button>
-            </div>
-        </div>
-    </div>
-
 
     <section class="final-cta">
         <div class="container">
