@@ -42,5 +42,7 @@ export const routes: Routes = [
             { path: 'unprotected-assets', loadComponent: () => import('./dashboard/placeholder.component').then(m => m.PlaceholderComponent) }
         ]
     },
-    { path: 'topic/:name', loadComponent: () => import('./home/topic/topic').then(m => m.TopicComponent) }
+    { path: 'topic/:name', loadComponent: () => import('./home/topic/topic').then(m => m.TopicComponent) },
+    { path: 'about', loadComponent: () => import('./home/about/about').then(m => m.AboutComponent) },
+    { path: 'contact', loadComponent: () => import('./home/contact/contact').then(m => m.ContactComponent) }
 ];

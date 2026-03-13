@@ -477,7 +477,7 @@
     <section class="audience-section">
         <div class="container">
             <div class="section-header center audience-heading">
-                <h2>Designed for Modern <span style="color: #8b5cf6;">Security Operations</span></h2>
+                <h2>Built for Modern <span style="color: #8b5cf6;">Security Teams</span></h2>
             </div>
             <div class="grid-4">
                 <div class="audience-card">
@@ -493,8 +493,8 @@
                     <p>Simplified management.</p>
                 </div>
                 <div class="audience-card">
-                    <h4>Healthcare</h4>
-                    <p>HIPAA compliant security.</p>
+                    <h4>Managed Security Providers</h4>
+                    <p>Multi-client security management.</p>
                 </div>
             </div>
         </div>
@@ -715,7 +715,7 @@
                         <span class="logo-icon"><lucide-icon [name]="Shield" [size]="20"></lucide-icon></span>
                         TECHZAZ <strong>EDR</strong>
                     </div>
-                    <p>Next-generation endpoint security for the modern enterprise.</p>
+                    <p>Next-generation endpoint detection and response for modern security operations.</p>
                     <div class="socials">
                         <a href="#"><lucide-icon [name]="Twitter" [size]="20"></lucide-icon></a>
                         <a href="#"><lucide-icon [name]="Linkedin" [size]="20"></lucide-icon></a>
@@ -724,20 +724,21 @@
                 </div>
                 <div class="footer-links">
                     <h4>Product</h4>
-                    <a [routerLink]="['/topic', 'features']">Features</a>
-                    <a [routerLink]="['/topic', 'roadmap']">Roadmap</a>
+                    <a href="#features" (click)="scrollToSection('features', $event)">Platform</a>
+                    <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)">How It Works</a>
+                    <a href="#architecture" (click)="scrollToSection('architecture', $event)">Architecture</a>
+                    <a href="#resources" (click)="scrollToSection('resources', $event)">Security</a>
+                    <a href="#pricing" (click)="scrollToSection('pricing', $event)">Pricing</a>
                 </div>
                 <div class="footer-links">
                     <h4>Company</h4>
-                    <a [routerLink]="['/topic', 'about']">About Us</a>
-                    <a [routerLink]="['/topic', 'careers']">Careers</a>
-                    <a [routerLink]="['/topic', 'contact']">Contact</a>
+                    <a routerLink="/about">About</a>
+                    <a routerLink="/contact">Contact</a>
                 </div>
                 <div class="footer-links">
-                    <h4>Resources</h4>
-                    <a [routerLink]="['/topic', 'blog']">Blog</a>
-                    <a [routerLink]="['/topic', 'docs']">Documentation</a>
-                    <a [routerLink]="['/topic', 'support']">Support</a>
+                    <h4>Access</h4>
+                    <a routerLink="/login">Get Started</a>
+                    <a href="javascript:void(0)" (click)="openDemoModal()">Request a Demo</a>
                 </div>
             </div>
             <div class="footer-bottom">

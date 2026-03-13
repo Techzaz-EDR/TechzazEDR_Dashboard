@@ -21,12 +21,6 @@ export class TopicComponent implements OnInit, AfterViewInit {
             icon: '💰',
             features: ['Unlimited Endpoints', '24/7 Priority Support', 'Threat Intelligence Feeds']
         },
-        'about': { 
-            title: 'About Techzaz', 
-            desc: 'Leading the way in simplified endpoint security for modern teams since 2024.', 
-            icon: '🏢',
-            features: ['Security-First Culture', 'Global Threat Lab', 'Innovative AI Engineering']
-        },
         'features': {
             title: 'Platform Features',
             desc: 'Comprehensive protection across every layer of your digital ecosystem.',
