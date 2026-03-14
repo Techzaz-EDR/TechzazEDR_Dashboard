@@ -162,4 +162,68 @@ export class FirestoreService {
       created_by: 'system'
     });
   }
+
+  getIncidents(): Observable<any[]> {
+    return this.authService.tenantId$.pipe(
+      switchMap(tId => {
+        const tenantId = tId || 'demo-org';
+        const subject = new ReplaySubject<any[]>(1);
+        const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
+        const q = query(incidentsRef, orderBy('timestamp', 'desc'));
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          this.zone.run(() => {
+            const incidents: any[] = [];
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              incidents.push({ 
+                id: doc.id, 
+                ...data,
+                title: data['title'] || data['name'] || 'Untitled Incident',
+                description: data['description'] || 'No description provided',
+                status: data['status'] || 'open',
+                priority: data['priority'] || data['severity'] || 'medium',
+                threats: data['threats'] || 0,
+                endpoints: data['endpoints_count'] || (Array.isArray(data['endpoints']) ? data['endpoints'].length : 0),
+                time: data['timestamp']?.toDate ? this.formatTime(data['timestamp'].toDate()) : 'Recently',
+                assignee: data['assignee'] || 'Unassigned'
+              });
+            });
+            subject.next(incidents);
+          });
+        }, (error) => {
+          console.error("Error fetching incidents:", error);
+          this.zone.run(() => subject.next([]));
+        });
+
+        return subject.asObservable().pipe(
+          finalize(() => unsubscribe())
+        );
+      })
+    );
+  }
+
+  async addIncident(incident: any) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
+    
+    await addDoc(incidentsRef, {
+      ...incident,
+      timestamp: serverTimestamp()
+    });
+  }
+
+  private formatTime(date: Date): string {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60) ;
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} mins ago`;
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    return `${diffDays} days ago`;
+  }
 }

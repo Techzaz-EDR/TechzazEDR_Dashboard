@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { FirestoreService } from '../../core/services/firestore.service';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -13,7 +15,8 @@ import {
     templateUrl: './incidents.html',
     styleUrl: './incidents.scss',
 })
-export class Incidents {
+export class Incidents implements OnInit, OnDestroy {
+    private subs = new Subscription();
     // Icons
     readonly PlusIcon = Plus;
     readonly SearchIcon = Search;
@@ -24,52 +27,21 @@ export class Incidents {
     readonly EyeIcon = Eye;
     readonly CircleIcon = Circle;
 
-    incidents = [
-        {
-            id: 1,
-            title: 'Critical Malware Outbreak',
-            description: 'Multiple endpoints infected with ransomware',
-            status: 'investigating',
-            priority: 'critical',
-            threats: 12,
-            endpoints: 5,
-            time: '2 hours ago',
-            assignee: 'Security Team'
-        },
-        {
-            id: 2,
-            title: 'Unauthorized Access Attempt',
-            description: 'Brute force attack detected on admin account',
-            status: 'contained',
-            priority: 'high',
-            threats: 3,
-            endpoints: 1,
-            time: '5 hours ago',
-            assignee: 'John Doe'
-        },
-        {
-            id: 3,
-            title: 'Data Exfiltration Detected',
-            description: 'Suspicious data transfer to external server',
-            status: 'open',
-            priority: 'high',
-            threats: 8,
-            endpoints: 2,
-            time: '1 day ago',
-            assignee: 'Jane Smith'
-        },
-        {
-            id: 4,
-            title: 'Privilege Escalation',
-            description: 'User attempted to escalate privileges',
-            status: 'resolved',
-            priority: 'medium',
-            threats: 1,
-            endpoints: 1,
-            time: '3 days ago',
-            assignee: 'Security Team'
-        }
-    ];
+    incidents: any[] = [];
+
+    constructor(private firestoreService: FirestoreService, private zone: NgZone) {}
+
+    ngOnInit() {
+        this.subs.add(
+            this.firestoreService.getIncidents().subscribe(data => {
+                this.incidents = data;
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.subs.unsubscribe();
+    }
 
     // Filters
     filterStatus = 'All Status';
@@ -140,19 +112,26 @@ export class Incidents {
     saveIncident() {
         if (!this.newIncident.title) return;
 
-        this.incidents.unshift({
-            id: this.incidents.length + 1,
+        const incidentData = {
             title: this.newIncident.title,
             description: this.newIncident.description,
             status: this.newIncident.status.toLowerCase(),
+            severity: this.newIncident.severity.toLowerCase(),
             priority: this.newIncident.severity.toLowerCase(),
-            threats: 0,
-            endpoints: this.newIncident.endpoints.length,
-            time: 'Just now',
-            assignee: this.newIncident.assignee
-        });
+            endpoints: this.newIncident.endpoints,
+            endpoints_count: this.newIncident.endpoints.length,
+            assignee: this.newIncident.assignee,
+            threats: 0
+        };
 
-        this.closeModal();
+        this.firestoreService.addIncident(incidentData).then(() => {
+            console.log('Incident saved to Firestore');
+            this.zone.run(() => {
+                this.closeModal();
+            });
+        }).catch(err => {
+            console.error('Error saving incident:', err);
+        });
     }
 
     // Actions
