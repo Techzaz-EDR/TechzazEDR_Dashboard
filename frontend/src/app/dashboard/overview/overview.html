@@ -6,6 +6,19 @@
             <p>Real-time Threat Monitoring & Risk Posture</p>
         </div>
         <div class="header-actions">
+            <div class="time-filter">
+                <button [class.active]="activeTimeFilter === '24h'" (click)="setTimeFilter('24h')">24h</button>
+                <button [class.active]="activeTimeFilter === '7d'" (click)="setTimeFilter('7d')">7d</button>
+                <button [class.active]="activeTimeFilter === '30d'" (click)="setTimeFilter('30d')">30d</button>
+                <button [class.active]="activeTimeFilter === 'custom'" (click)="setTimeFilter('custom')">Custom</button>
+            </div>
+            @if (activeTimeFilter === 'custom') {
+                <div class="custom-range">
+                    <input type="date" class="date-input" [(ngModel)]="customFrom" />
+                    <span class="range-sep">→</span>
+                    <input type="date" class="date-input" [(ngModel)]="customTo" />
+                </div>
+            }
             <span class="last-updated"><lucide-icon [name]="CheckCircle" [size]="14"></lucide-icon> Live Updated</span>
             <button class="action-btn primary"><lucide-icon [name]="RefreshCw" [size]="16"></lucide-icon>
                 Refresh</button>
@@ -23,6 +36,7 @@
             <div class="kpi-info">
                 <span class="value">{{ kpiData.securityStatus.value }}</span>
                 <span class="label">{{ kpiData.securityStatus.label }}</span>
+                <span class="subtitle">{{ kpiData.securityStatus.subtitle }}</span>
             </div>
         </div>
 
@@ -66,38 +80,65 @@
             </div>
             <div class="card-body donut-layout">
                 <div class="donut-chart-container">
-                    <svg viewBox="0 0 36 36" class="circular-chart">
+                    <svg viewBox="0 0 36 36" class="circular-chart" 
+                         [style.--target-protected]="targetProtected"
+                         [style.--target-at-risk]="targetAtRisk"
+                         [style.--target-offline]="targetOffline"
+                         [style.--offset-at-risk]="'-' + targetProtected"
+                         [style.--offset-offline]="'-' + (targetProtected + targetAtRisk)">
                         <path class="circle-bg"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle protected" stroke-dasharray="85, 100"
+                        <path class="circle protected" stroke-dasharray="0, 100"
+                            [style.animation]="'fillProtected 1.5s ease-out forwards'"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle at-risk" stroke-dasharray="10, 100" stroke-dashoffset="-85"
+                        <path class="circle at-risk" stroke-dasharray="0, 100"
+                              [style.animation]="'fillAtRisk 1.5s ease-out forwards'"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle offline" stroke-dasharray="5, 100" stroke-dashoffset="-95"
+                        <path class="circle offline" stroke-dasharray="0, 100"
+                              [style.animation]="'fillOffline 1.5s ease-out forwards'"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <text x="18" y="20.35" class="percentage">85%</text>
+                        
+                        <!-- Dynamic CSS Animations based on CSS variables -->
+                        <style>
+                            @keyframes fillProtected {
+                                to { stroke-dasharray: var(--target-protected), 100; }
+                            }
+                            @keyframes fillAtRisk {
+                                to { 
+                                    stroke-dasharray: var(--target-at-risk), 100; 
+                                    stroke-dashoffset: var(--offset-at-risk); 
+                                }
+                            }
+                            @keyframes fillOffline {
+                                to { 
+                                    stroke-dasharray: var(--target-offline), 100; 
+                                    stroke-dashoffset: var(--offset-offline); 
+                                }
+                            }
+                        </style>
+                        <text x="18" y="20.35" class="percentage">{{ protectionStats.protectedPct }}%</text>
                     </svg>
                 </div>
                 <div class="chart-legend">
                     <div class="legend-item">
                         <span class="dot protected"></span>
                         <div class="legend-info">
+                            <span class="label">Protected:</span>
                             <span class="count">{{ protectionStats.protected }}</span>
-                            <span class="label">Protected</span>
                         </div>
                     </div>
                     <div class="legend-item">
                         <span class="dot at-risk"></span>
                         <div class="legend-info">
+                            <span class="label">At Risk:</span>
                             <span class="count">{{ protectionStats.atRisk }}</span>
-                            <span class="label">At Risk</span>
                         </div>
                     </div>
                     <div class="legend-item">
                         <span class="dot offline"></span>
                         <div class="legend-info">
+                            <span class="label">Offline:</span>
                             <span class="count">{{ protectionStats.offline }}</span>
-                            <span class="label">Offline</span>
                         </div>
                     </div>
                 </div>
@@ -108,38 +149,62 @@
         <div class="card trend-card">
             <div class="card-header">
                 <h3>Risk Trend</h3>
-                <div class="period-selector">
-                    <button [class.active]="currentTrendPeriod === '24h'" (click)="setTrendPeriod('24h')">24h</button>
-                    <button [class.active]="currentTrendPeriod === '7d'" (click)="setTrendPeriod('7d')">7d</button>
-                    <button [class.active]="currentTrendPeriod === '30d'" (click)="setTrendPeriod('30d')">30d</button>
-                </div>
             </div>
             <div class="card-body trend-layout">
-                <!-- CSS-only simple line chart visualization for mock -->
                 <div class="line-chart-container">
-                    <div class="chart-grid">
-                        <div class="grid-line" style="top: 0%"></div>
-                        <div class="grid-line" style="top: 25%"></div>
-                        <div class="grid-line" style="top: 50%"></div>
-                        <div class="grid-line" style="top: 75%"></div>
-                        <div class="grid-line" style="top: 100%"></div>
+                    <span class="y-axis-label">Risk Score</span>
+                    <div class="y-axis-scale">
+                        <span>100</span>
+                        <span>75</span>
+                        <span>50</span>
+                        <span>25</span>
+                        <span>0</span>
                     </div>
-                    <div class="trend-line-wrapper">
-                        <!-- Simplified visual representation of the trend line using SVG polyline -->
-                        <svg class="trend-svg" viewBox="0 0 100 50" preserveAspectRatio="none">
-                            <polyline points="0,40 10,35 20,30 30,32 40,25 50,15 60,18 70,22 80,20 90,10 100,5"
-                                class="trend-polyline" />
-                            <defs>
-                                <linearGradient id="trendGradient" x1="0" x2="0" y1="0" y2="1">
-                                    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.5" />
-                                    <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
-                                </linearGradient>
-                            </defs>
-                            <polygon
-                                points="0,40 10,35 20,30 30,32 40,25 50,15 60,18 70,22 80,20 90,10 100,5 100,50 0,50"
-                                fill="url(#trendGradient)" />
-                        </svg>
+                    <div class="chart-area">
+                        <div class="chart-grid">
+                            <div class="grid-line" style="top: 0%"></div>
+                            <div class="grid-line" style="top: 25%"></div>
+                            <div class="grid-line" style="top: 50%"></div>
+                            <div class="grid-line" style="top: 75%"></div>
+                            <div class="grid-line" style="top: 100%"></div>
+                        </div>
+                        <div class="trend-line-wrapper">
+                            <svg class="trend-svg" viewBox="0 0 100 50" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="trendGradient" x1="0" x2="0" y1="0" y2="1">
+                                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.5" />
+                                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+                                    </linearGradient>
+                                </defs>
+                                <polygon [attr.points]="getTrendPolygonPoints()" fill="url(#trendGradient)" />
+                                <polyline [attr.points]="getTrendPolylinePoints()" class="trend-polyline" />
+                            </svg>
+                            <!-- Tooltip data points overlay -->
+                            <div class="data-points-overlay">
+                                @for (point of getTrendDataPoints(); track point.index) {
+                                    <div class="data-point"
+                                        [style.left.%]="point.x"
+                                        [style.top.%]="point.y * 2"
+                                        (mouseenter)="showTooltip($event, point)"
+                                        (mouseleave)="hideTooltip()">
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="x-axis-labels">
+                            @for (label of trendTimeLabels; track label) {
+                                <span>{{ label }}</span>
+                            }
+                        </div>
                     </div>
+                    <span class="x-axis-label">Time</span>
+                    <!-- Tooltip -->
+                    @if (tooltipVisible) {
+                        <div class="chart-tooltip" [style.left.px]="tooltipX" [style.top.px]="tooltipY">
+                            <div class="tooltip-row"><span class="tooltip-label">Risk Score:</span> {{ tooltipScore }}</div>
+                            <div class="tooltip-row"><span class="tooltip-label">Time:</span> {{ tooltipTime }}</div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -157,7 +222,7 @@
                     @for (item of agentHealth; track item.label) {
                     <div class="health-bar-row" [ngClass]="'status-' + item.color">
                         <div class="bar-info">
-                            <span class="label">{{ item.label }}</span>
+                            <span class="label">{{ item.label }}:</span>
                             <span class="count" [class.text-critical]="item.color === 'critical'"
                                 [class.text-warning]="item.color === 'warning'">
                                 {{ item.count }}
@@ -169,7 +234,13 @@
                                 [class.fill-neutral]="item.color === 'neutral'"
                                 [style.width.%]="(item.count / 50) * 100"></div> <!-- Mock pct -->
                         </div>
-                        <button class="action-sm">{{ item.action }}</button>
+                        <button class="action-sm" 
+                                (click)="handleHealthAction(item)"
+                                [disabled]="item.isProcessing || item.count === 0"
+                                [class.processing]="item.isProcessing">
+                            <lucide-icon *ngIf="item.isProcessing" [name]="RefreshCw" class="spin-icon"></lucide-icon>
+                            <span>{{ item.isProcessing ? 'Processing' : item.action }}</span>
+                        </button>
                     </div>
                     }
                 </div>
@@ -187,11 +258,20 @@
                     <div class="contributor-row" [ngClass]="'impact-' + item.impact.toLowerCase()">
                         <div class="contributor-info">
                             <span class="name">{{ item.name }}</span>
-                            <span class="impact-chip" [class.impact-critical]="item.impact === 'Critical'"
-                                [class.impact-high]="item.impact === 'High'"
-                                [class.impact-medium]="item.impact === 'Medium'">
-                                {{ item.impact }}
-                            </span>
+                            <div class="contributor-details">
+                                <span class="detail-item">
+                                    <span class="detail-label">Risk Impact:</span>
+                                    <span class="impact-chip" [class.impact-critical]="item.impact === 'Critical'"
+                                        [class.impact-high]="item.impact === 'High'"
+                                        [class.impact-medium]="item.impact === 'Medium'">
+                                        {{ item.impact }}
+                                    </span>
+                                </span>
+                                <span class="detail-item">
+                                    <span class="detail-label">Affected Devices:</span>
+                                    <span class="detail-value">{{ item.devices }}</span>
+                                </span>
+                            </div>
                         </div>
                         <button class="fix-btn">Fix</button>
                     </div>
@@ -207,7 +287,7 @@
         <div class="card incidents-table-card">
             <div class="card-header">
                 <h3>Recent Incidents</h3>
-                <a routerLink="/dashboard/incidents" class="view-all">View All</a>
+                <a routerLink="/dashboard/incidents" class="view-all-btn">View All</a>
             </div>
             <div class="card-body">
                 <table class="clean-table">
@@ -217,6 +297,7 @@
                             <th>Threat</th>
                             <th>Severity</th>
                             <th>Status</th>
+                            <th>Detected Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -232,6 +313,7 @@
                             </td>
                             <td><span class="status-badge {{incident.status.toLowerCase()}}">{{ incident.status
                                     }}</span></td>
+                            <td class="detected-time">{{ incident.detectedTime }}</td>
                         </tr>
                         }
                     </tbody>
@@ -252,9 +334,14 @@
                         <div class="feed-time">{{ threat.time }}</div>
                         <div class="feed-content">
                             <span class="feed-threat">{{ threat.name }}</span>
-                            <span class="feed-host">on {{ threat.host }}</span>
+                            <div class="feed-details">
+                                <span class="feed-detail"><span class="detail-label">Host:</span> {{ threat.host }}</span>
+                                <span class="feed-detail"><span class="detail-label">Technique:</span> {{ threat.technique || threat.type }}</span>
+                            </div>
                         </div>
-                        <span class="feed-type">{{ threat.type }}</span>
+                        <span class="feed-severity" [ngClass]="'severity-chip-' + threat.severity">
+                            {{ threat.severity | titlecase }}
+                        </span>
                     </div>
                     }
                 </div>

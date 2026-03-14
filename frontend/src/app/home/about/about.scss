@@ -1,0 +1,384 @@
+.about-page {
+    /* Inherit background from global var(--bg-primary) or var(--bg-dark) */
+    min-height: 100vh;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    padding-bottom: 80px;
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+    }
+
+    .center-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Navbar Styling */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 24px 0;
+        transition: all 0.3s;
+
+        &.scrolled {
+            background: rgba(3, 4, 11, 0.8);
+            backdrop-filter: blur(12px);
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+
+            .logo-icon {
+                color: #8b5cf6;
+                filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+            }
+
+            .highlight {
+                color: #8b5cf6;
+            }
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+
+            &:hover {
+                color: white;
+            }
+        }
+    }
+
+    /* Hero Section */
+    .about-hero {
+        padding: 80px 0 48px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 48px;
+            letter-spacing: -2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #8b5cf6;
+            font-weight: 600;
+            margin-bottom: 32px;
+            max-width: 800px;
+        }
+
+        .hero-desc {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 1050px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(40px);
+        }
+    }
+
+    /* Cards & Panels - utilizing global .glass-panel */
+    .glass-panel {
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+        &:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(139, 92, 246, 0.2);
+        }
+    }
+
+    /* Mission & Vision grid */
+    .mission-vision {
+        padding: 80px 0 120px;
+        position: relative;
+
+        .mission-vision-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+
+            @media (max-width: 992px) {
+                gap: 24px;
+            }
+
+            @media (max-width: 768px) {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            padding: 32px 40px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            h3 {
+                font-size: 1.75rem;
+                margin-bottom: 20px;
+                font-weight: 700;
+                color: #ffffff;
+                letter-spacing: -0.5px;
+            }
+
+            p {
+                color: #94a3b8;
+                line-height: 1.6;
+                font-size: 1.1rem;
+                margin: 0;
+                opacity: 0.9;
+            }
+        }
+    }
+
+    /* Team Section */
+    .team-section {
+        padding: 60px 0;
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 32px;
+
+            h2 {
+                font-size: 2.75rem;
+                margin-bottom: 16px;
+                font-weight: 800;
+                color: #ffffff;
+                letter-spacing: -1px;
+            }
+
+            .section-desc {
+                color: #94a3b8;
+                max-width: 650px;
+                margin: 0 auto;
+                font-size: 1.1rem;
+                line-height: 1.6;
+                opacity: 0.8;
+            }
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+
+            @media (max-width: 1024px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @media (max-width: 640px) {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .team-card {
+            padding: 24px 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 230px;
+            justify-content: center;
+
+            .avatar-container {
+                margin-bottom: 16px;
+
+                .avatar-placeholder {
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.8));
+                    border: 1px solid rgba(139, 92, 246, 0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: rgba(139, 92, 246, 0.8);
+                    overflow: hidden;
+
+                    .avatar-img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+                }
+            }
+
+            &:hover .avatar-placeholder {
+                border-color: #8b5cf6;
+                transform: scale(1.1) rotate(5deg);
+                color: #8b5cf6;
+                box-shadow: 0 0 25px rgba(139, 92, 246, 0.3);
+            }
+
+            h4 {
+                font-size: 1.4rem;
+                margin-bottom: 12px;
+                font-weight: 700;
+                color: white;
+            }
+
+            .role {
+                color: #94a3b8;
+                font-size: 0.95rem;
+                font-weight: 500;
+                margin-bottom: 32px;
+                opacity: 0.7;
+            }
+
+            .member-socials {
+                display: flex;
+                gap: 20px;
+
+                .social-link {
+                    color: #64748b;
+                    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                    padding: 8px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.02);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+
+                    &:hover {
+                        color: #ffffff;
+                        transform: translateY(-3px);
+                        background: rgba(139, 92, 246, 0.1);
+                        border-color: rgba(139, 92, 246, 0.3);
+                        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+                    }
+                }
+            }
+        }
+    }
+
+    /* Team Section update for card alignment */
+    .team-grid .team-card {
+        text-align: center;
+    }
+
+    /* Product Statement Section */
+    .product-statement {
+        padding: 40px 0;
+        
+        .statement-box {
+            padding: 50px 60px;
+            max-width: 900px;
+            text-align: center;
+            margin: 0 auto;
+            
+            h2 {
+                font-size: 2.5rem;
+                margin-bottom: 24px;
+                background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-weight: 800;
+                letter-spacing: -1px;
+            }
+            
+            p {
+                font-size: 1.2rem;
+                color: #94a3b8;
+                line-height: 1.7;
+                max-width: 750px;
+                margin: 0 auto;
+            }
+        }
+    }
+
+    /* Final CTA mini */
+    .final-cta.mini {
+        padding: 40px 0 80px;
+
+        .cta-box {
+            padding: 60px;
+            text-align: center;
+
+            h2 {
+                font-size: 2.5rem;
+                margin-bottom: 32px;
+            }
+
+            .cta-group {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+
+                @media (max-width: 600px) {
+                    flex-direction: column;
+                }
+            }
+        }
+    }
+
+    /* Global Utils Reused */
+    .gradient-text {
+        background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .highlight-purple {
+        color: #a78bfa;
+        background: linear-gradient(135deg, #8b5cf6, #d8b4fe);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-purple-text {
+        background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* End About Page */
+}

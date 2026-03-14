@@ -15,7 +15,12 @@
         <div class="auth-view sign-in-view">
             <form (submit)="signIn()">
                 <div class="form-header">
-                    <h2>Platform Access</h2>
+                    <div class="status-line">
+                        <span class="status-dot"></span>
+                        <lucide-icon [name]="ShieldCheck" [size]="14"></lucide-icon>
+                        Secure Console Access
+                    </div>
+                    <h2>Sign in to Techzaz EDR</h2>
                 </div>
 
                 <div *ngIf="errorMessage" class="error-banner">
@@ -23,20 +28,24 @@
                 </div>
 
                 <div class="inputs-group">
-                    <div class="input-field">
-                        <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                        <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <lucide-icon [name]="User" [size]="20" class="input-icon"></lucide-icon>
+                            <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
+                        </div>
                     </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                        <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
-                            placeholder="Password" required />
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <lucide-icon [name]="Lock" [size]="20" class="input-icon"></lucide-icon>
+                            <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
+                                placeholder="Password" required />
+                        </div>
                     </div>
                 </div>
 
-                <a href="#" class="forgot-password">Reset Credentials?</a>
-                <button type="submit" class="btn solid">Authenticate</button>
-                <p class="toggle-link">New here? <a (click)="toggleMode()">Initialize Tenant</a></p>
+                <a href="#" class="forgot-password">Forgot password?</a>
+                <button type="submit" class="btn btn-primary full-width">Sign In</button>
+                <p class="toggle-link">New here? <a (click)="toggleMode()">Create account</a></p>
             </form>
         </div>
 
@@ -48,24 +57,30 @@
                 </div>
 
                 <div class="inputs-group">
-                    <div class="input-field">
-                        <lucide-icon [name]="User" [size]="20"></lucide-icon>
-                        <input type="text" name="signupName" [(ngModel)]="signupName"
-                            placeholder="Administrator Name" />
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <lucide-icon [name]="User" [size]="20" class="input-icon"></lucide-icon>
+                            <input type="text" name="signupName" [(ngModel)]="signupName"
+                                placeholder="Administrator Name" />
+                        </div>
                     </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Mail" [size]="20"></lucide-icon>
-                        <input type="email" name="signupEmail" [(ngModel)]="signupEmail"
-                            placeholder="Work Email" />
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <lucide-icon [name]="Mail" [size]="20" class="input-icon"></lucide-icon>
+                            <input type="email" name="signupEmail" [(ngModel)]="signupEmail"
+                                placeholder="Work Email" />
+                        </div>
                     </div>
-                    <div class="input-field">
-                        <lucide-icon [name]="Lock" [size]="20"></lucide-icon>
-                        <input type="password" name="signupPassword" [(ngModel)]="signupPassword"
-                            placeholder="Master Password" />
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <lucide-icon [name]="Lock" [size]="20" class="input-icon"></lucide-icon>
+                            <input type="password" name="signupPassword" [(ngModel)]="signupPassword"
+                                placeholder="Master Password" />
+                        </div>
                     </div>
                 </div>
 
-                <button type="button" class="btn solid" (click)="signIn()">Deploy Workspace</button>
+                <button type="button" class="btn btn-primary full-width" (click)="signIn()">Deploy Workspace</button>
                 <p class="toggle-link">Already have an account? <a (click)="toggleMode()">Log In</a></p>
             </form>
         </div>

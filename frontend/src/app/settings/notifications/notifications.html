@@ -1,23 +1,26 @@
 <div class="settings-section">
+
     <div class="section-header">
         <h2>Notification Preferences</h2>
-        <p>Configure alert and notification settings</p>
     </div>
 
-    <div class="settings-card-group">
+    <div class="settings-card">
+
         <div class="card-title">
             <h3>Alert Settings</h3>
             <p>Control how and when you receive alerts</p>
         </div>
+
+        <div class="divider"></div>
 
         <div class="setting-item">
             <div class="setting-info">
                 <h4>Critical Threats</h4>
                 <p>Notify on critical threat detection</p>
             </div>
-            <label class="toggle-switch">
-                <input type="checkbox" checked>
-                <span class="slider"></span>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="prefs.criticalThreats">
+                <span class="track"><span class="thumb"></span></span>
             </label>
         </div>
 
@@ -26,24 +29,47 @@
                 <h4>Incident Updates</h4>
                 <p>Notify on incident status changes</p>
             </div>
-            <label class="toggle-switch">
-                <input type="checkbox" checked>
-                <span class="slider"></span>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="prefs.incidentUpdates">
+                <span class="track"><span class="thumb"></span></span>
             </label>
         </div>
 
         <div class="setting-item">
             <div class="setting-info">
                 <h4>Daily Summary</h4>
-                <p>Receive daily security summary</p>
+                <p>Receive daily security summary reports</p>
             </div>
-            <label class="toggle-switch">
-                <input type="checkbox">
-                <span class="slider"></span>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="prefs.dailySummary">
+                <span class="track"><span class="thumb"></span></span>
+            </label>
+        </div>
+
+        <div class="setting-item">
+            <div class="setting-info">
+                <h4>System Alerts</h4>
+                <p>Receive notifications for system health and status changes</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="prefs.systemAlerts">
+                <span class="track"><span class="thumb"></span></span>
+            </label>
+        </div>
+
+        <div class="setting-item last">
+            <div class="setting-info">
+                <h4>Email Digest</h4>
+                <p>Weekly email digest of security activity</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" [(ngModel)]="prefs.emailDigest">
+                <span class="track"><span class="thumb"></span></span>
             </label>
         </div>
 
     </div>
-    <button class="btn-primary" style="margin-top: 2rem;" (click)="savePreferences()">Save Notification
-        Settings</button>
+
+    <button class="btn-save" (click)="savePreferences()">Save Notification Settings</button>
+
 </div>

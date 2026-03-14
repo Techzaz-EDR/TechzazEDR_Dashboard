@@ -54,13 +54,12 @@
             <div class="nav-links">
                 <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Platform</a>
                 <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)" #navItem>How it Works</a>
-                <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Resources</a>
+                <a href="#architecture" (click)="scrollToSection('architecture', $event)" #navItem>Architecture</a>
+                <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Security</a>
+                <a href="#pricing" (click)="scrollToSection('pricing', $event)" #navItem>Pricing</a>
+                <a routerLink="/login" class="nav-btn-signin" #navItem>Sign In</a>
             </div>
-            <div class="nav-actions">
-                <a routerLink="/login" class="link-text" #navItem>Sign In</a>
-                <button class="btn btn-primary" (click)="scrollToSection('features', $event)" #ctaBtn>Get Started
-                    Free</button>
-            </div>
+
         </div>
     </nav>
 
@@ -83,12 +82,11 @@
                 </h1>
 
                 <p class="hero-subheadline">
-                    Protect your modern enterprise with intelligent, AI-driven detection that neutralizes threats at the
-                    source before they can evolve.
+                    Techzaz EDR continuously monitors every endpoint, detects malicious behavior in real time, and gives your security team the intelligence to respond before damage is done.
                 </p>
 
                 <div class="cta-actions">
-                    <a routerLink="/login" class="btn btn-primary-blue">Sign In</a>
+                    <a routerLink="/login" class="btn btn-primary-blue">Log In</a>
                     <a routerLink="/login" [queryParams]="{mode: 'signup'}" class="btn btn-outline-white">Sign Up</a>
                 </div>
             </div>
@@ -97,18 +95,6 @@
             <div class="hero-visual">
                 <div class="visual-scene">
                     <div class="energy-core">
-                        <!-- Rotating Rings -->
-                        <div class="ring-system">
-                            <div class="neon-ring ring-1"></div>
-                            <div class="neon-ring ring-2"></div>
-                            <div class="neon-ring ring-3"></div>
-                        </div>
-
-                        <!-- Particles -->
-                        <div class="particle-field">
-                            <i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i>
-                            <i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i>
-                        </div>
                     </div>
 
                     <!-- Ground Reflection -->
@@ -119,27 +105,7 @@
         </div>
     </header>
 
-    <!-- 2. TRUST STRIP -->
-    <section class="trust-strip">
-        <div class="container">
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Shield" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Secure-by-Design</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Cloud" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Cloud-Native Scaling</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Crosshair" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>MITRE ATT&CK Aligned</span>
-            </div>
-            <div class="trust-item">
-                <span class="icon"><lucide-icon [name]="Zap" [size]="20" class="trust-icon"></lucide-icon></span>
-                <span>Real-Time Telemetry</span>
-            </div>
-        </div>
-    </section>
+
 
     <!-- 3. WHY TECHZAZ (Benefits) -->
     <section class="features-grid" id="features">
@@ -153,43 +119,32 @@
                     <div class="card-category">REAL-TIME</div>
                     <div class="icon-box"><lucide-icon [name]="Activity" [size]="28"></lucide-icon></div>
                     <h3>Endpoint Monitoring</h3>
-                    <p>Continuous monitoring of all endpoints with lightweight agents that collect telemetry data and
-                        detect suspicious activities in real-time.</p>
+                    <p>Real-time monitoring of endpoint activity and suspicious behavior.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="card-category">CENTRALIZED</div>
-                    <div class="icon-box"><lucide-icon [name]="BarChart" [size]="28"></lucide-icon></div>
-                    <h3>Security Dashboard</h3>
-                    <p>Role-based access control with comprehensive overview of security status, alerts, and analytics
-                        in one unified interface.</p>
-                </div>
+
                 <div class="feature-card">
                     <div class="card-category">ADVANCED</div>
                     <div class="icon-box"><lucide-icon [name]="Bug" [size]="28"></lucide-icon></div>
                     <h3>Malware Detection</h3>
-                    <p>Comprehensive scanning to identify and categorize malware including ransomware, trojans, worms,
-                        and other malicious software.</p>
+                    <p>Detect ransomware, trojans, and other malicious software.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-category">NETWORK</div>
                     <div class="icon-box"><lucide-icon [name]="Network" [size]="28"></lucide-icon></div>
                     <h3>Network Security</h3>
-                    <p>Scan IP logs and data packets to detect suspicious connections, port scanning activities, and
-                        potential intrusion attempts.</p>
+                    <p>Monitor network traffic to detect intrusions and suspicious connections.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-category">AUTOMATED</div>
                     <div class="icon-box"><lucide-icon [name]="Zap" [size]="28"></lucide-icon></div>
                     <h3>Incident Response</h3>
-                    <p>Automated threat response actions and real-time alerting to minimize damage from security
-                        incidents and breaches.</p>
+                    <p>Automated responses to contain and mitigate security threats.</p>
                 </div>
                 <div class="feature-card">
                     <div class="card-category">ANALYTICS</div>
                     <div class="icon-box"><lucide-icon [name]="Search" [size]="28"></lucide-icon></div>
                     <h3>Historical Analysis</h3>
-                    <p>Compare current security events with historical data to identify trends, patterns, and emerging
-                        threats.</p>
+                    <p>Identify trends using historical security data.</p>
                 </div>
             </div>
         </div>
@@ -294,32 +249,131 @@
             </div>
             <div class="preview-visual glass-panel">
                 <!-- CSS-only UI representation -->
-                <div class="ui-header">
-                    <div class="search-bar">Search endpoints...</div>
-                    <div class="user-profile">Admin</div>
-                </div>
                 <div class="ui-grid">
                     <div class="ui-card big">
-                        <div class="chart-placeholder">
-                            <div class="bar-1"></div>
-                            <div class="bar-2"></div>
-                            <div class="bar-3"></div>
-                            <div class="bar-4"></div>
+                        <div class="dashboard-metrics">
+                            <div class="metric-item">
+                                <span class="label">Threats Detected Today</span>
+                                <span class="value critical">12</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Active Endpoints</span>
+                                <span class="value">1,284</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Blocked Attacks</span>
+                                <span class="value success">97</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="label">Active Alerts</span>
+                                <span class="value warning">2</span>
+                            </div>
+                        </div>
+                        
+                        <div class="threat-activity">
+                            <h4 class="activity-title">Threat Activity (Last 24h)</h4>
+                            <div class="mini-graph">
+                                <div class="graph-line"></div>
+                                <div class="graph-dots">
+                                    <div class="dot" style="bottom: 20%; left: 0%;"></div>
+                                    <div class="dot" style="bottom: 45%; left: 20%;"></div>
+                                    <div class="dot" style="bottom: 30%; left: 40%;"></div>
+                                    <div class="dot" style="bottom: 70%; left: 60%;"></div>
+                                    <div class="dot highlight" style="bottom: 50%; left: 80%;"></div>
+                                    <div class="dot" style="bottom: 40%; left: 100%;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="ui-card small">
                         <div class="threat-stream">
-                            <div class="feed-item target"><span>Targeted attack</span></div>
-                            <div class="feed-item block"><span>Infection blocked</span></div>
-                            <div class="feed-item warn"><span>Anomalous login</span></div>
+                            <div class="feed-item target">
+                                <lucide-icon [name]="Crosshair" [size]="14"></lucide-icon>
+                                <span>Targeted attack</span>
+                            </div>
+                            <div class="feed-item block">
+                                <lucide-icon [name]="Shield" [size]="14"></lucide-icon>
+                                <span>Infection blocked</span>
+                            </div>
+                            <div class="feed-item warn">
+                                <lucide-icon [name]="Activity" [size]="14"></lucide-icon>
+                                <span>Anomalous login</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="ui-card small centered">
-                        <div class="health-shield-mini">
-                            <div class="shield-core"></div>
-                            <div class="shield-ring"></div>
+                    <div class="ui-card small status-card">
+                        <div class="status-summary">
+                            <div class="status-indicator">
+                                <div class="pumping-circle"></div>
+                                <span class="status-text">Protected</span>
+                            </div>
+                            <div class="status-details">
+                                <div class="detail-row">
+                                    <span>Endpoints Protected</span>
+                                    <strong>100%</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Active Threats</span>
+                                    <strong>0</strong>
+                                </div>
+                            </div>
                         </div>
-                        <span class="shield-percent">98% Secure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: ARCHITECTURE OVERVIEW -->
+    <section class="architecture-overview" id="architecture">
+        <div class="container">
+            <div class="arch-layout">
+                <!-- Left: Text Content -->
+                <div class="arch-left">
+                    <div class="section-badge">PLATFORM ARCHITECTURE</div>
+                    <h2>Architecture <span class="arch-accent">Overview</span></h2>
+                    <p class="arch-desc">Scalable microservice architecture built for real-time threat detection and response.</p>
+                    <ul class="arch-points">
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Multi-tenant isolation for data security</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Endpoint agents for telemetry collection</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Centralized analysis for threat detection</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Secure channels for agent communication</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Role-based access for system control</li>
+                    </ul>
+                </div>
+                <!-- Right: 6 Architecture Cards in 3x2 Grid -->
+                <div class="arch-right">
+                    <div class="arch-cards-grid">
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Cpu" [size]="20"></lucide-icon></div>
+                            <h4>Endpoint Agent</h4>
+                            <p>Telemetry and local scanning</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Network" [size]="20"></lucide-icon></div>
+                            <h4>Network Analysis</h4>
+                            <p>IP and port activity monitoring</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Upload" [size]="20"></lucide-icon></div>
+                            <h4>Telemetry Ingestion</h4>
+                            <p>Secure data intake</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Brain" [size]="20"></lucide-icon></div>
+                            <h4>Detection Engine</h4>
+                            <p>Malware and threat analysis</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Zap" [size]="20"></lucide-icon></div>
+                            <h4>Alerting Service</h4>
+                            <p>Security alerts and reports</p>
+                        </div>
+                        <div class="arch-card">
+                            <div class="arch-icon"><lucide-icon [name]="Layout" [size]="20"></lucide-icon></div>
+                            <h4>Management Dashboard</h4>
+                            <p>Role-based visibility</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -330,7 +384,7 @@
     <section class="capabilities" id="resources">
         <div class="container">
             <div class="section-header center">
-                <h2>Enterprise <span style="color: #8b5cf6;">Security Strategy</span></h2>
+                <h2>Threat <span style="color: #8b5cf6;">Detection Coverage</span></h2>
                 <p>We take security seriously. Techzaz EDR is designed to detect malware, suspicious<br>network
                     activity, and unauthorized behaviour across organizational endpoints.</p>
             </div>
@@ -379,9 +433,52 @@
         </div>
     </section>
 
-    <!-- 7. WHO IT'S FOR -->
+    <!-- 7. WHY EDR -->
+    <section class="why-edr" id="why-edr">
+        <div class="container split-layout reverse">
+            <div class="edr-visual">
+                <div class="comparison-card">
+                    <div class="side traditional">
+                        <div class="icon-bg">
+                            <div class="cross"><lucide-icon [name]="X" [size]="56" color="rgba(239, 68, 68, 0.5)"></lucide-icon></div>
+                        </div>
+                        <h5>Traditional AV</h5>
+                        <p>Signature-based</p>
+                        <p>Misses new attacks</p>
+                    </div>
+                    <div class="side next-gen">
+                        <div class="icon-bg">
+                            <div class="check"><lucide-icon [name]="Check" [size]="64" color="#8b5cf6"></lucide-icon></div>
+                        </div>
+                        <h5>Techzaz EDR</h5>
+                        <p>Behavior-based</p>
+                        <p>Stops zero-days</p>
+                    </div>
+                </div>
+            </div>
+            <div class="edr-text">
+                <h2>Beyond Traditional <span class="accent-text">Antivirus</span></h2>
+                <p class="lead">Traditional antivirus relies on signatures. Techzaz EDR detects threats based on behavior.</p>
+                <div class="point">
+                    <span class="icon"><lucide-icon [name]="Bug" [size]="24"></lucide-icon></span>
+                    <p><strong><span class="accent-text">Detect Unknowns:</span></strong> Analyze what software <em>does</em>, not just what it
+                        <em>is</em>.
+                    </p>
+                </div>
+                <div class="point">
+                    <span class="icon"><lucide-icon [name]="Search" [size]="24"></lucide-icon></span>
+                    <p><strong><span class="accent-text">Deep Investigation:</span></strong> Root cause analysis for every incident.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. WHO IT'S FOR -->
     <section class="audience-section">
         <div class="container">
+            <div class="section-header center audience-heading">
+                <h2>Built for Modern <span style="color: #8b5cf6;">Security Teams</span></h2>
+            </div>
             <div class="grid-4">
                 <div class="audience-card">
                     <h4>Enterprises</h4>
@@ -396,60 +493,214 @@
                     <p>Simplified management.</p>
                 </div>
                 <div class="audience-card">
-                    <h4>Healthcare</h4>
-                    <p>HIPAA compliant security.</p>
+                    <h4>Managed Security Providers</h4>
+                    <p>Multi-client security management.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 8. WHY EDR -->
-    <section class="why-edr" id="why-edr">
-        <div class="container split-layout reverse">
-            <div class="edr-visual">
-                <div class="comparison-card">
-                    <div class="side traditional">
-                        <div class="cross"><lucide-icon [name]="X" [size]="56" color="#ef4444"></lucide-icon></div>
-                        <h5>Traditional AV</h5>
-                        <p>Signature-based</p>
-                        <p>Misses new attacks</p>
-                    </div>
-                    <div class="side next-gen">
-                        <div class="check"><lucide-icon [name]="Check" [size]="56" color="#10b981"></lucide-icon></div>
-                        <h5>Techzaz EDR</h5>
-                        <p>Behavior-based</p>
-                        <p>Stops zero-days</p>
-                    </div>
-                </div>
+    <!-- 9. PRICING SECTION -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header center">
+                <h2>Pricing</h2>
+                <p>Flexible security plans tailored for teams of all sizes.<br>
+                Contact us to schedule a guided product demo.</p>
             </div>
-            <div class="edr-text">
-                <h2>Beyond Traditional Antivirus</h2>
-                <p class="lead">Signatures aren't enough anymore. You need behavior analysis to stop modern ransomware
-                    and fileless attacks.</p>
-                <div class="point">
-                    <span class="icon"><lucide-icon [name]="Bug" [size]="24"></lucide-icon></span>
-                    <p><strong>Detect Unknowns:</strong> Analyze what software <em>does</em>, not just what it
-                        <em>is</em>.
-                    </p>
+            
+            <div class="pricing-grid">
+                <!-- Starter Plan -->
+                <div class="pricing-card">
+                    <div class="card-content">
+                        <div class="plan-header">
+                            <h3>Starter</h3>
+                            <p class="subtitle">Best for small teams</p>
+                        </div>
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Up to 50 endpoints</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Real-time malware detection</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Basic threat alerts</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Security dashboard</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Email support</li>
+                        </ul>
+                        <button class="btn btn-outline full-width" (click)="openDemoModal('Starter')">Request Demo</button>
+                    </div>
                 </div>
-                <div class="point">
-                    <span class="icon"><lucide-icon [name]="Search" [size]="24"></lucide-icon></span>
-                    <p><strong>Deep Investigation:</strong> Root cause analysis for every incident.</p>
+
+                <!-- Professional Plan (Most Popular) -->
+                <div class="pricing-card popular">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="card-content">
+                        <div class="plan-header">
+                            <h3>Professional</h3>
+                            <p class="subtitle">Best for growing companies</p>
+                        </div>
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Up to 500 endpoints</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Behavioral threat detection</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Incident response automation</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Threat timeline analytics</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Risk scoring</li>
+                        </ul>
+                        <button class="btn btn-primary-blue full-width" (click)="openDemoModal('Professional')">Request Demo</button>
+                    </div>
+                    <div class="card-glow"></div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <div class="card-content">
+                        <div class="plan-header">
+                            <h3>Enterprise</h3>
+                            <p class="subtitle">For large organizations</p>
+                        </div>
+                        <ul class="feature-list">
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Unlimited endpoints</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Advanced threat intelligence</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Compliance monitoring</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Role-based access control</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Dedicated security support</li>
+                            <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Custom integrations</li>
+                        </ul>
+                        <button class="btn btn-outline full-width" (click)="openDemoModal('Enterprise')">Contact Sales</button>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- DEMO REQUEST MODAL -->
+    <div class="modal-overlay" *ngIf="showDemoModal" (click)="closeDemoModal()">
+        <div class="modal-card" (click)="$event.stopPropagation()">
+            <button class="modal-close" (click)="closeDemoModal()">
+                <lucide-icon [name]="X" [size]="20"></lucide-icon>
+            </button>
+
+            <div class="modal-body" *ngIf="!formSubmitted">
+                <div class="modal-header">
+                    <h2>{{ demoFormData.selectedPlan === 'Enterprise' ? 'Contact Enterprise Sales' : 'Request a Guided Demo' }}</h2>
+                    <p>Experience the power of Techzaz EDR. Our experts will show you how to secure your enterprise.</p>
+                </div>
+
+                <form class="demo-form" (submit)="submitDemoForm($event)">
+                    <div class="form-group" *ngIf="isPlanDropdownMode">
+                        <label>Plan of Interest</label>
+                        <select name="selectedPlan" [(ngModel)]="demoFormData.selectedPlan" required>
+                            <option value="">Select a plan</option>
+                            <option value="Starter">Starter</option>
+                            <option value="Professional">Professional</option>
+                            <option value="Enterprise">Enterprise</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" *ngIf="!isPlanDropdownMode">
+                        <label>Requested Plan</label>
+                        <input type="text" name="selectedPlan" [(ngModel)]="demoFormData.selectedPlan" readonly style="opacity: 0.7; cursor: not-allowed;">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="firstName" [(ngModel)]="demoFormData.firstName" placeholder="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="lastName" [(ngModel)]="demoFormData.lastName" placeholder="Deo" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Work Email</label>
+                        <input type="email" name="workEmail" [(ngModel)]="demoFormData.workEmail" placeholder="john@company.lk" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" name="companyName" [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Networks" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" name="country" [(ngModel)]="demoFormData.country" placeholder="Sri Lanka" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" [(ngModel)]="demoFormData.phone" placeholder="+94 XX XXXXXXX" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company Size (Optional)</label>
+                        <select name="companySize" [(ngModel)]="demoFormData.companySize">
+                            <option value="">Select company size</option>
+                            <option value="1-50">1-50 employees</option>
+                            <option value="51-200">51-200 employees</option>
+                            <option value="201-500">201-500 employees</option>
+                            <option value="501-1000">501-1000 employees</option>
+                            <option value="1000+">1000+ employees</option>
+                        </select>
+                    </div>
+
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="agreed" name="agreed" [(ngModel)]="demoFormData.agreed" required>
+                        <label for="agreed">I agree to be contacted by Techzaz regarding product demonstrations and platform access.</label>
+                    </div>
+
+                    <p class="legal-text">
+                        By submitting this form, you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
+                    </p>
+
+                    <button type="submit" class="btn btn-primary-blue full-width">Request Demo</button>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div class="modal-success" *ngIf="formSubmitted">
+                <div class="success-icon">
+                    <lucide-icon [name]="Check" [size]="48"></lucide-icon>
+                </div>
+                <h2>Thank you!</h2>
+                <p>Our team will contact you shortly to schedule your Techzaz EDR demo.</p>
+                <button class="btn btn-outline" (click)="closeDemoModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
 
     <section class="final-cta">
         <div class="container">
             <div class="cta-box glass-panel">
                 <h2>Start Protecting Your Endpoints Today</h2>
-                <p>Deploy in minutes. Gain visibility instantly. Respond with confidence.</p>
+                <p>Deploy lightweight agents in minutes, monitor threats in real time, and respond instantly from a unified security dashboard.</p>
                 <div class="cta-group center">
-                    <button class="btn btn-primary large glow" routerLink="/login">Get Started</button>
-                    <button class="btn btn-outline large" (click)="scrollToSection('features', $event)">Request
-                        Demo</button>
+                    <button class="btn btn-primary large glow" routerLink="/login">
+                        <lucide-icon [name]="Rocket" [size]="18" class="btn-icon"></lucide-icon>
+                        Get Started
+                    </button>
+                    <button class="btn btn-outline large" (click)="openDemoModal()">
+                        <lucide-icon [name]="Play" [size]="18" class="btn-icon"></lucide-icon>
+                        Request Demo
+                    </button>
+                </div>
+                <div class="cta-trust-indicators">
+                    <div class="indicator">
+                        <lucide-icon [name]="Shield" [size]="16" class="icon"></lucide-icon>
+                        <span>Lightweight Agents</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Zap" [size]="16" class="icon"></lucide-icon>
+                        <span>Real-time Detection</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Layout" [size]="16" class="icon"></lucide-icon>
+                        <span>Unified Dashboard</span>
+                    </div>
+                    <div class="indicator">
+                        <lucide-icon [name]="Activity" [size]="16" class="icon"></lucide-icon>
+                        <span>Behavior Analysis</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -460,8 +711,11 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="logo">TECHZAZ <strong>EDR</strong></div>
-                    <p>Next-generation endpoint security for the modern enterprise.</p>
+                    <div class="logo">
+                        <span class="logo-icon"><lucide-icon [name]="Shield" [size]="20"></lucide-icon></span>
+                        TECHZAZ <strong>EDR</strong>
+                    </div>
+                    <p>Next-generation endpoint detection and response for modern security operations.</p>
                     <div class="socials">
                         <a href="#"><lucide-icon [name]="Twitter" [size]="20"></lucide-icon></a>
                         <a href="#"><lucide-icon [name]="Linkedin" [size]="20"></lucide-icon></a>
@@ -470,20 +724,21 @@
                 </div>
                 <div class="footer-links">
                     <h4>Product</h4>
-                    <a [routerLink]="['/topic', 'features']">Features</a>
-                    <a [routerLink]="['/topic', 'roadmap']">Roadmap</a>
+                    <a href="#features" (click)="scrollToSection('features', $event)">Platform</a>
+                    <a href="#how-it-works" (click)="scrollToSection('how-it-works', $event)">How It Works</a>
+                    <a href="#architecture" (click)="scrollToSection('architecture', $event)">Architecture</a>
+                    <a href="#resources" (click)="scrollToSection('resources', $event)">Security</a>
+                    <a href="#pricing" (click)="scrollToSection('pricing', $event)">Pricing</a>
                 </div>
                 <div class="footer-links">
                     <h4>Company</h4>
-                    <a [routerLink]="['/topic', 'about']">About Us</a>
-                    <a [routerLink]="['/topic', 'careers']">Careers</a>
-                    <a [routerLink]="['/topic', 'contact']">Contact</a>
+                    <a routerLink="/about">About</a>
+                    <a routerLink="/contact">Contact</a>
                 </div>
                 <div class="footer-links">
-                    <h4>Resources</h4>
-                    <a [routerLink]="['/topic', 'blog']">Blog</a>
-                    <a [routerLink]="['/topic', 'docs']">Documentation</a>
-                    <a [routerLink]="['/topic', 'support']">Support</a>
+                    <h4>Access</h4>
+                    <a routerLink="/login">Get Started</a>
+                    <a href="javascript:void(0)" (click)="openDemoModal()">Request a Demo</a>
                 </div>
             </div>
             <div class="footer-bottom">

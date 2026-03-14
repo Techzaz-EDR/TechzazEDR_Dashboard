@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
     LucideAngularModule,
     Search, Shield, Edit2, Trash2, MoreVertical, Plus
 } from 'lucide-angular';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { AuthService } from '../../core/services/auth.service';
+import { Subscription } from 'rxjs';
+import { getAuth } from 'firebase/auth';
 
 @Component({
     selector: 'app-users',
@@ -13,7 +17,7 @@ import {
     templateUrl: './users.html',
     styleUrl: './users.scss',
 })
-export class Users {
+export class Users implements OnInit, OnDestroy {
     // Icons
     readonly SearchIcon = Search;
     readonly ShieldIcon = Shield;
@@ -23,51 +27,63 @@ export class Users {
     readonly PlusIcon = Plus;
 
     searchTerm = '';
+    isLoading = true;
 
-    users = [
-        {
-            id: 1,
-            name: 'John Doe',
-            email: 'john@company.com',
-            role: 'Administrator',
-            status: 'active',
-            lastLogin: '2 minutes ago',
-            avatarColor: '#8b5cf6' // Purple
-        },
-        {
-            id: 2,
-            name: 'Jane Smith',
-            email: 'jane@company.com',
-            role: 'Security Analyst',
-            status: 'active',
-            lastLogin: '1 hour ago',
-            avatarColor: '#f97316' // Orange
-        },
-        {
-            id: 3,
-            name: 'Mike Johnson',
-            email: 'mike@company.com',
-            role: 'Incident Responder',
-            status: 'active',
-            lastLogin: '3 hours ago',
-            avatarColor: '#3b82f6' // Blue
-        },
-        {
-            id: 4,
-            name: 'Sarah Williams',
-            email: 'sarah@company.com',
-            role: 'Viewer',
-            status: 'inactive',
-            lastLogin: '5 days ago',
-            avatarColor: '#10b981' // Green
+    private authService = inject(AuthService);
+    private db = getFirestore(getAuth().app);
+    private cdr = inject(ChangeDetectorRef);
+    private profileSub?: Subscription;
+
+    users: any[] = [];
+
+    ngOnInit() {
+        this.profileSub = this.authService.userProfile$.subscribe(async profile => {
+            if (profile && profile.organization_id) {
+                this.isLoading = true;
+                this.cdr.detectChanges();
+                try {
+                    const usersRef = collection(this.db, 'users');
+                    const q = query(usersRef, where('organization_id', '==', profile.organization_id));
+                    const querySnapshot = await getDocs(q);
+                    
+                    this.users = querySnapshot.docs.map(doc => {
+                        const data = doc.data();
+                        return {
+                            id: doc.id,
+                            name: data['name'] || data['email'] || 'Unknown User',
+                            email: data['email'] || 'No Email',
+                            role: data['role'] || 'Unknown',
+                            status: data['status'] || 'active',
+                            lastLogin: this.formatLastLogin(data['last_login_at']),
+                            avatarColor: '#' + Math.floor(Math.random() * 16777215).toString(16) // Random color for now
+                        };
+                    });
+                } catch (error) {
+                    console.error('Error fetching organization users:', error);
+                } finally {
+                    this.isLoading = false;
+                    this.cdr.detectChanges();
+                }
+            } else if (profile === null) {
+                this.users = [];
+                this.isLoading = false;
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        if (this.profileSub) {
+            this.profileSub.unsubscribe();
         }
-    ];
+    }
 
     get filteredUsers() {
+        const term = this.searchTerm.toLowerCase();
         return this.users.filter(user =>
-            user.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-            user.role.toLowerCase().includes(this.searchTerm.toLowerCase())
+            (user.name?.toLowerCase() || '').includes(term) ||
+            (user.email?.toLowerCase() || '').includes(term) ||
+            (user.role?.toLowerCase() || '').includes(term)
         );
     }
 
@@ -114,5 +130,36 @@ export class Users {
         });
 
         this.closeModal();
+    }
+
+    private formatLastLogin(timestamp: any): string {
+        if (!timestamp) return 'Never';
+        try {
+            // Check if it's a Firestore Timestamp with toDate method
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            const now = new Date();
+            const diffMs = now.getTime() - date.getTime();
+            const diffSeconds = Math.floor(diffMs / 1000);
+            
+            if (diffSeconds < 60) return 'Just now';
+            
+            const diffMinutes = Math.floor(diffSeconds / 60);
+            if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
+            
+            const diffHours = Math.floor(diffMinutes / 60);
+            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            
+            const diffDays = Math.floor(diffHours / 24);
+            if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            
+            return new Intl.DateTimeFormat('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            }).format(date);
+        } catch (e) {
+            console.error('Error formatting date:', e);
+            return 'Unknown';
+        }
     }
 }

@@ -78,6 +78,33 @@
     padding: 24px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 
+    .name-cell-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: transform 0.2s ease;
+
+        &:hover {
+            transform: translateX(4px);
+            
+            .name-cell span {
+                color: #3b82f6;
+            }
+        }
+    }
+
+    .name-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        span {
+            font-weight: 600;
+            color: #f8fafc;
+            transition: color 0.2s ease;
+        }
+    }
+
     .section-header {
         display: flex;
         align-items: center;
@@ -285,11 +312,8 @@
 
                 &:hover {
                     background-color: rgba(255, 255, 255, 0.05);
-
-                    .os-icon {
-                        transform: scale(1.2);
-                        filter: drop-shadow(0 0 8px currentColor);
-                    }
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                 }
             }
         }
