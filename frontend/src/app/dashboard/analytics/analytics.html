@@ -3,7 +3,7 @@
     <div class="stats-grid">
         <div class="stat-card glass-card">
             <div class="stat-header">
-                <h3>Total Threats</h3>
+                <h3>Threats Detected</h3>
                 <span class="stat-icon"><lucide-icon [name]="ShieldIcon" [size]="20"></lucide-icon></span>
             </div>
             <div class="stat-body">
@@ -31,7 +31,7 @@
 
         <div class="stat-card glass-card">
             <div class="stat-header">
-                <h3>Avg Response</h3>
+                <h3>Avg Response Time</h3>
                 <span class="stat-icon"><lucide-icon [name]="ZapIcon" [size]="20"></lucide-icon></span>
             </div>
             <div class="stat-body">
@@ -45,7 +45,7 @@
 
         <div class="stat-card glass-card">
             <div class="stat-header">
-                <h3>Resolved</h3>
+                <h3>Resolved Incidents</h3>
                 <span class="stat-icon"><lucide-icon [name]="CheckCircleIcon" [size]="20"></lucide-icon></span>
             </div>
             <div class="stat-body">
@@ -66,34 +66,46 @@
                 <p class="subtitle">Real-time analysis of threat detection over the past 7 days</p>
             </div>
             <div class="chart-content line-chart-container">
-                <svg viewBox="0 0 600 200" preserveAspectRatio="none">
-                    <defs>
-                        <linearGradient id="mediumGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.5" />
-                            <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
-                        </linearGradient>
-                        <linearGradient id="criticalGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#ef4444" stop-opacity="0.5" />
-                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
-                        </linearGradient>
-                    </defs>
+                <div class="chart-frame">
+                    <div class="y-axis" aria-hidden="true">
+                        <span>40</span>
+                        <span>30</span>
+                        <span>20</span>
+                        <span>10</span>
+                        <span>0</span>
+                    </div>
 
-                    <!-- Grid Lines -->
-                    <line x1="0" y1="50" x2="600" y2="50" class="grid-line" />
-                    <line x1="0" y1="100" x2="600" y2="100" class="grid-line" />
-                    <line x1="0" y1="150" x2="600" y2="150" class="grid-line" />
+                    <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="mediumGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#10b981" stop-opacity="0.5" />
+                                <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+                            </linearGradient>
+                            <linearGradient id="criticalGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.5" />
+                                <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+                            </linearGradient>
+                        </defs>
 
-                    <!-- Medium Severity Path -->
-                    <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
-                    <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="6" />
+                        <!-- Grid Lines -->
+                        <line x1="0" y1="40" x2="600" y2="40" class="grid-line" />
+                        <line x1="0" y1="80" x2="600" y2="80" class="grid-line" />
+                        <line x1="0" y1="120" x2="600" y2="120" class="grid-line" />
+                        <line x1="0" y1="160" x2="600" y2="160" class="grid-line" />
+                        <line x1="0" y1="199" x2="600" y2="199" class="grid-line baseline" />
 
-                    <!-- Critical Severity Path -->
-                    <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
-                    <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="6" />
-                </svg>
+                        <!-- Medium Severity Path -->
+                        <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
+                        <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="6" />
 
-                <div class="x-axis">
-                    <span>Monday</span><span>Tuesday</span><span>Wednesday</span><span>Thursday</span><span>Friday</span><span>Saturday</span><span>Sunday</span>
+                        <!-- Critical Severity Path -->
+                        <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
+                        <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="6" />
+                    </svg>
+
+                    <div class="x-axis">
+                        <span>Monday</span><span>Tuesday</span><span>Wednesday</span><span>Thursday</span><span>Friday</span><span>Saturday</span><span>Sunday</span>
+                    </div>
                 </div>
 
                 <div class="chart-legend">
