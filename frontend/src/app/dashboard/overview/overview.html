@@ -149,11 +149,6 @@
         <div class="card trend-card">
             <div class="card-header">
                 <h3>Risk Trend</h3>
-                <div class="period-selector">
-                    <button [class.active]="currentTrendPeriod === '24h'" (click)="setTrendPeriod('24h')">24h</button>
-                    <button [class.active]="currentTrendPeriod === '7d'" (click)="setTrendPeriod('7d')">7d</button>
-                    <button [class.active]="currentTrendPeriod === '30d'" (click)="setTrendPeriod('30d')">30d</button>
-                </div>
             </div>
             <div class="card-body trend-layout">
                 <div class="line-chart-container">
