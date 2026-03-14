@@ -181,33 +181,36 @@
         <!-- Detailed Log -->
         <div class="chart-card glass-card detailed-log-section">
             <div class="log-header-bar">
-                <h3>
-                    Live Threat Feed
-                    <span class="badge">SECURE</span>
-                </h3>
-                <span class="subtitle">{{ detailedThreatLogs.length }} events active</span>
+                <div class="feed-title">
+                    <h3>Live Threat Feed</h3>
+                    <p>Threat telemetry is monitored in real-time across protected endpoints</p>
+                </div>
+                <div class="live-status" aria-label="Real-time threat monitoring status">
+                    <span class="badge">
+                        <span class="pulse-dot" aria-hidden="true"></span>
+                        {{ liveThreatFeedBadgeLabel }}
+                    </span>
+                    <span class="subtitle"><strong>{{ detailedThreatLogs.length }}</strong> events active</span>
+                </div>
             </div>
             <div class="log-list">
                 @for (log of detailedThreatLogs; track log.title; let i = $index) {
                 <div class="log-item" [style.animation-delay]="(i * 0.1) + 's'">
                     <div class="log-main">
-                        <div class="log-top">
-                            <h4>{{ log.title }}</h4>
-                            <span class="time">{{ log.time }}</span>
-                        </div>
+                        <h4>{{ log.title }}</h4>
                         <div class="log-details">
                             <span class="device">{{ log.device }}</span>
                             <span class="category">{{ log.category }}</span>
                         </div>
                     </div>
-                    <div class="log-actions">
-                        <span class="status-tag">{{ log.status }}</span>
-                        <span class="severity-tag" [ngClass]="'severity-' + log.severity.toLowerCase()">
-                            {{ log.severity }}
-                        </span>
-                        <button class="view-button" title="View Details"><lucide-icon [name]="EyeIcon"
-                                [size]="16"></lucide-icon></button>
-                    </div>
+                    <span class="time">{{ log.time }}</span>
+                    <span class="status-tag">{{ log.status }}</span>
+                    <span class="severity-tag" [ngClass]="'severity-' + log.severity.toLowerCase()">
+                        {{ log.severity }}
+                    </span>
+                    <button class="view-button" type="button" title="View Threat Details"
+                        aria-label="View Threat Details"><lucide-icon [name]="EyeIcon"
+                            [size]="16"></lucide-icon></button>
                 </div>
                 }
             </div>
