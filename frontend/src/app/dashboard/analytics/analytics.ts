@@ -164,4 +164,24 @@ export class Analytics {
             severity: 'HIGH'
         }
     ];
+
+    get hasActiveOrHighSeverityEvents(): boolean {
+        return this.detailedThreatLogs.some(log =>
+            log.status.toUpperCase() === 'ACTIVE' ||
+            log.severity.toUpperCase() === 'HIGH' ||
+            log.severity.toUpperCase() === 'CRITICAL'
+        );
+    }
+
+    get liveThreatFeedBadgeLabel(): 'LIVE' | 'MONITORED' | 'ACTIVE' {
+        if (this.hasActiveOrHighSeverityEvents) {
+            return 'ACTIVE';
+        }
+
+        if (this.detailedThreatLogs.length > 0) {
+            return 'MONITORED';
+        }
+
+        return 'LIVE';
+    }
 }
