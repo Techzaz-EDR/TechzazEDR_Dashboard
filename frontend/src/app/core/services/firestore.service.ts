@@ -44,8 +44,9 @@ export class FirestoreService {
         const tenantId = tId || 'demo-org';
         const subject = new ReplaySubject<any[]>(1);
         const agentsRef = collection(this.db, 'organizations', tenantId, 'agents');
+        const q = query(agentsRef, orderBy('last_seen', 'desc'));
 
-        const unsubscribe = onSnapshot(agentsRef, (querySnapshot) => {
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
           this.zone.run(() => {
             const agents: any[] = [];
             querySnapshot.forEach((doc) => {
