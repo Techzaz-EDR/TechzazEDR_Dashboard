@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { 
@@ -50,7 +50,8 @@ export class EndpointDetails implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -77,19 +78,19 @@ export class EndpointDetails implements OnInit, OnDestroy {
       // Real-time Firestore Subscriptions
       this.subscriptions.add(
         this.firestoreService.getAgentDetails(this.agentId).subscribe(details => {
-          if (details) this.agentDetails = details;
+          if (details) { this.agentDetails = details; this.cdr.detectChanges(); }
         })
       );
 
       this.subscriptions.add(
         this.firestoreService.getAgentAlerts(this.agentId).subscribe(alerts => {
-          if (alerts && alerts.length > 0) this.alerts = alerts;
+          if (alerts && alerts.length > 0) { this.alerts = alerts; this.cdr.detectChanges(); }
         })
       );
 
       this.subscriptions.add(
         this.firestoreService.getAgentCommands(this.agentId).subscribe(commands => {
-          if (commands && commands.length > 0) this.commands = commands;
+          if (commands && commands.length > 0) { this.commands = commands; this.cdr.detectChanges(); }
         })
       );
     }

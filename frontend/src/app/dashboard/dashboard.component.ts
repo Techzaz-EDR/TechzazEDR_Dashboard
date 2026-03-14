@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
@@ -226,9 +226,10 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    constructor(private router: Router, private authService: AuthService) {
+    constructor(private router: Router, private authService: AuthService, private cdr: ChangeDetectorRef) {
         this.authService.user$.subscribe(user => {
             this.userEmail = user?.email || 'Guest';
+            this.cdr.detectChanges();
         });
     }
 

@@ -5,6 +5,15 @@ import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
+import { NgZone } from '@angular/core';
+
+export interface ProfileUpdateData {
+    name?: string;
+    phone?: string;
+    bio?: string;
+    companyEmail?: string;
+    companyAddress?: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -25,35 +34,42 @@ export class AuthService {
 
     private db = getFirestore(this.auth.app);
 
-    constructor(private router: Router) {
-        onAuthStateChanged(this.auth, async (user: User | null) => {
-            console.log('Auth State Changed:', user ? `User ${user.email}` : 'No User');
-            this.userSubject.next(user);
+    constructor(private router: Router, private zone: NgZone) {
+        // Firebase callbacks run outside Angular's zone. Using .then() chains
+        // (not async/await) ensures every .next() call stays inside zone.run().
+        onAuthStateChanged(this.auth, (user: User | null) => {
             if (user) {
-                await this.refreshClaims(user);
-                
-                // Fetch the user's profile from the users collection
-                try {
+                this.zone.run(() => {
+                    this.userSubject.next(user);
+                });
+
+                // Load claims then profile, each .next() wrapped in zone.run()
+                this.refreshClaims(user).then(() => {
                     const userDocRef = doc(this.db, 'users', user.uid);
-                    const userDocSnap = await getDoc(userDocRef);
-                    
-                    if (userDocSnap.exists()) {
-                        this.userProfileSubject.next({ uid: user.uid, ...userDocSnap.data() });
-                        console.log('User profile fetched:', userDocSnap.data());
-                    } else {
-                        console.warn('User document not found in Firestore for uid:', user.uid);
-                        this.userProfileSubject.next(null);
-                    }
-                } catch (error) {
+                    return getDoc(userDocRef);
+                }).then(snap => {
+                    this.zone.run(() => {
+                        if (snap.exists()) {
+                            this.userProfileSubject.next({ uid: user.uid, ...snap.data() });
+                            console.log('User profile fetched:', snap.data());
+                        } else {
+                            console.warn('User document not found in Firestore for uid:', user.uid);
+                            this.userProfileSubject.next(null);
+                        }
+                    });
+                }).catch(error => {
                     console.error('Error fetching user profile:', error);
-                    this.userProfileSubject.next(null);
-                }
+                    this.zone.run(() => this.userProfileSubject.next(null));
+                });
 
             } else {
-                this.role = null;
-                this.tenantId = null;
-                this.tenantIdSubject.next(null);
-                this.userProfileSubject.next(null);
+                this.zone.run(() => {
+                    this.userSubject.next(null);
+                    this.role = null;
+                    this.tenantId = null;
+                    this.tenantIdSubject.next(null);
+                    this.userProfileSubject.next(null);
+                });
             }
         });
     }
@@ -62,15 +78,10 @@ export class AuthService {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, pass);
         const user = userCredential.user;
         
-        // Update last login timestamp in Firestore
-        try {
-            const userDocRef = doc(this.db, 'users', user.uid);
-            await updateDoc(userDocRef, {
-                last_login_at: serverTimestamp()
-            });
-        } catch (error) {
-            console.error('Error updating last_login_at:', error);
-        }
+        // Update last login timestamp in Firestore (fire-and-forget)
+        const userDocRef = doc(this.db, 'users', user.uid);
+        updateDoc(userDocRef, { last_login_at: serverTimestamp() })
+            .catch(error => console.error('Error updating last_login_at:', error));
 
         return userCredential;
     }
@@ -90,10 +101,36 @@ export class AuthService {
         const result = await getIdTokenResult(user);
         this.role = (result.claims['role'] as string) || null;
         this.tenantId = (result.claims['tenantId'] as string) || null;
-        this.tenantIdSubject.next(this.tenantId);
+        this.zone.run(() => this.tenantIdSubject.next(this.tenantId));
     }
 
     get isLoggedIn(): boolean {
         return !!this.userSubject.value;
+    }
+
+    get currentUser(): User | null | undefined {
+        return this.userSubject.value;
+    }
+
+    updateProfile(data: ProfileUpdateData): void {
+        const user = this.auth.currentUser;
+        if (!user) throw new Error('No authenticated user');
+
+        // 1. Optimistic update immediately — button will unstick right away
+        const current = this.userProfileSubject.value || {};
+        this.userProfileSubject.next({ ...current, ...data, uid: user.uid });
+
+        // 2. Fire-and-forget Firestore write in the background
+        const userDocRef = doc(this.db, 'users', user.uid);
+        const update: Record<string, any> = { updatedAt: serverTimestamp() };
+        if (data.name !== undefined)          update['name']          = data.name;
+        if (data.phone !== undefined)         update['phone']         = data.phone;
+        if (data.bio !== undefined)           update['bio']           = data.bio;
+        if (data.companyEmail !== undefined)  update['companyEmail']  = data.companyEmail;
+        if (data.companyAddress !== undefined) update['companyAddress'] = data.companyAddress;
+
+        updateDoc(userDocRef, update)
+            .then(() => console.log('Profile saved to Firestore'))
+            .catch(err => console.error('Profile Firestore write error:', err));
     }
 }
