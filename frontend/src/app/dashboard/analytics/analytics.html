@@ -95,22 +95,40 @@
                         <line x1="0" y1="199" x2="600" y2="199" class="grid-line baseline" />
 
                         <!-- Medium Severity Path -->
+                        <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="5" />
                         <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
-                        <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="6" />
+                        @for (point of trendCoordinates; track point.index) {
+                        <g class="chart-point-group medium" [attr.transform]="'translate(' + point.x + ',' + point.y + ')'">
+                            <title>{{ point.label }}: {{ point.value }} security alerts</title>
+                            <circle class="point-hit-area" r="12"></circle>
+                            <circle class="point-halo" r="6"></circle>
+                            <circle class="point-core" r="3.5"></circle>
+                        </g>
+                        }
 
                         <!-- Critical Severity Path -->
+                        <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="5" />
                         <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
-                        <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="6" />
+                        @for (point of criticalCoordinates; track point.index) {
+                        <g class="chart-point-group critical" [attr.transform]="'translate(' + point.x + ',' + point.y + ')'">
+                            <title>{{ point.label }}: {{ point.value }} critical threats</title>
+                            <circle class="point-hit-area" r="12"></circle>
+                            <circle class="point-halo" r="6"></circle>
+                            <circle class="point-core" r="3.5"></circle>
+                        </g>
+                        }
                     </svg>
 
                     <div class="x-axis">
-                        <span>Monday</span><span>Tuesday</span><span>Wednesday</span><span>Thursday</span><span>Friday</span><span>Saturday</span><span>Sunday</span>
+                        @for (label of trendDayLabels; track label) {
+                        <span>{{ label }}</span>
+                        }
                     </div>
                 </div>
 
                 <div class="chart-legend">
                     <div class="legend-item"><span class="dot critical"></span> Critical Threats</div>
-                    <div class="legend-item"><span class="dot medium"></span> System Alerts</div>
+                    <div class="legend-item"><span class="dot medium"></span> Security Alerts</div>
                 </div>
             </div>
         </div>
@@ -168,7 +186,7 @@
         </div>
 
         <!-- Top Threats -->
-        <div class="chart-card glass-card">
+        <div class="chart-card glass-card malware-focus-card">
             <div class="card-header">
                 <h3>Critical Malware types</h3>
                 <p class="subtitle">Most prevalent threat categories</p>
