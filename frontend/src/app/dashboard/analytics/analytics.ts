@@ -8,6 +8,14 @@ import {
     FileText, Settings, ChevronDown, Fingerprint
 } from 'lucide-angular';
 
+type ChartPoint = {
+    index: number;
+    x: number;
+    y: number;
+    value: number;
+    label: string;
+};
+
 @Component({
     selector: 'app-analytics',
     standalone: true,
@@ -55,23 +63,34 @@ export class Analytics {
         console.log('Generating report:', this.reportType, this.reportFormat);
     }
 
-    // Chart Data Helpers (Simplified for CSS Charts)
+    // Threat Trend chart data
+    readonly trendDayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-    // Threat Trend (Line Chart Points - SVG Polyline)
-    // Mapping numbers 0-40 to SVG coordinate space 0-100 height
-    get trendPoints() {
-        // Mock data points
-        const data = [28, 26, 32, 30, 36, 39, 29];
-        // Convert to SVG points string "x,y x,y..."
-        // Width 100% -> viewbox 0 0 600 200
-        // x step = 100
-        return data.map((val, i) => `${i * 100},${200 - (val * 4)} `).join(' ');
+    private readonly chartHeight = 200;
+    private readonly chartXStep = 100;
+    private readonly chartYScale = 4;
+
+    private readonly trendSeries = [28, 26, 32, 30, 36, 39, 29];
+    private readonly criticalSeries = [5, 4, 8, 6, 9, 8, 5];
+
+    readonly trendCoordinates = this.mapSeriesToCoordinates(this.trendSeries);
+    readonly criticalCoordinates = this.mapSeriesToCoordinates(this.criticalSeries);
+
+    readonly trendPoints = this.toPolylinePoints(this.trendCoordinates);
+    readonly criticalPoints = this.toPolylinePoints(this.criticalCoordinates);
+
+    private mapSeriesToCoordinates(series: number[]): ChartPoint[] {
+        return series.map((value, index) => ({
+            index,
+            x: index * this.chartXStep,
+            y: this.chartHeight - (value * this.chartYScale),
+            value,
+            label: this.trendDayLabels[index] ?? `Day ${index + 1}`
+        }));
     }
 
-    // Critical Trend
-    get criticalPoints() {
-        const data = [5, 4, 8, 6, 9, 8, 5];
-        return data.map((val, i) => `${i * 100},${200 - (val * 4)} `).join(' ');
+    private toPolylinePoints(points: ChartPoint[]): string {
+        return points.map(point => `${point.x},${point.y}`).join(' ');
     }
 
     // Incident Status (Donut)
