@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api import firebase_test, admin, examples, alerts
+from app.api import firebase_test, admin, examples, alerts, commands
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -22,6 +22,7 @@ app.include_router(firebase_test.router, prefix=settings.API_V1_STR, tags=["fire
 app.include_router(admin.router, prefix=f"{settings.API_V1_STR}/admin", tags=["admin"])
 app.include_router(examples.router, prefix=settings.API_V1_STR, tags=["examples"])
 app.include_router(alerts.router, prefix=f"{settings.API_V1_STR}/alerts", tags=["alerts"])
+app.include_router(commands.router, prefix=f"{settings.API_V1_STR}/commands", tags=["commands"])
 
 @app.get("/")
 def read_root():
