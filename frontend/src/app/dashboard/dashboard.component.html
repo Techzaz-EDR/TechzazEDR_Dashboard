@@ -144,9 +144,16 @@
                 }
 
                 <div class="user-profile" (click)="toggleDropdown()" [class.active]="isDropdownOpen">
-                    <div class="avatar-circle">AD</div>
+                    <div class="avatar-circle"
+                         [style.background-image]="userProfile?.photoUrl ? 'url(' + userProfile.photoUrl + ')' : 'none'"
+                         [style.background-size]="'cover'"
+                         [style.background-position]="'center'">
+                        @if (!userProfile?.photoUrl) {
+                            {{ getInitials(userProfile?.name) }}
+                        }
+                    </div>
                     <div class="user-details">
-                        <span class="username">{{ userEmail }}</span>
+                        <span class="username">{{ userProfile?.name || userEmail }}</span>
                         <span class="role">Security Ops</span>
                     </div>
                     <span class="dropdown-icon"><lucide-icon [name]="ChevronDown" [size]="16"></lucide-icon></span>
