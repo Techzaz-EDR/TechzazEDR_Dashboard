@@ -1,0 +1,114 @@
+<div class="terms-container">
+  <nav class="terms-nav">
+    <div class="container nav-content">
+      <a routerLink="/" class="back-link">
+        <lucide-icon [name]="ArrowLeft" [size]="18"></lucide-icon>
+        Back to Home
+      </a>
+      <div class="nav-logo">
+        <lucide-icon [name]="Shield" [size]="20" class="logo-icon"></lucide-icon>
+        TECHZAZ <strong>EDR</strong>
+      </div>
+    </div>
+  </nav>
+
+  <header class="terms-header">
+    <div class="container header-content">
+      <div class="badge">Legal</div>
+      <h1>Terms & Conditions</h1>
+      <p class="updated">Last Updated: {{ lastUpdated }}</p>
+    </div>
+  </header>
+
+  <main class="terms-main container">
+    <aside class="sidebar-nav">
+      <div class="glass-card sticky-sidebar">
+        <h3>Contents</h3>
+        <ul>
+          <li *ngFor="let section of sections">
+            <button (click)="scrollToSection(section.id)">
+              <lucide-icon [name]="section.icon" [size]="16" class="link-icon"></lucide-icon>
+              {{ section.label }}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="terms-content">
+      <section id="agreement" class="glass-card">
+        <h2><lucide-icon [name]="Scale" [size]="24" class="section-icon"></lucide-icon> 1. User Agreement</h2>
+        <p>
+          Welcome to Techzaz EDR. By accessing or using our platform, you agree to be bound by these Terms and Conditions. Please read them carefully.
+        </p>
+        <p>
+          These terms constitute a legally binding agreement between you (or the entity you represent) and Techzaz regarding your use of the EDR services, including endpoint agents, management dashboards, and detection engines.
+        </p>
+      </section>
+
+      <section id="usage" class="glass-card">
+        <h2><lucide-icon [name]="CheckCircle" [size]="24" class="section-icon"></lucide-icon> 2. Acceptable Use</h2>
+        <p>
+          The Techzaz EDR platform is intended for legitimate security operations, threat hunting, and endpoint protection. You agree not to:
+        </p>
+        <ul>
+          <li>Use the platform for any illegal or unauthorized purpose.</li>
+          <li>Attempt to reverse engineer the endpoint agents or detection logic.</li>
+          <li>Use the telemetry data to infringe on any third party's intellectual property or privacy rights.</li>
+          <li>Interfere with or disrupt the integrity or performance of the platform.</li>
+        </ul>
+      </section>
+
+      <section id="proprietary" class="glass-card">
+        <h2><lucide-icon [name]="Award" [size]="24" class="section-icon"></lucide-icon> 3. Proprietary Rights</h2>
+        <p>
+          Techzaz retains all rights, title, and interest in and to the EDR platform, including all software, algorithms, detection signatures, and documentation.
+        </p>
+        <p>
+          You are granted a limited, non-exclusive, non-transferable license to deploy agents and use the platform solely for your internal security monitoring and incident response activities.
+        </p>
+      </section>
+
+      <section id="liability" class="glass-card">
+        <h2><lucide-icon [name]="AlertCircle" [size]="24" class="section-icon"></lucide-icon> 4. Limitation of Liability</h2>
+        <p>
+          While Techzaz EDR is designed to detect and mitigate security threats, no security solution is 100% effective. 
+        </p>
+        <p>
+          Techzaz shall not be liable for any damages resulting from security breaches, data loss, or system downtime, even if the platform was in use at the time of the incident. You acknowledge that cybersecurity is a shared responsibility.
+        </p>
+      </section>
+
+      <section id="termination" class="glass-card">
+        <h2><lucide-icon [name]="Lock" [size]="24" class="section-icon"></lucide-icon> 5. Termination</h2>
+        <p>
+          We reserve the right to suspend or terminate your access to the platform if we believe you have violated these terms or if your usage poses a risk to the platform's security.
+        </p>
+        <p>
+          Upon termination, your license to use the platform ends immediately, and you must uninstall all deployed endpoint agents.
+        </p>
+      </section>
+
+      <div class="legal-notice glass-card">
+        <p>
+          Your use of the platform is also governed by our 
+          <a routerLink="/privacy-policy">Privacy Policy</a>.
+        </p>
+        <p>
+          If you have any questions about these terms, please contact us at 
+          <a href="mailto:legal@techzaz.com">legal@techzaz.com</a>.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="terms-footer">
+    <div class="container footer-content">
+      <p>&copy; 2026 Techzaz EDR Platform. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/terms-conditions">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+</div>
