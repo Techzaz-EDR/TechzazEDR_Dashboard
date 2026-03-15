@@ -1,19 +1,20 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X, ShieldCheck } from 'lucide-angular';
+import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X, ShieldCheck, Building2, Phone, CheckCircle } from 'lucide-angular';
 import { gsap } from 'gsap';
 import { AuthService } from '../core/services/auth.service';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [CommonModule, LucideAngularModule, FormsModule],
+    imports: [CommonModule, LucideAngularModule, FormsModule, RouterLink],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })
 export class LoginComponent implements AfterViewInit, OnInit {
+    // Sign-In Fields
     email = '';
     password = '';
     showPassword = false;
@@ -21,9 +22,19 @@ export class LoginComponent implements AfterViewInit, OnInit {
     errorMessage = '';
 
     // Sign Up Fields
-    signupName = '';
+    signupFirstName = '';
+    signupLastName = '';
     signupEmail = '';
+    signupCompany = '';
+    signupCountry = '';
+    signupPhone = '';
     signupPassword = '';
+    signupConfirmPassword = '';
+    showSignupPassword = false;
+    agreeTerms = false;
+    agreeContact = false;
+    signupError = '';
+    signupSuccess = false;
 
     readonly Eye = Eye;
     readonly EyeOff = EyeOff;
@@ -35,6 +46,9 @@ export class LoginComponent implements AfterViewInit, OnInit {
     readonly Globe = Globe;
     readonly Github = Github;
     readonly ShieldCheck = ShieldCheck;
+    readonly Building2 = Building2;
+    readonly Phone = Phone;
+    readonly CheckCircle = CheckCircle;
     private glowElement: HTMLElement | null = null;
 
     constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
@@ -112,12 +126,56 @@ export class LoginComponent implements AfterViewInit, OnInit {
         }
     }
 
+    async signUp() {
+        this.signupError = '';
+
+        if (this.signupPassword !== this.signupConfirmPassword) {
+            this.signupError = 'Passwords do not match. Please try again.';
+            return;
+        }
+
+        if (!this.agreeTerms) {
+            this.signupError = 'You must agree to the Terms of Service and Privacy Policy.';
+            return;
+        }
+
+        try {
+            // Registration logic — wire to AuthService when backend is ready
+            console.log('Sign up payload:', {
+                firstName: this.signupFirstName,
+                lastName: this.signupLastName,
+                email: this.signupEmail,
+                company: this.signupCompany,
+                country: this.signupCountry,
+                phone: this.signupPhone,
+            });
+            // On success, show confirmation state
+            this.signupSuccess = true;
+        } catch (error: any) {
+            console.error('Sign up failed', error);
+            this.signupError = error.message || 'Registration failed. Please try again.';
+        }
+    }
+
     togglePassword() {
         this.showPassword = !this.showPassword;
     }
 
+    goToLogin() {
+        this.isSignUpMode = false;
+        this.signupSuccess = false;
+        this.router.navigate(['/login']);
+    }
+
+    goToHome() {
+        this.router.navigate(['/']);
+    }
+
     toggleMode() {
         this.isSignUpMode = !this.isSignUpMode;
+        this.signupSuccess = false;
         this.errorMessage = '';
+        this.signupError = '';
     }
 }
+

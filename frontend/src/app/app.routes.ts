@@ -46,5 +46,6 @@ export const routes: Routes = [
     { path: 'about', loadComponent: () => import('./home/about/about').then(m => m.AboutComponent) },
     { path: 'contact', loadComponent: () => import('./home/contact/contact').then(m => m.ContactComponent) },
     { path: 'privacy-policy', loadComponent: () => import('./home/privacy-policy/privacy-policy').then(m => m.PrivacyPolicyComponent) },
-    { path: 'terms-conditions', loadComponent: () => import('./home/terms-conditions/terms-conditions').then(m => m.TermsConditionsComponent) }
+    { path: 'terms-conditions', loadComponent: () => import('./home/terms-conditions/terms-conditions').then(m => m.TermsConditionsComponent) },
+    { path: 'terms', redirectTo: 'terms-conditions', pathMatch: 'full' }
 ];

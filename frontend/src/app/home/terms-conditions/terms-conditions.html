@@ -22,11 +22,18 @@
 
   <main class="terms-main container">
     <aside class="sidebar-nav">
-      <div class="glass-card sticky-sidebar">
+      <!-- Mobile Nav Trigger -->
+      <div class="mobile-nav-trigger" (click)="toggleMobileNav()">
+        <lucide-icon [name]="ChevronDown" [size]="18" [class.open]="isMobileNavOpen"></lucide-icon>
+        <span>Contents</span>
+      </div>
+
+      <div class="glass-card sticky-sidebar" [class.mobile-open]="isMobileNavOpen">
         <h3>Contents</h3>
         <ul>
           <li *ngFor="let section of sections">
-            <button (click)="scrollToSection(section.id)">
+            <button (click)="scrollToSection(section.id); isMobileNavOpen = false" 
+                    [class.active]="activeSectionId === section.id">
               <lucide-icon [name]="section.icon" [size]="16" class="link-icon"></lucide-icon>
               {{ section.label }}
             </button>

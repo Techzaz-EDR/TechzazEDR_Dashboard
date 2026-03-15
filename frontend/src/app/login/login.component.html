@@ -1,4 +1,4 @@
-<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" (mousemove)="onMouseMove($event)"
+<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" [class.success-mode]="signupSuccess" (mousemove)="onMouseMove($event)"
     (mouseleave)="onMouseLeave()">
     <div class="hover-glow"></div>
 
@@ -74,6 +74,162 @@
                 </div>
 
             </form>
+        </div>
+
+        <!-- Sign-Up View -->
+        <div class="auth-view sign-up-view">
+
+            <!-- Fixed badge header — always visible above the scrollable form -->
+            @if (!signupSuccess) {
+            <div class="signup-card-header">
+                <div class="status-line">
+                    <span class="status-dot"></span>
+                    <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                    ORGANIZATION REGISTRATION
+                </div>
+                <h2>Create your Techzaz EDR account</h2>
+                <p class="subtitle">Set up your organization account to access the Techzaz EDR platform.</p>
+            </div>
+            }
+
+            @if (!signupSuccess) {
+            <form (ngSubmit)="signUp()" #signUpForm="ngForm" class="signup-form">
+
+                <div class="form-header" style="display:none">
+
+                </div>
+
+                <!-- Error Banner -->
+                @if (signupError) {
+                    <div class="error-banner">{{ signupError }}</div>
+                }
+
+                <!-- Input Fields -->
+                <div class="inputs-group">
+
+                    <!-- Row: First Name | Last Name -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                            <input type="text" name="firstName" [(ngModel)]="signupFirstName"
+                                placeholder="First Name" required autocomplete="given-name" />
+                        </div>
+                        <div class="form-group">
+                            <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                            <input type="text" name="lastName" [(ngModel)]="signupLastName"
+                                placeholder="Last Name" required autocomplete="family-name" />
+                        </div>
+                    </div>
+
+                    <!-- Work Email -->
+                    <div class="form-group">
+                        <lucide-icon [img]="Mail" [size]="16"></lucide-icon>
+                        <input type="email" name="signupEmail" [(ngModel)]="signupEmail"
+                            placeholder="Work Email" required autocomplete="email" />
+                    </div>
+
+                    <!-- Company Name -->
+                    <div class="form-group">
+                        <lucide-icon [img]="Building2" [size]="16"></lucide-icon>
+                        <input type="text" name="companyName" [(ngModel)]="signupCompany"
+                            placeholder="Company Name" required autocomplete="organization" />
+                    </div>
+
+                    <!-- Row: Country | Phone -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <lucide-icon [img]="Globe" [size]="16"></lucide-icon>
+                            <input type="text" name="country" [(ngModel)]="signupCountry"
+                                placeholder="Country" required autocomplete="country-name" />
+                        </div>
+                        <div class="form-group">
+                            <lucide-icon [img]="Phone" [size]="16"></lucide-icon>
+                            <input type="tel" name="phone" [(ngModel)]="signupPhone"
+                                placeholder="Phone Number" autocomplete="tel" />
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
+                        <input [type]="showSignupPassword ? 'text' : 'password'"
+                            name="signupPassword" [(ngModel)]="signupPassword"
+                            placeholder="Password" required autocomplete="new-password" />
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                        <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
+                        <input [type]="showSignupPassword ? 'text' : 'password'"
+                            name="confirmPassword" [(ngModel)]="signupConfirmPassword"
+                            placeholder="Confirm Password" required autocomplete="new-password" />
+                    </div>
+
+                </div>
+
+                <!-- Agreement Checkboxes -->
+                <div class="agreement-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="agreeTerms" [(ngModel)]="agreeTerms" required />
+                        <span class="checkmark"></span>
+                        <span>I agree to the <a routerLink="/terms" (click)="$event.stopPropagation()" class="policy-link">Terms of Service</a> and <a routerLink="/privacy-policy" (click)="$event.stopPropagation()" class="policy-link">Privacy Policy</a>.</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="agreeContact" [(ngModel)]="agreeContact" />
+                        <span class="checkmark"></span>
+                        <span>I agree to be contacted regarding onboarding and security updates.</span>
+                    </label>
+                </div>
+
+                <!-- Create Account Button -->
+                <div class="btn-submit-wrapper">
+                    <button type="submit" class="btn btn-primary full-width-btn">Create Account</button>
+                </div>
+
+                <!-- Bottom Link -->
+                <div class="toggle-link">
+                    Already have an account? <a (click)="toggleMode()">Log in</a>
+                </div>
+
+            </form>
+            } <!-- end @if (!signupSuccess) -->
+
+            <!-- Success Confirmation State -->
+            @if (signupSuccess) {
+            <div class="success-view">
+
+                <!-- Check Icon -->
+                <div class="success-icon-ring">
+                    <lucide-icon [img]="CheckCircle" [size]="36"></lucide-icon>
+                </div>
+
+                <!-- Badge -->
+                <div class="status-line success-badge">
+                    <span class="status-dot"></span>
+                    <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                    REQUEST RECEIVED
+                </div>
+
+                <!-- Title -->
+                <h2 class="success-title">Account Request Submitted</h2>
+
+                <!-- Note -->
+                <p class="success-secondary">
+                    A verification or onboarding step may be required before full platform access is enabled.
+                </p>
+
+                <!-- Divider -->
+                <div class="success-divider"></div>
+
+                <!-- Buttons -->
+                <div class="success-actions">
+                    <button class="btn btn-primary" (click)="goToLogin()">Go to Login</button>
+                    <button class="btn btn-outline" (click)="goToHome()">Back to Home</button>
+                </div>
+
+            </div>
+            } <!-- end @if (signupSuccess) -->
+
         </div>
 
     </div>
