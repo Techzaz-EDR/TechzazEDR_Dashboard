@@ -110,13 +110,22 @@
     z-index: 2;
 }
 
+/* Signup view: relative so card height grows with content */
 .sign-up-view {
+    position: relative;
     opacity: 0;
     z-index: 1;
     pointer-events: none;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .super-auth-container.sign-up-mode {
+    align-items: flex-start;
+    padding: 32px 0;
+
     .sign-in-view {
         opacity: 0;
         pointer-events: none;
@@ -126,6 +135,12 @@
         opacity: 1;
         z-index: 3;
         pointer-events: auto;
+    }
+
+    .auth-card {
+        position: relative;
+        overflow: visible;
+        overflow-y: auto;
     }
 }
 
@@ -309,6 +324,26 @@ form {
             &:nth-of-type(3) {
                 animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.14s forwards;
             }
+
+            &:nth-of-type(4) {
+                animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.26s forwards;
+            }
+
+            &:nth-of-type(5) {
+                animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.38s forwards;
+            }
+
+            &:nth-of-type(6) {
+                animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.50s forwards;
+            }
+
+            &:nth-of-type(7) {
+                animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.62s forwards;
+            }
+
+            &:nth-of-type(8) {
+                animation: slide-up-fade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.74s forwards;
+            }
         }
     }
 
@@ -353,6 +388,136 @@ form {
     }
 
     /* Inputs and Buttons (.solid) are now inherited from styles.scss (.input-wrapper and .btn-primary) */
+}
+
+/* =========================================
+   SIGNUP-SPECIFIC STYLES
+   ========================================= */
+
+/* Widen card when in sign-up mode */
+.super-auth-container.sign-up-mode .auth-card {
+    width: 520px;
+    min-height: 540px;
+}
+
+/* Signup form: fill full height, allow internal scroll */
+.signup-form {
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 36px 40px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: transparent;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(59, 130, 246, 0.2) transparent;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(59, 130, 246, 0.25);
+        border-radius: 4px;
+    }
+
+    .form-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .form-header .subtitle {
+        font-size: 0.82rem;
+        margin-top: 6px;
+    }
+}
+
+/* Two-column field row */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+}
+
+/* Full-width CTA button for signup */
+.full-width-btn {
+    width: 100%;
+    max-width: 100% !important;
+    letter-spacing: 0.5px;
+}
+
+/* Agreement / Checkbox section */
+.agreement-section {
+    width: 100%;
+    margin: 14px 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.45;
+
+    input[type="checkbox"] {
+        display: none;
+    }
+
+    .checkmark {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+        margin-top: 1px;
+        border-radius: 4px;
+        border: 1px solid rgba(59, 130, 246, 0.35);
+        background: rgba(8, 11, 18, 0.8);
+        transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 5px;
+            width: 5px;
+            height: 8px;
+            border: 2px solid white;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+    }
+
+    input[type="checkbox"]:checked + .checkmark {
+        background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+        border-color: var(--primary);
+        box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+
+        &::after {
+            opacity: 1;
+        }
+    }
+
+    .policy-link {
+        color: var(--neon-blue);
+        text-decoration: none;
+        font-weight: 600;
+        transition: text-shadow 0.2s;
+
+        &:hover {
+            text-shadow: 0 0 6px var(--neon-blue);
+        }
+    }
 }
 
 /* =========================================
