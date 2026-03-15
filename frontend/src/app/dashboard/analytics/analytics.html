@@ -134,23 +134,29 @@
         </div>
 
         <!-- Incident Status -->
-        <div class="chart-card glass-card cyber-card">
+        <div class="chart-card glass-card">
             <div class="card-header">
                 <h3>Incident Lifecycle</h3>
-                <p class="subtitle">Current distribution of incident states</p>
+                <p class="subtitle">Distribution of incident states</p>
             </div>
             <div class="chart-content donut-chart-container">
                 <div class="donut-viz">
                     <svg class="circle-svg" viewBox="0 0 100 100">
                         <circle class="track" cx="50" cy="50" r="40" />
-                        <!-- Simplified segments as example, real logic would need SVG calculations -->
-                        <circle class="segment resolved" cx="50" cy="50" r="40" stroke="#3b82f6"
-                            style="--dash-offset: 35; stroke-dasharray: 65 100;" />
-                        <circle class="segment investigating" cx="50" cy="50" r="40" stroke="#EF4444"
-                            style="--dash-offset: 0; stroke-dasharray: 15 100; stroke-dashoffset: -65;" />
-                        <circle class="segment contained" cx="50" cy="50" r="40" stroke="#F97316"
-                            style="--dash-offset: 0; stroke-dasharray: 20 100; stroke-dashoffset: -80;" />
+                        <!-- Resolved 65%: arc≈159, starts at top (offset=0) -->
+                        <circle class="segment resolved" cx="50" cy="50" r="40" stroke="#657182"
+                            style="stroke-dasharray: 159 251; stroke-dashoffset: 0;" />
+                        <!-- Investigating 15%: arc≈37, starts after resolved+gap (offset=-161) -->
+                        <circle class="segment investigating" cx="50" cy="50" r="40" stroke="#EB4344"
+                            style="stroke-dasharray: 37 251; stroke-dashoffset: -161;" />
+                        <!-- Contained 20%: arc≈49, starts after investigating+gap (offset=-200) -->
+                        <circle class="segment contained" cx="50" cy="50" r="40" stroke="#3A81F4"
+                            style="stroke-dasharray: 49 251; stroke-dashoffset: -200;" />
                     </svg>
+                    <div class="donut-center">
+                        <span class="total">{{ donutTotal }}</span>
+                        <span class="label">Total</span>
+                    </div>
                 </div>
 
                 <div class="donut-legend">
@@ -158,6 +164,7 @@
                     <div class="legend-item">
                         <span class="dot" [style.background-color]="segment.color"></span>
                         <span class="label">{{ segment.label }}</span>
+                        <span class="stat-count">{{ segment.count }}</span>
                         <span class="percent">{{ segment.percent }}%</span>
                     </div>
                     }
