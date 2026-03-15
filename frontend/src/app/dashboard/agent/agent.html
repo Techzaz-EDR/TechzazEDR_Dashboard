@@ -6,9 +6,9 @@
         <lucide-icon [name]="ShieldIcon" class="header-icon" (click)="backToEndpoints()" style="cursor: pointer;"></lucide-icon>
         <h1 (click)="backToEndpoints()" style="cursor: pointer;">{{ agentId }}</h1>
       </div>
-      <div class="status-badge" [class.active]="agentDetails?.status === 'active'">
-        <span class="status-pulse" *ngIf="agentDetails?.status === 'active'"></span>
-        {{ agentDetails?.status === 'active' ? 'Active' : 'Offline' }}
+      <div class="status-badge" [class.active]="agentDetails?.status === 'online'">
+        <span class="status-pulse" *ngIf="agentDetails?.status === 'online'"></span>
+        {{ agentDetails?.status === 'online' ? 'Online' : 'Offline' }}
       </div>
     </div>
 

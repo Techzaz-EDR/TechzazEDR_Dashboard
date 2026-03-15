@@ -14,7 +14,7 @@ def process_alert_background(agent_id: str, organization_id: str, alert: Securit
     alert_dict = alert.dict()
     
     # Add a backend receive timestamp for tracking latency
-    alert_dict["_received_at"] = datetime.utcnow().isoformat()
+    alert_dict["_received_at"] = datetime.utcnow().isoformat() + 'Z'
     
     # Write to Firestore: organizations/{organization_id}/agents/{agent_id}/alerts/{alert_id}
     org_ref = db.collection("organizations").document(organization_id)
@@ -22,7 +22,7 @@ def process_alert_background(agent_id: str, organization_id: str, alert: Securit
     # Update agent last_seen/status
     agent_ref = org_ref.collection("agents").document(agent_id)
     agent_ref.set({
-        "last_seen": datetime.utcnow().isoformat(),
+        "last_seen": datetime.utcnow().isoformat() + 'Z',
         "status": "online"
     }, merge=True)
     
