@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X, ShieldCheck, Building2, Phone, CheckCircle } from 'lucide-angular';
 import { gsap } from 'gsap';
@@ -9,7 +9,7 @@ import { AuthService } from '../core/services/auth.service';
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [CommonModule, LucideAngularModule, FormsModule],
+    imports: [CommonModule, LucideAngularModule, FormsModule, RouterLink],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })

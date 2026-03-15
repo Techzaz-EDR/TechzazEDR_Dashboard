@@ -172,7 +172,7 @@
                     <label class="checkbox-label">
                         <input type="checkbox" name="agreeTerms" [(ngModel)]="agreeTerms" required />
                         <span class="checkmark"></span>
-                        <span>I agree to the <a href="#" class="policy-link">Terms of Service</a> and <a href="#" class="policy-link">Privacy Policy</a>.</span>
+                        <span>I agree to the <a routerLink="/terms" (click)="$event.stopPropagation()" class="policy-link">Terms of Service</a> and <a routerLink="/privacy-policy" (click)="$event.stopPropagation()" class="policy-link">Privacy Policy</a>.</span>
                     </label>
                     <label class="checkbox-label">
                         <input type="checkbox" name="agreeContact" [(ngModel)]="agreeContact" />

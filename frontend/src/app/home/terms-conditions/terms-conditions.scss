@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .terms-container {
   min-height: 100vh;
   background-color: #030712;
@@ -153,8 +157,9 @@
 
   .sticky-sidebar {
     position: sticky;
-    top: 120px;
+    top: 100px;
     padding: 24px;
+    z-index: 10;
 
     h3 {
       font-size: 0.85rem;
@@ -189,14 +194,95 @@
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
+      position: relative;
 
       &:hover {
         background: rgba(139, 92, 246, 0.05);
         color: #fff;
       }
 
+      &.active {
+        color: #fff;
+        background: rgba(139, 92, 246, 0.08);
+        border-right: 2px solid #8b5cf6;
+        border-radius: 10px 0 0 10px;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 3px;
+          height: 16px;
+          background: #8b5cf6;
+          border-radius: 0 4px 4px 0;
+          box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        .link-icon {
+          color: #8b5cf6;
+          opacity: 1;
+        }
+      }
+
       .link-icon {
         opacity: 0.6;
+      }
+    }
+  }
+}
+
+.mobile-nav-trigger {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+  
+  lucide-icon {
+    transition: transform 0.3s ease;
+    &.open {
+      transform: rotate(180deg);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    display: flex;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar-nav {
+    display: block !important;
+    position: sticky;
+    top: 96px;
+    z-index: 50;
+
+    .sticky-sidebar {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      padding: 12px;
+      margin-top: 8px;
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+
+      &.mobile-open {
+        display: block;
+      }
+
+      h3 {
+        display: none;
       }
     }
   }

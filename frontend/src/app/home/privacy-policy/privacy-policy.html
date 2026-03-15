@@ -16,17 +16,25 @@
     <div class="container header-content">
       <div class="badge">Legal</div>
       <h1>Privacy Policy</h1>
+      <p class="header-subtitle">How Techzaz EDR collects, uses, and protects your data.</p>
       <p class="updated">Last Updated: {{ lastUpdated }}</p>
     </div>
   </header>
 
   <main class="policy-main container">
     <aside class="sidebar-nav">
-      <div class="glass-card sticky-sidebar">
+      <!-- Mobile Nav Trigger -->
+      <div class="mobile-nav-trigger" (click)="toggleMobileNav()">
+        <lucide-icon [name]="ChevronDown" [size]="18" [class.open]="isMobileNavOpen"></lucide-icon>
+        <span>Contents</span>
+      </div>
+
+      <div class="glass-card sticky-sidebar" [class.mobile-open]="isMobileNavOpen">
         <h3>Contents</h3>
         <ul>
           <li *ngFor="let section of sections">
-            <button (click)="scrollToSection(section.id)">
+            <button (click)="scrollToSection(section.id); isMobileNavOpen = false" 
+                    [class.active]="activeSectionId === section.id">
               <lucide-icon [name]="section.icon" [size]="16" class="link-icon"></lucide-icon>
               {{ section.label }}
             </button>
@@ -119,9 +127,16 @@
           </div>
         </div>
       </section>
-
+ 
+      <section id="data-retention" class="glass-card">
+        <h2><lucide-icon [name]="Clock" [size]="24" class="section-icon"></lucide-icon> 5. Data Retention</h2>
+        <p>
+          Techzaz EDR retains collected telemetry, account information, and security event data only for the period necessary to provide endpoint protection, threat detection, and compliance support. Retention durations may vary depending on operational, legal, and security requirements.
+        </p>
+      </section>
+ 
       <section id="your-rights" class="glass-card">
-        <h2><lucide-icon [name]="CheckCircle" [size]="24" class="section-icon"></lucide-icon> 5. Your Rights</h2>
+        <h2><lucide-icon [name]="CheckCircle" [size]="24" class="section-icon"></lucide-icon> 6. Your Rights</h2>
         <p>
           You have certain rights regarding your data:
         </p>
@@ -132,6 +147,16 @@
         </ul>
         <p>
           To exercise these rights, please contact our privacy team at <a href="mailto:privacy@techzaz.com">privacy@techzaz.com</a>.
+        </p>
+      </section>
+ 
+      <section id="contact-us" class="glass-card">
+        <h2><lucide-icon [name]="Mail" [size]="24" class="section-icon"></lucide-icon> 7. Contact Us</h2>
+        <p>
+          If you have questions about this Privacy Policy or how your data is handled within the Techzaz EDR platform, you may contact our security team at:
+        </p>
+        <p>
+          <a href="mailto:security@techzaz.com">security@techzaz.com</a>
         </p>
       </section>
     </div>
