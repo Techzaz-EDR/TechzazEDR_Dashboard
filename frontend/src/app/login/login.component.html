@@ -2,7 +2,7 @@
     (mouseleave)="onMouseLeave()">
     <div class="hover-glow"></div>
 
-    <!-- Background Data Fragments -->
+    <!-- Background Data Fragments / Watermark -->
     <div class="data-fragments">
         <div class="fragment" style="--top: 15%; --left: 10%; --delay: 0s">Techzaz EDR</div>
         <div class="fragment" style="--top: 25%; --left: 80%; --delay: 3s">Techzaz EDR</div>
@@ -10,79 +10,72 @@
         <div class="fragment" style="--top: 80%; --left: 70%; --delay: 1.5s">Techzaz EDR</div>
     </div>
 
+    <!-- Centered Login Card -->
     <div class="auth-card">
-        <!-- Sign In View -->
+
+        <!-- Sign-In View -->
         <div class="auth-view sign-in-view">
-            <form (submit)="signIn()">
+            <form (ngSubmit)="signIn()" #signInForm="ngForm">
+
                 <div class="form-header">
+                    <!-- Status Badge -->
                     <div class="status-line">
                         <span class="status-dot"></span>
-                        <lucide-icon [name]="ShieldCheck" [size]="14"></lucide-icon>
-                        Secure Console Access
+                        <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                        SECURE CONSOLE ACCESS
                     </div>
-                    <h2>Sign in to Techzaz EDR</h2>
+
+                    <!-- Title -->
+                    <h2>Log in to Techzaz EDR</h2>
                 </div>
 
-                <div *ngIf="errorMessage" class="error-banner">
-                    {{ errorMessage }}
-                </div>
+                <!-- Error Banner -->
+                @if (errorMessage) {
+                    <div class="error-banner">{{ errorMessage }}</div>
+                }
 
+                <!-- Input Fields -->
                 <div class="inputs-group">
                     <div class="form-group">
-                        <div class="input-wrapper">
-                            <lucide-icon [name]="User" [size]="20" class="input-icon"></lucide-icon>
-                            <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
-                        </div>
+                        <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                        <input
+                            type="email"
+                            name="email"
+                            [(ngModel)]="email"
+                            placeholder="Work Email"
+                            required
+                            autocomplete="email"
+                        />
                     </div>
                     <div class="form-group">
-                        <div class="input-wrapper">
-                            <lucide-icon [name]="Lock" [size]="20" class="input-icon"></lucide-icon>
-                            <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
-                                placeholder="Password" required />
-                        </div>
+                        <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
+                        <input
+                            [type]="showPassword ? 'text' : 'password'"
+                            name="password"
+                            [(ngModel)]="password"
+                            placeholder="Password"
+                            required
+                            autocomplete="current-password"
+                        />
                     </div>
                 </div>
 
-                <a href="#" class="forgot-password">Forgot password?</a>
-                <button type="submit" class="btn btn-primary full-width">Sign In</button>
-                <p class="toggle-link">New here? <a (click)="toggleMode()">Create account</a></p>
+                <!-- Forgot Password -->
+                <a class="forgot-password" href="#">Forgot password?</a>
+
+                <!-- Sign In Button -->
+                <div class="btn-submit-wrapper">
+                    <button type="submit" class="btn btn-primary">SIGN IN</button>
+                </div>
+
+                <!-- Bottom Link -->
+                <div class="toggle-link">
+                    New here? <a (click)="toggleMode()">Create account</a>
+                </div>
+
             </form>
         </div>
 
-        <!-- Sign Up View -->
-        <div class="auth-view sign-up-view">
-            <form>
-                <div class="form-header">
-                    <h2>Initialize Tenant</h2>
-                </div>
-
-                <div class="inputs-group">
-                    <div class="form-group">
-                        <div class="input-wrapper">
-                            <lucide-icon [name]="User" [size]="20" class="input-icon"></lucide-icon>
-                            <input type="text" name="signupName" [(ngModel)]="signupName"
-                                placeholder="Administrator Name" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-wrapper">
-                            <lucide-icon [name]="Mail" [size]="20" class="input-icon"></lucide-icon>
-                            <input type="email" name="signupEmail" [(ngModel)]="signupEmail"
-                                placeholder="Work Email" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-wrapper">
-                            <lucide-icon [name]="Lock" [size]="20" class="input-icon"></lucide-icon>
-                            <input type="password" name="signupPassword" [(ngModel)]="signupPassword"
-                                placeholder="Master Password" />
-                        </div>
-                    </div>
-                </div>
-
-                <button type="button" class="btn btn-primary full-width" (click)="signIn()">Deploy Workspace</button>
-                <p class="toggle-link">Already have an account? <a (click)="toggleMode()">Log In</a></p>
-            </form>
-        </div>
     </div>
+
 </div>
