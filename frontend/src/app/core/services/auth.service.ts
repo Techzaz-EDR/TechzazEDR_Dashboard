@@ -136,6 +136,21 @@ export class AuthService {
             .catch(err => console.error('Profile Firestore write error:', err));
     }
 
+    async updateProfilePictureData(photoUrl: string): Promise<void> {
+        const user = this.auth.currentUser;
+        if (!user) throw new Error('No authenticated user');
+
+        const userDocRef = doc(this.db, 'users', user.uid);
+        await updateDoc(userDocRef, { 
+            photoUrl: photoUrl,
+            updatedAt: serverTimestamp()
+        });
+
+        // Update the local state
+        const current = this.userProfileSubject.value || {};
+        this.userProfileSubject.next({ ...current, photoUrl: photoUrl });
+    }
+
     async uploadProfilePicture(file: File): Promise<string> {
         const user = this.auth.currentUser;
         if (!user) throw new Error('No authenticated user');

@@ -88,6 +88,47 @@ export class Profile implements OnInit, OnDestroy {
         }
     }
 
+    private resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event: any) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width = Math.round((width * maxHeight) / height);
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        resolve(dataUrl);
+                    } else {
+                        reject(new Error('Canvas context could not be created'));
+                    }
+                };
+                img.onerror = (error) => reject(error);
+                img.src = event.target.result;
+            };
+            reader.onerror = (error) => reject(error);
+        });
+    }
+
     async onFileSelected(event: any) {
         const file = event.target.files?.[0];
         if (!file) return;
@@ -107,13 +148,16 @@ export class Profile implements OnInit, OnDestroy {
         this.cdr.detectChanges();
         
         try {
-            const url = await this.authService.uploadProfilePicture(file);
-            this.user.photoUrl = url;
+            // Compress and resize the image before uploading directly to Firestore as Base64 to bypass failing Storage bucket
+            const dataUrl = await this.resizeImage(file, 400, 400);
+            await this.authService.updateProfilePictureData(dataUrl);
+            
+            this.user.photoUrl = dataUrl;
             this.saveSuccess = true;
             setTimeout(() => { this.saveSuccess = false; this.cdr.detectChanges(); }, 4000);
         } catch (err: any) {
-            console.error('Error uploading picture', err);
-            this.uploadError = err?.message || 'Failed to upload picture. Please try again.';
+            console.error('Error saving picture:', err);
+            this.uploadError = err?.message || 'Failed to process picture. Please try again.';
         } finally {
             this.uploading = false;
             // Clear input so same file can be selected again
