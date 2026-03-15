@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, getIdTokenResult } from 'firebase/auth';
-import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, doc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable, from, firstValueFrom } from 'rxjs';
