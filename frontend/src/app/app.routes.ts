@@ -44,5 +44,6 @@ export const routes: Routes = [
     },
     { path: 'topic/:name', loadComponent: () => import('./home/topic/topic').then(m => m.TopicComponent) },
     { path: 'about', loadComponent: () => import('./home/about/about').then(m => m.AboutComponent) },
-    { path: 'contact', loadComponent: () => import('./home/contact/contact').then(m => m.ContactComponent) }
+    { path: 'contact', loadComponent: () => import('./home/contact/contact').then(m => m.ContactComponent) },
+    { path: 'privacy-policy', loadComponent: () => import('./home/privacy-policy/privacy-policy').then(m => m.PrivacyPolicyComponent) }
 ];
