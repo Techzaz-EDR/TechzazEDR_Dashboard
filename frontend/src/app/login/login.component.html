@@ -1,4 +1,4 @@
-<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" (mousemove)="onMouseMove($event)"
+<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" [class.success-mode]="signupSuccess" (mousemove)="onMouseMove($event)"
     (mouseleave)="onMouseLeave()">
     <div class="hover-glow"></div>
 
@@ -78,22 +78,25 @@
 
         <!-- Sign-Up View -->
         <div class="auth-view sign-up-view">
+
+            <!-- Fixed badge header — always visible above the scrollable form -->
+            @if (!signupSuccess) {
+            <div class="signup-card-header">
+                <div class="status-line">
+                    <span class="status-dot"></span>
+                    <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                    ORGANIZATION REGISTRATION
+                </div>
+                <h2>Create your Techzaz EDR account</h2>
+                <p class="subtitle">Set up your organization account to access the Techzaz EDR platform.</p>
+            </div>
+            }
+
             @if (!signupSuccess) {
             <form (ngSubmit)="signUp()" #signUpForm="ngForm" class="signup-form">
 
-                <div class="form-header">
-                    <!-- Status Badge -->
-                    <div class="status-line">
-                        <span class="status-dot"></span>
-                        <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
-                        SECURE ORGANIZATION SETUP
-                    </div>
+                <div class="form-header" style="display:none">
 
-                    <!-- Title -->
-                    <h2>Create your Techzaz EDR account</h2>
-
-                    <!-- Subtitle -->
-                    <p class="subtitle">Set up your organization account to access the Techzaz EDR platform.</p>
                 </div>
 
                 <!-- Error Banner -->
@@ -210,23 +213,13 @@
                 <!-- Title -->
                 <h2 class="success-title">Account Request Submitted</h2>
 
-                <!-- Description -->
-                <p class="success-description">
-                    Your Techzaz EDR account request has been submitted successfully.
-                </p>
-
-                <!-- Secondary text -->
+                <!-- Note -->
                 <p class="success-secondary">
-                    You can proceed to sign in once your workspace is ready, or return to the homepage.
+                    A verification or onboarding step may be required before full platform access is enabled.
                 </p>
 
                 <!-- Divider -->
                 <div class="success-divider"></div>
-
-                <!-- Small note -->
-                <p class="success-note">
-                    A verification or onboarding step may be required before full platform access is enabled.
-                </p>
 
                 <!-- Buttons -->
                 <div class="success-actions">
