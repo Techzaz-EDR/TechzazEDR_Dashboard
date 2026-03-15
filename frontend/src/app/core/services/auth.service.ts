@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, getIdTokenResult } from 'firebase/auth';
-import { getFirestore, doc, getDoc, updateDoc, serverTimestamp, setDoc, collection, addDoc, deleteDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable, from, firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
@@ -33,6 +34,7 @@ export class AuthService {
     public tenantId: string | null = null;
 
     private db = getFirestore(this.auth.app);
+    private storage = getStorage(this.auth.app);
 
     constructor(private router: Router, private zone: NgZone) {
         // Firebase callbacks run outside Angular's zone. Using .then() chains
@@ -183,5 +185,47 @@ export class AuthService {
         updateDoc(userDocRef, update)
             .then(() => console.log('Profile saved to Firestore'))
             .catch(err => console.error('Profile Firestore write error:', err));
+    }
+
+    async updateProfilePictureData(photoUrl: string): Promise<void> {
+        const user = this.auth.currentUser;
+        if (!user) throw new Error('No authenticated user');
+
+        const userDocRef = doc(this.db, 'users', user.uid);
+        await updateDoc(userDocRef, { 
+            photoUrl: photoUrl,
+            updatedAt: serverTimestamp()
+        });
+
+        // Update the local state
+        const current = this.userProfileSubject.value || {};
+        this.userProfileSubject.next({ ...current, photoUrl: photoUrl });
+    }
+
+    async uploadProfilePicture(file: File): Promise<string> {
+        const user = this.auth.currentUser;
+        if (!user) throw new Error('No authenticated user');
+
+        // Create a reference to the storage location
+        const storageRef = ref(this.storage, `profile_pictures/${user.uid}_${Date.now()}_${file.name}`);
+        
+        // Upload the file
+        await uploadBytes(storageRef, file);
+        
+        // Get the download URL
+        const downloadURL = await getDownloadURL(storageRef);
+        
+        // Update Firestore with the new photo URL
+        const userDocRef = doc(this.db, 'users', user.uid);
+        await updateDoc(userDocRef, { 
+            photoUrl: downloadURL,
+            updatedAt: serverTimestamp()
+        });
+
+        // Update the local state
+        const current = this.userProfileSubject.value || {};
+        this.userProfileSubject.next({ ...current, photoUrl: downloadURL });
+
+        return downloadURL;
     }
 }
