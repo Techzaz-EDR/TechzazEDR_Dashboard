@@ -57,7 +57,7 @@
                 <a href="#architecture" (click)="scrollToSection('architecture', $event)" #navItem>Architecture</a>
                 <a href="#resources" (click)="scrollToSection('resources', $event)" #navItem>Security</a>
                 <a href="#pricing" (click)="scrollToSection('pricing', $event)" #navItem>Pricing</a>
-                <a routerLink="/login" class="nav-btn-signin" #navItem>Sign In</a>
+                <a routerLink="/login" class="nav-btn-signin" #navItem>Log In</a>
             </div>
 
         </div>
@@ -649,7 +649,7 @@
                     </div>
 
                     <p class="legal-text">
-                        By submitting this form, you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
+                        By submitting this form, you agree to our <a routerLink="/privacy-policy">Privacy Policy</a> and <a routerLink="/terms-conditions">Terms of Service</a>.
                     </p>
 
                     <button type="submit" class="btn btn-primary-blue full-width">Request Demo</button>
@@ -744,8 +744,8 @@
             <div class="footer-bottom">
                 <p>&copy; 2026 Techzaz EDR Platform. All rights reserved.</p>
                 <div class="legal-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
+                    <a routerLink="/privacy-policy">Privacy Policy</a>
+                    <a routerLink="/terms-conditions">Terms of Service</a>
                 </div>
             </div>
         </div>

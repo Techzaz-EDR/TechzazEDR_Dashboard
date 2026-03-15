@@ -79,6 +79,11 @@ export class Analytics {
     readonly trendPoints = this.toPolylinePoints(this.trendCoordinates);
     readonly criticalPoints = this.toPolylinePoints(this.criticalCoordinates);
 
+    trendTooltipVisible = false;
+    trendTooltipX = 0;
+    trendTooltipY = 0;
+    trendTooltipText = '';
+
     private mapSeriesToCoordinates(series: number[]): ChartPoint[] {
         return series.map((value, index) => ({
             index,
@@ -93,13 +98,34 @@ export class Analytics {
         return points.map(point => `${point.x},${point.y}`).join(' ');
     }
 
+    showTrendTooltip(event: MouseEvent, point: ChartPoint, seriesLabel: string) {
+        const frameElement = (event.currentTarget as SVGElement | null)?.closest('.chart-frame') as HTMLElement | null;
+        if (!frameElement) {
+            return;
+        }
+
+        const rect = frameElement.getBoundingClientRect();
+        this.trendTooltipX = event.clientX - rect.left;
+        this.trendTooltipY = event.clientY - rect.top;
+        this.trendTooltipText = `${point.label}: ${point.value} ${seriesLabel}`;
+        this.trendTooltipVisible = true;
+    }
+
+    hideTrendTooltip() {
+        this.trendTooltipVisible = false;
+    }
+
     // Incident Status (Donut)
-    // Segments: Contained (Orange), Investigating (Red), Resolved (Green)
+    // Segments: Contained (Blue), Investigating (Amber), Resolved (Green)
     donutSegments = [
-        { color: '#F97316', percent: 20, label: 'Contained' },
-        { color: '#EF4444', percent: 15, label: 'Investigating' },
-        { color: '#22C55E', percent: 65, label: 'Resolved' }
+        { color: '#3A81F4', percent: 20, count: 40, label: 'Contained' },
+        { color: '#EB4344', percent: 15, count: 30, label: 'Investigating' },
+        { color: '#657182', percent: 65, count: 130, label: 'Resolved' }
     ];
+
+    get donutTotal(): number {
+        return this.donutSegments.reduce((sum, s) => sum + s.count, 0);
+    }
 
     // Detection Methods (Top Threat Types - Horizontal Bar)
     topThreats = [

@@ -1,126 +1,161 @@
-# TechzazEDR Dashboard
+# 🛡️ TechzazEDR Dashboard
 
-A modern, high-performance Endpoint Detection and Response (EDR) dashboard built with a decoupled architecture using Angular and FastAPI.
+[![Status](https://img.shields.io/badge/Status-Active-success.svg)](#)
+[![Version](https://img.shields.io/badge/Version-1.2.0-blue.svg)](#)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](#)
 
-## Table of Contents
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-  - [Frontend Setup](#frontend-setup)
-  - [Backend Setup](#backend-setup)
-- [Git Workflow](#git-workflow)
-- [API Documentation](#api-documentation)
+A modern, high-performance Endpoint Detection and Response (EDR) orchestration hub. Built with a decoupled architecture using **Angular 21** and **FastAPI**, it provides real-time monitoring, threat hunting, and fleet management for the TechzazEDR ecosystem.
 
 ---
 
-## Overview
-TechzazEDR Dashboard is designed to provide real-time monitoring and management of endpoint security. It features a sleek, responsive frontend and a robust, scalable backend API.
+## 📖 Table of Contents
+- [✨ Core Features](#-core-features)
+- [🏗️ System Architecture](#️-system-architecture)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [📂 Project Structure](#-project-structure)
+- [🚀 Quick Start](#-quick-start)
+- [🔒 Security](#-security)
+- [🤝 Contributing](#-contributing)
 
-## Architecture
-The project follows a modern **Frontend-Backend (Decoupled)** and **Multi-Tenant SaaS** architecture:
-- **Frontend**: A single-page application (SPA) that communicates with the API.
-- **Backend**: A RESTful API that handles data processing, security logic, and database interactions.
-- **Database (Firestore)**: Implements rigid data isolation with hierarchical paths: `organizations/{organization_id}/agents/{agent_id}/alerts/{alert_id}`.
+---
 
-## Tech Stack
+## ✨ Core Features
+
+| Feature | Description |
+| :--- | :--- |
+| **Real-time Monitoring** | Live telemetry streaming from agents directly to the dashboard. |
+| **Multi-Tenant Hub** | Secure data isolation for multiple organizations and sub-tenants. |
+| **Fleet Orchestration** | Monitor agent health, status, and orchestrate remote scans. |
+| **Advanced Analytics** | High-fidelity visualizations for rapid threat triage and investigation. |
+| **RBAC** | Fine-grained access control (Admin, Analyst, Viewer) at the API layer. |
+
+---
+
+## 🏗️ System Architecture
+
+The TechzazEDR ecosystem follows a distributed telemetry pipeline:
+
+```mermaid
+graph TD
+    subgraph "Endpoints"
+        A1["🛡️ Windows Agent A"]
+        A2["🛡️ Windows Agent B"]
+    end
+
+    subgraph "Cloud Backend (FastAPI)"
+        B["⚙️ Telemetry API"]
+        C["🔐 Auth Middleware"]
+        D["📊 Task Processor"]
+    end
+
+    subgraph "Data Layer"
+        E[("🔥 Firestore NoSQL")]
+        F["🔑 Firebase Auth"]
+    end
+
+    subgraph "Management Console"
+        G["🖥️ Angular Dashboard"]
+    end
+
+    A1 -- "Alerts (REST/JSON)" --> B
+    A2 -- "Alerts (REST/JSON)" --> B
+    B -- "Validate Claims" --> C
+    C -- "Verify Token" --> F
+    B -- "Store Telemetry" --> E
+    G -- "Query Data" --> B
+    G -- "Live Updates" --> E
+```
+
+### 🛰️ Telemetry Pipeline
+1. **Detection**: Agents detect threats using HIDS, YARA, or Network DPI.
+2. **Ingestion**: Alerts are pushed to the FastAPI backend via scoped API keys.
+3. **Storage**: Data is stored in a hierarchical Firestore structure: `organizations/{org_id}/agents/{agent_id}/alerts/{alert_id}`.
+4. **Visualization**: Analysts monitor and triage alerts in real-time on the dashboard.
+
+```mermaid
+sequenceDiagram
+    participant A as 🛡️ Windows Agent
+    participant B as ⚙️ FastAPI Backend
+    participant C as 🔥 Firestore
+    participant D as 🖥️ Angular Dashboard
+
+    A->>B: POST /api/alerts (with API Key)
+    B->>B: Validate Tenant & API Key
+    B->>C: Create Alert Document
+    C-->>D: Real-time Snapshot
+    D->>D: Play Pulse Animation
+```
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework**: [Angular](https://angular.io/) (v21+)
-- **Styling**: SCSS (Vanilla CSS principles)
-- **Animations**: GSAP
-- **Icons**: Lucide Angular
-- **Build Tool**: Angular CLI / Vite (development server)
+- **Framework**: [Angular 21](https://angular.io/) (Signals, Standalone Components)
+- **Styling**: Modern SCSS + Lucide Icons
+- **Animations**: [GSAP](https://greensock.com/gsap/) for premium feel
+- **Build**: Vite-powered CLI
 
 ### Backend
-- **Framework**: [FastAPI](https://fastapi.tiangolo.com/)
-- **Runtime**: Python 3.13.5
-- **Server**: Uvicorn
-- **Settings**: Pydantic Settings (Environment-based config)
+- **Framework**: [FastAPI](https://fastapi.tiangolo.com/) (Async Python 3.13)
+- **Validation**: Pydantic v2
+- **Database**: Google Cloud Firestore
+- **Identity**: Firebase Authentication (Custom Claims)
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```text
 TechzazEDR_Dashboard/
-├── frontend/             # Angular SPA
-│   ├── src/
-│   │   ├── app/          # Components, Services, Routes
-│   │   └── main.ts       # Application Entry
-│   └── package.json      # Frontend Dependencies
+├── frontend/             # Angular 21 Single Page Application
+│   ├── src/app/core/     # Global Services & Guards
+│   ├── src/app/dashboard/# Overview, Endpoints, Incidents
+│   └── src/app/settings/ # Org & Profile Management
 ├── backend/              # FastAPI REST API
-│   ├── app/              # Application Logic
-│   │   ├── api/          # Route Handlers
-│   │   ├── core/         # Config & Settings
-│   │   ├── models/       # Database Models
-│   │   └── schemas/      # Pydantic Schemas
-│   ├── .venv/            # Python Virtual Environment
-│   ├── run.py            # Development Server Entry
-│   └── requirements.txt  # Python Dependencies
-└── README.md             # This Document
+│   ├── app/api/          # Route Handlers
+│   ├── app/core/         # Security & Firebase Logic
+│   └── app/models/       # Firestore Data Schemas
+└── README.md             # Project Root Documentation
 ```
 
 ---
 
-## Getting Started
+## 🚀 Quick Start
 
-### Frontend Setup
-1. Navigate to the `frontend` directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm start
-   ```
-   *The frontend will be available at http://localhost:4200/*
-
-### Backend Setup
-1. Navigate to the `backend` directory:
-   ```bash
-   cd backend
-   ```
-2. Create and activate a virtual environment (if not present):
-   ```powershell
-   py -m venv .venv
-   .venv\Scripts\Activate.ps1
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Initialize the Multi-Tenant Database (Firestore):
-   ```bash
-   python initialize_orgs.py
-   ```
-5. Run the development server:
-   ```bash
-   python run.py
-   ```
-   *The backend API will be available at http://127.0.0.1:8000/*
-
----
-
-## Git Workflow
-The project uses a multi-branch strategy:
-- `main`: Production-ready code.
-- `inuka`: Active development branch.
-
-**To push changes:**
+### 1. Clone the Repository
 ```bash
-git add .
-git commit -m "Your descriptive message"
-git push origin inuka  # Push to dev branch
-git push origin main   # Push to main branch
+git clone https://github.com/Techzaz/TechzazEDR_Dashboard.git
+cd TechzazEDR_Dashboard
 ```
 
-## API Documentation
-Once the backend is running, you can access interactive documentation:
-- **Swagger UI**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **ReDoc**: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+### 2. Backend Setup
+```bash
+cd backend
+python -m venv .venv
+# Activate: source .venv/bin/activate (Linux/macOS) or .venv\Scripts\activate (Windows)
+pip install -r requirements.txt
+python initialize_orgs.py  # Seed initial tenant
+python run.py              # Start API on http://localhost:8000
+```
+
+### 3. Frontend Setup
+```bash
+cd ../frontend
+npm install
+npm start                  # Start Console on http://localhost:4200
+```
+
+---
+
+## 🔒 Security
+- All API communication requires valid JWT tokens.
+- Agents authenticate via `OrganizationApiKeys`.
+- Data isolation enforced through Firestore security rules and backend validation.
+
+## 🤝 Contributing
+Contributions are welcome! Please branch from `main` and submit a Pull Request.
+
+---
+> [!NOTE]
+> This system is designed for enterprise-grade security monitoring. Ensure your Firebase configuration is properly secured before deploying to production.
