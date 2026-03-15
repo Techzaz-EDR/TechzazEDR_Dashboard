@@ -4,7 +4,7 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User,
 import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable, from, firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { NgZone } from '@angular/core';
 
@@ -112,6 +112,57 @@ export class AuthService {
 
     get currentUser(): User | null | undefined {
         return this.userSubject.value;
+    }
+
+    /**
+     * Saves user data to Firestore users collection only.
+     * Does NOT create a Firebase Authentication account.
+     */
+    async addUserToFirestore(email: string, name: string, role: string, extraData: any = {}) {
+        const adminTenantId = await firstValueFrom(this.tenantId$);
+        if (!adminTenantId) throw new Error('No tenant context found for administrator');
+
+        const usersRef = collection(this.db, 'users');
+        const newUserDoc = await addDoc(usersRef, {
+            email,
+            name,
+            role,
+            organization_id: adminTenantId,
+            status: 'active',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            ...extraData
+        });
+
+        console.log(`User ${email} saved to Firestore with ID: ${newUserDoc.id}`);
+        return { id: newUserDoc.id, email, name, role };
+    }
+
+    /**
+     * Deletes a user document from Firestore.
+     */
+    async deleteUserFromFirestore(userId: string) {
+        console.log(`AuthService: Attempting to delete user document: users/${userId}`);
+        const userDocRef = doc(this.db, 'users', userId);
+        try {
+            await deleteDoc(userDocRef);
+            console.log(`AuthService: User ${userId} successfully deleted from Firestore.`);
+        } catch (error) {
+            console.error(`AuthService: Error deleting user ${userId}:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Updates an existing user document in Firestore.
+     */
+    async updateUserInFirestore(userId: string, data: any) {
+        const userDocRef = doc(this.db, 'users', userId);
+        await updateDoc(userDocRef, {
+            ...data,
+            updatedAt: serverTimestamp()
+        });
+        console.log(`User ${userId} updated in Firestore.`);
     }
 
     updateProfile(data: ProfileUpdateData): void {
