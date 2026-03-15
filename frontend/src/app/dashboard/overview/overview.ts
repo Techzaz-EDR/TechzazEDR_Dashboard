@@ -8,6 +8,9 @@ import {
   CheckCircle, Shield, Activity
 } from 'lucide-angular';
 
+import { Subscription } from 'rxjs';
+import { FirestoreService } from '../../core/services/firestore.service';
+
 @Component({
   selector: 'app-overview',
   standalone: true,
@@ -153,15 +156,23 @@ export class Overview implements OnInit, OnDestroy {
   animatedAtRiskPct = 0;
   animatedOfflinePct = 0;
 
-  // CSS Target Properties
-  targetProtected = 0;
-  targetAtRisk = 0;
-  targetOffline = 0;
+  private subs = new Subscription();
+
+  constructor(private firestoreService: FirestoreService) {}
 
   ngOnInit() {
     this.setTrendPeriod('24h');
     this.initThreatSimulation();
     this.animateDonutChart();
+    
+    // Fetch real incident count
+    this.subs.add(
+      this.firestoreService.getOrganizationAlerts().subscribe(alerts => {
+        if (this.kpiData && this.kpiData.activeIncidents) {
+          this.kpiData.activeIncidents.value = alerts.length;
+        }
+      })
+    );
   }
 
   animateDonutChart() {

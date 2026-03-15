@@ -13,6 +13,9 @@ router = APIRouter()
 def process_alert_background(agent_id: str, organization_id: str, alert: SecurityAlert):
     alert_dict = alert.dict()
     
+    # Add organization metadata
+    alert_dict["organization_id"] = organization_id
+    
     # Add a backend receive timestamp for tracking latency
     alert_dict["_received_at"] = datetime.utcnow().isoformat() + 'Z'
     
