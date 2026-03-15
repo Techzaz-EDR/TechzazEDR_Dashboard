@@ -2,12 +2,80 @@
     (mouseleave)="onMouseLeave()">
     <div class="hover-glow"></div>
 
-    <!-- Background Data Fragments -->
+    <!-- Background Data Fragments / Watermark -->
     <div class="data-fragments">
         <div class="fragment" style="--top: 15%; --left: 10%; --delay: 0s">Techzaz EDR</div>
         <div class="fragment" style="--top: 25%; --left: 80%; --delay: 3s">Techzaz EDR</div>
         <div class="fragment" style="--top: 65%; --left: 15%; --delay: 6s">Techzaz EDR</div>
         <div class="fragment" style="--top: 80%; --left: 70%; --delay: 1.5s">Techzaz EDR</div>
+    </div>
+
+    <!-- Centered Login Card -->
+    <div class="auth-card">
+
+        <!-- Sign-In View -->
+        <div class="auth-view sign-in-view">
+            <form (ngSubmit)="signIn()" #signInForm="ngForm">
+
+                <div class="form-header">
+                    <!-- Status Badge -->
+                    <div class="status-line">
+                        <span class="status-dot"></span>
+                        <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                        SECURE CONSOLE ACCESS
+                    </div>
+
+                    <!-- Title -->
+                    <h2>Log in to Techzaz EDR</h2>
+                </div>
+
+                <!-- Error Banner -->
+                @if (errorMessage) {
+                    <div class="error-banner">{{ errorMessage }}</div>
+                }
+
+                <!-- Input Fields -->
+                <div class="inputs-group">
+                    <div class="form-group">
+                        <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                        <input
+                            type="email"
+                            name="email"
+                            [(ngModel)]="email"
+                            placeholder="Work Email"
+                            required
+                            autocomplete="email"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
+                        <input
+                            [type]="showPassword ? 'text' : 'password'"
+                            name="password"
+                            [(ngModel)]="password"
+                            placeholder="Password"
+                            required
+                            autocomplete="current-password"
+                        />
+                    </div>
+                </div>
+
+                <!-- Forgot Password -->
+                <a class="forgot-password" href="#">Forgot password?</a>
+
+                <!-- Sign In Button -->
+                <div class="btn-submit-wrapper">
+                    <button type="submit" class="btn btn-primary">SIGN IN</button>
+                </div>
+
+                <!-- Bottom Link -->
+                <div class="toggle-link">
+                    New here? <a (click)="toggleMode()">Create account</a>
+                </div>
+
+            </form>
+        </div>
+
     </div>
 
 </div>
