@@ -2,7 +2,7 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X, ShieldCheck, Building2, Phone } from 'lucide-angular';
+import { LucideAngularModule, Eye, EyeOff, User, Lock, Mail, Twitter, Linkedin, Globe, Github, X, ShieldCheck, Building2, Phone, CheckCircle } from 'lucide-angular';
 import { gsap } from 'gsap';
 import { AuthService } from '../core/services/auth.service';
 
@@ -34,6 +34,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     agreeTerms = false;
     agreeContact = false;
     signupError = '';
+    signupSuccess = false;
 
     readonly Eye = Eye;
     readonly EyeOff = EyeOff;
@@ -47,6 +48,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     readonly ShieldCheck = ShieldCheck;
     readonly Building2 = Building2;
     readonly Phone = Phone;
+    readonly CheckCircle = CheckCircle;
     private glowElement: HTMLElement | null = null;
 
     constructor(private router: Router, private authService: AuthService, private route: ActivatedRoute) { }
@@ -147,8 +149,8 @@ export class LoginComponent implements AfterViewInit, OnInit {
                 country: this.signupCountry,
                 phone: this.signupPhone,
             });
-            // On success, redirect to login
-            this.toggleMode();
+            // On success, show confirmation state
+            this.signupSuccess = true;
         } catch (error: any) {
             console.error('Sign up failed', error);
             this.signupError = error.message || 'Registration failed. Please try again.';
@@ -159,8 +161,19 @@ export class LoginComponent implements AfterViewInit, OnInit {
         this.showPassword = !this.showPassword;
     }
 
+    goToLogin() {
+        this.isSignUpMode = false;
+        this.signupSuccess = false;
+        this.router.navigate(['/login']);
+    }
+
+    goToHome() {
+        this.router.navigate(['/']);
+    }
+
     toggleMode() {
         this.isSignUpMode = !this.isSignUpMode;
+        this.signupSuccess = false;
         this.errorMessage = '';
         this.signupError = '';
     }

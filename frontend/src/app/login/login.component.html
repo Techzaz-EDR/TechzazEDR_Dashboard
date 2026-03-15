@@ -78,6 +78,7 @@
 
         <!-- Sign-Up View -->
         <div class="auth-view sign-up-view">
+            @if (!signupSuccess) {
             <form (ngSubmit)="signUp()" #signUpForm="ngForm" class="signup-form">
 
                 <div class="form-header">
@@ -188,6 +189,54 @@
                 </div>
 
             </form>
+            } <!-- end @if (!signupSuccess) -->
+
+            <!-- Success Confirmation State -->
+            @if (signupSuccess) {
+            <div class="success-view">
+
+                <!-- Check Icon -->
+                <div class="success-icon-ring">
+                    <lucide-icon [img]="CheckCircle" [size]="36"></lucide-icon>
+                </div>
+
+                <!-- Badge -->
+                <div class="status-line success-badge">
+                    <span class="status-dot"></span>
+                    <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                    REQUEST RECEIVED
+                </div>
+
+                <!-- Title -->
+                <h2 class="success-title">Account Request Submitted</h2>
+
+                <!-- Description -->
+                <p class="success-description">
+                    Your Techzaz EDR account request has been submitted successfully.
+                </p>
+
+                <!-- Secondary text -->
+                <p class="success-secondary">
+                    You can proceed to sign in once your workspace is ready, or return to the homepage.
+                </p>
+
+                <!-- Divider -->
+                <div class="success-divider"></div>
+
+                <!-- Small note -->
+                <p class="success-note">
+                    A verification or onboarding step may be required before full platform access is enabled.
+                </p>
+
+                <!-- Buttons -->
+                <div class="success-actions">
+                    <button class="btn btn-primary" (click)="goToLogin()">Go to Login</button>
+                    <button class="btn btn-outline" (click)="goToHome()">Back to Home</button>
+                </div>
+
+            </div>
+            } <!-- end @if (signupSuccess) -->
+
         </div>
 
     </div>
