@@ -1,74 +1,103 @@
-# TechzazEDR Frontend
+# 🖥️ TechzazEDR Management Console
 
-A premium, modern security operations console built with **Angular 21** and **GSAP**. This dashboard provides a real-time, high-fidelity view of the threats detected across the enterprise.
+[![Angular](https://img.shields.io/badge/Angular-21+-DD0031.svg?logo=angular&logoColor=white)](#)
+[![State](https://img.shields.io/badge/State-Signals-blue.svg)](#)
+[![Animations](https://img.shields.io/badge/Animations-GSAP-green.svg)](#)
 
-## ✨ Features
+A premium, high-fidelity security operations console. This dashboard provides real-time threat visualization and fleet management with a focus on speed, performance, and user experience.
 
-- **Signal-Based State Management**: Leveraging Angular's newest reactivity model for high performance.
-- **Real-time Telemetry Updates**: Direct integration with Firestore for live alert streams.
-- **Proactive UI**: Advanced data visualizations and threat analytics.
-- **Ultra-Smooth UI**: GSAP powered micro-animations for a premium "Defense Grade" feel.
-- **Multitenancy Aware**: Fully handles tenant switching and RBAC-controlled views.
+---
 
-## 🖼️ Dashboard Views & Functions
+## ✨ Key Features
 
-The frontend is divided into specialized views, each optimized for a specific security operations persona.
+- **Signal-Based Reactivity**: Utilizing Angular's newest reactivity model for lightning-fast UI updates.
+- **GSAP-Powered UX**: Ultra-smooth micro-animations for a premium, "Defense Grade" feel.
+- **Real-time Alert Streams**: Direct Firestore integration for zero-latency detection updates.
+- **Multi-Tenant Navigation**: Context-aware switching between organizations and tenants.
+- **Responsive Command Center**: Optimized for desktop monitoring and tablet field use.
 
-### 📈 Overview (`dashboard/overview`)
-- **Executive Summary**: High-level charts displaying alert volume by severity and category.
-- **Top Threats**: Dynamic list of the most frequent or critical rules triggered across the fleet.
-- **System Health**: Aggregate status of all registered agents (Online vs. Offline).
+---
 
-### 🖥️ Endpoints (`dashboard/endpoints`)
-- **Fleet Management**: Searchable and filterable table of all agents in the organization.
-- **Host Details**: Deep dive into specific machine metadata, including OS version and last-seen metrics.
-- **Status Tracking**: Visual indicators for real-time agent connectivity.
+## 🗺️ Dashboard Views
 
-### 🚨 Incidents (`dashboard/incidents`)
-- **Investigation Workbench**: Comprehensive table of all received alerts with advanced search capabilities.
-- **Threat Details**: Side-pane preview and full-page investigation views for individual alerts.
-- **Triage Actions**: (Planned) Workflows for status updates and incident remediation.
+| View | Purpose | Features |
+| :--- | :--- | :--- |
+| **Overview** | Situational Awareness | Real-time charts, Top Threat lists, Fleet health. |
+| **Endpoints** | Fleet Management | Searchable agent table, detail drill-downs, status tracking. |
+| **Incidents** | Investigation Lab | Advanced filtering, side-pane previews, triage actions. |
+| **Settings** | Configuration | API key management, Org profile, RBAC profile. |
 
-### ⚙️ Settings (`settings/`)
-- **Organization Control**: Manage global tenant settings and API key visibility.
-- **Security Posture**: Configure user profiles and notification preferences.
+---
 
-## 🛠️ Technology Stack
+## 🏗️ Technology Stack
 
-- **Framework**: Angular 21
-- **State**: Angular Signals
-- **Animations**: GSAP (GreenSock Animation Platform)
+- **Core**: Angular 21 (Standalone Components)
+- **Reactivity**: Angular Signals
+- **Motion**: GSAP 3 (GreenSock)
 - **Icons**: Lucide Angular
-- **Styling**: SCSS (CSS Variables + Modular Architecture)
-- **Build Tool**: Vite (via Angular CLI)
+- **State Management**: Service-based Signal stores
+- **Build**: Vite-powered CLI
 
-## 📂 Component Map
+```mermaid
+graph TD
+    UI[UI Layer / Components] --> Services[Core Services / Signals]
+    Services --> Interceptors[JWT Interceptors]
+    Interceptors --> API[FastAPI / Firestore]
+    
+    subgraph "State Management"
+        Services
+    end
+    
+    subgraph "Motion Engine"
+        GSAP[GSAP Animations]
+    end
+    
+    UI -.-> GSAP
+```
 
-- `core/`: Strategic logic (Auth guards, JWT interceptors, API services).
-- `dashboard/`:
-  - `overview/`: Strategic aggregate metrics.
-  - `endpoints/`: Fleet status and agent management.
-  - `incidents/`: In-depth alert investigation workflow.
-- `settings/`: Organization configuration and user profile management.
+---
+
+## 📂 Project Structure
+
+```text
+src/app/
+├── core/             # Auth, API Services, Guards, Interceptors
+├── dashboard/        # Feature Modules (Overview, Endpoints, Incidents)
+│   ├── overview/     # Aggregated security charts
+│   ├── endpoints/    # Fleet monitoring and agent management
+│   └── incidents/    # Alert investigation and triage
+├── settings/         # Organization & Profile configuration
+├── shared/           # UI Components (Buttons, Modals, Cards)
+└── home/             # Landing and Entry views
+```
+
+---
 
 ## 🚀 Getting Started
 
-### Installation
+### 1. Installation
 ```bash
 npm install
 ```
 
-### Development Server
+### 2. Development
 ```bash
 npm start
 ```
-*App will be available at http://localhost:4200/*
+*Console will be live at http://localhost:4200/*
 
-### Production Build
+### 3. Production Build
 ```bash
 npm run build
 ```
 
 ---
+
+## 🎨 UI/UX Guidelines
+- Use **GSAP** for all state transitions (sidebar, card loading, alert pulses).
+- Favor **Signals** over `BehaviorSubject` for local component state.
+- Follow the modular SCSS structure in `src/styles/` for new components.
+
+---
 > [!TIP]
-> Use the `video/` directory to store screencaps of UI workflows for documentation purposes.
+> Check the `video/` directory in the repository root for visual walkthroughs of new UI features.
