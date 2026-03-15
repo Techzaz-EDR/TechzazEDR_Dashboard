@@ -1,0 +1,213 @@
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { 
+  LucideAngularModule, 
+  Terminal, 
+  Shield, 
+  Activity, 
+  Clock, 
+  AlertTriangle, 
+  Search, 
+  Settings,
+  RefreshCw,
+  CheckCircle,
+  XCircle,
+  Play
+} from 'lucide-angular';
+import { FirestoreService } from '../../core/services/firestore.service';
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-agent',
+  standalone: true,
+  imports: [CommonModule, LucideAngularModule],
+  templateUrl: './agent.html',
+  styleUrl: './agent.scss'
+})
+export class AgentComponent implements OnInit, OnDestroy {
+  // Icons
+  readonly TerminalIcon = Terminal;
+  readonly ShieldIcon = Shield;
+  readonly ActivityIcon = Activity;
+  readonly ClockIcon = Clock;
+  readonly AlertTriangleIcon = AlertTriangle;
+  readonly SearchIcon = Search;
+  readonly SettingsIcon = Settings;
+  readonly RefreshCwIcon = RefreshCw;
+  readonly CheckCircleIcon = CheckCircle;
+  readonly XCircleIcon = XCircle;
+  readonly PlayIcon = Play;
+
+  agentId: string | null = null;
+  agentDetails: any = null;
+  alerts: any[] = [];
+  commands: any[] = [];
+  
+  loadingCommands: { [key: string]: boolean } = {};
+
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(
+    private router: Router,
+    private firestoreService: FirestoreService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit() {
+    this.subscriptions.add(
+      this.firestoreService.selectedAgentId$.subscribe(id => {
+        this.agentId = id;
+        if (this.agentId) {
+          this.loadAgentData(this.agentId);
+        } else {
+          // If no agent selected, redirect back
+          this.router.navigate(['/dashboard/endpoints']);
+        }
+      })
+    );
+  }
+
+  private loadAgentData(agentId: string) {
+    this.agentDetails = null; // Reset
+    this.alerts = [];
+    this.commands = [];
+
+    // Real-time Firestore Subscriptions
+    this.subscriptions.add(
+      this.firestoreService.getAgentDetails(agentId).subscribe(details => {
+        if (details) {
+          this.agentDetails = {
+            ...details,
+            name: details.hostname || details.id,
+            os: details.os || 'Unknown OS',
+            ip: details.ip || '0.0.0.0',
+            status: details.status || 'offline',
+            last_seen: this.formatLastSeen(details.last_seen)
+          };
+          this.cdr.detectChanges();
+        } else {
+          // No data found in Firestore
+          this.agentDetails = { id: agentId, status: 'unknown' };
+          this.cdr.detectChanges();
+        }
+      })
+    );
+
+    this.subscriptions.add(
+      this.firestoreService.getAgentAlerts(agentId).subscribe(alerts => {
+        this.alerts = alerts.map(a => ({
+          ...a,
+          severity: a.Severity || a.severity || 'Medium',
+          name: a.Category || a.RuleId || a.name || 'Security Alert',
+          description: a.Details?.description || a.description || (a.Details ? JSON.stringify(a.Details) : 'Alert details not available'),
+          // Handle both Firestore Timestamp and ISO string
+          displayTime: this.formatAlertTime(a.Timestamp || a.timestamp)
+        }));
+        this.cdr.detectChanges();
+      })
+    );
+
+    this.subscriptions.add(
+      this.firestoreService.getAgentCommands(agentId).subscribe(commands => {
+        this.commands = commands;
+        this.cdr.detectChanges();
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  async runNetworkScan() {
+    if (!this.agentId) return;
+    this.loadingCommands['network'] = true;
+    try {
+      await this.firestoreService.sendCommand(this.agentId, 'run_network_scan');
+    } finally {
+      setTimeout(() => this.loadingCommands['network'] = false, 2000);
+    }
+  }
+
+  async runSystemScan() {
+    if (!this.agentId) return;
+    this.loadingCommands['system'] = true;
+    try {
+      await this.firestoreService.sendCommand(this.agentId, 'run_hids_scan');
+    } finally {
+      setTimeout(() => this.loadingCommands['system'] = false, 2000);
+    }
+  }
+
+  async updateConfig() {
+    if (!this.agentId) return;
+    this.loadingCommands['config'] = true;
+    try {
+      await this.firestoreService.sendCommand(this.agentId, 'update_config');
+    } finally {
+      setTimeout(() => this.loadingCommands['config'] = false, 2000);
+    }
+  }
+
+  getSeverityClass(severity: string): string {
+    switch (severity.toLowerCase()) {
+      case 'critical': return 'severity-critical';
+      case 'high': return 'severity-high';
+      case 'medium': return 'severity-medium';
+      case 'low': return 'severity-low';
+      default: return '';
+    }
+  }
+
+  backToEndpoints() {
+    this.router.navigate(['/dashboard/endpoints']);
+  }
+
+  public formatAlertTime(timestamp: any): string {
+    if (!timestamp) return 'Just now';
+    
+    // If it's a Firestore Timestamp
+    if (timestamp && typeof timestamp.toDate === 'function') {
+      const date = timestamp.toDate();
+      return this.formatDate(date);
+    }
+    
+    // If it's an ISO string or other date format
+    const date = new Date(timestamp);
+    if (!isNaN(date.getTime())) {
+      return this.formatDate(date);
+    }
+    
+    return String(timestamp);
+  }
+
+  public formatLastSeen(timestamp: any): string {
+    if (!timestamp) return 'Never';
+    
+    if (timestamp && typeof timestamp.toDate === 'function') {
+      return this.formatRelativeTime(timestamp.toDate());
+    }
+    
+    const date = new Date(timestamp);
+    if (!isNaN(date.getTime())) {
+      return this.formatRelativeTime(date);
+    }
+    
+    return String(timestamp);
+  }
+
+  private formatDate(date: Date): string {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  private formatRelativeTime(date: Date): string {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    return date.toLocaleDateString();
+  }
+}

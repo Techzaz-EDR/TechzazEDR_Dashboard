@@ -1092,6 +1092,49 @@
 .health-bar-row {
     opacity: 0;
     animation: slideUpFade 0.5s ease-out forwards;
+
+    .action-sm {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-secondary);
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-width: 65px;
+        justify-content: center;
+
+        &:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        &.processing {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--primary);
+            border-color: var(--primary-low);
+        }
+
+        .spin-icon {
+            width: 12px;
+            height: 12px;
+            animation: spin 1s linear infinite;
+        }
+    }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .health-bar-row:nth-child(1) {

@@ -3,21 +3,28 @@
         <!-- Profile Picture Section -->
         <section class="form-section">
             <h2>Profile Picture</h2>
-            <p class="section-desc">Upload a new profile picture</p>
 
             <div class="avatar-upload">
-                <div class="avatar-circle">
-                    <lucide-icon [name]="User" [size]="48" color="#1a1a1a"></lucide-icon>
+                <div class="avatar-circle" 
+                     [style.background-image]="user.photoUrl ? 'url(' + user.photoUrl + ')' : 'none'" 
+                     [style.background-size]="'cover'" 
+                     [style.background-position]="'center'">
+                    <lucide-icon *ngIf="!user.photoUrl" [name]="User" [size]="48" color="#1a1a1a"></lucide-icon>
                     <div class="camera-badge">
                         <lucide-icon [name]="Camera" [size]="14"></lucide-icon>
                     </div>
                 </div>
                 <div class="upload-actions">
-                    <button class="btn-upload">
-                        <lucide-icon [name]="Upload" [size]="16" class="icon-left"></lucide-icon>
-                        Upload New Picture
+                    <input type="file" #fileInput (change)="onFileSelected($event)" hidden accept="image/png, image/jpeg, image/gif">
+                    <button class="btn-upload" (click)="fileInput.click()" [disabled]="uploading">
+                        <lucide-icon *ngIf="!uploading" [name]="Upload" [size]="16" class="icon-left"></lucide-icon>
+                        {{ uploading ? 'Uploading...' : 'Upload New Picture' }}
                     </button>
                     <span class="upload-hint">JPG, PNG or GIF. Max size 5MB. Recommended 400x400px.</span>
+                    <div *ngIf="uploadError" class="feedback-error" style="margin-top: 8px; font-size: 12px; padding: 6px;">
+                        <lucide-icon [name]="AlertCircle" [size]="14"></lucide-icon>
+                        {{ uploadError }}
+                    </div>
                 </div>
             </div>
         </section>
@@ -34,19 +41,19 @@
                 </div>
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" [(ngModel)]="user.email">
+                    <input type="email" [value]="user.email" disabled title="Email cannot be changed here">
                 </div>
                 <div class="form-group">
                     <label>Role</label>
-                    <input type="text" [(ngModel)]="user.role">
+                    <input type="text" [value]="user.role" disabled title="Role is managed by your administrator">
                 </div>
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input type="text" [(ngModel)]="user.phone">
+                    <input type="text" [(ngModel)]="user.phone" placeholder="e.g. +94 77 123 4567">
                 </div>
                 <div class="form-group full-width">
                     <label>Bio</label>
-                    <textarea rows="3" [(ngModel)]="user.bio"></textarea>
+                    <textarea rows="3" [(ngModel)]="user.bio" placeholder="Tell us a little about yourself..."></textarea>
                 </div>
             </div>
         </section>
@@ -59,22 +66,37 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label>Company Name</label>
-                    <input type="text" [(ngModel)]="user.companyName">
+                    <input type="text" [value]="user.companyName" disabled title="Company name is managed by your administrator">
                 </div>
                 <div class="form-group">
                     <label>Company Email</label>
-                    <input type="email" [(ngModel)]="user.companyEmail">
+                    <input type="email" [(ngModel)]="user.companyEmail" placeholder="company@example.com">
                 </div>
                 <div class="form-group full-width">
                     <label>Company Address</label>
-                    <input type="text" [(ngModel)]="user.companyAddress">
+                    <input type="text" [(ngModel)]="user.companyAddress" placeholder="123 Main St, City, Country">
                 </div>
             </div>
         </section>
 
+        <!-- Save Feedback -->
+        <div class="save-feedback" *ngIf="saveSuccess || saveError">
+            <div class="feedback-success" *ngIf="saveSuccess">
+                <lucide-icon [name]="CheckCircle" [size]="16"></lucide-icon>
+                Profile saved successfully!
+            </div>
+            <div class="feedback-error" *ngIf="saveError">
+                <lucide-icon [name]="AlertCircle" [size]="16"></lucide-icon>
+                {{ saveError }}
+            </div>
+        </div>
+
         <div class="form-actions">
-            <button class="btn-cancel">Cancel</button>
-            <button class="btn-save" (click)="saveProfile()">Save Changes</button>
+            <button class="btn-cancel" [disabled]="saving">Cancel</button>
+            <button class="btn-save" (click)="saveProfile()" [disabled]="saving">
+                <span *ngIf="saving">Saving...</span>
+                <span *ngIf="!saving">Save Changes</span>
+            </button>
         </div>
     </div>
 </div>

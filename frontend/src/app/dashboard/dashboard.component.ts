@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
@@ -29,6 +29,8 @@ export interface NavItem {
 export class DashboardComponent implements OnInit {
     isDropdownOpen = false;
     userEmail: string | null = null;
+    userProfile: any = null;
+    private profileSub?: Subscription;
 
     // Search Functionality
     searchQuery = '';
@@ -226,13 +228,35 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    constructor(private router: Router, private authService: AuthService) {
+    constructor(private router: Router, private authService: AuthService, private cdr: ChangeDetectorRef) {
         this.authService.user$.subscribe(user => {
             this.userEmail = user?.email || 'Guest';
+            this.cdr.detectChanges();
+        });
+
+        this.profileSub = this.authService.userProfile$.subscribe(profile => {
+            if (profile) {
+                this.userProfile = profile;
+                this.cdr.detectChanges();
+            }
         });
     }
 
     ngOnInit() { }
+
+    ngOnDestroy() {
+        this.profileSub?.unsubscribe();
+    }
+
+    getInitials(name: string): string {
+        if (!name) return 'AD';
+        return name
+            .split(' ')
+            .map(n => n[0])
+            .join('')
+            .toUpperCase()
+            .substring(0, 2);
+    }
 
     logout() {
         console.log('Logging out...');

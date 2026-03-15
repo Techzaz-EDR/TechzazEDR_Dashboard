@@ -3,7 +3,7 @@
     <div class="stats-grid">
         <div class="stat-card glass-card">
             <div class="stat-header">
-                <h3>Total Threats</h3>
+                <h3>Threats Detected</h3>
                 <span class="stat-icon"><lucide-icon [name]="ShieldIcon" [size]="20"></lucide-icon></span>
             </div>
             <div class="stat-body">
@@ -31,7 +31,7 @@
 
         <div class="stat-card glass-card">
             <div class="stat-header">
-                <h3>Avg Response</h3>
+                <h3>Avg Response Time</h3>
                 <span class="stat-icon"><lucide-icon [name]="ZapIcon" [size]="20"></lucide-icon></span>
             </div>
             <div class="stat-body">
@@ -45,7 +45,7 @@
 
         <div class="stat-card glass-card">
             <div class="stat-header">
-                <h3>Resolved</h3>
+                <h3>Resolved Incidents</h3>
                 <span class="stat-icon"><lucide-icon [name]="CheckCircleIcon" [size]="20"></lucide-icon></span>
             </div>
             <div class="stat-body">
@@ -66,61 +66,107 @@
                 <p class="subtitle">Real-time analysis of threat detection over the past 7 days</p>
             </div>
             <div class="chart-content line-chart-container">
-                <svg viewBox="0 0 600 200" preserveAspectRatio="none">
-                    <defs>
-                        <linearGradient id="mediumGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.5" />
-                            <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
-                        </linearGradient>
-                        <linearGradient id="criticalGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#ef4444" stop-opacity="0.5" />
-                            <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
-                        </linearGradient>
-                    </defs>
+                <div class="chart-frame">
+                    <div class="y-axis" aria-hidden="true">
+                        <span>40</span>
+                        <span>30</span>
+                        <span>20</span>
+                        <span>10</span>
+                        <span>0</span>
+                    </div>
 
-                    <!-- Grid Lines -->
-                    <line x1="0" y1="50" x2="600" y2="50" class="grid-line" />
-                    <line x1="0" y1="100" x2="600" y2="100" class="grid-line" />
-                    <line x1="0" y1="150" x2="600" y2="150" class="grid-line" />
+                    <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="mediumGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#10b981" stop-opacity="0.5" />
+                                <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+                            </linearGradient>
+                            <linearGradient id="criticalGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.5" />
+                                <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+                            </linearGradient>
+                        </defs>
 
-                    <!-- Medium Severity Path -->
-                    <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
-                    <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="6" />
+                        <!-- Grid Lines -->
+                        <line x1="0" y1="40" x2="600" y2="40" class="grid-line" />
+                        <line x1="0" y1="80" x2="600" y2="80" class="grid-line" />
+                        <line x1="0" y1="120" x2="600" y2="120" class="grid-line" />
+                        <line x1="0" y1="160" x2="600" y2="160" class="grid-line" />
+                        <line x1="0" y1="199" x2="600" y2="199" class="grid-line baseline" />
 
-                    <!-- Critical Severity Path -->
-                    <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
-                    <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="6" />
-                </svg>
+                        <!-- Medium Severity Path -->
+                        <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="5" />
+                        <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
+                        @for (point of trendCoordinates; track point.index) {
+                        <g class="chart-point-group medium"
+                            [attr.transform]="'translate(' + point.x + ',' + point.y + ')'"
+                            (mouseenter)="showTrendTooltip($event, point, 'security alerts')"
+                            (mouseleave)="hideTrendTooltip()">
+                            <circle class="point-hit-area" r="12"></circle>
+                            <circle class="point-halo" r="6"></circle>
+                            <circle class="point-core" r="3.5"></circle>
+                        </g>
+                        }
 
-                <div class="x-axis">
-                    <span>Monday</span><span>Tuesday</span><span>Wednesday</span><span>Thursday</span><span>Friday</span><span>Saturday</span><span>Sunday</span>
+                        <!-- Critical Severity Path -->
+                        <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="5" />
+                        <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
+                        @for (point of criticalCoordinates; track point.index) {
+                        <g class="chart-point-group critical"
+                            [attr.transform]="'translate(' + point.x + ',' + point.y + ')'"
+                            (mouseenter)="showTrendTooltip($event, point, 'critical threats')"
+                            (mouseleave)="hideTrendTooltip()">
+                            <circle class="point-hit-area" r="12"></circle>
+                            <circle class="point-halo" r="6"></circle>
+                            <circle class="point-core" r="3.5"></circle>
+                        </g>
+                        }
+                    </svg>
+
+                    @if (trendTooltipVisible) {
+                    <div class="chart-tooltip" [style.left.px]="trendTooltipX" [style.top.px]="trendTooltipY">
+                        {{ trendTooltipText }}
+                    </div>
+                    }
+
+                    <div class="x-axis">
+                        @for (label of trendDayLabels; track label) {
+                        <span>{{ label }}</span>
+                        }
+                    </div>
                 </div>
 
                 <div class="chart-legend">
                     <div class="legend-item"><span class="dot critical"></span> Critical Threats</div>
-                    <div class="legend-item"><span class="dot medium"></span> System Alerts</div>
+                    <div class="legend-item"><span class="dot medium"></span> Security Alerts</div>
                 </div>
             </div>
         </div>
 
         <!-- Incident Status -->
-        <div class="chart-card glass-card cyber-card">
+        <div class="chart-card glass-card">
             <div class="card-header">
                 <h3>Incident Lifecycle</h3>
-                <p class="subtitle">Current distribution of incident states</p>
+                <p class="subtitle">Distribution of incident states</p>
             </div>
             <div class="chart-content donut-chart-container">
                 <div class="donut-viz">
                     <svg class="circle-svg" viewBox="0 0 100 100">
                         <circle class="track" cx="50" cy="50" r="40" />
-                        <!-- Simplified segments as example, real logic would need SVG calculations -->
-                        <circle class="segment resolved" cx="50" cy="50" r="40" stroke="#3b82f6"
-                            style="--dash-offset: 35; stroke-dasharray: 65 100;" />
-                        <circle class="segment investigating" cx="50" cy="50" r="40" stroke="#EF4444"
-                            style="--dash-offset: 0; stroke-dasharray: 15 100; stroke-dashoffset: -65;" />
-                        <circle class="segment contained" cx="50" cy="50" r="40" stroke="#F97316"
-                            style="--dash-offset: 0; stroke-dasharray: 20 100; stroke-dashoffset: -80;" />
+                        <!-- Resolved 65%: arc≈159, starts at top (offset=0) -->
+                        <circle class="segment resolved" cx="50" cy="50" r="40" stroke="#657182"
+                            style="stroke-dasharray: 159 251; stroke-dashoffset: 0;" />
+                        <!-- Investigating 15%: arc≈37, starts after resolved+gap (offset=-161) -->
+                        <circle class="segment investigating" cx="50" cy="50" r="40" stroke="#EB4344"
+                            style="stroke-dasharray: 37 251; stroke-dashoffset: -161;" />
+                        <!-- Contained 20%: arc≈49, starts after investigating+gap (offset=-200) -->
+                        <circle class="segment contained" cx="50" cy="50" r="40" stroke="#3A81F4"
+                            style="stroke-dasharray: 49 251; stroke-dashoffset: -200;" />
                     </svg>
+                    <div class="donut-center">
+                        <span class="total">{{ donutTotal }}</span>
+                        <span class="label">Total</span>
+                    </div>
                 </div>
 
                 <div class="donut-legend">
@@ -128,6 +174,7 @@
                     <div class="legend-item">
                         <span class="dot" [style.background-color]="segment.color"></span>
                         <span class="label">{{ segment.label }}</span>
+                        <span class="stat-count">{{ segment.count }}</span>
                         <span class="percent">{{ segment.percent }}%</span>
                     </div>
                     }
@@ -156,7 +203,7 @@
         </div>
 
         <!-- Top Threats -->
-        <div class="chart-card glass-card">
+        <div class="chart-card glass-card malware-focus-card">
             <div class="card-header">
                 <h3>Critical Malware types</h3>
                 <p class="subtitle">Most prevalent threat categories</p>
@@ -178,33 +225,36 @@
         <!-- Detailed Log -->
         <div class="chart-card glass-card detailed-log-section">
             <div class="log-header-bar">
-                <h3>
-                    Live Threat Feed
-                    <span class="badge">SECURE</span>
-                </h3>
-                <span class="subtitle">{{ detailedThreatLogs.length }} events active</span>
+                <div class="feed-title">
+                    <h3>Live Threat Feed</h3>
+                    <p>Threat telemetry is monitored in real-time across protected endpoints</p>
+                </div>
+                <div class="live-status" aria-label="Real-time threat monitoring status">
+                    <span class="badge">
+                        <span class="pulse-dot" aria-hidden="true"></span>
+                        {{ liveThreatFeedBadgeLabel }}
+                    </span>
+                    <span class="subtitle"><strong>{{ detailedThreatLogs.length }}</strong> events active</span>
+                </div>
             </div>
             <div class="log-list">
                 @for (log of detailedThreatLogs; track log.title; let i = $index) {
                 <div class="log-item" [style.animation-delay]="(i * 0.1) + 's'">
                     <div class="log-main">
-                        <div class="log-top">
-                            <h4>{{ log.title }}</h4>
-                            <span class="time">{{ log.time }}</span>
-                        </div>
+                        <h4>{{ log.title }}</h4>
                         <div class="log-details">
                             <span class="device">{{ log.device }}</span>
                             <span class="category">{{ log.category }}</span>
                         </div>
                     </div>
-                    <div class="log-actions">
-                        <span class="status-tag">{{ log.status }}</span>
-                        <span class="severity-tag" [ngClass]="'severity-' + log.severity.toLowerCase()">
-                            {{ log.severity }}
-                        </span>
-                        <button class="view-button" title="View Details"><lucide-icon [name]="EyeIcon"
-                                [size]="16"></lucide-icon></button>
-                    </div>
+                    <span class="time">{{ log.time }}</span>
+                    <span class="status-tag">{{ log.status }}</span>
+                    <span class="severity-tag" [ngClass]="'severity-' + log.severity.toLowerCase()">
+                        {{ log.severity }}
+                    </span>
+                    <button class="view-button" type="button" title="View Threat Details"
+                        aria-label="View Threat Details"><lucide-icon [name]="EyeIcon"
+                            [size]="16"></lucide-icon></button>
                 </div>
                 }
             </div>

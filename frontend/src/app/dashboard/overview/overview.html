@@ -149,11 +149,6 @@
         <div class="card trend-card">
             <div class="card-header">
                 <h3>Risk Trend</h3>
-                <div class="period-selector">
-                    <button [class.active]="currentTrendPeriod === '24h'" (click)="setTrendPeriod('24h')">24h</button>
-                    <button [class.active]="currentTrendPeriod === '7d'" (click)="setTrendPeriod('7d')">7d</button>
-                    <button [class.active]="currentTrendPeriod === '30d'" (click)="setTrendPeriod('30d')">30d</button>
-                </div>
             </div>
             <div class="card-body trend-layout">
                 <div class="line-chart-container">
@@ -239,7 +234,13 @@
                                 [class.fill-neutral]="item.color === 'neutral'"
                                 [style.width.%]="(item.count / 50) * 100"></div> <!-- Mock pct -->
                         </div>
-                        <button class="action-sm">{{ item.action }}</button>
+                        <button class="action-sm" 
+                                (click)="handleHealthAction(item)"
+                                [disabled]="item.isProcessing || item.count === 0"
+                                [class.processing]="item.isProcessing">
+                            <lucide-icon *ngIf="item.isProcessing" [name]="RefreshCw" class="spin-icon"></lucide-icon>
+                            <span>{{ item.isProcessing ? 'Processing' : item.action }}</span>
+                        </button>
                     </div>
                     }
                 </div>

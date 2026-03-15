@@ -1,0 +1,106 @@
+<div class="endpoint-details-container">
+  <!-- 1. Header Profile -->
+  <header class="endpoint-header">
+    <div class="identity-group">
+      <div class="id-wrapper">
+        <lucide-icon [name]="ShieldIcon" class="header-icon" (click)="backToEndpoints()" style="cursor: pointer;"></lucide-icon>
+        <h1 (click)="backToEndpoints()" style="cursor: pointer;">{{ agentId }}</h1>
+      </div>
+      <div class="status-badge" [class.active]="agentDetails?.status === 'active'">
+        <span class="status-pulse" *ngIf="agentDetails?.status === 'active'"></span>
+        {{ agentDetails?.status === 'active' ? 'Active' : 'Offline' }}
+      </div>
+    </div>
+
+    <div class="meta-strip">
+      <div class="meta-item">
+        <lucide-icon [name]="TerminalIcon" class="meta-icon"></lucide-icon>
+        <span>{{ agentDetails?.ip || '192.168.1.101' }}</span>
+      </div>
+      <div class="meta-item">
+        <lucide-icon [name]="ActivityIcon" class="meta-icon"></lucide-icon>
+        <span>{{ agentDetails?.os || 'Windows 10 Pro' }}</span>
+      </div>
+      <div class="meta-item">
+        <lucide-icon [name]="ClockIcon" class="meta-icon"></lucide-icon>
+        <span>Last check-in: {{ agentDetails?.last_seen }}</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="action-bar-container">
+    <section class="action-panel">
+      <div class="action-buttons">
+        <button (click)="runNetworkScan()" [disabled]="loadingCommands['network']">
+          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['network']"></lucide-icon>
+          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['network']"></lucide-icon>
+          {{ loadingCommands['network'] ? 'Command Queued...' : 'Network Scan' }}
+        </button>
+
+        <button (click)="runSystemScan()" [disabled]="loadingCommands['system']">
+          <lucide-icon [name]="ShieldIcon" *ngIf="!loadingCommands['system']"></lucide-icon>
+          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['system']"></lucide-icon>
+          {{ loadingCommands['system'] ? 'Command Queued...' : 'Run System Scan' }}
+        </button>
+
+        <button (click)="updateConfig()" [disabled]="loadingCommands['config']">
+          <lucide-icon [name]="SettingsIcon" *ngIf="!loadingCommands['config']"></lucide-icon>
+          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['config']"></lucide-icon>
+          {{ loadingCommands['config'] ? 'Command Queued...' : 'Update Config' }}
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div class="content-grid">
+    <!-- 4. Local Threat Feed -->
+    <section class="threat-feed">
+      <h2 class="section-title">Local Threat Feed</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Severity</th>
+              <th>Alert Name</th>
+              <th>Description</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let alert of alerts">
+              <td>
+                <span class="severity-tag" [ngClass]="getSeverityClass(alert.severity)">
+                  {{ alert.severity }}
+                </span>
+              </td>
+              <td class="alert-name">{{ alert.name }}</td>
+              <td class="alert-desc" [title]="alert.description">{{ alert.description }}</td>
+              <td class="alert-time">{{ alert.displayTime }}</td>
+            </tr>
+            <tr *ngIf="alerts.length === 0">
+              <td colspan="4" class="no-data">No alerts found for this agent.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Task Queue -->
+    <section class="task-queue">
+      <h2 class="section-title">Command History</h2>
+      <div class="queue-list">
+        <div class="queue-item" *ngFor="let cmd of commands">
+          <div class="cmd-info">
+            <span class="cmd-time">{{ formatAlertTime(cmd.timestamp) }}</span>
+            <span class="cmd-name">{{ cmd.command }}</span>
+          </div>
+          <div class="cmd-status" [ngClass]="cmd.status">
+            <lucide-icon [name]="cmd.status === 'completed' ? CheckCircleIcon : (cmd.status === 'pending' ? ClockIcon : XCircleIcon)"></lucide-icon>
+            {{ cmd.status | titlecase }}
+          </div>
+        </div>
+        <div class="no-data" *ngIf="commands.length === 0">No recent commands found.</div>
+      </div>
+    </section>
+  </div>
+</div>
