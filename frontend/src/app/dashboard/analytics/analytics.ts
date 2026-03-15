@@ -94,12 +94,16 @@ export class Analytics {
     }
 
     // Incident Status (Donut)
-    // Segments: Contained (Orange), Investigating (Red), Resolved (Green)
+    // Segments: Contained (Blue), Investigating (Amber), Resolved (Green)
     donutSegments = [
-        { color: '#F97316', percent: 20, label: 'Contained' },
-        { color: '#EF4444', percent: 15, label: 'Investigating' },
-        { color: '#22C55E', percent: 65, label: 'Resolved' }
+        { color: '#3A81F4', percent: 20, count: 40, label: 'Contained' },
+        { color: '#EB4344', percent: 15, count: 30, label: 'Investigating' },
+        { color: '#657182', percent: 65, count: 130, label: 'Resolved' }
     ];
+
+    get donutTotal(): number {
+        return this.donutSegments.reduce((sum, s) => sum + s.count, 0);
+    }
 
     // Detection Methods (Top Threat Types - Horizontal Bar)
     topThreats = [

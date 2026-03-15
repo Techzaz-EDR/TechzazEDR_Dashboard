@@ -525,24 +525,17 @@
     }
 }
 
-/* Cyber Card Glassmorphism */
-.cyber-card {
-    background: rgba(2, 6, 23, 0.5) !important;
-    backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
 /* Donut Chart */
 .chart-card .chart-content.donut-chart-container {
-    min-height: 270px;
+    min-height: 240px;
 }
 
 .donut-chart-container {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    padding: 0.5rem 0.75rem 0.75rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.25rem 0.5rem 0.5rem;
 
     @media (max-width: 600px) {
         flex-direction: column;
@@ -552,8 +545,8 @@
 
     .donut-viz {
         position: relative;
-        width: 242px;
-        height: 242px;
+        width: 260px;
+        height: 260px;
         flex: 0 0 auto;
         opacity: 0;
         transform: scale(0.9);
@@ -564,7 +557,7 @@
             width: 100%;
             height: 100%;
             transform: rotate(-90deg);
-            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.4));
+            filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
 
             circle {
                 fill: none;
@@ -574,25 +567,20 @@
             }
 
             .track {
-                stroke: rgba(255, 255, 255, 0.02);
+                stroke: rgba(255, 255, 255, 0.04);
             }
 
             .segment {
-                stroke-dasharray: 100 100;
-                stroke-dashoffset: 100;
-                animation: fillDonut 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                animation-delay: 0.4s;
-
                 &.contained {
-                    filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.4));
+                    filter: drop-shadow(0 0 5px rgba(58, 129, 244, 0.25));
                 }
 
                 &.investigating {
-                    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
+                    filter: drop-shadow(0 0 5px rgba(235, 67, 68, 0.25));
                 }
 
                 &.resolved {
-                    filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.4));
+                    filter: drop-shadow(0 0 5px rgba(101, 113, 130, 0.25));
                 }
 
                 &:hover {
@@ -618,7 +606,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
 
             .total {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
                 font-weight: 900;
                 color: #fff;
                 line-height: 1;
@@ -626,10 +614,10 @@
             }
 
             .label {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
                 color: var(--text-muted, #64748b);
                 text-transform: uppercase;
-                letter-spacing: 2.5px;
+                letter-spacing: 2px;
                 margin-top: 4px;
                 font-weight: 700;
             }
@@ -639,25 +627,24 @@
     .donut-legend {
         display: flex;
         flex-direction: column;
-        gap: 0.65rem;
+        gap: 0.5rem;
         flex: 1;
-        max-width: 190px;
-        margin-left: -0.15rem;
+        min-width: 0;
 
         @media (max-width: 600px) {
             width: 100%;
             max-width: 320px;
-            margin-left: 0;
         }
 
         .legend-item {
-            display: flex;
+            display: grid;
+            grid-template-columns: 10px 1fr 36px 40px;
             align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 1.25rem;
-            border-radius: 12px;
+            gap: 0.6rem;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 0;
             animation: slideUpFade 0.5s ease-out forwards;
@@ -669,30 +656,40 @@
             }
 
             &:hover {
-                background: rgba(255, 255, 255, 0.08);
-                border-color: rgba(255, 255, 255, 0.1);
-                transform: translateY(-2px);
+                background: rgba(255, 255, 255, 0.06);
+                border-color: rgba(255, 255, 255, 0.08);
+                transform: translateX(2px);
                 cursor: pointer;
             }
 
             .dot {
-                width: 12px;
-                height: 12px;
-                border-radius: 4px;
+                width: 10px;
+                height: 10px;
+                border-radius: 3px;
                 transition: all 0.3s ease;
             }
 
             .label {
+                font-size: 0.85rem;
+                color: #e2e8f0;
+                font-weight: 600;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .stat-count {
                 font-size: 0.9rem;
                 color: #f8fafc;
-                font-weight: 600;
-                flex: 1;
+                font-weight: 700;
+                text-align: right;
             }
 
             .percent {
-                font-size: 0.9rem;
+                font-size: 0.8rem;
                 color: var(--text-muted, #64748b);
-                font-weight: 700;
+                font-weight: 600;
+                text-align: right;
             }
         }
     }
