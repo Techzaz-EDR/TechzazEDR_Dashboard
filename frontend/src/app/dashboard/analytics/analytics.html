@@ -98,8 +98,10 @@
                         <polyline [attr.points]="trendPoints" class="glow-path" stroke="#3b82f6" stroke-width="5" />
                         <polyline [attr.points]="trendPoints" class="chart-path" stroke="#3b82f6" stroke-width="3" />
                         @for (point of trendCoordinates; track point.index) {
-                        <g class="chart-point-group medium" [attr.transform]="'translate(' + point.x + ',' + point.y + ')'">
-                            <title>{{ point.label }}: {{ point.value }} security alerts</title>
+                        <g class="chart-point-group medium"
+                            [attr.transform]="'translate(' + point.x + ',' + point.y + ')'"
+                            (mouseenter)="showTrendTooltip($event, point, 'security alerts')"
+                            (mouseleave)="hideTrendTooltip()">
                             <circle class="point-hit-area" r="12"></circle>
                             <circle class="point-halo" r="6"></circle>
                             <circle class="point-core" r="3.5"></circle>
@@ -110,14 +112,22 @@
                         <polyline [attr.points]="criticalPoints" class="glow-path" stroke="#ef4444" stroke-width="5" />
                         <polyline [attr.points]="criticalPoints" class="chart-path" stroke="#ef4444" stroke-width="3" />
                         @for (point of criticalCoordinates; track point.index) {
-                        <g class="chart-point-group critical" [attr.transform]="'translate(' + point.x + ',' + point.y + ')'">
-                            <title>{{ point.label }}: {{ point.value }} critical threats</title>
+                        <g class="chart-point-group critical"
+                            [attr.transform]="'translate(' + point.x + ',' + point.y + ')'"
+                            (mouseenter)="showTrendTooltip($event, point, 'critical threats')"
+                            (mouseleave)="hideTrendTooltip()">
                             <circle class="point-hit-area" r="12"></circle>
                             <circle class="point-halo" r="6"></circle>
                             <circle class="point-core" r="3.5"></circle>
                         </g>
                         }
                     </svg>
+
+                    @if (trendTooltipVisible) {
+                    <div class="chart-tooltip" [style.left.px]="trendTooltipX" [style.top.px]="trendTooltipY">
+                        {{ trendTooltipText }}
+                    </div>
+                    }
 
                     <div class="x-axis">
                         @for (label of trendDayLabels; track label) {
