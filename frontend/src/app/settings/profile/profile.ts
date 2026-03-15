@@ -25,6 +25,9 @@ export class Profile implements OnInit, OnDestroy {
     saveSuccess = false;
     saveError = '';
 
+    uploading = false;
+    uploadError = '';
+
     user = {
         fullName: 'Loading...',
         email: '...',
@@ -33,7 +36,8 @@ export class Profile implements OnInit, OnDestroy {
         bio: '',
         companyName: '...',
         companyEmail: '',
-        companyAddress: ''
+        companyAddress: '',
+        photoUrl: ''
     };
 
     constructor(private authService: AuthService, private cdr: ChangeDetectorRef) {}
@@ -49,7 +53,8 @@ export class Profile implements OnInit, OnDestroy {
                     bio:            profile.bio          || '',
                     companyName:    profile.organization_id || profile.tenantId || 'Unknown Organization',
                     companyEmail:   profile.companyEmail  || '',
-                    companyAddress: profile.companyAddress || ''
+                    companyAddress: profile.companyAddress || '',
+                    photoUrl:       profile.photoUrl      || ''
                 };
                 // Force Angular to re-render regardless of which zone this fires in
                 this.cdr.detectChanges();
@@ -80,6 +85,40 @@ export class Profile implements OnInit, OnDestroy {
         } catch (err: any) {
             this.saving = false;
             this.saveError = err?.message || 'Failed to save profile. Please try again.';
+        }
+    }
+
+    async onFileSelected(event: any) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            this.uploadError = 'Please select an image file (JPG, PNG or GIF).';
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            this.uploadError = 'Image size should be less than 5MB.';
+            return;
+        }
+
+        this.uploading = true;
+        this.uploadError = '';
+        this.cdr.detectChanges();
+        
+        try {
+            const url = await this.authService.uploadProfilePicture(file);
+            this.user.photoUrl = url;
+            this.saveSuccess = true;
+            setTimeout(() => { this.saveSuccess = false; this.cdr.detectChanges(); }, 4000);
+        } catch (err: any) {
+            console.error('Error uploading picture', err);
+            this.uploadError = err?.message || 'Failed to upload picture. Please try again.';
+        } finally {
+            this.uploading = false;
+            // Clear input so same file can be selected again
+            event.target.value = '';
+            this.cdr.detectChanges();
         }
     }
 }
