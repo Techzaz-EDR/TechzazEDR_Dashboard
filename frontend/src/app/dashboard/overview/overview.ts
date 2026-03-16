@@ -155,6 +155,9 @@ export class Overview implements OnInit, OnDestroy {
   animatedProtectionPct = 0;
   animatedAtRiskPct = 0;
   animatedOfflinePct = 0;
+  targetProtected = 0;
+  targetAtRisk = 0;
+  targetOffline = 0;
 
   private subs = new Subscription();
 
