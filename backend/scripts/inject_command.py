@@ -1,18 +1,14 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
-from datetime import datetime
-import os
+from datetime import datetime, UTC
+from firebase_init import init_firebase
 
 def inject_command():
-    cred_path = "../../firebase-service-account.json"
-    if not os.path.exists(cred_path):
-        cred_path = "firebase-service-account.json"
+    db, _ = init_firebase()
+    if not db:
+        print("Could not initialize Firebase")
+        return
 
-    if not firebase_admin._apps:
-        cred = credentials.Certificate(cred_path)
-        firebase_admin.initialize_app(cred)
-
-    db = firestore.client()
     agent_id = "DESKTOP-TEST1"
     commands_ref = db.collection("organizations").document("demo-org").collection("agents").document(agent_id).collection("commands")
     
@@ -20,7 +16,7 @@ def inject_command():
         "command": "run_hids_scan",
         "parameters": {},
         "status": "pending",
-        "timestamp": datetime.utcnow(),
+        "timestamp": datetime.now(UTC),
         "created_by": "verification_script"
     }
     

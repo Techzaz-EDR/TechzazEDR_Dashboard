@@ -1,20 +1,18 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
-from datetime import datetime
+from datetime import datetime, UTC
 import uuid
-
-# Set path to service account
-cert_path = "c:/Users/Imesh/OneDrive/Documents/GitHub/TechzazEDR_Dashboard/backend/firebase-service-account.json"
-cred = credentials.Certificate(cert_path)
-if not firebase_admin._apps:
-    firebase_admin.initialize_app(cred)
-
-db = firestore.client()
+from firebase_init import init_firebase
 
 def add_test_alert(agent_id, org_id="demo-org"):
+    db, _ = init_firebase()
+    if not db:
+        print("Could not initialize Firebase")
+        return
+
     alert_id = str(uuid.uuid4())
     alert_data = {
-        "timestamp": datetime.utcnow(), # Use actual datetime for Firestore timestamp
+        "timestamp": datetime.now(UTC), # Use actual datetime for Firestore timestamp
         "organization_id": org_id,
         "RuleId": "AGGREGATION_TEST",
         "Category": "Security Audit",

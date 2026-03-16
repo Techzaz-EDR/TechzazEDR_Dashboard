@@ -2,20 +2,17 @@ import os
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 from datetime import datetime, UTC
+from firebase_init import init_firebase
 
 # Configuration
-SERVICE_ACCOUNT_PATH = "firebase-service-account.json"
 ADMIN_EMAIL = "inuka.20240695@iit.ac.lk"
 TENANT_NAME = "orgtest1"
 
 def bootstrap():
-    if not os.path.exists(SERVICE_ACCOUNT_PATH):
-        print(f"Error: Service account not found at {SERVICE_ACCOUNT_PATH}")
+    db, auth_client = init_firebase()
+    if not db:
+        print("Could not initialize Firebase")
         return
-
-    cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
-    firebase_admin.initialize_app(cred)
-    db = firestore.client()
 
     print(f"--- Bootstrapping Admin: {ADMIN_EMAIL} ---")
 
@@ -33,11 +30,11 @@ def bootstrap():
 
         # 2. Create User in Firebase Auth
         try:
-            user_record = auth.get_user_by_email(ADMIN_EMAIL)
+            user_record = auth_client.get_user_by_email(ADMIN_EMAIL)
             print(f"User {ADMIN_EMAIL} already exists in Auth. Updating claims...")
-        except auth.UserNotFoundError:
+        except auth_client.UserNotFoundError:
             # Set a temporary password - they should reset it later
-            user_record = auth.create_user(
+            user_record = auth_client.create_user(
                 email=ADMIN_EMAIL,
                 email_verified=True,
                 password="ChangeMe123!", 
@@ -46,7 +43,7 @@ def bootstrap():
             print(f"Created new Auth user for {ADMIN_EMAIL}")
 
         # 3. Set Custom Claims
-        auth.set_custom_user_claims(user_record.uid, {
+        auth_client.set_custom_user_claims(user_record.uid, {
             "tenantId": tenant_id,
             "role": "Admin"
         })
@@ -69,7 +66,7 @@ def bootstrap():
         if user_record.email_verified:
             print("Login with email and your chosen password.")
         else:
-            link = auth.generate_password_reset_link(ADMIN_EMAIL)
+            link = auth_client.generate_password_reset_link(ADMIN_EMAIL)
             print(f"Password Reset/Setup Link: {link}")
 
     except Exception as e:

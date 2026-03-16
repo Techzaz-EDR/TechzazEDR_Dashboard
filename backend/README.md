@@ -48,12 +48,12 @@ The backend includes several scripts for administration and testing:
 
 | Script | Purpose |
 | :--- | :--- |
-| `initialize_orgs.py` | Bootstraps the initial organization and demo tenants. |
-| `bootstrap_admin.py` | Creates a super-admin user in Firebase. |
-| `sync_users.py` | Synchronizes local user data with Firebase Auth. |
-| `inject_alert.py` | Simulates an agent pushing an alert for testing purposes. |
-| `list_agents.py` | Lists all registered agents for a specific tenant. |
-| `verify_last_seen.py` | Checks agent heartbeats and updates connectivity status. |
+| `scripts/initialize_orgs.py` | Bootstraps the initial organization and demo tenants. |
+| `scripts/bootstrap_admin.py` | Creates a super-admin user in Firebase. |
+| `scripts/sync_users.py` | Synchronizes local user data with Firebase Auth. |
+| `scripts/inject_alert.py` | Simulates an agent pushing an alert for testing purposes. |
+| `scripts/list_agents.py` | Lists all registered agents for a specific tenant. |
+| `scripts/verify_last_seen.py` | Checks agent heartbeats and updates connectivity status. |
 
 ---
 
@@ -88,8 +88,8 @@ Copy `.env.example` to `.env` and configure:
 | Variable | Description | Default |
 |:---|:---|:---|
 | `PROJECT_NAME` | Display name of the API | Techzaz EDR Dashboard |
-| `FIREBASE_SERVICE_ACCOUNT_PATH` | Path to JSON key | `firebase-service-account.json` |
 | `FIREBASE_PROJECT_ID` | Firebase Project ID | `techzazedr` |
+| `FIREBASE_PRIVATE_KEY` | Firebase Service Account Private Key | (from .env) |
 | `ALERTS_API_KEY` | Global/Default Ingestion Key| `tz_demo_key` |
 
 ---
@@ -103,12 +103,12 @@ Copy `.env.example` to `.env` and configure:
    pip install -r requirements.txt
    ```
 
-2. **Firebase**:
-   Place `firebase-service-account.json` in this directory.
+2. **Firebase Configuration**:
+   The application now uses environment variables for Firebase configuration. Fill in the `FIREBASE_*` variables in your `.env` file using values from your service account JSON. (See `firebase_init.py` for all required keys).
 
 3. **Initialize**:
    ```bash
-   python initialize_orgs.py
+   python scripts/initialize_orgs.py
    ```
 
 4. **Run**:

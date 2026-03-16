@@ -3,34 +3,23 @@ import sys
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from datetime import datetime, UTC
+from firebase_init import init_firebase
 
-# Add the backend directory to python path if not running from there
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from app.core.config import settings
+# Target Configuration
+TARGET_ORG = "demo-org"
+TARGET_ROLE = "Admin"
 
 def sync_users_to_demo_org():
     print("Starting synchronization of Firebase Auth users to Firestore under 'demo-org'...")
     
-    # Initialize Firebase if not already initialized
-    if not firebase_admin._apps:
-        if os.path.exists(settings.FIREBASE_SERVICE_ACCOUNT_PATH):
-            cred = credentials.Certificate(settings.FIREBASE_SERVICE_ACCOUNT_PATH)
-            firebase_admin.initialize_app(cred)
-            print("Firebase Admin SDK initialized successfully.")
-        else:
-            print(f"CRITICAL: Firebase service account file not found at {settings.FIREBASE_SERVICE_ACCOUNT_PATH}")
-            return
+    db, auth_client = init_firebase()
+    if not db:
+        print("Could not initialize Firebase")
+        return
 
-    db = firestore.client()
-    
-    # Target Configuration
-    TARGET_ORG = "demo-org"
-    TARGET_ROLE = "Admin"
-    
     try:
         # Fetch all existing users from Firebase Authentication (handles up to 1000 users per page by default)
-        page = auth.list_users()
+        page = auth_client.list_users()
         users = page.users
         while page.has_next_page:
             page = page.get_next_page()
@@ -53,7 +42,7 @@ def sync_users_to_demo_org():
                 current_claims["organizationId"] = TARGET_ORG
                 current_claims["role"] = TARGET_ROLE
                 
-                auth.set_custom_user_claims(uid, current_claims)
+                auth_client.set_custom_user_claims(uid, current_claims)
             except Exception as e:
                 print(f"  [ERROR] Failed to set custom claims for {email}: {e}")
                 continue
