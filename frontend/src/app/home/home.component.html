@@ -583,15 +583,16 @@
                     <p>Experience the power of Techzaz EDR. Our experts will show you how to secure your enterprise.</p>
                 </div>
 
-                <form class="demo-form" (submit)="submitDemoForm($event)">
+                <form class="demo-form" #demoForm="ngForm" (ngSubmit)="submitDemoForm($event, demoForm)" novalidate>
                     <div class="form-group" *ngIf="isPlanDropdownMode">
-                        <label>Plan of Interest</label>
-                        <select name="selectedPlan" [(ngModel)]="demoFormData.selectedPlan" required>
+                        <label>Plan of Interest <span class="required">*</span></label>
+                        <select name="selectedPlan" #demoPlanCtrl="ngModel" [(ngModel)]="demoFormData.selectedPlan" required>
                             <option value="">Select a plan</option>
                             <option value="Starter">Starter</option>
                             <option value="Professional">Professional</option>
                             <option value="Enterprise">Enterprise</option>
                         </select>
+                        <span class="error-message" *ngIf="demoSubmitted && demoPlanCtrl.invalid">Please select a plan.</span>
                     </div>
 
                     <div class="form-group" *ngIf="!isPlanDropdownMode">
@@ -601,33 +602,39 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>First Name</label>
-                            <input type="text" name="firstName" [(ngModel)]="demoFormData.firstName" placeholder="John" required>
+                            <label>First Name <span class="required">*</span></label>
+                            <input type="text" name="firstName" #demoFirstNameCtrl="ngModel" [(ngModel)]="demoFormData.firstName" placeholder="John" required>
+                            <span class="error-message" *ngIf="demoSubmitted && demoFirstNameCtrl.invalid">First name is required.</span>
                         </div>
                         <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" name="lastName" [(ngModel)]="demoFormData.lastName" placeholder="Deo" required>
+                            <label>Last Name <span class="required">*</span></label>
+                            <input type="text" name="lastName" #demoLastNameCtrl="ngModel" [(ngModel)]="demoFormData.lastName" placeholder="Deo" required>
+                            <span class="error-message" *ngIf="demoSubmitted && demoLastNameCtrl.invalid">Last name is required.</span>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Work Email</label>
-                        <input type="email" name="workEmail" [(ngModel)]="demoFormData.workEmail" placeholder="john@company.lk" required>
+                        <label>Work Email <span class="required">*</span></label>
+                        <input type="email" name="workEmail" #demoEmailCtrl="ngModel" [(ngModel)]="demoFormData.workEmail" placeholder="john@company.lk" required>
+                        <span class="error-message" *ngIf="demoSubmitted && demoEmailCtrl.invalid">Work email is required.</span>
                     </div>
 
                     <div class="form-group">
-                        <label>Company Name</label>
-                        <input type="text" name="companyName" [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Networks" required>
+                        <label>Company Name <span class="required">*</span></label>
+                        <input type="text" name="companyName" #demoCompanyCtrl="ngModel" [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Networks" required>
+                        <span class="error-message" *ngIf="demoSubmitted && demoCompanyCtrl.invalid">Company name is required.</span>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Country</label>
-                            <input type="text" name="country" [(ngModel)]="demoFormData.country" placeholder="Sri Lanka" required>
+                            <label>Country <span class="required">*</span></label>
+                            <input type="text" name="country" #demoCountryCtrl="ngModel" [(ngModel)]="demoFormData.country" placeholder="Sri Lanka" required>
+                            <span class="error-message" *ngIf="demoSubmitted && demoCountryCtrl.invalid">Country is required.</span>
                         </div>
                         <div class="form-group">
-                            <label>Phone Number</label>
-                            <input type="tel" name="phone" [(ngModel)]="demoFormData.phone" placeholder="+94 XX XXXXXXX" required>
+                            <label>Phone Number <span class="required">*</span></label>
+                            <input type="tel" name="phone" #demoPhoneCtrl="ngModel" [(ngModel)]="demoFormData.phone" placeholder="+94 XX XXXXXXX" required>
+                            <span class="error-message" *ngIf="demoSubmitted && demoPhoneCtrl.invalid">Phone number is required.</span>
                         </div>
                     </div>
 

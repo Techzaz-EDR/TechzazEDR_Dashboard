@@ -20,6 +20,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     showPassword = false;
     isSignUpMode = false;
     errorMessage = '';
+    loginSubmitted = false;
 
     // Sign Up Fields
     signupFirstName = '';
@@ -35,6 +36,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     agreeContact = false;
     signupError = '';
     signupSuccess = false;
+    signupSubmitted = false;
 
     readonly Eye = Eye;
     readonly EyeOff = EyeOff;
@@ -115,8 +117,14 @@ export class LoginComponent implements AfterViewInit, OnInit {
         }
     }
 
-    async signIn() {
+    async signIn(signInForm: any) {
+        this.loginSubmitted = true;
         this.errorMessage = '';
+
+        if (signInForm.invalid) {
+            return;
+        }
+
         try {
             await this.authService.login(this.email, this.password);
             this.router.navigate(['/dashboard']);
@@ -126,8 +134,13 @@ export class LoginComponent implements AfterViewInit, OnInit {
         }
     }
 
-    async signUp() {
+    async signUp(signUpForm: any) {
+        this.signupSubmitted = true;
         this.signupError = '';
+
+        if (signUpForm.invalid) {
+            return;
+        }
 
         if (this.signupPassword !== this.signupConfirmPassword) {
             this.signupError = 'Passwords do not match. Please try again.';

@@ -25,7 +25,7 @@ export class TermsConditionsComponent implements OnInit {
   readonly AlertCircle = AlertCircle;
   readonly ChevronDown = ChevronDown;
  
-  lastUpdated = 'October 24, 2026';
+  lastUpdated = 'February 10, 2026';
   activeSectionId = 'agreement';
   isMobileNavOpen = false;
 

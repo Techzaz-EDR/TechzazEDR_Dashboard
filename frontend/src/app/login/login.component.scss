@@ -274,12 +274,22 @@ form {
         }
     }
 
-    span {
+    span:not(.required):not(.error-message) {
         font-size: 0.8rem;
         color: rgba(255, 255, 255, 0.6);
         margin-bottom: 20px;
         opacity: 0;
         animation: fade-in 0.6s ease 0.8s forwards;
+    }
+
+    .required {
+        color: #ff4d4f !important;
+        margin-left: 4px;
+        font-weight: 600;
+        opacity: 1 !important;
+        animation: none !important;
+        font-size: inherit;
+        margin-bottom: 0;
     }
 
     .error-banner {
@@ -306,16 +316,40 @@ form {
             margin: 10px 0;
             opacity: 0;
             transform: translateY(20px);
+            text-align: left;
 
-            input {
-                background: rgba(8, 11, 18, 0.8);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                padding-left: 42px;
+            label {
+                display: block;
+                font-size: 0.8rem;
+                font-weight: 500;
+                color: rgba(255, 255, 255, 0.45);
+                margin-bottom: 6px;
+            }
 
-                &:focus {
-                    background: rgba(8, 11, 18, 1);
-                    border-color: rgba(59, 130, 246, 0.5);
-                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            .input-with-icon {
+                position: relative;
+                width: 100%;
+
+                lucide-icon {
+                    position: absolute;
+                    left: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: rgba(255, 255, 255, 0.4);
+                    transition: color 0.3s;
+                    z-index: 2;
+                }
+
+                input {
+                    background: rgba(8, 11, 18, 0.8);
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    padding-left: 42px;
+
+                    &:focus {
+                        background: rgba(8, 11, 18, 1);
+                        border-color: rgba(59, 130, 246, 0.5);
+                        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+                    }
                 }
             }
 
@@ -379,18 +413,6 @@ form {
             width: 100%;
             max-width: 220px;
         }
-    }
-
-    /* +120ms */
-
-    lucide-icon {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.4);
-        transition: color 0.3s;
-        z-index: 2;
     }
 
     /* Inputs and Buttons (.solid) are now inherited from styles.scss (.input-wrapper and .btn-primary) */
