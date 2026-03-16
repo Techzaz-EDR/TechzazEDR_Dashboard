@@ -10,6 +10,7 @@ import {
   collectionGroup,
   doc,
   getDoc,
+  updateDoc,
   orderBy,
   limit
 } from 'firebase/firestore';
@@ -160,6 +161,17 @@ export class FirestoreService {
       status: 'pending',
       timestamp: serverTimestamp(),
       created_by: 'system'
+    });
+  }
+
+  async updateAlertStatus(agentId: string, alertId: string, status: string) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const alertRef = doc(this.db, 'organizations', tenantId, 'agents', agentId, 'alerts', alertId);
+    
+    await updateDoc(alertRef, {
+        status: status,
+        updated_at: serverTimestamp()
     });
   }
 
