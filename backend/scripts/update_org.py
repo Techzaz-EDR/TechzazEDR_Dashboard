@@ -1,25 +1,22 @@
 import os
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
+from firebase_init import init_firebase
 
-SERVICE_ACCOUNT_PATH = "firebase-service-account.json"
 USER_EMAIL = "inuka.20240695@iit.ac.lk"
 NEW_ORG_NAME = "orgtest1"
 
 def update_org():
-    if not os.path.exists(SERVICE_ACCOUNT_PATH):
-        print(f"Error: Service account not found at {SERVICE_ACCOUNT_PATH}")
+    db, auth_client = init_firebase()
+    if not db:
+        print("Could not initialize Firebase")
         return
-
-    cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
-    firebase_admin.initialize_app(cred)
-    db = firestore.client()
 
     print(f"--- Updating Organization for: {USER_EMAIL} ---")
 
     try:
         # 1. Find the user to get their tenantId
-        user_record = auth.get_user_by_email(USER_EMAIL)
+        user_record = auth_client.get_user_by_email(USER_EMAIL)
         uid = user_record.uid
         
         user_doc = db.collection("users").document(uid).get()

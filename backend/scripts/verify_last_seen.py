@@ -4,26 +4,16 @@ from firebase_admin import credentials, firestore
 from datetime import datetime
 import os
 import time
+from firebase_init import init_firebase
 
 def verify():
     print("Starting verification...")
-    # 1. Check current last_seen in Firestore
-    cred_path = "./firebase-service-account.json"
-    if not os.path.exists(cred_path):
-        print(f"Service account file not found at {cred_path}")
+    
+    db, _ = init_firebase()
+    if not db:
+        print("Could not initialize Firebase")
         return
 
-    print(f"Initializing Firebase with {cred_path}...")
-    if not firebase_admin._apps:
-        try:
-            cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(cred)
-            print("Firebase initialized.")
-        except Exception as e:
-            print(f"Failed to initialize Firebase: {e}")
-            return
-
-    db = firestore.client()
     agent_id = "DESKTOP-TEST1"
     organization_id = "demo-org"
     agent_ref = db.collection("organizations").document(organization_id).collection("agents").document(agent_id)

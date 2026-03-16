@@ -1,19 +1,15 @@
-import os
 import firebase_admin
-from firebase_admin import credentials, auth
+from firebase_init import init_firebase
 
-SERVICE_ACCOUNT_PATH = "firebase-service-account.json"
 ADMIN_EMAIL = "INUKA.20240695@iit.ac.lk"
 
 def check_user():
-    if not os.path.exists(SERVICE_ACCOUNT_PATH):
-        print(f"Error: Service account not found at {SERVICE_ACCOUNT_PATH}")
+    db, auth = init_firebase()
+    if not auth:
+        print("Could not initialize Firebase Auth")
         return
 
     try:
-        cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
-        firebase_admin.initialize_app(cred)
-        
         try:
             user = auth.get_user_by_email(ADMIN_EMAIL)
             print(f"User Found (as-is): {user.email}")
