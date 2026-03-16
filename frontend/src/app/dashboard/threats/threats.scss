@@ -49,20 +49,55 @@
 
 .filters-bar {
     display: flex;
-    gap: 16px;
-    padding: 16px;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 16px 14px;
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
 
+    .filters-heading {
+        display: flex;
+        align-items: center;
+    }
+
+    .filters-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(148, 163, 184, 0.82);
+    }
+
+    .filters-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px 16px;
+        flex-wrap: wrap;
+    }
+
+    .filters-controls-left,
+    .filters-controls-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
     .filter-group {
+        min-width: 170px;
+
         .select-wrapper select {
-            padding: 10px 16px;
+            width: 100%;
+            min-height: 40px;
+            padding: 8px 14px;
             background-color: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: 6px;
             color: var(--text-primary);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
+            line-height: 1.2;
             cursor: pointer;
 
             &:focus {
@@ -70,9 +105,21 @@
                 border-color: var(--accent-primary);
             }
         }
+    }
 
-        &.right-align {
-            margin-left: auto;
+    @media (max-width: 900px) {
+        .filters-controls {
+            align-items: stretch;
+        }
+
+        .filters-controls-left,
+        .filters-controls-right {
+            width: 100%;
+        }
+
+        .filter-group {
+            flex: 1 1 180px;
+            min-width: 0;
         }
     }
 }
@@ -88,31 +135,58 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 16px;
+        align-items: stretch;
 
         .class-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 16px;
+            padding: 16px 16px 18px;
             position: relative;
             overflow: hidden;
+            min-height: 138px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
 
             .label {
                 font-size: 0.85rem;
                 color: var(--text-muted);
                 margin-bottom: 8px;
+                line-height: 1.25;
+                min-height: 2.1rem;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                overflow: hidden;
+            }
+
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
             }
 
             .value {
                 font-size: 1.5rem;
                 font-weight: 700;
                 color: var(--text-primary);
-                margin-bottom: 4px;
+                line-height: 1;
             }
 
             .trend {
                 font-size: 0.75rem;
                 font-weight: 500;
+                line-height: 1.2;
+                margin-top: auto;
+                padding-top: 8px;
+                min-height: 0.9rem;
 
                 &.positive {
                     color: var(--status-low);
@@ -127,6 +201,7 @@
                 position: absolute;
                 bottom: 0;
                 left: 0;
+                right: 0;
                 width: 100%;
                 height: 3px;
                 opacity: 0.7;
@@ -157,17 +232,81 @@
         h3 {
             font-size: 1rem;
             color: var(--text-secondary);
-            margin-bottom: 12px;
+            margin-bottom: 4px;
+        }
+
+        .time-range-note {
+            margin: 0 0 10px;
+            font-size: 0.75rem;
+            color: rgba(148, 163, 184, 0.8);
         }
 
         .chart-container {
             flex: 1;
             width: 100%;
             border-bottom: 1px solid var(--border-light);
+        }
+
+        .chart-container.threat-volume-chart {
+            display: grid;
+            grid-template-columns: 30px minmax(0, 1fr);
+            column-gap: 10px;
+            align-items: stretch;
+            padding-top: 4px;
+
+            .y-axis-hints {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 8px 0 28px;
+
+                span {
+                    font-size: 0.68rem;
+                    color: rgba(148, 163, 184, 0.7);
+                    line-height: 1;
+                    text-align: right;
+                }
+            }
+
+            .plot-wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                min-width: 0;
+            }
 
             svg {
                 width: 100%;
-                height: 100%;
+                height: 170px;
+
+                .grid-line {
+                    stroke: rgba(51, 65, 85, 0.28);
+                    stroke-dasharray: 3 6;
+                    stroke-width: 1;
+                }
+
+                .grid-line.baseline {
+                    stroke: rgba(100, 116, 139, 0.45);
+                    stroke-dasharray: none;
+                }
+
+                .grid-line.vertical {
+                    stroke: rgba(51, 65, 85, 0.2);
+                    stroke-dasharray: 2 7;
+                }
+            }
+
+            .x-axis-markers {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 8px;
+                padding: 0 2px;
+
+                span {
+                    font-size: 0.68rem;
+                    letter-spacing: 0.02em;
+                    color: rgba(148, 163, 184, 0.72);
+                }
             }
         }
     }
