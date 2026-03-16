@@ -96,6 +96,22 @@ h6 {
 }
 
 /* Global Forms */
+
+/* Required field asterisk */
+.required {
+    color: #ff4d4f;
+    margin-left: 4px;
+    font-weight: 500;
+}
+
+/* Inline validation error message */
+.error-message {
+    color: #ff4d4f;
+    font-size: 13px;
+    margin-top: 4px;
+    display: block;
+}
+
 .form-group {
     text-align: left;
     margin-bottom: 20px;

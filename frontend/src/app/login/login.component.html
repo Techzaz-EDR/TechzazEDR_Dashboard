@@ -1,4 +1,4 @@
-<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" [class.success-mode]="signupSuccess" (mousemove)="onMouseMove($event)"
+<!-- TRACER_12345 --><div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" [class.success-mode]="signupSuccess" (mousemove)="onMouseMove($event)"
     (mouseleave)="onMouseLeave()">
     <div class="hover-glow"></div>
 
@@ -15,7 +15,7 @@
 
         <!-- Sign-In View -->
         <div class="auth-view sign-in-view">
-            <form (ngSubmit)="signIn()" #signInForm="ngForm">
+            <form (ngSubmit)="signIn(signInForm)" #signInForm="ngForm">
 
                 <div class="form-header">
                     <!-- Status Badge -->
@@ -26,7 +26,7 @@
                     </div>
 
                     <!-- Title -->
-                    <h2>Log in to Techzaz EDR</h2>
+                    <h2 id="VIBE_CHECK_SIGNIN">Log in to Techzaz EDR</h2>
                 </div>
 
                 <!-- Error Banner -->
@@ -37,26 +37,36 @@
                 <!-- Input Fields -->
                 <div class="inputs-group">
                     <div class="form-group">
-                        <lucide-icon [img]="User" [size]="16"></lucide-icon>
-                        <input
-                            type="email"
-                            name="email"
-                            [(ngModel)]="email"
-                            placeholder="Work Email"
-                            required
-                            autocomplete="email"
-                        />
+                        <label>Work Email <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                            <input
+                                type="email"
+                                name="email"
+                                #emailCtrl="ngModel"
+                                [(ngModel)]="email"
+                                placeholder="Work Email"
+                                required
+                                autocomplete="email"
+                            />
+                        </div>
+                        <span class="error-message" *ngIf="loginSubmitted && emailCtrl.invalid">Work email is required.</span>
                     </div>
                     <div class="form-group">
-                        <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
-                        <input
-                            [type]="showPassword ? 'text' : 'password'"
-                            name="password"
-                            [(ngModel)]="password"
-                            placeholder="Password"
-                            required
-                            autocomplete="current-password"
-                        />
+                        <label>Password <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
+                            <input
+                                [type]="showPassword ? 'text' : 'password'"
+                                name="password"
+                                #passwordCtrl="ngModel"
+                                [(ngModel)]="password"
+                                placeholder="Password"
+                                required
+                                autocomplete="current-password"
+                            />
+                        </div>
+                        <span class="error-message" *ngIf="loginSubmitted && passwordCtrl.invalid">Password is required.</span>
                     </div>
                 </div>
 
@@ -93,7 +103,7 @@
             }
 
             @if (!signupSuccess) {
-            <form (ngSubmit)="signUp()" #signUpForm="ngForm" class="signup-form">
+            <form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm)" novalidate class="signup-form">
 
                 <div class="form-header" style="display:none">
 
@@ -110,59 +120,91 @@
                     <!-- Row: First Name | Last Name -->
                     <div class="form-row">
                         <div class="form-group">
-                            <lucide-icon [img]="User" [size]="16"></lucide-icon>
-                            <input type="text" name="firstName" [(ngModel)]="signupFirstName"
-                                placeholder="First Name" required autocomplete="given-name" />
+                            <label>First Name <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                                <input type="text" name="firstName" #firstNameCtrl="ngModel" [(ngModel)]="signupFirstName"
+                                    placeholder="First Name" required autocomplete="given-name" />
+                            </div>
+                            <span class="error-message" *ngIf="signupSubmitted && firstNameCtrl.invalid">First name is required.</span>
                         </div>
                         <div class="form-group">
-                            <lucide-icon [img]="User" [size]="16"></lucide-icon>
-                            <input type="text" name="lastName" [(ngModel)]="signupLastName"
-                                placeholder="Last Name" required autocomplete="family-name" />
+                            <label>Last Name <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                                <input type="text" name="lastName" #lastNameCtrl="ngModel" [(ngModel)]="signupLastName"
+                                    placeholder="Last Name" required autocomplete="family-name" />
+                            </div>
+                            <span class="error-message" *ngIf="signupSubmitted && lastNameCtrl.invalid">Last name is required.</span>
                         </div>
                     </div>
 
                     <!-- Work Email -->
                     <div class="form-group">
-                        <lucide-icon [img]="Mail" [size]="16"></lucide-icon>
-                        <input type="email" name="signupEmail" [(ngModel)]="signupEmail"
-                            placeholder="Work Email" required autocomplete="email" />
+                        <label>Work Email <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Mail" [size]="16"></lucide-icon>
+                            <input type="email" name="signupEmail" #signupEmailCtrl="ngModel" [(ngModel)]="signupEmail"
+                                placeholder="Work Email" required autocomplete="email" />
+                        </div>
+                        <span class="error-message" *ngIf="signupSubmitted && signupEmailCtrl.invalid">Work email is required.</span>
                     </div>
 
                     <!-- Company Name -->
                     <div class="form-group">
-                        <lucide-icon [img]="Building2" [size]="16"></lucide-icon>
-                        <input type="text" name="companyName" [(ngModel)]="signupCompany"
-                            placeholder="Company Name" required autocomplete="organization" />
+                        <label>Company Name <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Building2" [size]="16"></lucide-icon>
+                            <input type="text" name="companyName" #companyCtrl="ngModel" [(ngModel)]="signupCompany"
+                                placeholder="Company Name" required autocomplete="organization" />
+                        </div>
+                        <span class="error-message" *ngIf="signupSubmitted && companyCtrl.invalid">Company name is required.</span>
                     </div>
 
                     <!-- Row: Country | Phone -->
                     <div class="form-row">
                         <div class="form-group">
-                            <lucide-icon [img]="Globe" [size]="16"></lucide-icon>
-                            <input type="text" name="country" [(ngModel)]="signupCountry"
-                                placeholder="Country" required autocomplete="country-name" />
+                            <label>Country <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <lucide-icon [img]="Globe" [size]="16"></lucide-icon>
+                                <input type="text" name="country" #countryCtrl="ngModel" [(ngModel)]="signupCountry"
+                                    placeholder="Country" required autocomplete="country-name" />
+                            </div>
+                            <span class="error-message" *ngIf="signupSubmitted && countryCtrl.invalid">Country is required.</span>
                         </div>
                         <div class="form-group">
-                            <lucide-icon [img]="Phone" [size]="16"></lucide-icon>
-                            <input type="tel" name="phone" [(ngModel)]="signupPhone"
-                                placeholder="Phone Number" autocomplete="tel" />
+                            <label>Phone Number <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <lucide-icon [img]="Phone" [size]="16"></lucide-icon>
+                                <input type="tel" name="phone" #phoneCtrl="ngModel" [(ngModel)]="signupPhone"
+                                    placeholder="Phone Number" required autocomplete="tel" />
+                            </div>
+                            <span class="error-message" *ngIf="signupSubmitted && phoneCtrl.invalid">Phone number is required.</span>
                         </div>
                     </div>
 
                     <!-- Password -->
                     <div class="form-group">
-                        <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
-                        <input [type]="showSignupPassword ? 'text' : 'password'"
-                            name="signupPassword" [(ngModel)]="signupPassword"
-                            placeholder="Password" required autocomplete="new-password" />
+                        <label>Password <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
+                            <input [type]="showSignupPassword ? 'text' : 'password'"
+                                name="signupPassword" #signupPwCtrl="ngModel" [(ngModel)]="signupPassword"
+                                placeholder="Password" required autocomplete="new-password" />
+                        </div>
+                        <span class="error-message" *ngIf="signupSubmitted && signupPwCtrl.invalid">Password is required.</span>
                     </div>
 
                     <!-- Confirm Password -->
                     <div class="form-group">
-                        <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
-                        <input [type]="showSignupPassword ? 'text' : 'password'"
-                            name="confirmPassword" [(ngModel)]="signupConfirmPassword"
-                            placeholder="Confirm Password" required autocomplete="new-password" />
+                        <label>Confirm Password <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
+                            <input [type]="showSignupPassword ? 'text' : 'password'"
+                                name="confirmPassword" #confirmPwCtrl="ngModel" [(ngModel)]="signupConfirmPassword"
+                                placeholder="Confirm Password" required autocomplete="new-password" />
+                        </div>
+                        <span class="error-message" *ngIf="signupSubmitted && confirmPwCtrl.invalid">Please confirm your password.</span>
                     </div>
 
                 </div>
@@ -170,15 +212,11 @@
                 <!-- Agreement Checkboxes -->
                 <div class="agreement-section">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="agreeTerms" [(ngModel)]="agreeTerms" required />
+                        <input type="checkbox" name="agreeTerms" #agreeTermsCtrl="ngModel" [(ngModel)]="agreeTerms" required />
                         <span class="checkmark"></span>
-                        <span>I agree to the <a routerLink="/terms" (click)="$event.stopPropagation()" class="policy-link">Terms of Service</a> and <a routerLink="/privacy-policy" (click)="$event.stopPropagation()" class="policy-link">Privacy Policy</a>.</span>
+                        <span>I agree to the <a routerLink="/terms" (click)="$event.stopPropagation()" class="policy-link">Terms of Service</a> and <a routerLink="/privacy-policy" (click)="$event.stopPropagation()" class="policy-link">Privacy Policy</a>. <span class="required">*</span></span>
                     </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="agreeContact" [(ngModel)]="agreeContact" />
-                        <span class="checkmark"></span>
-                        <span>I agree to be contacted regarding onboarding and security updates.</span>
-                    </label>
+                    <span class="error-message" *ngIf="signupSubmitted && agreeTermsCtrl.invalid">You must agree to the Terms of Service and Privacy Policy.</span>
                 </div>
 
                 <!-- Create Account Button -->
