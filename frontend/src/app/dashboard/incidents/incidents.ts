@@ -77,20 +77,59 @@ export class Incidents implements OnInit, OnDestroy {
 
 
     // Actions
-    isolateEndpoint(id: number) {
-        console.log(`Isolating endpoint for incident ${id}`);
-        // Mock action
-        alert(`Endpoint isolate command sent for Incident #${id}`);
+    async isolateEndpoint(incident: any) {
+        if (!incident.agent_id) {
+            console.error('Cannot isolate: No agent ID for incident', incident.id);
+            alert('Error: Agent ID missing for this incident.');
+            return;
+        }
+
+        console.log(`Sending ISOLATE command for agent ${incident.agent_id} (Incident #${incident.id})`);
+        try {
+            await this.firestoreService.sendCommand(incident.agent_id, 'isolate_endpoint');
+            alert(`Isolation command sent successfully for Agent: ${incident.agent_id}`);
+            
+            // Optionally update status to contained
+            await this.firestoreService.updateAlertStatus(incident.agent_id, incident.id, 'contained');
+        } catch (error) {
+            console.error('Failed to isolate endpoint:', error);
+            alert('Failed to send isolation command. Check console for details.');
+        }
     }
 
-    blockThreat(id: number) {
-        console.log(`Blocking threat for incident ${id}`);
-        // Mock action
-        alert(`Global block rule created for threat in Incident #${id}`);
+    async blockThreat(incident: any) {
+        if (!incident.agent_id) {
+            alert('Error: Agent ID missing for this incident.');
+            return;
+        }
+
+        console.log(`Sending BLOCK_INDICATOR command for agent ${incident.agent_id} (Incident #${incident.id})`);
+        try {
+            await this.firestoreService.sendCommand(incident.agent_id, 'block_indicator', { 
+                detail: incident.description,
+                incident_id: incident.id 
+            });
+            alert(`Global block rule created for threat in Incident #${incident.id}. Distributed to agent ${incident.agent_id}.`);
+        } catch (error) {
+            console.error('Failed to block threat:', error);
+            alert('Failed to create block rule. Check console for details.');
+        }
     }
 
-    investigate(id: number) {
-        console.log(`Investigating incident ${id}`);
-        // navigate to details or show details modal
+    async investigate(incident: any) {
+        if (!incident.agent_id) {
+            alert('Error: Agent ID missing for this incident.');
+            return;
+        }
+
+        console.log(`Updating status to 'investigating' for Incident #${incident.id}`);
+        try {
+            await this.firestoreService.updateAlertStatus(incident.agent_id, incident.id, 'investigating');
+            // UI will automatically update via Firestore onSnapshot
+            console.log('Status updated successfully');
+        } catch (error) {
+            console.error('Failed to update incident status:', error);
+            alert('Failed to update status. Check console for details.');
+        }
     }
 }

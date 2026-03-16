@@ -82,13 +82,13 @@
                     <td>
                         <div class="action-buttons">
                             <button class="btn-icon danger" title="Isolate Endpoint"
-                                (click)="isolateEndpoint(incident.id)"><lucide-icon [name]="ShieldOffIcon"
+                                (click)="isolateEndpoint(incident)"><lucide-icon [name]="ShieldOffIcon"
                                     [size]="18"></lucide-icon></button>
                             <button class="btn-icon warning" title="Block Globally"
-                                (click)="blockThreat(incident.id)"><lucide-icon [name]="ShieldIcon"
+                                (click)="blockThreat(incident)"><lucide-icon [name]="ShieldIcon"
                                     [size]="18"></lucide-icon></button>
                             <button class="btn-icon info" title="Investigate"
-                                (click)="investigate(incident.id)"><lucide-icon [name]="EyeIcon"
+                                (click)="investigate(incident)"><lucide-icon [name]="EyeIcon"
                                     [size]="18"></lucide-icon></button>
                         </div>
                     </td>
