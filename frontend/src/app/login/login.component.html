@@ -184,15 +184,22 @@
                     </div>
 
                     <!-- Password -->
-                    <div class="form-group">
+                    <div class="form-group password-field-group">
                         <label>Password <span class="required">*</span></label>
                         <div class="input-with-icon">
                             <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
                             <input [type]="showSignupPassword ? 'text' : 'password'"
                                 name="signupPassword" #signupPwCtrl="ngModel" [(ngModel)]="signupPassword"
-                                placeholder="Password" required autocomplete="new-password" />
+                                placeholder="Password" required pattern="^(?=.*[A-Z])(?=.*[0-9]).{8,}$" autocomplete="new-password" />
+                            <button type="button" class="password-toggle" (click)="toggleSignupPassword()">
+                                <lucide-icon [img]="showSignupPassword ? EyeOff : Eye" [size]="16"></lucide-icon>
+                            </button>
                         </div>
-                        <span class="error-message" *ngIf="signupSubmitted && signupPwCtrl.invalid">Password is required.</span>
+                        <div class="password-feedback" *ngIf="signupPassword">
+                            <span class="helper-text">At least 8 characters, including a number and an uppercase letter.</span>
+                        </div>
+                        <span class="error-message" *ngIf="signupSubmitted && signupPwCtrl.errors?.['required']">Password is required.</span>
+                        <span class="error-message" *ngIf="signupSubmitted && signupPwCtrl.errors?.['pattern']">Password must meet the required criteria.</span>
                     </div>
 
                     <!-- Confirm Password -->
@@ -200,11 +207,15 @@
                         <label>Confirm Password <span class="required">*</span></label>
                         <div class="input-with-icon">
                             <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
-                            <input [type]="showSignupPassword ? 'text' : 'password'"
+                            <input [type]="showSignupConfirmPassword ? 'text' : 'password'"
                                 name="confirmPassword" #confirmPwCtrl="ngModel" [(ngModel)]="signupConfirmPassword"
                                 placeholder="Confirm Password" required autocomplete="new-password" />
+                            <button type="button" class="password-toggle" (click)="toggleSignupConfirmPassword()">
+                                <lucide-icon [img]="showSignupConfirmPassword ? EyeOff : Eye" [size]="16"></lucide-icon>
+                            </button>
                         </div>
-                        <span class="error-message" *ngIf="signupSubmitted && confirmPwCtrl.invalid">Please confirm your password.</span>
+                        <span class="error-message" *ngIf="confirmPwCtrl.touched && signupPassword !== signupConfirmPassword">Passwords do not match.</span>
+                        <span class="error-message" *ngIf="signupSubmitted && confirmPwCtrl.errors?.['required'] && !confirmPwCtrl.touched">Please confirm your password.</span>
                     </div>
 
                 </div>

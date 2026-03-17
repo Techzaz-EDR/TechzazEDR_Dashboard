@@ -32,6 +32,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     signupPassword = '';
     signupConfirmPassword = '';
     showSignupPassword = false;
+    showSignupConfirmPassword = false;
     agreeTerms = false;
     agreeContact = false;
     signupError = '';
@@ -172,6 +173,14 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
     togglePassword() {
         this.showPassword = !this.showPassword;
+    }
+
+    toggleSignupPassword() {
+        this.showSignupPassword = !this.showSignupPassword;
+    }
+
+    toggleSignupConfirmPassword() {
+        this.showSignupConfirmPassword = !this.showSignupConfirmPassword;
     }
 
     goToLogin() {
