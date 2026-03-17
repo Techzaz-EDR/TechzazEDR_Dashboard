@@ -344,12 +344,58 @@ form {
                     background: rgba(8, 11, 18, 0.8);
                     border: 1px solid rgba(255, 255, 255, 0.08);
                     padding-left: 42px;
+                    padding-right: 42px;
 
                     &:focus {
                         background: rgba(8, 11, 18, 1);
                         border-color: rgba(59, 130, 246, 0.5);
                         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
                     }
+                }
+
+                .password-toggle {
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    cursor: pointer;
+                    color: rgba(255, 255, 255, 0.4);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                    z-index: 3;
+
+                    &:hover {
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+
+                    &:focus {
+                        outline: none;
+                    }
+
+                    lucide-icon {
+                        position: static;
+                        transform: none;
+                        display: flex;
+                    }
+                }
+            }
+
+            .password-feedback {
+                display: flex;
+                flex-direction: column;
+                margin-top: 8px;
+                gap: 4px;
+                padding: 0 4px;
+
+                .helper-text {
+                    font-size: 0.72rem;
+                    color: rgba(255, 255, 255, 0.4);
+                    line-height: 1.4;
                 }
             }
 
