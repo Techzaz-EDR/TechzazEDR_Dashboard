@@ -6,6 +6,18 @@ import {
     RefreshCw, Monitor, Eye
 } from 'lucide-angular';
 
+type ThreatLogEntry = {
+    id: number;
+    title: string;
+    description: string;
+    endpoint: string;
+    time: string;
+    severity: string;
+    type: string;
+    status: string;
+    icon: string;
+};
+
 @Component({
     selector: 'app-threats',
     standalone: true,
@@ -37,7 +49,7 @@ export class Threats {
         { label: 'Privilege Escalation', count: 7, trend: '0%', color: 'critical' }
     ];
 
-    threats = [
+    threats: ThreatLogEntry[] = [
         {
             id: 1,
             title: 'Suspicious Process Execution',
@@ -117,6 +129,8 @@ export class Threats {
         }
     ];
 
+    selectedThreat: ThreatLogEntry | null = null;
+
     // Filters
     filterSeverity = 'All Severities';
     filterStatus = 'All Status';
@@ -150,6 +164,16 @@ export class Threats {
 
             return matchSeverity && matchStatus && matchTime;
         });
+    }
+
+    openThreatDetails(threat: ThreatLogEntry, event?: Event): void {
+        event?.stopPropagation();
+        this.selectedThreat = threat;
+    }
+
+    closeThreatDetails(event?: Event): void {
+        event?.stopPropagation();
+        this.selectedThreat = null;
     }
 
     parseTimeAgo(timeString: string): number {

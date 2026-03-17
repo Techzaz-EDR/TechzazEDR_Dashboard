@@ -139,16 +139,21 @@
             <span class="count">{{ filteredThreats.length }} items</span>
         </div>
 
+        <div class="threats-log-body">
         <div class="threats-list">
             @for (threat of filteredThreats; track threat.id) {
-            <div class="threat-row" [class]="threat.severity">
+            <div class="threat-row" [class]="threat.severity" [class.is-selected]="selectedThreat?.id === threat.id"
+                (click)="openThreatDetails(threat)" (keydown.enter)="openThreatDetails(threat)"
+                (keydown.space)="openThreatDetails(threat); $event.preventDefault()" tabindex="0" role="button"
+                [attr.aria-label]="'Open details for ' + threat.title">
                 <div class="severity-indicator"></div>
 
                 <div class="threat-main">
-                    <div class="row-top">
+                    <div class="row-top" aria-label="Threat metadata">
                         <span class="time">{{ threat.time }}</span>
                         <span class="endpoint">
-                            <lucide-icon [name]="MonitorIcon" [size]="14"></lucide-icon> {{ threat.endpoint }}
+                            <lucide-icon [name]="MonitorIcon" [size]="14"></lucide-icon>
+                            <span class="endpoint-name">{{ threat.endpoint }}</span>
                         </span>
                         <span class="type-badge">{{ threat.type }}</span>
                     </div>
@@ -159,17 +164,66 @@
                     </div>
                 </div>
 
-                <div class="threat-meta flip-layout">
+                <div class="col-status">
                     <span class="badge status" [class]="threat.status">{{ threat.status }}</span>
+                </div>
+
+                <div class="col-severity">
                     <span class="badge severity" [class]="threat.severity">{{ threat.severity }}</span>
                 </div>
 
-                <div class="actions">
-                    <button class="icon-btn" title="View Details"><lucide-icon [name]="EyeIcon"
+                <div class="col-actions">
+                    <button class="icon-btn" type="button" title="View Details" aria-label="View threat details"
+                        (click)="openThreatDetails(threat, $event)"><lucide-icon [name]="EyeIcon"
                             [size]="18"></lucide-icon></button>
                 </div>
             </div>
             }
+        </div>
+
+        @if (selectedThreat) {
+        <div class="threat-details-panel" aria-live="polite">
+            <div class="panel-head">
+                <div class="headline">
+                    <span class="label">Threat details</span>
+                    <h4>{{ selectedThreat.title }}</h4>
+                </div>
+                <button class="dismiss-btn" type="button" (click)="closeThreatDetails($event)">
+                    <lucide-icon [name]="EyeIcon" [size]="14"></lucide-icon>
+                    Dismiss
+                </button>
+            </div>
+
+            <p class="panel-desc">{{ selectedThreat.description }}</p>
+
+            <div class="panel-fields">
+                <div class="field">
+                    <span class="field-label">Endpoint</span>
+                    <span class="field-value">
+                        <lucide-icon [name]="MonitorIcon" [size]="13"></lucide-icon>
+                        {{ selectedThreat.endpoint }}
+                    </span>
+                </div>
+                <div class="field">
+                    <span class="field-label">Detected</span>
+                    <span class="field-value">{{ selectedThreat.time }}</span>
+                </div>
+                <div class="field">
+                    <span class="field-label">Category</span>
+                    <span class="field-value">{{ selectedThreat.type }}</span>
+                </div>
+                <div class="field">
+                    <span class="field-label">Severity</span>
+                    <span class="field-value severity" [class]="selectedThreat.severity">{{ selectedThreat.severity }}</span>
+                </div>
+                <div class="field">
+                    <span class="field-label">Status</span>
+                    <span class="field-value status" [class]="selectedThreat.status">{{ selectedThreat.status }}</span>
+                </div>
+            </div>
+        </div>
+        }
+
         </div>
     </div>
 </div>
