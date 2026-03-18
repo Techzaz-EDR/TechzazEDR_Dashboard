@@ -36,10 +36,10 @@
   <div class="action-bar-container">
     <section class="action-panel">
       <div class="action-buttons">
-        <button (click)="runFullScan()" [disabled]="loadingCommands['fullScan']" class="full-scan-btn">
-          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['fullScan']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['fullScan']"></lucide-icon>
-          {{ loadingCommands['fullScan'] ? 'Initializing Full Scan...' : 'Initiate Full Scan' }}
+        <button (click)="runRemoteScan()" [disabled]="loadingCommands['remoteScan']" class="full-scan-btn">
+          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['remoteScan']"></lucide-icon>
+          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['remoteScan']"></lucide-icon>
+          {{ loadingCommands['remoteScan'] ? 'Initializing Remote Scan...' : 'Initiate Remote Scan' }}
         </button>
 
         <button (click)="updateConfig()" [disabled]="loadingCommands['config']">
