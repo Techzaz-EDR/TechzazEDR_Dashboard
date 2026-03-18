@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FirestoreService } from '../../core/services/firestore.service';
 import {
     LucideAngularModule,
-    Shield, Plus, Search, AlertTriangle
+    Shield, Plus, Search
 } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 
@@ -21,7 +21,6 @@ export class Endpoints implements OnInit, OnDestroy {
     readonly ShieldIcon = Shield;
     readonly PlusIcon = Plus;
     readonly SearchIcon = Search;
-    readonly AlertTriangleIcon = AlertTriangle;
 
     filteredEndpoints: any[] = [];
     searchQuery: string = '';
@@ -45,7 +44,6 @@ export class Endpoints implements OnInit, OnDestroy {
                     os: a.os || 'Unknown OS',
                     ip: a.ip || '0.0.0.0',
                     status: a.status || 'offline',
-                    threats: a.threats_count || 0,
                     lastSeen: a.last_seen ? this.formatLastSeen(a.last_seen) : 'Never'
                 }));
                 this.onSearch();

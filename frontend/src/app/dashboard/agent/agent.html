@@ -229,3 +229,51 @@
     </div>
   </div>
 </div>
+
+<!-- Update Config Modal -->
+<div class="modal-overlay" *ngIf="showUpdateConfigModal" (click)="closeUpdateConfigModal()">
+  <div class="modal-content config-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="title-group">
+        <div class="icon-circle">
+          <lucide-icon [name]="SettingsIcon" [size]="24"></lucide-icon>
+        </div>
+        <div>
+          <h2>Update Agent Config</h2>
+          <span class="subtitle">Push latest security parameters to {{ agentId }}</span>
+        </div>
+      </div>
+      <button class="close-btn" (click)="closeUpdateConfigModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="config-info-box">
+        <lucide-icon [name]="ShieldIcon" [size]="32" class="info-icon"></lucide-icon>
+        <p>This will broadcast a <strong>remote configuration sync</strong> command to the agent. The agent will reload its `config.json` without requiring a reboot.</p>
+      </div>
+
+      <div class="impact-list">
+        <div class="impact-item">
+          <lucide-icon [name]="CheckCircleIcon" [size]="14"></lucide-icon>
+          <span>Reloads monitoring paths & exclusions</span>
+        </div>
+        <div class="impact-item">
+          <lucide-icon [name]="CheckCircleIcon" [size]="14"></lucide-icon>
+          <span>Updates YARA ruleset pointers</span>
+        </div>
+        <div class="impact-item">
+          <lucide-icon [name]="CheckCircleIcon" [size]="14"></lucide-icon>
+          <span>Refreshes organization API keys</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeUpdateConfigModal()">Cancel</button>
+      <button class="confirm-btn" (click)="confirmUpdateConfig()">
+        Confirm Update
+        <lucide-icon [name]="RefreshCwIcon" [size]="16" *ngIf="loadingCommands['config']" class="spin"></lucide-icon>
+      </button>
+    </div>
+  </div>
+</div>

@@ -307,13 +307,14 @@
 
       .feed-main {
         flex: 1;
+        min-width: 0; // Crucial for flex containers to allow children to shrink
         display: flex;
         flex-direction: column;
-        min-width: 0;
 
         .table-container {
           flex: 1;
           overflow-x: auto;
+          width: 100%;
 
           table {
             width: 100%;
@@ -488,19 +489,25 @@
       }
 
       .threat-details-panel {
-        flex: 0 0 350px;
-        width: 350px;
-        background: rgba(30, 41, 59, 0.7);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
+        flex: 0 0 380px;
+        width: 380px;
+        position: sticky;
+        top: 2rem;
+        align-self: flex-start;
+        height: min-content;
+        max-height: calc(100vh - 10rem);
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.4);
+        border-radius: 16px;
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
         gap: 1.25rem;
-        animation: fadeInRight 0.3s ease-out;
+        animation: fadeInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 10;
         overflow-y: auto;
-        max-height: 100%;
 
         @media (max-width: 1200px) {
           flex: 1;
@@ -613,8 +620,10 @@
               pre {
                 margin: 0;
                 font-family: 'JetBrains Mono', monospace;
-                font-size: 0.7rem;
-                color: #94a3b8;
+                font-size: 0.75rem;
+                color: #93c5fd;
+                white-space: pre-wrap;
+                word-break: break-all;
               }
             }
           }
@@ -893,4 +902,113 @@
 @keyframes slideUpModal {
   from { transform: translateY(30px) scale(0.98); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.modal-content.config-modal {
+  width: 500px;
+  max-width: 90%;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+
+  .modal-body {
+    padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .config-info-box {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    padding: 1.5rem;
+    border-radius: 16px;
+
+    .info-icon {
+      color: #3b82f6;
+      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+      flex-shrink: 0;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+
+      strong {
+        color: #60a5fa;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .impact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .impact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #94a3b8;
+      font-size: 0.85rem;
+
+      lucide-icon {
+        color: #22c55e;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .modal-footer {
+    padding: 1.5rem 2.5rem 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.1);
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      &.cancel-btn {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.05);
+          color: #fff;
+        }
+      }
+
+      &.confirm-btn {
+        background: #3b82f6;
+        border: none;
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+
+        &:hover {
+          background: #2563eb;
+          transform: translateY(-1px);
+          box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+      }
+    }
+  }
 }
