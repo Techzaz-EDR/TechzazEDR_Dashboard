@@ -41,11 +41,16 @@ export class ContactComponent {
 
     constructor(private location: Location) {}
 
-    submitContactForm(event: Event) {
+    submitContactForm(event: Event, contactForm: any) {
         event.preventDefault();
+        this.formSubmitted = true;
+        
+        if (contactForm.invalid) {
+            return;
+        }
+
         // Here you would typically send the data to a backend service
         console.log('Form submission:', this.contactForm);
-        this.formSubmitted = true;
     }
 
     goBack() {

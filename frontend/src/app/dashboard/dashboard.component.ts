@@ -29,6 +29,8 @@ export interface NavItem {
 export class DashboardComponent implements OnInit {
     isDropdownOpen = false;
     userEmail: string | null = null;
+    userProfile: any = null;
+    private profileSub?: Subscription;
 
     // Search Functionality
     searchQuery = '';
@@ -231,9 +233,30 @@ export class DashboardComponent implements OnInit {
             this.userEmail = user?.email || 'Guest';
             this.cdr.detectChanges();
         });
+
+        this.profileSub = this.authService.userProfile$.subscribe(profile => {
+            if (profile) {
+                this.userProfile = profile;
+                this.cdr.detectChanges();
+            }
+        });
     }
 
     ngOnInit() { }
+
+    ngOnDestroy() {
+        this.profileSub?.unsubscribe();
+    }
+
+    getInitials(name: string): string {
+        if (!name) return 'AD';
+        return name
+            .split(' ')
+            .map(n => n[0])
+            .join('')
+            .toUpperCase()
+            .substring(0, 2);
+    }
 
     logout() {
         console.log('Logging out...');

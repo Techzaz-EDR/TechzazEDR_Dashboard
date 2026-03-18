@@ -87,8 +87,14 @@ export class Users implements OnInit, OnDestroy {
         );
     }
 
-    // Modal Logic
+    // Modal & Action Logic
     showAddUserModal = false;
+    showEditUserModal = false;
+    showDeleteConfirmModal = false;
+    userIdToDelete: any = null;
+    activeOptionsId: any = null;
+    isSaving = false;
+
     newUser = {
         name: '',
         email: '',
@@ -97,13 +103,15 @@ export class Users implements OnInit, OnDestroy {
         department: 'IT'
     };
 
+    editingUser: any = null;
+
     openModal() {
         this.showAddUserModal = true;
     }
 
     closeModal() {
         this.showAddUserModal = false;
-        // Reset form
+        this.isSaving = false;
         this.newUser = {
             name: '',
             email: '',
@@ -113,23 +121,150 @@ export class Users implements OnInit, OnDestroy {
         };
     }
 
-    saveUser() {
-        // Validation valid for demo?
-        if (!this.newUser.name || !this.newUser.email) return;
+    openEditModal(user: any) {
+        this.editingUser = { ...user };
+        // Map UI role back to dropdown values if needed
+        const role = user.role === 'Administrator' ? 'Admin' :
+                    user.role === 'Security Analyst' ? 'Analyst' : 'Viewer';
+        this.editingUser.internalRole = role;
+        this.showEditUserModal = true;
+    }
 
-        const newId = this.users.length + 1;
-        this.users.unshift({
-            id: newId,
-            name: this.newUser.name,
-            email: this.newUser.email,
-            role: this.newUser.role === 'Admin' ? 'Administrator' :
-                this.newUser.role === 'Analyst' ? 'Security Analyst' : 'Viewer',
-            status: 'active',
-            lastLogin: 'Just now',
-            avatarColor: '#' + Math.floor(Math.random() * 16777215).toString(16) // Random color
-        });
+    closeEditModal() {
+        this.showEditUserModal = false;
+        this.editingUser = null;
+    }
 
-        this.closeModal();
+    async saveUser() {
+        if (!this.newUser.name || !this.newUser.email) {
+            alert('Please fill in Name and Email.');
+            return;
+        }
+
+        this.isSaving = true;
+        this.cdr.detectChanges();
+
+        try {
+            const role = this.newUser.role === 'Admin' ? 'Administrator' :
+                        this.newUser.role === 'Analyst' ? 'Security Analyst' : 'Viewer';
+
+            const result = await this.authService.addUserToFirestore(
+                this.newUser.email,
+                this.newUser.name,
+                role,
+                { 
+                    password: this.newUser.password, 
+                    department: this.newUser.department 
+                }
+            );
+
+            this.users.unshift({
+                id: result.id,
+                name: this.newUser.name,
+                email: this.newUser.email,
+                role: role,
+                status: 'active',
+                lastLogin: 'Just now',
+                avatarColor: '#' + Math.floor(Math.random() * 16777215).toString(16)
+            });
+
+            this.closeModal();
+            alert(`User ${this.newUser.email} saved to dashboard successfully.`);
+        } catch (error: any) {
+            console.error('Error in saveUser:', error);
+            alert(`Failed to save user: ${error.message || 'Unknown error'}`);
+        } finally {
+            this.isSaving = false;
+            this.cdr.detectChanges();
+        }
+    }
+
+    async saveEditUser() {
+        if (!this.editingUser.name || !this.editingUser.email) return;
+
+        this.isSaving = true;
+        this.cdr.detectChanges();
+
+        try {
+            const role = this.editingUser.internalRole === 'Admin' ? 'Administrator' :
+                        this.editingUser.internalRole === 'Analyst' ? 'Security Analyst' : 'Viewer';
+
+            await this.authService.updateUserInFirestore(this.editingUser.id, {
+                name: this.editingUser.name,
+                email: this.editingUser.email,
+                role: role,
+                department: this.editingUser.department || 'IT'
+            });
+
+            // Update local list
+            const index = this.users.findIndex(u => u.id === this.editingUser.id);
+            if (index !== -1) {
+                this.users[index] = {
+                    ...this.users[index],
+                    name: this.editingUser.name,
+                    email: this.editingUser.email,
+                    role: role
+                };
+            }
+
+            this.closeEditModal();
+        } catch (error: any) {
+            console.error('Error updating user:', error);
+            alert('Failed to update user.');
+        } finally {
+            this.isSaving = false;
+            this.cdr.detectChanges();
+        }
+    }
+
+    deleteUser(userId: any) {
+        console.log('UsersComponent: deleteUser called for ID:', userId);
+        this.userIdToDelete = userId;
+        this.showDeleteConfirmModal = true;
+    }
+
+    async confirmDelete() {
+        if (!this.userIdToDelete) return;
+
+        this.isSaving = true;
+        this.cdr.detectChanges();
+
+        try {
+            console.log('UsersComponent: Deletion confirmed. Calling AuthService for ID:', this.userIdToDelete);
+            await this.authService.deleteUserFromFirestore(this.userIdToDelete);
+            console.log('UsersComponent: AuthService deletion returned success. Updating local list.');
+            this.users = this.users.filter(u => u.id !== this.userIdToDelete);
+            this.closeDeleteModal();
+            this.cdr.detectChanges();
+        } catch (error: any) {
+            console.error('UsersComponent: Error during user deletion:', error);
+            alert(`Failed to delete user: ${error.message || 'Unknown error'}`);
+            this.isSaving = false;
+            this.cdr.detectChanges();
+        }
+    }
+
+    closeDeleteModal() {
+        this.showDeleteConfirmModal = false;
+        this.userIdToDelete = null;
+        this.isSaving = false;
+    }
+
+    async toggleUserStatus(user: any) {
+        const newStatus = user.status === 'active' ? 'suspended' : 'active';
+        try {
+            await this.authService.updateUserInFirestore(user.id, { status: newStatus });
+            user.status = newStatus;
+            this.activeOptionsId = null;
+            this.cdr.detectChanges();
+        } catch (error: any) {
+            console.error('Error toggling user status:', error);
+            alert('Failed to update status.');
+        }
+    }
+
+    toggleOptions(userId: any) {
+        this.activeOptionsId = this.activeOptionsId === userId ? null : userId;
     }
 
     private formatLastLogin(timestamp: any): string {

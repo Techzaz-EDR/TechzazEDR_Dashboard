@@ -439,11 +439,11 @@
 
             .trend-polyline {
                 fill: none;
-                stroke: var(--chart-primary);
+                stroke: var(--chart-critical);
                 stroke-width: 3;
                 stroke-linejoin: round;
                 stroke-linecap: round;
-                filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.4));
+                filter: drop-shadow(0 4px 6px rgba(239, 68, 68, 0.4));
                 animation: drawLine 1.5s ease-out forwards;
                 stroke-dasharray: 1000;
                 stroke-dashoffset: 1000;
@@ -473,7 +473,7 @@
                     width: 6px;
                     height: 6px;
                     border-radius: 50%;
-                    background: var(--chart-primary);
+                    background: var(--chart-critical);
                     opacity: 0;
                     transition: opacity 0.2s ease;
                 }

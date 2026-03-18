@@ -175,7 +175,6 @@
 
                 &:last-child {
                     padding-right: 24px;
-                    text-align: right;
                 }
             }
 
@@ -191,7 +190,6 @@
 
                 &:last-child {
                     padding-right: 24px;
-                    text-align: right;
                 }
 
                 &.col-name {
@@ -279,21 +277,6 @@
                         color: #f87171;
                         border-color: rgba(239, 68, 68, 0.2);
                         box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
-                    }
-                }
-
-                .btn-icon {
-                    background: none;
-                    border: none;
-                    cursor: pointer;
-                    color: var(--text-muted);
-                    font-size: 1rem;
-                    padding: 4px;
-                    margin-left: 8px;
-                    transition: color 0.2s;
-
-                    &:hover {
-                        color: var(--text-primary);
                     }
                 }
             }

@@ -5,18 +5,26 @@
             <h2>Profile Picture</h2>
 
             <div class="avatar-upload">
-                <div class="avatar-circle">
-                    <lucide-icon [name]="User" [size]="48" color="#1a1a1a"></lucide-icon>
+                <div class="avatar-circle" 
+                     [style.background-image]="user.photoUrl ? 'url(' + user.photoUrl + ')' : 'none'" 
+                     [style.background-size]="'cover'" 
+                     [style.background-position]="'center'">
+                    <lucide-icon *ngIf="!user.photoUrl" [name]="User" [size]="48" color="#1a1a1a"></lucide-icon>
                     <div class="camera-badge">
                         <lucide-icon [name]="Camera" [size]="14"></lucide-icon>
                     </div>
                 </div>
                 <div class="upload-actions">
-                    <button class="btn-upload">
-                        <lucide-icon [name]="Upload" [size]="16" class="icon-left"></lucide-icon>
-                        Upload New Picture
+                    <input type="file" #fileInput (change)="onFileSelected($event)" hidden accept="image/png, image/jpeg, image/gif">
+                    <button class="btn-upload" (click)="fileInput.click()" [disabled]="uploading">
+                        <lucide-icon *ngIf="!uploading" [name]="Upload" [size]="16" class="icon-left"></lucide-icon>
+                        {{ uploading ? 'Uploading...' : 'Upload New Picture' }}
                     </button>
                     <span class="upload-hint">JPG, PNG or GIF. Max size 5MB. Recommended 400x400px.</span>
+                    <div *ngIf="uploadError" class="feedback-error" style="margin-top: 8px; font-size: 12px; padding: 6px;">
+                        <lucide-icon [name]="AlertCircle" [size]="14"></lucide-icon>
+                        {{ uploadError }}
+                    </div>
                 </div>
             </div>
         </section>

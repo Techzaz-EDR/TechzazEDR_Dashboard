@@ -58,6 +58,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     scrolled = false;
     showDemoModal = false;
     formSubmitted = false;
+    demoSubmitted = false;
     isPlanDropdownMode = false;
 
     // Form Data
@@ -140,13 +141,11 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         document.body.style.overflow = 'auto'; // Restore scroll
     }
 
-    submitDemoForm(event: Event) {
+    submitDemoForm(event: Event, demoForm: any) {
         event.preventDefault();
+        this.demoSubmitted = true;
 
-        const { firstName, lastName, workEmail, companyName, country, phone, agreed, selectedPlan } = this.demoFormData;
-
-        // Basic Required Validation
-        if (!firstName || !lastName || !workEmail || !companyName || !country || !phone || !selectedPlan || !agreed) {
+        if (demoForm.invalid) {
             console.warn('Validation failed: Missing required fields.');
             return;
         }

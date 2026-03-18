@@ -1,8 +1,8 @@
-<div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" (mousemove)="onMouseMove($event)"
+<!-- TRACER_12345 --><div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" [class.success-mode]="signupSuccess" (mousemove)="onMouseMove($event)"
     (mouseleave)="onMouseLeave()">
     <div class="hover-glow"></div>
 
-    <!-- Background Data Fragments -->
+    <!-- Background Data Fragments / Watermark -->
     <div class="data-fragments">
         <div class="fragment" style="--top: 15%; --left: 10%; --delay: 0s">Techzaz EDR</div>
         <div class="fragment" style="--top: 25%; --left: 80%; --delay: 3s">Techzaz EDR</div>
@@ -10,29 +10,47 @@
         <div class="fragment" style="--top: 80%; --left: 70%; --delay: 1.5s">Techzaz EDR</div>
     </div>
 
+    <!-- Centered Login Card -->
     <div class="auth-card">
-        <!-- Sign In View -->
+
+        <!-- Sign-In View -->
         <div class="auth-view sign-in-view">
-            <form (submit)="signIn()">
+            <form (ngSubmit)="signIn(signInForm)" #signInForm="ngForm">
+
                 <div class="form-header">
+                    <!-- Status Badge -->
                     <div class="status-line">
                         <span class="status-dot"></span>
-                        <lucide-icon [name]="ShieldCheck" [size]="14"></lucide-icon>
-                        Secure Console Access
+                        <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                        SECURE CONSOLE ACCESS
                     </div>
-                    <h2>Sign in to Techzaz EDR</h2>
+
+                    <!-- Title -->
+                    <h2 id="VIBE_CHECK_SIGNIN">Log in to Techzaz EDR</h2>
                 </div>
 
-                <div *ngIf="errorMessage" class="error-banner">
-                    {{ errorMessage }}
-                </div>
+                <!-- Error Banner -->
+                @if (errorMessage) {
+                    <div class="error-banner">{{ errorMessage }}</div>
+                }
 
+                <!-- Input Fields -->
                 <div class="inputs-group">
                     <div class="form-group">
-                        <div class="input-wrapper">
-                            <lucide-icon [name]="User" [size]="20" class="input-icon"></lucide-icon>
-                            <input type="email" name="email" [(ngModel)]="email" placeholder="Work Email" required />
+                        <label>Work Email <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                            <input
+                                type="email"
+                                name="email"
+                                #emailCtrl="ngModel"
+                                [(ngModel)]="email"
+                                placeholder="Work Email"
+                                required
+                                autocomplete="email"
+                            />
                         </div>
+                        <span class="error-message" *ngIf="loginSubmitted && emailCtrl.invalid">Work email is required.</span>
                     </div>
                     <div class="form-group">
                         <div class="input-wrapper password-field">
@@ -49,37 +67,143 @@
                                 <lucide-icon [name]="showPassword ? EyeOff : Eye" [size]="18" class="toggle-icon"></lucide-icon>
                             </button>
                         </div>
+                        <span class="error-message" *ngIf="loginSubmitted && passwordCtrl.invalid">Password is required.</span>
                     </div>
                 </div>
 
-                <a href="#" class="forgot-password">Forgot password?</a>
-                <button type="submit" class="btn btn-primary full-width">Sign In</button>
-                <p class="toggle-link">New here? <a (click)="toggleMode()">Create account</a></p>
+                <!-- Forgot Password -->
+                <a class="forgot-password" href="#">Forgot password?</a>
+
+                <!-- Sign In Button -->
+                <div class="btn-submit-wrapper">
+                    <button type="submit" class="btn btn-primary">SIGN IN</button>
+                </div>
+
+                <!-- Bottom Link -->
+                <div class="toggle-link">
+                    New here? <a (click)="toggleMode()">Create account</a>
+                </div>
+
             </form>
         </div>
 
-        <!-- Sign Up View -->
+        <!-- Sign-Up View -->
         <div class="auth-view sign-up-view">
-            <form>
-                <div class="form-header">
-                    <h2>Initialize Tenant</h2>
+
+            <!-- Fixed badge header — always visible above the scrollable form -->
+            @if (!signupSuccess) {
+            <div class="signup-card-header">
+                <div class="status-line">
+                    <span class="status-dot"></span>
+                    <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                    ORGANIZATION REGISTRATION
+                </div>
+                <h2>Create your Techzaz EDR account</h2>
+                <p class="subtitle">Set up your organization account to access the Techzaz EDR platform.</p>
+            </div>
+            }
+
+            @if (!signupSuccess) {
+            <form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm)" novalidate class="signup-form">
+
+                <div class="form-header" style="display:none">
+
                 </div>
 
+                <!-- Error Banner -->
+                @if (signupError) {
+                    <div class="error-banner">{{ signupError }}</div>
+                }
+
+                <!-- Input Fields -->
                 <div class="inputs-group">
-                    <div class="form-group">
-                        <div class="input-wrapper">
-                            <lucide-icon [name]="User" [size]="20" class="input-icon"></lucide-icon>
-                            <input type="text" name="signupName" [(ngModel)]="signupName"
-                                placeholder="Administrator Name" />
+
+                    <!-- Row: First Name | Last Name -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                                <input type="text" name="firstName" #firstNameCtrl="ngModel" [(ngModel)]="signupFirstName"
+                                    placeholder="First Name" required autocomplete="given-name" />
+                            </div>
+                            <span class="error-message" *ngIf="signupSubmitted && firstNameCtrl.invalid">First name is required.</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                                <input type="text" name="lastName" #lastNameCtrl="ngModel" [(ngModel)]="signupLastName"
+                                    placeholder="Last Name" required autocomplete="family-name" />
+                            </div>
+                            <span class="error-message" *ngIf="signupSubmitted && lastNameCtrl.invalid">Last name is required.</span>
                         </div>
                     </div>
+
+                    <!-- Work Email -->
                     <div class="form-group">
-                        <div class="input-wrapper">
-                            <lucide-icon [name]="Mail" [size]="20" class="input-icon"></lucide-icon>
-                            <input type="email" name="signupEmail" [(ngModel)]="signupEmail"
-                                placeholder="Work Email" />
+                        <label>Work Email <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Mail" [size]="16"></lucide-icon>
+                            <input type="email" name="signupEmail" #signupEmailCtrl="ngModel" [(ngModel)]="signupEmail"
+                                placeholder="Work Email" required autocomplete="email" />
+                        </div>
+                        <span class="error-message" *ngIf="signupSubmitted && signupEmailCtrl.invalid">Work email is required.</span>
+                    </div>
+
+                    <!-- Company Name -->
+                    <div class="form-group">
+                        <label>Company Name <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Building2" [size]="16"></lucide-icon>
+                            <input type="text" name="companyName" #companyCtrl="ngModel" [(ngModel)]="signupCompany"
+                                placeholder="Company Name" required autocomplete="organization" />
+                        </div>
+                        <span class="error-message" *ngIf="signupSubmitted && companyCtrl.invalid">Company name is required.</span>
+                    </div>
+
+                    <!-- Row: Country | Phone -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Country <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <lucide-icon [img]="Globe" [size]="16"></lucide-icon>
+                                <input type="text" name="country" #countryCtrl="ngModel" [(ngModel)]="signupCountry"
+                                    placeholder="Country" required autocomplete="country-name" />
+                            </div>
+                            <span class="error-message" *ngIf="signupSubmitted && countryCtrl.invalid">Country is required.</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <lucide-icon [img]="Phone" [size]="16"></lucide-icon>
+                                <input type="tel" name="phone" #phoneCtrl="ngModel" [(ngModel)]="signupPhone"
+                                    placeholder="Phone Number" required autocomplete="tel" />
+                            </div>
+                            <span class="error-message" *ngIf="signupSubmitted && phoneCtrl.invalid">Phone number is required.</span>
                         </div>
                     </div>
+
+                    <!-- Password -->
+                    <div class="form-group password-field-group">
+                        <label>Password <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
+                            <input [type]="showSignupPassword ? 'text' : 'password'"
+                                name="signupPassword" #signupPwCtrl="ngModel" [(ngModel)]="signupPassword"
+                                placeholder="Password" required pattern="^(?=.*[A-Z])(?=.*[0-9]).{8,}$" autocomplete="new-password" />
+                            <button type="button" class="password-toggle" (click)="toggleSignupPassword()">
+                                <lucide-icon [img]="showSignupPassword ? EyeOff : Eye" [size]="16"></lucide-icon>
+                            </button>
+                        </div>
+                        <div class="password-feedback" *ngIf="signupPassword">
+                            <span class="helper-text">At least 8 characters, including a number and an uppercase letter.</span>
+                        </div>
+                        <span class="error-message" *ngIf="signupSubmitted && signupPwCtrl.errors?.['required']">Password is required.</span>
+                        <span class="error-message" *ngIf="signupSubmitted && signupPwCtrl.errors?.['pattern']">Password must meet the required criteria.</span>
+                    </div>
+
+                    <!-- Confirm Password -->
                     <div class="form-group">
                         <div class="input-wrapper password-field">
                             <lucide-icon [name]="Lock" [size]="20" class="input-icon"></lucide-icon>
@@ -90,17 +214,77 @@
                                 class="password-toggle"
                                 (click)="toggleSignupPassword()"
                                 [attr.aria-label]="showSignupPassword ? 'Hide password' : 'Show password'"
-                                [attr.title]="showSignupPassword ? 'Hide password' : 'Show password'"
-                            >
+                                [attr.title]="showSignupPassword ? 'Hide password' : 'Show password'">
                                 <lucide-icon [name]="showSignupPassword ? EyeOff : Eye" [size]="18" class="toggle-icon"></lucide-icon>
                             </button>
                         </div>
+                        <span class="error-message" *ngIf="confirmPwCtrl.touched && signupPassword !== signupConfirmPassword">Passwords do not match.</span>
+                        <span class="error-message" *ngIf="signupSubmitted && confirmPwCtrl.errors?.['required'] && !confirmPwCtrl.touched">Please confirm your password.</span>
                     </div>
+
                 </div>
 
-                <button type="button" class="btn btn-primary full-width" (click)="signIn()">Deploy Workspace</button>
-                <p class="toggle-link">Already have an account? <a (click)="toggleMode()">Log In</a></p>
+                <!-- Agreement Checkboxes -->
+                <div class="agreement-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="agreeTerms" #agreeTermsCtrl="ngModel" [(ngModel)]="agreeTerms" required />
+                        <span class="checkmark"></span>
+                        <span>I agree to the <a routerLink="/terms" (click)="$event.stopPropagation()" class="policy-link">Terms of Service</a> and <a routerLink="/privacy-policy" (click)="$event.stopPropagation()" class="policy-link">Privacy Policy</a>. <span class="required">*</span></span>
+                    </label>
+                    <span class="error-message" *ngIf="signupSubmitted && agreeTermsCtrl.invalid">You must agree to the Terms of Service and Privacy Policy.</span>
+                </div>
+
+                <!-- Create Account Button -->
+                <div class="btn-submit-wrapper">
+                    <button type="submit" class="btn btn-primary full-width-btn">Create Account</button>
+                </div>
+
+                <!-- Bottom Link -->
+                <div class="toggle-link">
+                    Already have an account? <a (click)="toggleMode()">Log in</a>
+                </div>
+
             </form>
+            } <!-- end @if (!signupSuccess) -->
+
+            <!-- Success Confirmation State -->
+            @if (signupSuccess) {
+            <div class="success-view">
+
+                <!-- Check Icon -->
+                <div class="success-icon-ring">
+                    <lucide-icon [img]="CheckCircle" [size]="36"></lucide-icon>
+                </div>
+
+                <!-- Badge -->
+                <div class="status-line success-badge">
+                    <span class="status-dot"></span>
+                    <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                    REQUEST RECEIVED
+                </div>
+
+                <!-- Title -->
+                <h2 class="success-title">Account Request Submitted</h2>
+
+                <!-- Note -->
+                <p class="success-secondary">
+                    A verification or onboarding step may be required before full platform access is enabled.
+                </p>
+
+                <!-- Divider -->
+                <div class="success-divider"></div>
+
+                <!-- Buttons -->
+                <div class="success-actions">
+                    <button class="btn btn-primary" (click)="goToLogin()">Go to Login</button>
+                    <button class="btn btn-outline" (click)="goToHome()">Back to Home</button>
+                </div>
+
+            </div>
+            } <!-- end @if (signupSuccess) -->
+
         </div>
+
     </div>
+
 </div>

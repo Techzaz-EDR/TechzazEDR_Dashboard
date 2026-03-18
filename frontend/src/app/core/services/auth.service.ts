@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, getIdTokenResult } from 'firebase/auth';
-import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, updateDoc, serverTimestamp, collection, addDoc, deleteDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable, from, firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { NgZone } from '@angular/core';
 
@@ -33,6 +34,7 @@ export class AuthService {
     public tenantId: string | null = null;
 
     private db = getFirestore(this.auth.app);
+    private storage = getStorage(this.auth.app);
 
     constructor(private router: Router, private zone: NgZone) {
         // Firebase callbacks run outside Angular's zone. Using .then() chains
@@ -112,6 +114,57 @@ export class AuthService {
         return this.userSubject.value;
     }
 
+    /**
+     * Saves user data to Firestore users collection only.
+     * Does NOT create a Firebase Authentication account.
+     */
+    async addUserToFirestore(email: string, name: string, role: string, extraData: any = {}) {
+        const adminTenantId = await firstValueFrom(this.tenantId$);
+        if (!adminTenantId) throw new Error('No tenant context found for administrator');
+
+        const usersRef = collection(this.db, 'users');
+        const newUserDoc = await addDoc(usersRef, {
+            email,
+            name,
+            role,
+            organization_id: adminTenantId,
+            status: 'active',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            ...extraData
+        });
+
+        console.log(`User ${email} saved to Firestore with ID: ${newUserDoc.id}`);
+        return { id: newUserDoc.id, email, name, role };
+    }
+
+    /**
+     * Deletes a user document from Firestore.
+     */
+    async deleteUserFromFirestore(userId: string) {
+        console.log(`AuthService: Attempting to delete user document: users/${userId}`);
+        const userDocRef = doc(this.db, 'users', userId);
+        try {
+            await deleteDoc(userDocRef);
+            console.log(`AuthService: User ${userId} successfully deleted from Firestore.`);
+        } catch (error) {
+            console.error(`AuthService: Error deleting user ${userId}:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Updates an existing user document in Firestore.
+     */
+    async updateUserInFirestore(userId: string, data: any) {
+        const userDocRef = doc(this.db, 'users', userId);
+        await updateDoc(userDocRef, {
+            ...data,
+            updatedAt: serverTimestamp()
+        });
+        console.log(`User ${userId} updated in Firestore.`);
+    }
+
     updateProfile(data: ProfileUpdateData): void {
         const user = this.auth.currentUser;
         if (!user) throw new Error('No authenticated user');
@@ -132,5 +185,47 @@ export class AuthService {
         updateDoc(userDocRef, update)
             .then(() => console.log('Profile saved to Firestore'))
             .catch(err => console.error('Profile Firestore write error:', err));
+    }
+
+    async updateProfilePictureData(photoUrl: string): Promise<void> {
+        const user = this.auth.currentUser;
+        if (!user) throw new Error('No authenticated user');
+
+        const userDocRef = doc(this.db, 'users', user.uid);
+        await updateDoc(userDocRef, { 
+            photoUrl: photoUrl,
+            updatedAt: serverTimestamp()
+        });
+
+        // Update the local state
+        const current = this.userProfileSubject.value || {};
+        this.userProfileSubject.next({ ...current, photoUrl: photoUrl });
+    }
+
+    async uploadProfilePicture(file: File): Promise<string> {
+        const user = this.auth.currentUser;
+        if (!user) throw new Error('No authenticated user');
+
+        // Create a reference to the storage location
+        const storageRef = ref(this.storage, `profile_pictures/${user.uid}_${Date.now()}_${file.name}`);
+        
+        // Upload the file
+        await uploadBytes(storageRef, file);
+        
+        // Get the download URL
+        const downloadURL = await getDownloadURL(storageRef);
+        
+        // Update Firestore with the new photo URL
+        const userDocRef = doc(this.db, 'users', user.uid);
+        await updateDoc(userDocRef, { 
+            photoUrl: downloadURL,
+            updatedAt: serverTimestamp()
+        });
+
+        // Update the local state
+        const current = this.userProfileSubject.value || {};
+        this.userProfileSubject.next({ ...current, photoUrl: downloadURL });
+
+        return downloadURL;
     }
 }

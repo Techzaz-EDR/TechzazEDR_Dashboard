@@ -6,9 +6,6 @@
                 <p>Manage and monitor your protected endpoints</p>
             </div>
             <div class="actions">
-                <button class="btn btn-outline">
-                    <lucide-icon [name]="DownloadIcon" [size]="18"></lucide-icon> Export
-                </button>
                 <button class="btn btn-primary" (click)="openModal()">
                     <lucide-icon [name]="PlusIcon" [size]="18"></lucide-icon> Add Endpoint
                 </button>
@@ -39,7 +36,6 @@
                         <th class="col-status">Status</th>
                         <th class="col-threats">Threats</th>
                         <th class="col-seen">Last Seen</th>
-                        <th class="col-actions">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,14 +67,6 @@
                             </div>
                         </td>
                         <td class="col-seen">{{ ep.lastSeen }}</td>
-                        <td class="col-actions">
-
-                            <button class="btn-icon" title="View" (click)="navigateToAgent(ep.name)">
-                                <lucide-icon [name]="EyeIcon" [size]="18"></lucide-icon>
-                            </button>
-                            <button class="btn-icon" title="More"><lucide-icon [name]="MoreVerticalIcon"
-                                    [size]="18"></lucide-icon></button>
-                        </td>
                     </tr>
                     }
                 </tbody>

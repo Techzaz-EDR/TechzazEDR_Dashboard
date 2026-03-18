@@ -1,0 +1,174 @@
+<div class="privacy-container">
+  <nav class="privacy-nav">
+    <div class="container nav-content">
+      <a routerLink="/" class="back-link">
+        <lucide-icon [name]="ArrowLeft" [size]="18"></lucide-icon>
+        Back to Home
+      </a>
+      <div class="nav-logo">
+        <lucide-icon [name]="Shield" [size]="20" class="logo-icon"></lucide-icon>
+        TECHZAZ <strong>EDR</strong>
+      </div>
+    </div>
+  </nav>
+
+  <header class="policy-header">
+    <div class="container header-content">
+      <div class="badge">Legal</div>
+      <h1>Privacy Policy</h1>
+      <p class="header-subtitle">How Techzaz EDR collects, uses, and protects your data.</p>
+      <p class="updated">Last Updated: {{ lastUpdated }}</p>
+    </div>
+  </header>
+
+  <main class="policy-main container">
+    <aside class="sidebar-nav">
+      <!-- Mobile Nav Trigger -->
+      <div class="mobile-nav-trigger" (click)="toggleMobileNav()">
+        <lucide-icon [name]="ChevronDown" [size]="18" [class.open]="isMobileNavOpen"></lucide-icon>
+        <span>Contents</span>
+      </div>
+
+      <div class="glass-card sticky-sidebar" [class.mobile-open]="isMobileNavOpen">
+        <h3>Contents</h3>
+        <ul>
+          <li *ngFor="let section of sections">
+            <button (click)="scrollToSection(section.id); isMobileNavOpen = false" 
+                    [class.active]="activeSectionId === section.id">
+              <lucide-icon [name]="section.icon" [size]="16" class="link-icon"></lucide-icon>
+              {{ section.label }}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="policy-content">
+      <section id="introduction" class="glass-card">
+        <h2><lucide-icon [name]="Info" [size]="24" class="section-icon"></lucide-icon> 1. Introduction</h2>
+        <p>
+          At Techzaz EDR, we are committed to protecting the privacy and security of our users' data. This Privacy Policy describes how we collect, use, and disclose personal and telemetry data when you use the Techzaz EDR Platform.
+        </p>
+        <p>
+          By accessing or using our platform, you agree to the collection and use of information in accordance with this policy. Our platform is designed to provide next-generation endpoint detection and response, which requires the collection of specific system telemetry to detect and prevent threats.
+        </p>
+      </section>
+
+      <section id="data-collection" class="glass-card">
+        <h2><lucide-icon [name]="FileText" [size]="24" class="section-icon"></lucide-icon> 2. Data Collection</h2>
+        <h3>2.1 Telemetry Data</h3>
+        <p>
+          To provide effective security services, our agents collect endpoint telemetry including:
+        </p>
+        <ul>
+          <li>Process execution and behavior patterns</li>
+          <li>Network connection metadata (IP addresses, ports)</li>
+          <li>File system activity and modifications</li>
+          <li>System configuration and hardware identifiers</li>
+          <li>Memory artifacts for threat analysis</li>
+        </ul>
+        <h3>2.2 Personal Information</h3>
+        <p>
+          We collect personal information necessary for account management and security:
+        </p>
+        <ul>
+          <li>Name and email address for authentication</li>
+          <li>Organization details and user roles</li>
+          <li>IP addresses of management console users</li>
+        </ul>
+      </section>
+
+      <section id="data-usage" class="glass-card">
+        <h2><lucide-icon [name]="Eye" [size]="24" class="section-icon"></lucide-icon> 3. How We Use Your Data</h2>
+        <p>
+          We use the collected data for the following purposes:
+        </p>
+        <div class="usage-grid">
+          <div class="usage-item">
+            <strong>Threat Detection</strong>
+            <p>Analyzing behavioral patterns to identify and block malicious activity in real-time.</p>
+          </div>
+          <div class="usage-item">
+            <strong>Incident Response</strong>
+            <p>Providing visual timelines and attack chains for security investigation.</p>
+          </div>
+          <div class="usage-item">
+            <strong>Platform Analytics</strong>
+            <p>Aggregating risk scores to provide an overview of your security posture.</p>
+          </div>
+          <div class="usage-item">
+            <strong>Service Improvement</strong>
+            <p>Refining our detection engines and improving agent performance.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="security" class="glass-card">
+        <h2><lucide-icon [name]="Lock" [size]="24" class="section-icon"></lucide-icon> 4. Data Security</h2>
+        <p>
+          Data security is at the core of Techzaz EDR. We implement industry-leading measures to protect your data:
+        </p>
+        <div class="security-features">
+          <div class="feature">
+            <lucide-icon [name]="CheckCircle" [size]="16" class="check"></lucide-icon>
+            End-to-end encryption for all agent-to-server communication.
+          </div>
+          <div class="feature">
+            <lucide-icon [name]="CheckCircle" [size]="16" class="check"></lucide-icon>
+            Multi-tenant isolation ensuring data is never leaked between organizations.
+          </div>
+          <div class="feature">
+            <lucide-icon [name]="CheckCircle" [size]="16" class="check"></lucide-icon>
+            Regular security audits and automated vulnerability scanning.
+          </div>
+          <div class="feature">
+            <lucide-icon [name]="CheckCircle" [size]="16" class="check"></lucide-icon>
+            Role-based Access Control (RBAC) ensuring minimum privilege.
+          </div>
+        </div>
+      </section>
+ 
+      <section id="data-retention" class="glass-card">
+        <h2><lucide-icon [name]="Clock" [size]="24" class="section-icon"></lucide-icon> 5. Data Retention</h2>
+        <p>
+          Techzaz EDR retains collected telemetry, account information, and security event data only for the period necessary to provide endpoint protection, threat detection, and compliance support. Retention durations may vary depending on operational, legal, and security requirements.
+        </p>
+      </section>
+ 
+      <section id="your-rights" class="glass-card">
+        <h2><lucide-icon [name]="CheckCircle" [size]="24" class="section-icon"></lucide-icon> 6. Your Rights</h2>
+        <p>
+          You have certain rights regarding your data:
+        </p>
+        <ul>
+          <li><strong>Right to Access:</strong> You can request detailed information about what data we hold.</li>
+          <li><strong>Right to Deletion:</strong> You can request the removal of specific telemetry data after established retention periods.</li>
+          <li><strong>Right to Portability:</strong> You can export security logs for use in your own SIEM or SOAR tools.</li>
+        </ul>
+        <p>
+          To exercise these rights, please contact our privacy team at <a href="mailto:privacy@techzaz.com">privacy@techzaz.com</a>.
+        </p>
+      </section>
+ 
+      <section id="contact-us" class="glass-card">
+        <h2><lucide-icon [name]="Mail" [size]="24" class="section-icon"></lucide-icon> 7. Contact Us</h2>
+        <p>
+          If you have questions about this Privacy Policy or how your data is handled within the Techzaz EDR platform, you may contact our security team at:
+        </p>
+        <p>
+          <a href="mailto:security@techzaz.com">security@techzaz.com</a>
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="policy-footer">
+    <div class="container footer-content">
+      <p>&copy; 2026 Techzaz EDR Platform. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/terms-conditions">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+</div>

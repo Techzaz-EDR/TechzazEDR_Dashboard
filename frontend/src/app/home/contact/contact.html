@@ -85,46 +85,51 @@
                             <h3>Talk to Our Security Team</h3>
                             <p class="form-desc">Fill out the form below and we'll get back to you shortly.</p>
 
-                            <form class="demo-form" (submit)="submitContactForm($event)">
+                            <form class="demo-form" #contactFormRef="ngForm" (ngSubmit)="submitContactForm($event, contactFormRef)" novalidate>
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label>First Name</label>
+                                        <label>First Name <span class="required">*</span></label>
                                         <div class="input-wrapper">
                                             <lucide-icon [name]="User" [size]="18" class="input-icon"></lucide-icon>
-                                            <input type="text" name="firstName" [(ngModel)]="contactForm.firstName" placeholder="John" required>
+                                            <input type="text" name="firstName" #cFirstNameCtrl="ngModel" [(ngModel)]="contactForm.firstName" placeholder="John" required>
                                         </div>
+                                        <span class="error-message" *ngIf="formSubmitted && cFirstNameCtrl.invalid">First name is required.</span>
                                     </div>
                                     <div class="form-group">
-                                        <label>Last Name</label>
+                                        <label>Last Name <span class="required">*</span></label>
                                         <div class="input-wrapper">
                                             <lucide-icon [name]="User" [size]="18" class="input-icon"></lucide-icon>
-                                            <input type="text" name="lastName" [(ngModel)]="contactForm.lastName" placeholder="Doe" required>
+                                            <input type="text" name="lastName" #cLastNameCtrl="ngModel" [(ngModel)]="contactForm.lastName" placeholder="Doe" required>
                                         </div>
+                                        <span class="error-message" *ngIf="formSubmitted && cLastNameCtrl.invalid">Last name is required.</span>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Work Email</label>
+                                    <label>Work Email <span class="required">*</span></label>
                                     <div class="input-wrapper">
                                         <lucide-icon [name]="Mail" [size]="18" class="input-icon"></lucide-icon>
-                                        <input type="email" name="workEmail" [(ngModel)]="contactForm.workEmail" placeholder="john@company.com" required>
+                                        <input type="email" name="workEmail" #cEmailCtrl="ngModel" [(ngModel)]="contactForm.workEmail" placeholder="john@company.com" required>
                                     </div>
+                                    <span class="error-message" *ngIf="formSubmitted && cEmailCtrl.invalid">Work email is required.</span>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Phone Number</label>
+                                    <label>Phone Number <span class="required">*</span></label>
                                     <div class="input-wrapper">
                                         <lucide-icon [name]="Phone" [size]="18" class="input-icon"></lucide-icon>
-                                        <input type="tel" name="phone" [(ngModel)]="contactForm.phone" placeholder="+94 XX XXXXXXX" required>
+                                        <input type="tel" name="phone" #cPhoneCtrl="ngModel" [(ngModel)]="contactForm.phone" placeholder="+94 XX XXXXXXX" required>
                                     </div>
+                                    <span class="error-message" *ngIf="formSubmitted && cPhoneCtrl.invalid">Phone number is required.</span>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Message</label>
+                                    <label>Message <span class="required">*</span></label>
                                     <div class="input-wrapper textarea-wrapper">
                                         <lucide-icon [name]="MessageSquare" [size]="18" class="input-icon"></lucide-icon>
-                                        <textarea name="message" [(ngModel)]="contactForm.message" rows="4" placeholder="Tell us about your security requirements..." required></textarea>
+                                        <textarea name="message" #cMessageCtrl="ngModel" [(ngModel)]="contactForm.message" rows="4" placeholder="Tell us about your security requirements..." required></textarea>
                                     </div>
+                                    <span class="error-message" *ngIf="formSubmitted && cMessageCtrl.invalid">Message is required.</span>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary full-width">Submit Inquiry</button>
@@ -202,8 +207,8 @@
             <div class="footer-bottom">
                 <p>&copy; 2026 Techzaz EDR Platform. All rights reserved.</p>
                 <div class="legal-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
+                    <a routerLink="/privacy-policy">Privacy Policy</a>
+                    <a routerLink="/terms-conditions">Terms of Service</a>
                 </div>
             </div>
         </div>

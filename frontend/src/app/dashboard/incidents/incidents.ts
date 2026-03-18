@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { FirestoreService } from '../../core/services/firestore.service';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
     LucideAngularModule,
-    Plus, Search, Monitor, AlertTriangle, ShieldOff, Shield, Eye, Circle
+    Search, Monitor, AlertTriangle, ShieldOff, Shield, Eye, Circle
 } from 'lucide-angular';
 
 @Component({
@@ -13,9 +15,9 @@ import {
     templateUrl: './incidents.html',
     styleUrl: './incidents.scss',
 })
-export class Incidents {
+export class Incidents implements OnInit, OnDestroy {
+    private subs = new Subscription();
     // Icons
-    readonly PlusIcon = Plus;
     readonly SearchIcon = Search;
     readonly MonitorIcon = Monitor;
     readonly AlertTriangleIcon = AlertTriangle;
@@ -24,52 +26,31 @@ export class Incidents {
     readonly EyeIcon = Eye;
     readonly CircleIcon = Circle;
 
-    incidents = [
-        {
-            id: 1,
-            title: 'Critical Malware Outbreak',
-            description: 'Multiple endpoints infected with ransomware',
-            status: 'investigating',
-            priority: 'critical',
-            threats: 12,
-            endpoints: 5,
-            time: '2 hours ago',
-            assignee: 'Security Team'
-        },
-        {
-            id: 2,
-            title: 'Unauthorized Access Attempt',
-            description: 'Brute force attack detected on admin account',
-            status: 'contained',
-            priority: 'high',
-            threats: 3,
-            endpoints: 1,
-            time: '5 hours ago',
-            assignee: 'John Doe'
-        },
-        {
-            id: 3,
-            title: 'Data Exfiltration Detected',
-            description: 'Suspicious data transfer to external server',
-            status: 'open',
-            priority: 'high',
-            threats: 8,
-            endpoints: 2,
-            time: '1 day ago',
-            assignee: 'Jane Smith'
-        },
-        {
-            id: 4,
-            title: 'Privilege Escalation',
-            description: 'User attempted to escalate privileges',
-            status: 'resolved',
-            priority: 'medium',
-            threats: 1,
-            endpoints: 1,
-            time: '3 days ago',
-            assignee: 'Security Team'
-        }
-    ];
+    incidents: any[] = [];
+
+    constructor(private firestoreService: FirestoreService, private zone: NgZone) {}
+
+    ngOnInit() {
+        this.subs.add(
+            this.firestoreService.getOrganizationAlerts().subscribe(data => {
+                this.incidents = data.map(item => ({
+                    ...item,
+                    title: item.title || item.RuleId || item.rule_name || 'Security Alert',
+                    description: item.description || item.Details?.description || item.reason || 'Potential threat detected',
+                    severity: (item.severity || item.Severity || 'medium').toLowerCase(),
+                    priority: (item.severity || item.Severity || 'medium').toLowerCase(),
+                    status: item.status || item.Status || 'open',
+                    endpoints: item.agent_id || 'Unknown',
+                    threats: 1,
+                    assignee: item.assignee || 'Unassigned'
+                }));
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.subs.unsubscribe();
+    }
 
     // Filters
     filterStatus = 'All Status';
@@ -94,82 +75,61 @@ export class Incidents {
         return results;
     }
 
-    // Modal Logic
-    showNewIncidentModal = false;
-    newIncident = {
-        title: '',
-        description: '',
-        severity: 'Medium',
-        status: 'Open',
-        endpoints: [] as string[],
-        assignee: 'Me'
-    };
 
-    availableEndpoints = ['Desktop-A1', 'Server-DB01', 'Laptop-CEO', 'HR-Workstation-04', 'FileServer-02'];
-    availableUsers = ['Me', 'Security Team', 'John Doe', 'Jane Smith', 'System Admin'];
+    // Actions
+    async isolateEndpoint(incident: any) {
+        if (!incident.agent_id) {
+            console.error('Cannot isolate: No agent ID for incident', incident.id);
+            alert('Error: Agent ID missing for this incident.');
+            return;
+        }
 
-    toggleEndpoint(endpoint: string) {
-        const index = this.newIncident.endpoints.indexOf(endpoint);
-        if (index === -1) {
-            this.newIncident.endpoints.push(endpoint);
-        } else {
-            this.newIncident.endpoints.splice(index, 1);
+        console.log(`Sending ISOLATE command for agent ${incident.agent_id} (Incident #${incident.id})`);
+        try {
+            await this.firestoreService.sendCommand(incident.agent_id, 'isolate_endpoint');
+            alert(`Isolation command sent successfully for Agent: ${incident.agent_id}`);
+            
+            // Optionally update status to contained
+            await this.firestoreService.updateAlertStatus(incident.agent_id, incident.id, 'contained');
+        } catch (error) {
+            console.error('Failed to isolate endpoint:', error);
+            alert('Failed to send isolation command. Check console for details.');
         }
     }
 
-    isEndpointSelected(endpoint: string): boolean {
-        return this.newIncident.endpoints.includes(endpoint);
+    async blockThreat(incident: any) {
+        if (!incident.agent_id) {
+            alert('Error: Agent ID missing for this incident.');
+            return;
+        }
+
+        console.log(`Sending BLOCK_INDICATOR command for agent ${incident.agent_id} (Incident #${incident.id})`);
+        try {
+            await this.firestoreService.sendCommand(incident.agent_id, 'block_indicator', { 
+                detail: incident.description,
+                incident_id: incident.id 
+            });
+            alert(`Global block rule created for threat in Incident #${incident.id}. Distributed to agent ${incident.agent_id}.`);
+        } catch (error) {
+            console.error('Failed to block threat:', error);
+            alert('Failed to create block rule. Check console for details.');
+        }
     }
 
-    openModal() {
-        this.showNewIncidentModal = true;
-    }
+    async investigate(incident: any) {
+        if (!incident.agent_id) {
+            alert('Error: Agent ID missing for this incident.');
+            return;
+        }
 
-    closeModal() {
-        this.showNewIncidentModal = false;
-        this.newIncident = {
-            title: '',
-            description: '',
-            severity: 'Medium',
-            status: 'Open',
-            endpoints: [],
-            assignee: 'Me'
-        };
-    }
-
-    saveIncident() {
-        if (!this.newIncident.title) return;
-
-        this.incidents.unshift({
-            id: this.incidents.length + 1,
-            title: this.newIncident.title,
-            description: this.newIncident.description,
-            status: this.newIncident.status.toLowerCase(),
-            priority: this.newIncident.severity.toLowerCase(),
-            threats: 0,
-            endpoints: this.newIncident.endpoints.length,
-            time: 'Just now',
-            assignee: this.newIncident.assignee
-        });
-
-        this.closeModal();
-    }
-
-    // Actions
-    isolateEndpoint(id: number) {
-        console.log(`Isolating endpoint for incident ${id}`);
-        // Mock action
-        alert(`Endpoint isolate command sent for Incident #${id}`);
-    }
-
-    blockThreat(id: number) {
-        console.log(`Blocking threat for incident ${id}`);
-        // Mock action
-        alert(`Global block rule created for threat in Incident #${id}`);
-    }
-
-    investigate(id: number) {
-        console.log(`Investigating incident ${id}`);
-        // navigate to details or show details modal
+        console.log(`Updating status to 'investigating' for Incident #${incident.id}`);
+        try {
+            await this.firestoreService.updateAlertStatus(incident.agent_id, incident.id, 'investigating');
+            // UI will automatically update via Firestore onSnapshot
+            console.log('Status updated successfully');
+        } catch (error) {
+            console.error('Failed to update incident status:', error);
+            alert('Failed to update status. Check console for details.');
+        }
     }
 }

@@ -1,0 +1,38 @@
+--- Rules Collection ---
+Rule ID: HIDS-B1
+Rule ID: HIDS-P1
+Rule ID: HIDS-P2
+Rule ID: HIDS-P3
+Rule ID: MAL-F1
+Rule ID: MAL-F2
+Rule ID: MAL-YARA
+Rule ID: NET-1
+Rule ID: NET-11
+Rule ID: NET-12
+Rule ID: NET-14
+Rule ID: NET-15
+Rule ID: NET-16
+Rule ID: NET-2
+Rule ID: NET-3
+Rule ID: NET-4
+Rule ID: NET-5
+Rule ID: NET-7
+Rule ID: NET-8
+Rule ID: NET-9
+Rule ID: NET-TCP-FLAG
+
+--- Unique Rule IDs in Alerts ---
+Alert Rule ID: AGGREGATION_TEST
+Alert Rule ID: HIDS-B1
+Alert Rule ID: HIDS-P2
+Alert Rule ID: MAL-YARA
+Alert Rule ID: NET-1
+Alert Rule ID: NET-11
+Alert Rule ID: NET-12
+Alert Rule ID: NET-16
+Alert Rule ID: NET-2
+Alert Rule ID: NET-4
+Alert Rule ID: NET-7
+Alert Rule ID: NET-9
+Alert Rule ID: TEST_ALERT_001
+Alert Rule ID: TEST_ALERT_SYNC_WORKS

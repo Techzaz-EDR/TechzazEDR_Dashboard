@@ -79,6 +79,11 @@ export class Analytics {
     readonly trendPoints = this.toPolylinePoints(this.trendCoordinates);
     readonly criticalPoints = this.toPolylinePoints(this.criticalCoordinates);
 
+    trendTooltipVisible = false;
+    trendTooltipX = 0;
+    trendTooltipY = 0;
+    trendTooltipText = '';
+
     private mapSeriesToCoordinates(series: number[]): ChartPoint[] {
         return series.map((value, index) => ({
             index,
@@ -91,6 +96,23 @@ export class Analytics {
 
     private toPolylinePoints(points: ChartPoint[]): string {
         return points.map(point => `${point.x},${point.y}`).join(' ');
+    }
+
+    showTrendTooltip(event: MouseEvent, point: ChartPoint, seriesLabel: string) {
+        const frameElement = (event.currentTarget as SVGElement | null)?.closest('.chart-frame') as HTMLElement | null;
+        if (!frameElement) {
+            return;
+        }
+
+        const rect = frameElement.getBoundingClientRect();
+        this.trendTooltipX = event.clientX - rect.left;
+        this.trendTooltipY = event.clientY - rect.top;
+        this.trendTooltipText = `${point.label}: ${point.value} ${seriesLabel}`;
+        this.trendTooltipVisible = true;
+    }
+
+    hideTrendTooltip() {
+        this.trendTooltipVisible = false;
     }
 
     // Incident Status (Donut)
@@ -206,5 +228,17 @@ export class Analytics {
         }
 
         return 'LIVE';
+    }
+
+    selectedThreat: any | null = null;
+
+    openThreatDetails(threat: any, event?: Event): void {
+        event?.stopPropagation();
+        this.selectedThreat = threat;
+    }
+
+    closeThreatDetails(event?: Event): void {
+        event?.stopPropagation();
+        this.selectedThreat = null;
     }
 }

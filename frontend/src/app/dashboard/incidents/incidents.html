@@ -5,9 +5,6 @@
                 <h1>Incidents & Response</h1>
                 <p>Manage security incidents and execute response actions</p>
             </div>
-            <button class="new-incident-btn primary-btn" (click)="openModal()">
-                <lucide-icon [name]="PlusIcon" [size]="18"></lucide-icon> New Incident
-            </button>
         </div>
 
         <div class="filters-bar">
@@ -73,8 +70,7 @@
                     </td>
                     <td>
                         <div class="assets-info">
-                            <span><lucide-icon [name]="MonitorIcon" [size]="14"></lucide-icon> {{ incident.endpoints }}
-                                Endpoints</span>
+                            <span><lucide-icon [name]="MonitorIcon" [size]="14"></lucide-icon> Agent: {{ incident.endpoints }}</span>
                             <span class="sub"><lucide-icon [name]="AlertTriangleIcon" [size]="14"></lucide-icon> {{
                                 incident.threats }} Threats</span>
                         </div>
@@ -86,13 +82,13 @@
                     <td>
                         <div class="action-buttons">
                             <button class="btn-icon danger" title="Isolate Endpoint"
-                                (click)="isolateEndpoint(incident.id)"><lucide-icon [name]="ShieldOffIcon"
+                                (click)="isolateEndpoint(incident)"><lucide-icon [name]="ShieldOffIcon"
                                     [size]="18"></lucide-icon></button>
                             <button class="btn-icon warning" title="Block Globally"
-                                (click)="blockThreat(incident.id)"><lucide-icon [name]="ShieldIcon"
+                                (click)="blockThreat(incident)"><lucide-icon [name]="ShieldIcon"
                                     [size]="18"></lucide-icon></button>
                             <button class="btn-icon info" title="Investigate"
-                                (click)="investigate(incident.id)"><lucide-icon [name]="EyeIcon"
+                                (click)="investigate(incident)"><lucide-icon [name]="EyeIcon"
                                     [size]="18"></lucide-icon></button>
                         </div>
                     </td>
@@ -100,81 +96,4 @@
                 }
             </tbody>
         </table>
-    </div>
-</div>
-
-<!-- New Incident Modal -->
-@if (showNewIncidentModal) {
-<div class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Report New Incident</h2>
-            <button class="close-btn" (click)="closeModal()">×</button>
-        </div>
-
-        <div class="modal-body">
-            <div class="form-group">
-                <label>Incident Title</label>
-                <input type="text" [(ngModel)]="newIncident.title"
-                    placeholder="e.g., Ransomware detected on HR network">
-                <small>This becomes the bold header in your list</small>
-            </div>
-
-            <div class="form-group">
-                <label>Description</label>
-                <textarea [(ngModel)]="newIncident.description" rows="3"
-                    placeholder="Describe the behavior observed..."></textarea>
-                <small>Populates the subtitle text</small>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Severity Level</label>
-                    <select [(ngModel)]="newIncident.severity">
-                        <option value="Critical">Critical</option>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Initial Status</label>
-                    <select [(ngModel)]="newIncident.status">
-                        <option value="Open">Open</option>
-                        <option value="Investigating">Investigating</option>
-                        <option value="Contained">Contained</option>
-                        <option value="Resolved">Resolved</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Affected Endpoints ({{newIncident.endpoints.length}} selected)</label>
-                <div class="endpoints-grid">
-                    @for (endpoint of availableEndpoints; track endpoint) {
-                    <div class="endpoint-chip" [class.selected]="isEndpointSelected(endpoint)"
-                        (click)="toggleEndpoint(endpoint)">
-                        <lucide-icon [name]="MonitorIcon" [size]="14" class="icon"></lucide-icon> {{ endpoint }}
-                    </div>
-                    }
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Assignee</label>
-                <select [(ngModel)]="newIncident.assignee">
-                    @for (user of availableUsers; track user) {
-                    <option [value]="user">{{ user }}</option>
-                    }
-                </select>
-            </div>
-        </div>
-
-        <div class="modal-footer">
-            <button class="btn-cancel" (click)="closeModal()">Cancel</button>
-            <button class="btn-save" (click)="saveIncident()">Create Incident</button>
-        </div>
-    </div>
-</div>
-}
+    </div>

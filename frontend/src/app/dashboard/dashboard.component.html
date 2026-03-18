@@ -92,18 +92,6 @@
             </div>
 
             <div class="top-actions">
-                <!-- Global Time Filter -->
-                <div class="time-filter">
-                    <span class="icon"><lucide-icon [name]="Clock" [size]="18"></lucide-icon></span>
-                    <select class="time-select">
-                        <option value="24h" selected>Last 24 Hours</option>
-                        <option value="7d">Last 7 Days</option>
-                        <option value="30d">Last 30 Days</option>
-                        <option value="custom">Custom Range</option>
-                    </select>
-                </div>
-
-                <div class="divider"></div>
 
                 <button class="icon-btn notification-btn" (click)="toggleNotifications()"
                     [class.active]="isNotificationOpen">
@@ -144,9 +132,16 @@
                 }
 
                 <div class="user-profile" (click)="toggleDropdown()" [class.active]="isDropdownOpen">
-                    <div class="avatar-circle">AD</div>
+                    <div class="avatar-circle"
+                         [style.background-image]="userProfile?.photoUrl ? 'url(' + userProfile.photoUrl + ')' : 'none'"
+                         [style.background-size]="'cover'"
+                         [style.background-position]="'center'">
+                        @if (!userProfile?.photoUrl) {
+                            {{ getInitials(userProfile?.name) }}
+                        }
+                    </div>
                     <div class="user-details">
-                        <span class="username">{{ userEmail }}</span>
+                        <span class="username">{{ userProfile?.name || userEmail }}</span>
                         <span class="role">Security Ops</span>
                     </div>
                     <span class="dropdown-icon"><lucide-icon [name]="ChevronDown" [size]="16"></lucide-icon></span>
