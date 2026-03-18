@@ -30,7 +30,6 @@ export class LoginComponent implements AfterViewInit, OnInit {
     signupCountry = '';
     signupPhone = '';
     signupPassword = '';
-    showSignupPassword = false;
     signupConfirmPassword = '';
     showSignupPassword = false;
     showSignupConfirmPassword = false;
