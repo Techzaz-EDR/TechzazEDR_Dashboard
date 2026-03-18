@@ -218,37 +218,6 @@
                     color: var(--text-muted);
                 }
 
-                &.col-threats {
-                    .threat-wrapper {
-                        display: flex;
-                        align-items: center;
-
-                        .threat-icon {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            width: 14px;
-                            margin-right: 6px;
-                            flex-shrink: 0;
-
-                            &.danger {
-                                color: var(--status-critical);
-                            }
-                        }
-
-                        .threat-count {
-                            &.danger {
-                                color: var(--status-critical);
-                                font-weight: 600;
-                            }
-
-                            &.safe {
-                                color: var(--text-muted);
-                            }
-                        }
-                    }
-                }
-
                 .badge.status {
                     padding: 4px 14px;
                     border-radius: 8px;

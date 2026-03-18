@@ -34,7 +34,6 @@
                         <th class="col-os">OS</th>
                         <th class="col-ip">IP Address</th>
                         <th class="col-status">Status</th>
-                        <th class="col-threats">Threats</th>
                         <th class="col-seen">Last Seen</th>
                     </tr>
                 </thead>
@@ -53,18 +52,6 @@
                         <td class="col-ip">{{ ep.ip }}</td>
                         <td class="col-status">
                             <span class="badge status" [class]="ep.status">{{ ep.status }}</span>
-                        </td>
-                        <td class="col-threats">
-                            <div class="threat-wrapper">
-                                @if (ep.threats > 0) {
-                                <lucide-icon [name]="AlertTriangleIcon" [size]="14"
-                                    class="threat-icon danger"></lucide-icon>
-                                <span class="threat-count danger">{{ ep.threats }}</span>
-                                } @else {
-                                <span class="threat-icon placeholder"></span>
-                                <span class="threat-count safe">{{ ep.threats }}</span>
-                                }
-                            </div>
                         </td>
                         <td class="col-seen">{{ ep.lastSeen }}</td>
                     </tr>
