@@ -377,10 +377,13 @@
 
                 a {
                     color: #64748b;
-                    transition: color 0.3s;
+                    opacity: 0.8;
+                    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
                     &:hover {
                         color: white;
+                        opacity: 1;
+                        transform: translateY(-4px) scale(1.1);
                     }
                 }
             }

@@ -2362,15 +2362,17 @@
 
                 .socials {
                     display: flex;
-                    gap: 36px;
+                    gap: 16px;
 
                     a {
                         color: #64748b;
-                        transition: all 0.3s ease;
+                        opacity: 0.8;
+                        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
                         &:hover {
                             color: #8b5cf6;
-                            transform: translateY(-2px);
+                            opacity: 1;
+                            transform: translateY(-4px) scale(1.1);
                         }
                     }
                 }
