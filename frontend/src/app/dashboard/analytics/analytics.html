@@ -237,24 +237,70 @@
                     <span class="subtitle"><strong>{{ detailedThreatLogs.length }}</strong> events active</span>
                 </div>
             </div>
-            <div class="log-list">
-                @for (log of detailedThreatLogs; track log.title; let i = $index) {
-                <div class="log-item" [style.animation-delay]="(i * 0.1) + 's'">
-                    <div class="log-main">
-                        <h4>{{ log.title }}</h4>
-                        <div class="log-details">
-                            <span class="device">{{ log.device }}</span>
-                            <span class="category">{{ log.category }}</span>
+            <div class="log-body">
+                <div class="log-list">
+                    @for (log of detailedThreatLogs; track log.title; let i = $index) {
+                    <div class="log-item" [style.animation-delay]="(i * 0.1) + 's'" [class.is-selected]="selectedThreat?.title === log.title"
+                        (click)="openThreatDetails(log)">
+                        <div class="log-main">
+                            <h4>{{ log.title }}</h4>
+                            <div class="log-details">
+                                <span class="device">{{ log.device }}</span>
+                                <span class="category">{{ log.category }}</span>
+                            </div>
+                        </div>
+                        <span class="time">{{ log.time }}</span>
+                        <span class="status-tag">{{ log.status }}</span>
+                        <span class="severity-tag" [ngClass]="'severity-' + log.severity.toLowerCase()">
+                            {{ log.severity }}
+                        </span>
+                        <button class="view-button" type="button" title="View Threat Details"
+                            aria-label="View Threat Details" (click)="openThreatDetails(log, $event)"><lucide-icon [name]="EyeIcon"
+                                [size]="16"></lucide-icon></button>
+                    </div>
+                    }
+                </div>
+
+                @if (selectedThreat) {
+                <div class="threat-details-panel" aria-live="polite">
+                    <div class="panel-head">
+                        <div class="headline">
+                            <span class="label">Threat details</span>
+                            <h4>{{ selectedThreat.title }}</h4>
+                        </div>
+                        <button class="dismiss-btn" type="button" (click)="closeThreatDetails($event)">
+                            <lucide-icon [name]="EyeIcon" [size]="14"></lucide-icon>
+                            Dismiss
+                        </button>
+                    </div>
+                
+                    <p class="panel-desc">{{ selectedThreat.description }}</p>
+                
+                    <div class="panel-fields">
+                        <div class="field">
+                            <span class="field-label">Endpoint</span>
+                            <span class="field-value">
+                                <lucide-icon [name]="ShieldIcon" [size]="13"></lucide-icon>
+                                {{ selectedThreat.device }}
+                            </span>
+                        </div>
+                        <div class="field">
+                            <span class="field-label">Detected</span>
+                            <span class="field-value">{{ selectedThreat.time }}</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-label">Category</span>
+                            <span class="field-value">{{ selectedThreat.category }}</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-label">Severity</span>
+                            <span class="field-value severity" [class]="selectedThreat.severity.toLowerCase()">{{ selectedThreat.severity }}</span>
+                        </div>
+                        <div class="field">
+                            <span class="field-label">Status</span>
+                            <span class="field-value status" [class]="selectedThreat.status.toLowerCase()">{{ selectedThreat.status }}</span>
                         </div>
                     </div>
-                    <span class="time">{{ log.time }}</span>
-                    <span class="status-tag">{{ log.status }}</span>
-                    <span class="severity-tag" [ngClass]="'severity-' + log.severity.toLowerCase()">
-                        {{ log.severity }}
-                    </span>
-                    <button class="view-button" type="button" title="View Threat Details"
-                        aria-label="View Threat Details"><lucide-icon [name]="EyeIcon"
-                            [size]="16"></lucide-icon></button>
                 </div>
                 }
             </div>

@@ -61,32 +61,101 @@
     <!-- 4. Local Threat Feed -->
     <section class="threat-feed">
       <h2 class="section-title">Local Threat Feed</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Severity</th>
-              <th>Alert Name</th>
-              <th>Description</th>
-              <th>Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let alert of alerts">
-              <td>
-                <span class="severity-tag" [ngClass]="getSeverityClass(alert.severity)">
-                  {{ alert.severity }}
-                </span>
-              </td>
-              <td class="alert-name">{{ alert.name }}</td>
-              <td class="alert-desc" [title]="alert.description">{{ alert.description }}</td>
-              <td class="alert-time">{{ alert.displayTime }}</td>
-            </tr>
-            <tr *ngIf="alerts.length === 0">
-              <td colspan="4" class="no-data">No alerts found for this agent.</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="feed-body">
+        <div class="feed-main">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Alert Name</th>
+                  <th>Description</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let alert of paginatedAlerts" (click)="openAlertDetails(alert, $event)" [class.is-selected]="selectedAlert === alert" style="cursor: pointer;">
+                  <td>
+                    <span class="severity-tag" [ngClass]="getSeverityClass(alert.severity)">
+                      {{ alert.severity }}
+                    </span>
+                  </td>
+                  <td class="alert-name">{{ alert.name }}</td>
+                  <td class="alert-desc" [title]="alert.description">{{ alert.description }}</td>
+                  <td class="alert-time">{{ alert.displayTime }}</td>
+                </tr>
+                <tr *ngIf="alerts.length === 0">
+                  <td colspan="4" class="no-data">No alerts found for this agent.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="pagination-footer" *ngIf="alerts.length > pageSize">
+            <div class="pagination-info">
+              Showing <strong>{{ (currentPage - 1) * pageSize + 1 }}</strong> - 
+              <strong>{{ Math.min(currentPage * pageSize, alerts.length) }}</strong> of 
+              <strong>{{ alerts.length }}</strong> alerts
+            </div>
+            <div class="pagination-controls">
+              <button class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1">
+                <lucide-icon [name]="ChevronLeftIcon" [size]="14"></lucide-icon>
+                Prev
+              </button>
+              <div class="page-numbers">
+                <button *ngFor="let p of pageNumbers" 
+                        class="page-num" 
+                        [class.active]="p === currentPage"
+                        (click)="goToPage(p)">
+                  {{ p }}
+                </button>
+              </div>
+              <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+                Next
+                <lucide-icon [name]="ChevronRightIcon" [size]="14"></lucide-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Split View Details Panel -->
+        <div class="threat-details-panel" *ngIf="selectedAlert" aria-live="polite">
+          <div class="panel-head">
+            <div class="headline">
+              <span class="label">Alert details</span>
+              <h4>{{ selectedAlert.name }}</h4>
+            </div>
+            <button class="dismiss-btn" type="button" (click)="closeAlertDetails($event)">
+              <lucide-icon [name]="EyeIcon" [size]="14"></lucide-icon>
+              Dismiss
+            </button>
+          </div>
+        
+          <p class="panel-desc">{{ selectedAlert.description }}</p>
+        
+          <div class="panel-fields">
+            <div class="field">
+              <span class="field-label">Category</span>
+              <span class="field-value">{{ selectedAlert.Category || selectedAlert.name }}</span>
+            </div>
+            <div class="field">
+              <span class="field-label">Detected Time</span>
+              <span class="field-value">{{ formatAlertTime(selectedAlert.Timestamp || selectedAlert.timestamp) }}</span>
+            </div>
+            <div class="field">
+              <span class="field-label">Severity</span>
+              <span class="field-value severity" [ngClass]="getSeverityClass(selectedAlert.severity)">{{ selectedAlert.severity }}</span>
+            </div>
+            <!-- More details if Available -->
+            <div class="field" *ngIf="selectedAlert.Details">
+              <span class="field-label">Raw Data</span>
+              <div class="raw-data-box">
+                <pre>{{ selectedAlert.Details | json }}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
