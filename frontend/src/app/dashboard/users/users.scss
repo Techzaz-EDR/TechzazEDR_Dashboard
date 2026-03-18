@@ -208,52 +208,66 @@
     }
 
     .badge {
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 14px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        line-height: 1;
+        min-width: 100px;
 
         &.administrator {
-            background-color: #ef4444;
-            color: white;
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
         }
 
-        /* Red */
         &.security-analyst {
-            background-color: #f97316;
-            color: white;
+            background-color: rgba(249, 115, 22, 0.15);
+            color: #f97316;
+            border: 1px solid rgba(249, 115, 22, 0.3);
         }
 
-        /* Orange */
         &.incident-responder {
-            background-color: #f59e0b;
-            color: white;
+            background-color: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
-        /* Yellow/Orange */
         &.viewer {
-            background-color: #84cc16;
-            color: black;
-        }
-
-        /* Green */
-    }
-
-    .status-badge {
-        padding: 2px 10px;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: capitalize;
-
-        &.active {
-            background-color: rgba(132, 204, 22, 0.2);
+            background-color: rgba(132, 204, 22, 0.15);
             color: #84cc16;
             border: 1px solid rgba(132, 204, 22, 0.3);
         }
+    }
 
-        &.inactive {
-            background-color: rgba(107, 114, 128, 0.2);
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        line-height: 1;
+
+        &.active {
+            background-color: rgba(132, 204, 22, 0.15);
+            color: #84cc16;
+            border: 1px solid rgba(132, 204, 22, 0.3);
+            box-shadow: 0 0 10px rgba(132, 204, 22, 0.1);
+        }
+
+        &.inactive,
+        &.suspended {
+            background-color: rgba(107, 114, 128, 0.15);
             color: #9ca3af;
             border: 1px solid rgba(107, 114, 128, 0.3);
         }
