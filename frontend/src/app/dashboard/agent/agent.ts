@@ -13,7 +13,8 @@ import {
   RefreshCw,
   CheckCircle,
   XCircle,
-  Play
+  Play,
+  History
 } from 'lucide-angular';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
@@ -38,12 +39,15 @@ export class AgentComponent implements OnInit, OnDestroy {
   readonly CheckCircleIcon = CheckCircle;
   readonly XCircleIcon = XCircle;
   readonly PlayIcon = Play;
+  readonly HistoryIcon = History;
 
   agentId: string | null = null;
   agentDetails: any = null;
   alerts: any[] = [];
   commands: any[] = [];
+  commandStats: { total: number, completed: number, pending: number, failed: number } = { total: 0, completed: 0, pending: 0, failed: 0 };
   
+  showCommandHistoryModal: boolean = false;
   loadingCommands: { [key: string]: boolean } = {};
 
   private subscriptions: Subscription = new Subscription();
@@ -111,9 +115,27 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.firestoreService.getAgentCommands(agentId).subscribe(commands => {
         this.commands = commands;
+        this.calculateCommandStats();
         this.cdr.detectChanges();
       })
     );
+  }
+
+  private calculateCommandStats() {
+    this.commandStats = {
+      total: this.commands.length,
+      completed: this.commands.filter(c => c.status === 'completed').length,
+      pending: this.commands.filter(c => c.status === 'pending').length,
+      failed: this.commands.filter(c => c.status === 'failed').length
+    };
+  }
+
+  getCommandIcon(command: string): any {
+    const cmd = command.toLowerCase();
+    if (cmd.includes('scan') || cmd.includes('network')) return this.ActivityIcon;
+    if (cmd.includes('system') || cmd.includes('hids')) return this.ShieldIcon;
+    if (cmd.includes('config')) return this.SettingsIcon;
+    return this.TerminalIcon;
   }
 
   ngOnDestroy() {
@@ -162,6 +184,21 @@ export class AgentComponent implements OnInit, OnDestroy {
 
   backToEndpoints() {
     this.router.navigate(['/dashboard/endpoints']);
+  }
+
+  toggleCommandHistory() {
+    this.showCommandHistoryModal = !this.showCommandHistoryModal;
+    this.cdr.detectChanges();
+  }
+
+  openCommandHistoryModal() {
+    this.showCommandHistoryModal = true;
+    this.cdr.detectChanges();
+  }
+
+  closeCommandHistoryModal() {
+    this.showCommandHistoryModal = false;
+    this.cdr.detectChanges();
   }
 
   public formatAlertTime(timestamp: any): string {
