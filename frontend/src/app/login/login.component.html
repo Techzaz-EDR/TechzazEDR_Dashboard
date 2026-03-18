@@ -35,10 +35,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="input-wrapper">
+                        <div class="input-wrapper password-field">
                             <lucide-icon [name]="Lock" [size]="20" class="input-icon"></lucide-icon>
                             <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
                                 placeholder="Password" required />
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                (click)="togglePassword()"
+                                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                                [attr.title]="showPassword ? 'Hide password' : 'Show password'"
+                            >
+                                <lucide-icon [name]="showPassword ? EyeOff : Eye" [size]="18" class="toggle-icon"></lucide-icon>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -72,10 +81,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="input-wrapper">
+                        <div class="input-wrapper password-field">
                             <lucide-icon [name]="Lock" [size]="20" class="input-icon"></lucide-icon>
-                            <input type="password" name="signupPassword" [(ngModel)]="signupPassword"
+                            <input [type]="showSignupPassword ? 'text' : 'password'" name="signupPassword" [(ngModel)]="signupPassword"
                                 placeholder="Master Password" />
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                (click)="toggleSignupPassword()"
+                                [attr.aria-label]="showSignupPassword ? 'Hide password' : 'Show password'"
+                                [attr.title]="showSignupPassword ? 'Hide password' : 'Show password'"
+                            >
+                                <lucide-icon [name]="showSignupPassword ? EyeOff : Eye" [size]="18" class="toggle-icon"></lucide-icon>
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -24,6 +24,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     signupName = '';
     signupEmail = '';
     signupPassword = '';
+    showSignupPassword = false;
 
     readonly Eye = Eye;
     readonly EyeOff = EyeOff;
@@ -114,6 +115,10 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
     togglePassword() {
         this.showPassword = !this.showPassword;
+    }
+
+    toggleSignupPassword() {
+        this.showSignupPassword = !this.showSignupPassword;
     }
 
     toggleMode() {
