@@ -480,8 +480,8 @@
   }
 
   .modal-body {
-    padding: 0 2.5rem 2rem;
-    max-height: 50vh;
+    padding: 0 2.5rem 3rem;
+    max-height: 60vh;
     overflow-y: auto;
 
     &.custom-scrollbar::-webkit-scrollbar {
@@ -600,37 +600,6 @@
       p {
         color: #64748b;
         max-width: 300px;
-      }
-    }
-  }
-
-  .modal-footer {
-    padding: 1.5rem 2.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    justify-content: center;
-
-    .btn-primary-glow {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: white;
-      border: none;
-      padding: 0.85rem 3rem;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.5);
-        filter: brightness(1.1);
-      }
-
-      &:active {
-        transform: translateY(0);
       }
     }
   }
