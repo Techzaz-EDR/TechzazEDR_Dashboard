@@ -36,16 +36,10 @@
   <div class="action-bar-container">
     <section class="action-panel">
       <div class="action-buttons">
-        <button (click)="runNetworkScan()" [disabled]="loadingCommands['network']">
-          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['network']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['network']"></lucide-icon>
-          {{ loadingCommands['network'] ? 'Command Queued...' : 'Network Scan' }}
-        </button>
-
-        <button (click)="runSystemScan()" [disabled]="loadingCommands['system']">
-          <lucide-icon [name]="ShieldIcon" *ngIf="!loadingCommands['system']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['system']"></lucide-icon>
-          {{ loadingCommands['system'] ? 'Command Queued...' : 'Run System Scan' }}
+        <button (click)="runFullScan()" [disabled]="loadingCommands['fullScan']" class="full-scan-btn">
+          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['fullScan']"></lucide-icon>
+          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['fullScan']"></lucide-icon>
+          {{ loadingCommands['fullScan'] ? 'Initializing Full Scan...' : 'Initiate Full Scan' }}
         </button>
 
         <button (click)="updateConfig()" [disabled]="loadingCommands['config']">
@@ -147,7 +141,18 @@
               <span class="field-label">Severity</span>
               <span class="field-value severity" [ngClass]="getSeverityClass(selectedAlert.severity)">{{ selectedAlert.severity }}</span>
             </div>
-            <!-- More details if Available -->
+
+            <!-- Rule Specific Details -->
+            <div class="field" *ngIf="selectedAlert.ruleInfo?.description">
+              <span class="field-label">Rule Description</span>
+              <span class="field-value">{{ selectedAlert.ruleInfo.description }}</span>
+            </div>
+            <div class="field" *ngIf="selectedAlert.ruleInfo?.mitigation">
+              <span class="field-label">Primary Mitigation</span>
+              <span class="field-value">{{ selectedAlert.ruleInfo.mitigation }}</span>
+            </div>
+
+            <!-- Technical Detail Fields -->
             <div class="field" *ngIf="selectedAlert.Details">
               <span class="field-label">Raw Data</span>
               <div class="raw-data-box">

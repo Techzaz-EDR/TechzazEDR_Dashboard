@@ -60,6 +60,7 @@ export class AgentComponent implements OnInit, OnDestroy {
   // Pagination for Alerts
   currentPage: number = 1;
   pageSize: number = 50;
+  ruleDescriptions: { [key: string]: any } = {};
 
   get totalPages(): number {
     return Math.ceil(this.alerts.length / this.pageSize);
@@ -181,9 +182,13 @@ export class AgentComponent implements OnInit, OnDestroy {
             severity: a.Severity || a.severity || 'Medium',
             name: a.RuleId || a.Category || a.name || 'Security Alert',
             description: description,
+            ruleInfo: this.ruleDescriptions[a.RuleId] || null,
             displayTime: this.formatAlertTime(a.Timestamp || a.timestamp)
           };
         });
+
+        // Trigger rule info fetching for all unique RuleIds
+        this.enrichAlertsWithRules();
         
         // Ensure selectedAlert remains valid if it's still in the list
         if (this.selectedAlert) {
@@ -207,6 +212,36 @@ export class AgentComponent implements OnInit, OnDestroy {
     );
   }
 
+  private enrichAlertsWithRules() {
+    const ruleIds = [...new Set(this.alerts.map(a => a.RuleId).filter(id => id && !this.ruleDescriptions[id]))];
+    
+    ruleIds.forEach(ruleId => {
+      // Initialize with a pending state to avoid redundant fetches
+      this.ruleDescriptions[ruleId] = { loading: true };
+      
+      this.subscriptions.add(
+        this.firestoreService.getRule(ruleId).subscribe(rule => {
+          if (rule) {
+            this.ruleDescriptions[ruleId] = rule;
+            // Update the name and description of all matching alerts
+            this.alerts.forEach(a => {
+              if (a.RuleId === ruleId) {
+                a.ruleInfo = rule;
+                // If the rule has a better name, use it (keep RuleId prefix if preferred)
+                if (rule.name) {
+                  a.name = `${ruleId}: ${rule.name}`;
+                }
+              }
+            });
+            this.cdr.detectChanges();
+          } else {
+            this.ruleDescriptions[ruleId] = { notFound: true };
+          }
+        })
+      );
+    });
+  }
+
   private calculateCommandStats() {
     this.commandStats = {
       total: this.commands.length,
@@ -228,23 +263,13 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  async runNetworkScan() {
+  async runFullScan() {
     if (!this.agentId) return;
-    this.loadingCommands['network'] = true;
+    this.loadingCommands['fullScan'] = true;
     try {
-      await this.firestoreService.sendCommand(this.agentId, 'run_network_scan');
+      await this.firestoreService.sendCommand(this.agentId, 'run_full_scan');
     } finally {
-      setTimeout(() => this.loadingCommands['network'] = false, 2000);
-    }
-  }
-
-  async runSystemScan() {
-    if (!this.agentId) return;
-    this.loadingCommands['system'] = true;
-    try {
-      await this.firestoreService.sendCommand(this.agentId, 'run_hids_scan');
-    } finally {
-      setTimeout(() => this.loadingCommands['system'] = false, 2000);
+      setTimeout(() => this.loadingCommands['fullScan'] = false, 2000);
     }
   }
 
