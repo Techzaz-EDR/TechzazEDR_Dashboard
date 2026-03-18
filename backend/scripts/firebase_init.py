@@ -40,12 +40,9 @@ def get_firebase_credentials():
         "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN", "googleapis.com")
     }
     
-    # If environment variables are missing, try falling back to JSON
+    # If environment variables are missing, return None (do not fallback to JSON)
     if not cred_dict["project_id"] or not cred_dict["private_key"]:
-        if os.path.exists("firebase-service-account.json"):
-            return credentials.Certificate("firebase-service-account.json")
         return None
-        
     return credentials.Certificate(cred_dict)
 
 def init_firebase():
