@@ -229,4 +229,16 @@ export class Analytics {
 
         return 'LIVE';
     }
+
+    selectedThreat: any | null = null;
+
+    openThreatDetails(threat: any, event?: Event): void {
+        event?.stopPropagation();
+        this.selectedThreat = threat;
+    }
+
+    closeThreatDetails(event?: Event): void {
+        event?.stopPropagation();
+        this.selectedThreat = null;
+    }
 }

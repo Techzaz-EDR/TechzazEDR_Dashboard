@@ -14,7 +14,10 @@ import {
   CheckCircle,
   XCircle,
   Play,
-  History
+  History,
+  Eye,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-angular';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
@@ -40,6 +43,10 @@ export class AgentComponent implements OnInit, OnDestroy {
   readonly XCircleIcon = XCircle;
   readonly PlayIcon = Play;
   readonly HistoryIcon = History;
+  readonly EyeIcon = Eye;
+  readonly ChevronLeftIcon = ChevronLeft;
+  readonly ChevronRightIcon = ChevronRight;
+  readonly Math = Math;
 
   agentId: string | null = null;
   agentDetails: any = null;
@@ -49,6 +56,46 @@ export class AgentComponent implements OnInit, OnDestroy {
   
   showCommandHistoryModal: boolean = false;
   loadingCommands: { [key: string]: boolean } = {};
+
+  // Pagination for Alerts
+  currentPage: number = 1;
+  pageSize: number = 50;
+
+  get totalPages(): number {
+    return Math.ceil(this.alerts.length / this.pageSize);
+  }
+
+  get paginatedAlerts(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.alerts.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get pageNumbers(): number[] {
+    const pages = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.cdr.detectChanges();
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.cdr.detectChanges();
+    }
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.cdr.detectChanges();
+  }
 
   private subscriptions: Subscription = new Subscription();
 
@@ -76,6 +123,7 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.agentDetails = null; // Reset
     this.alerts = [];
     this.commands = [];
+    this.currentPage = 1;
 
     // Real-time Firestore Subscriptions
     this.subscriptions.add(
@@ -100,14 +148,52 @@ export class AgentComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.firestoreService.getAgentAlerts(agentId).subscribe(alerts => {
-        this.alerts = alerts.map(a => ({
-          ...a,
-          severity: a.Severity || a.severity || 'Medium',
-          name: a.Category || a.RuleId || a.name || 'Security Alert',
-          description: a.Details?.description || a.description || (a.Details ? JSON.stringify(a.Details) : 'Alert details not available'),
-          // Handle both Firestore Timestamp and ISO string
-          displayTime: this.formatAlertTime(a.Timestamp || a.timestamp)
-        }));
+        this.alerts = alerts.map(a => {
+          let description = a.description || '';
+          
+          // If description is missing or looks like raw JSON, try to extract better info
+          if (a.Details) {
+            const d = a.Details;
+            // Prioritize specific fields if description is generic or missing
+            if (!description || description.startsWith('{')) {
+              const parts = [];
+              if (d.Source) parts.push(`Source: ${d.Source}`);
+              if (d.Target) parts.push(`Target: ${d.Target}`);
+              if (d.Reason) parts.push(`Reason: ${d.Reason}`);
+              if (d.Action) parts.push(`Action: ${d.Action}`);
+              
+              if (parts.length > 0) {
+                description = parts.join(' | ');
+              } else if (d.description) {
+                description = d.description;
+              } else if (!description) {
+                description = JSON.stringify(d);
+              }
+            }
+          }
+
+          if (!description) {
+            description = 'Security event details not available';
+          }
+
+          return {
+            ...a,
+            severity: a.Severity || a.severity || 'Medium',
+            name: a.RuleId || a.Category || a.name || 'Security Alert',
+            description: description,
+            displayTime: this.formatAlertTime(a.Timestamp || a.timestamp)
+          };
+        });
+        
+        // Ensure selectedAlert remains valid if it's still in the list
+        if (this.selectedAlert) {
+          const updated = this.alerts.find(a => 
+            (a.Timestamp && a.Timestamp === this.selectedAlert.Timestamp) || 
+            (a.id && a.id === this.selectedAlert.id)
+          );
+          if (updated) this.selectedAlert = updated;
+        }
+
         this.cdr.detectChanges();
       })
     );
@@ -246,5 +332,25 @@ export class AgentComponent implements OnInit, OnDestroy {
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
     return date.toLocaleDateString();
+  }
+
+  selectedAlert: any | null = null;
+
+  openAlertDetails(alert: any, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.selectedAlert = alert;
+    this.cdr.detectChanges();
+  }
+
+  closeAlertDetails(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.selectedAlert = null;
+    this.cdr.detectChanges();
   }
 }
