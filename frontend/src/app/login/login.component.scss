@@ -105,6 +105,19 @@
     z-index: 2;
 }
 
+.forgot-password-view {
+    position: relative;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+
 /* Signup view: column layout — header always on top, form scrolls below */
 .sign-up-view {
     position: relative;
@@ -147,6 +160,27 @@
     &.success-mode {
         align-items: center;
         padding: 0;
+    }
+}
+
+.super-auth-container.forgot-password-mode {
+    .sign-in-view {
+        opacity: 0;
+        pointer-events: none;
+        display: none;
+    }
+
+    .sign-up-view {
+        opacity: 0;
+        pointer-events: none;
+        display: none;
+    }
+
+    .forgot-password-view {
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 3;
+        display: flex;
     }
 }
 

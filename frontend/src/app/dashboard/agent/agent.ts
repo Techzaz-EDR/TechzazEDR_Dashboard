@@ -55,7 +55,7 @@ export class AgentComponent implements OnInit, OnDestroy {
   commandStats: { total: number, completed: number, pending: number, failed: number } = { total: 0, completed: 0, pending: 0, failed: 0 };
   
   showCommandHistoryModal: boolean = false;
-  showUpdateConfigModal: boolean = false;
+  showConfigureAgentModal: boolean = false;
   loadingCommands: { [key: string]: boolean } = {};
 
   // Pagination for Alerts
@@ -274,28 +274,13 @@ export class AgentComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateConfig() {
-    this.openUpdateConfigModal();
-  }
-
-  async confirmUpdateConfig() {
-    if (!this.agentId) return;
-    this.loadingCommands['config'] = true;
-    this.closeUpdateConfigModal();
-    try {
-      await this.firestoreService.sendCommand(this.agentId, 'update_config');
-    } finally {
-      setTimeout(() => this.loadingCommands['config'] = false, 2000);
-    }
-  }
-
-  openUpdateConfigModal() {
-    this.showUpdateConfigModal = true;
+  openConfigureAgentModal() {
+    this.showConfigureAgentModal = true;
     this.cdr.detectChanges();
   }
 
-  closeUpdateConfigModal() {
-    this.showUpdateConfigModal = false;
+  closeConfigureAgentModal() {
+    this.showConfigureAgentModal = false;
     this.cdr.detectChanges();
   }
 

@@ -42,10 +42,9 @@
           {{ loadingCommands['remoteScan'] ? 'Initializing Remote Scan...' : 'Initiate Remote Scan' }}
         </button>
 
-        <button (click)="updateConfig()" [disabled]="loadingCommands['config']">
-          <lucide-icon [name]="SettingsIcon" *ngIf="!loadingCommands['config']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['config']"></lucide-icon>
-          {{ loadingCommands['config'] ? 'Command Queued...' : 'Update Config' }}
+        <button (click)="openConfigureAgentModal()" class="configure-agent-btn">
+          <lucide-icon [name]="SettingsIcon"></lucide-icon>
+          Configure Agent
         </button>
       </div>
     </section>
@@ -230,8 +229,8 @@
   </div>
 </div>
 
-<!-- Update Config Modal -->
-<div class="modal-overlay" *ngIf="showUpdateConfigModal" (click)="closeUpdateConfigModal()">
+<!-- Configure Agent Modal -->
+<div class="modal-overlay" *ngIf="showConfigureAgentModal" (click)="closeConfigureAgentModal()">
   <div class="modal-content config-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <div class="title-group">
@@ -239,41 +238,22 @@
           <lucide-icon [name]="SettingsIcon" [size]="24"></lucide-icon>
         </div>
         <div>
-          <h2>Update Agent Config</h2>
-          <span class="subtitle">Push latest security parameters to {{ agentId }}</span>
+          <h2>Configure Agent</h2>
+          <span class="subtitle">Adjust parameters for {{ agentId }}</span>
         </div>
       </div>
-      <button class="close-btn" (click)="closeUpdateConfigModal()">×</button>
+      <button class="close-btn" (click)="closeConfigureAgentModal()">×</button>
     </div>
 
     <div class="modal-body">
       <div class="config-info-box">
-        <lucide-icon [name]="ShieldIcon" [size]="32" class="info-icon"></lucide-icon>
-        <p>This will broadcast a <strong>remote configuration sync</strong> command to the agent. The agent will reload its `config.json` without requiring a reboot.</p>
-      </div>
-
-      <div class="impact-list">
-        <div class="impact-item">
-          <lucide-icon [name]="CheckCircleIcon" [size]="14"></lucide-icon>
-          <span>Reloads monitoring paths & exclusions</span>
-        </div>
-        <div class="impact-item">
-          <lucide-icon [name]="CheckCircleIcon" [size]="14"></lucide-icon>
-          <span>Updates YARA ruleset pointers</span>
-        </div>
-        <div class="impact-item">
-          <lucide-icon [name]="CheckCircleIcon" [size]="14"></lucide-icon>
-          <span>Refreshes organization API keys</span>
-        </div>
+        <lucide-icon [name]="SettingsIcon" [size]="32" class="info-icon"></lucide-icon>
+        <p>Agent configuration options are currently under construction. Future updates will allow you to edit these settings from this interface.</p>
       </div>
     </div>
 
     <div class="modal-footer">
-      <button class="cancel-btn" (click)="closeUpdateConfigModal()">Cancel</button>
-      <button class="confirm-btn" (click)="confirmUpdateConfig()">
-        Confirm Update
-        <lucide-icon [name]="RefreshCwIcon" [size]="16" *ngIf="loadingCommands['config']" class="spin"></lucide-icon>
-      </button>
+      <button class="cancel-btn" (click)="closeConfigureAgentModal()">Close</button>
     </div>
   </div>
 </div>
