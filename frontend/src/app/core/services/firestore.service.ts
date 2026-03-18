@@ -264,6 +264,28 @@ export class FirestoreService {
   }
 
 
+  getRule(ruleId: string): Observable<any> {
+    const ruleRef = doc(this.db, 'rules', ruleId);
+    const subject = new ReplaySubject<any>(1);
+
+    const unsubscribe = onSnapshot(ruleRef, (docSnap) => {
+      this.zone.run(() => {
+        if (docSnap.exists()) {
+          subject.next({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          subject.next(null);
+        }
+      });
+    }, (error) => {
+      console.error(`Error fetching rule ${ruleId}:`, error);
+      this.zone.run(() => subject.next(null));
+    });
+
+    return subject.asObservable().pipe(
+      finalize(() => unsubscribe())
+    );
+  }
+
   private formatTime(date: Date): string {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
