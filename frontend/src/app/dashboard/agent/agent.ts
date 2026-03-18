@@ -263,13 +263,13 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  async runFullScan() {
+  async runRemoteScan() {
     if (!this.agentId) return;
-    this.loadingCommands['fullScan'] = true;
+    this.loadingCommands['remoteScan'] = true;
     try {
-      await this.firestoreService.sendCommand(this.agentId, 'run_full_scan');
+      await this.firestoreService.sendCommand(this.agentId, 'run_remote_scan');
     } finally {
-      setTimeout(() => this.loadingCommands['fullScan'] = false, 2000);
+      setTimeout(() => this.loadingCommands['remoteScan'] = false, 2000);
     }
   }
 
