@@ -83,14 +83,16 @@
         }
 
         &.active {
-            background-color: rgba(93, 124, 255, 0.14);
-            color: #5D7CFF;
-            border-color: rgba(93, 124, 255, 0.32);
-            box-shadow: 0 0 0 1px rgba(93, 124, 255, 0.16) inset;
+            background-color: rgba(79, 107, 255, 0.1);
+            color: #4F6BFF;
+            border-color: #4F6BFF;
+            box-shadow: 0 0 15px rgba(79, 107, 255, 0.2) inset;
+            /* Subtle inset glow */
 
             .icon {
-                color: #5D7CFF;
-                filter: drop-shadow(0 0 6px rgba(93, 124, 255, 0.26));
+                color: #4F6BFF;
+                filter: drop-shadow(0 0 5px rgba(79, 107, 255, 0.3));
+            }
             }
         }
 
@@ -162,9 +164,15 @@
 
             &:focus {
                 outline: none;
+<<<<<<< HEAD
                 border-color: var(--border-focus);
                 box-shadow: 0 0 0 3px rgba(93, 124, 255, 0.2);
                 background-color: var(--bg-elevated);
+=======
+                border-color: var(--accent-primary);
+                box-shadow: 0 0 0 3px rgba(79, 107, 255, 0.2);
+                background-color: rgba(255, 255, 255, 0.06);
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
             }
         }
 
@@ -207,8 +215,13 @@
                     justify-content: center;
                     width: 32px;
                     height: 32px;
+<<<<<<< HEAD
                     background-color: rgba(93, 124, 255, 0.14);
                     color: #5D7CFF;
+=======
+                    background-color: rgba(79, 107, 255, 0.1);
+                    color: var(--accent-primary, #4F6BFF);
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                     border-radius: 8px;
                     flex-shrink: 0;
                 }
@@ -404,7 +417,12 @@
                         top: 0;
                         bottom: 0;
                         width: 3px;
+<<<<<<< HEAD
                         background-color: #5D7CFF;
+=======
+                        background-color: #4F6BFF;
+                        /* Blue accent for unread strip */
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                     }
                 }
 

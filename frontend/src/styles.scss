@@ -1,35 +1,46 @@
 /* Global Styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-:root {
-    /* Unified Cyan-Blue-Violet Theme */
-    --bg-primary: #060C18;
+    /* Techzaz Professional Purplish-Blue Palette */
+    --bg-primary: #060C18; /* Main Background */
     --bg-dark: #060C18;
-    --bg-secondary: #091224;
-    --bg-card: #0D152B;
-    --bg-elevated: #111B34;
+    --bg-secondary: #0A1224; /* Secondary Background */
+    --bg-card: #0D152B; /* Card Background */
+    --bg-elevated: #111B34; /* Surface / Elevated */
     --bg-input: #0A1326;
-    --bg-hover: rgba(93, 124, 255, 0.08);
+    --bg-hover: rgba(79, 107, 255, 0.08);
 
-    --primary: #5D7CFF;
-    --primary-hover: #6C88FF;
-    --secondary: #3EA0FF;
-    --highlight: #6C88FF;
-    --accent-bright: #18D8FF;
+    --primary: #4F6BFF; /* Primary Brand Color */
+    --primary-hover: #5B76FF; /* Primary Hover */
+    --primary-glow: rgba(79, 107, 255, 0.4);
+    --secondary: #7C6CFF; /* Purple Accent */
+    --secondary-glow: rgba(124, 108, 255, 0.4);
+    --accent-deep-indigo: #3D4FD4; /* Deep Indigo */
+    --accent-blue: #3B82F6; /* Blue Accent */
+    --accent-glow: rgba(79, 107, 255, 0.3);
 
-    --accent-primary: #5D7CFF;
-    --accent-secondary: #6C88FF;
-    --accent-cyan: #18D8FF;
-    --accent-sky: #3EA0FF;
-    --accent-purple: #6C88FF;
+    --link-color: #3B82F6;
+    --link-hover: #4F6BFF;
+    --focus-glow: rgba(79, 107, 255, 0.20);
 
-    --link-color: #3EA0FF;
-    --link-hover: #18D8FF;
-    --focus-glow: rgba(93, 124, 255, 0.20);
+    --text-primary: #F2F6FF; /* Primary Text */
+    --text-secondary: #A7B4D0; /* Secondary Text */
+    --text-white: #F2F6FF;
+    --text-muted: #7483A3; /* Muted Text */
+    --text-gray: #8b949e;
 
-    --primary-glow: rgba(93, 124, 255, 0.4);
-    --secondary-glow: rgba(62, 160, 255, 0.35);
-    --accent-glow: rgba(93, 124, 255, 0.3);
+    --border-color: #1D2A45; /* Primary Border */
+    --border-soft: #22314F; /* Soft Border */
+    --border-focus: #4F6BFF; /* Focus Border */
+    --border-strong: #1D2A45;
+    --border-light: rgba(255, 255, 255, 0.06);
+    --border-hover: #22314F;
+
+    /* Chart & Status Colors */
+    --chart-primary: #4F6BFF;
+    --chart-warning: #f59e0b;
+    --chart-critical: #ef4444;
+    --chart-neutral: #7483A3;
 
     --text-primary: #F2F6FF;
     --text-secondary: #A8B6D6;
@@ -50,25 +61,26 @@
     --chart-critical: #EF4444;
     --chart-neutral: #64748B;
 
-    --status-critical: #EF4444;
+    --status-critical: #ef4444;
     --status-critical-bg: rgba(239, 68, 68, 0.1);
-    --status-high: #F97316;
+    --status-high: #f97316;
     --status-high-bg: rgba(249, 115, 22, 0.1);
-    --status-medium: #F59E0B;
+    --status-medium: #f59e0b;
     --status-medium-bg: rgba(245, 158, 11, 0.1);
-    --status-low: #22C55E;
+    --status-low: #22c55e;
     --status-low-bg: rgba(34, 197, 94, 0.1);
     --status-neutral: #64748B;
     --status-neutral-bg: rgba(100, 116, 139, 0.12);
-    --status-info-bg: rgba(93, 124, 255, 0.1);
+    --status-info-bg: rgba(79, 107, 255, 0.1);
 
     /* Shadows */
     --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-    --shadow-glow: 0 0 15px rgba(93, 124, 255, 0.20);
+    --shadow-glow: 0 0 15px rgba(79, 107, 255, 0.15);
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    --gradient-text: linear-gradient(90deg, #18D8FF 0%, #3EA0FF 35%, #5D7CFF 68%, #6C88FF 100%);
+    --gradient-text: linear-gradient(90deg, #22D3EE 0%, #4F6BFF 55%, #7C6CFF 100%);
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
     --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
 
     /* Transitions */
@@ -140,8 +152,13 @@ h6 {
 
     input, select, textarea {
         width: 100%;
+<<<<<<< HEAD
         background: var(--bg-input);
         border: 1px solid var(--border-color);
+=======
+        background: #0D152B;
+        border: 1px solid #1D2A45;
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
         padding: 14px 16px;
         border-radius: 8px;
         color: var(--text-white);
@@ -151,6 +168,7 @@ h6 {
 
         &:focus {
             outline: none;
+<<<<<<< HEAD
             border-color: var(--border-focus);
             background: var(--bg-elevated);
             box-shadow: 0 0 0 3px var(--focus-glow);
@@ -158,6 +176,15 @@ h6 {
 
         &::placeholder {
             color: var(--text-muted);
+=======
+            border-color: #4F6BFF;
+            background: #111B34;
+            box-shadow: 0 0 0 3px rgba(79, 107, 255, 0.1);
+        }
+
+        &::placeholder {
+            color: #7483A3;
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
         }
     }
 
@@ -167,6 +194,7 @@ h6 {
         gap: 10px;
         padding: 0 14px;
         border-radius: 8px;
+<<<<<<< HEAD
         background: var(--bg-input);
         border: 1px solid var(--border-color);
         transition: border-color 0.3s;
@@ -175,13 +203,27 @@ h6 {
             border-color: var(--border-focus);
             background: var(--bg-elevated);
             box-shadow: 0 0 0 3px var(--focus-glow);
+=======
+        background: #0D152B;
+        border: 1px solid #1D2A45;
+        transition: border-color 0.3s;
+
+        &:focus-within {
+            border-color: #4F6BFF;
+            background: #111B34;
+            box-shadow: 0 0 0 3px rgba(79, 107, 255, 0.1);
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
         }
 
         .input-icon {
             flex-shrink: 0;
             display: flex;
             align-items: center;
+<<<<<<< HEAD
             color: var(--secondary);
+=======
+            color: #7C6CFF;
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
             opacity: 0.8;
             pointer-events: none;
         }
@@ -197,7 +239,11 @@ h6 {
             font-family: inherit;
 
             &::placeholder {
+<<<<<<< HEAD
                 color: var(--text-muted);
+=======
+                color: #7483A3;
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
             }
         }
 
@@ -241,17 +287,30 @@ h6 {
     }
 
     &.btn-primary {
+<<<<<<< HEAD
         background: var(--primary);
         color: white;
         box-shadow: 0 8px 25px rgba(93, 124, 255, 0.35);
 
         &.glow:hover {
             box-shadow: 0 0 30px rgba(93, 124, 255, 0.55);
+=======
+        background: linear-gradient(135deg, #4F6BFF 0%, #5B76FF 100%);
+        color: white;
+        box-shadow: 0 8px 25px rgba(79, 107, 255, 0.4);
+
+        &.glow:hover {
+            box-shadow: 0 0 30px rgba(79, 107, 255, 0.6);
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
         }
 
         &:hover {
             transform: translateY(-2px);
+<<<<<<< HEAD
             background: var(--primary-hover);
+=======
+            background: linear-gradient(135deg, #5B76FF 0%, #4F6BFF 100%);
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
         }
     }
 
@@ -261,8 +320,20 @@ h6 {
         color: var(--text-primary);
 
         &:hover {
+<<<<<<< HEAD
             background: rgba(93, 124, 255, 0.12);
             border-color: var(--border-focus);
+=======
+            background: rgba(79, 107, 255, 0.1);
+            border-color: #4F6BFF;
+        }
+    }
+
+    &.btn-primary-blue {
+        background: linear-gradient(135deg, #4F6BFF 0%, #5B76FF 100%);
+        color: white;
+            border-color: white;
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
             transform: translateY(-2px);
         }
     }

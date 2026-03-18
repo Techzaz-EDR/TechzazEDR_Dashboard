@@ -14,7 +14,7 @@
     flex-direction: column;
     gap: 2rem;
     background: var(--bg-primary);
-    border: 1px solid var(--border-color); // White/10 border
+    border: 1px solid var(--border-color, #1D2A45); // Primary border color
     border-radius: 24px;
     animation: fadeIn 0.8s var(--ease-out);
 }
@@ -92,19 +92,19 @@
 
     0%,
     100% {
-        box-shadow: 0 0 15px rgba(93, 124, 255, 0.2);
+        box-shadow: 0 0 15px rgba(79, 107, 255, 0.2);
     }
 
     50% {
-        box-shadow: 0 0 25px rgba(93, 124, 255, 0.4);
+        box-shadow: 0 0 25px rgba(79, 107, 255, 0.4);
     }
 }
 
 /* Glassmorphism Base */
 .glass-card {
-    background: var(--bg-card);
+    background: var(--bg-card, #0D152B);
     backdrop-filter: blur(16px);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-color, #1D2A45);
     border-radius: 20px;
     box-shadow: var(--shadow-card);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -123,7 +123,11 @@
 
     &:hover {
         transform: translateY(-2px);
+<<<<<<< HEAD
         border-color: var(--primary, #3EA0FF);
+=======
+        border-color: #4F6BFF;
+>>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 }
