@@ -310,7 +310,53 @@ form {
         display: flex;
         flex-direction: column;
 
-        .form-group {
+        .input-wrapper.password-field {
+            position: relative;
+
+            input {
+                padding-right: 44px;
+            }
+
+            .password-toggle {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                width: 28px;
+                height: 28px;
+                border: none;
+                border-radius: 6px;
+                background: transparent;
+                color: rgba(255, 255, 255, 0.45);
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 3;
+                transition: color 0.2s ease, background-color 0.2s ease;
+
+                &:hover {
+                    color: rgba(255, 255, 255, 0.75);
+                    background: rgba(255, 255, 255, 0.05);
+                }
+
+                &:focus-visible {
+                    outline: 1px solid rgba(59, 130, 246, 0.6);
+                    outline-offset: 2px;
+                    color: rgba(255, 255, 255, 0.9);
+                }
+
+                .toggle-icon {
+                    position: static;
+                    left: auto;
+                    top: auto;
+                    transform: none;
+                    color: inherit;
+                }
+            }
+        }
+
+        .input-field {
             position: relative;
             width: 100%;
             margin: 10px 0;
