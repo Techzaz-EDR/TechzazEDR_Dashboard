@@ -100,6 +100,13 @@
     transition: opacity 0.5s ease-in-out;
 }
 
+.forgot-password-view {
+    display: none;
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
 .sign-in-view {
     opacity: 1;
     z-index: 2;
@@ -121,9 +128,9 @@
 .super-auth-container.sign-up-mode {
     align-items: flex-start;
     overflow-y: auto;
-    padding: 48px 0;
+    padding: 48px 20px;
 
-    .sign-in-view {
+    .sign-in-view, .forgot-password-view {
         opacity: 0;
         pointer-events: none;
         display: none;
@@ -139,7 +146,6 @@
     .auth-card {
         position: relative;
         overflow: visible;
-        overflow-y: auto;
         margin: 0 auto;
     }
 
@@ -147,6 +153,21 @@
     &.success-mode {
         align-items: center;
         padding: 0;
+    }
+}
+
+.super-auth-container.forgot-password-mode {
+    .sign-in-view, .sign-up-view {
+        opacity: 0;
+        pointer-events: none;
+        display: none !important;
+    }
+
+    .forgot-password-view {
+        opacity: 1;
+        z-index: 3;
+        pointer-events: auto;
+        display: flex;
     }
 }
 
@@ -477,12 +498,17 @@ form {
 /* Badge + heading above the scrollable form — always visible */
 .signup-card-header {
     width: 100%;
-    padding: 32px 40px 0;
+    padding: 32px 40px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    background: var(--glass-bg);
+    z-index: 5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
     .status-line {
         display: flex;
@@ -532,7 +558,7 @@ form {
         font-size: 0.82rem;
         color: rgba(255, 255, 255, 0.5);
         max-width: 280px;
-        margin: 0 auto 20px;
+        margin: 0 auto;
         line-height: 1.4;
         opacity: 1;
         transform: translateY(0);
