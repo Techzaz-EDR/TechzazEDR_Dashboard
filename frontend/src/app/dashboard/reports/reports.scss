@@ -85,16 +85,50 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(93, 124, 255, 0.1);
+
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 0;
+        animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+        @for $i from 1 through 10 {
+            &:nth-child(#{$i}) {
+                animation-delay: #{$i * 0.1}s;
+            }
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+
+            .action-buttons .icon-btn {
+                opacity: 0.9;
+            }
+        }
+
+        .report-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-glow, rgba(93, 124, 255, 0.1));
             border-radius: 12px;
-            color: #3EA0FF;
+            color: var(--primary, #5D7CFF);
             transition: all 0.4s ease;
 
             // Varied colors for icons based on child position for variety
             &:nth-of-type(1) {
-                color: #3EA0FF;
-                background: rgba(93, 124, 255, 0.1);
+                color: #3b82f6;
             }
+
+            // Varied colors for icons based on child position for variety
+            &:nth-of-type(1) {
+                color: #3b82f6;
+                }
+>>>>>>> 4cb2b8e (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
         }
 
         /* Category Specific Colors */
@@ -116,6 +150,12 @@
         &:nth-child(5) .report-icon {
             color: #ef4444;
             background: rgba(239, 68, 68, 0.1);
+=======
+            background: var(--accent-glow, rgba(93, 124, 255, 0.1));
+            border-radius: 12px;
+            color: var(--primary, #5D7CFF);
+            transition: all 0.4s ease;
+>>>>>>> 51b4ab5 (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
         }
 
         .report-info {
@@ -156,9 +196,10 @@
                 letter-spacing: 1px;
 
                 &.ready {
-                    background: rgba(34, 197, 94, 0.1);
-                    color: #22C55E;
-                    border: 1px solid rgba(34, 197, 94, 0.2);
+                    background: var(--status-low-bg);
+                    color: var(--status-low);
+                    border: 1px solid var(--status-low-bg);
+                }
                 }
             }
 
@@ -172,7 +213,11 @@
                     border-radius: 8px;
                     width: 36px;
                     height: 36px;
+<<<<<<< HEAD
                     color: #A8B6D6;
+=======
+                    color: var(--text-muted, #A8B6D6);
+>>>>>>> 4cb2b8e (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -182,17 +227,30 @@
 
                     &:hover {
                         opacity: 1 !important;
+<<<<<<< HEAD
                         background: rgba(93, 124, 255, 0.1);
                         color: #3EA0FF;
                         border-color: rgba(93, 124, 255, 0.3);
+=======
+                        background: var(--bg-hover, rgba(93, 124, 255, 0.08));
+                        color: var(--primary, #5D7CFF);
+                        border-color: var(--primary-glow, rgba(93, 124, 255, 0.4));
+>>>>>>> 4cb2b8e (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
                         transform: translateY(-2px);
                         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                     }
 
                     &.delete:hover {
+<<<<<<< HEAD
                         background: rgba(239, 68, 68, 0.1);
                         color: #EF4444;
                         border-color: rgba(239, 68, 68, 0.3);
+=======
+                        background: var(--status-critical-bg);
+                        color: var(--status-critical);
+                        border-color: var(--status-critical-bg);
+                    }
+>>>>>>> 4cb2b8e (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
                     }
                 }
             }
