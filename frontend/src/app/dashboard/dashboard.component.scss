@@ -164,15 +164,9 @@
 
             &:focus {
                 outline: none;
-<<<<<<< HEAD
                 border-color: var(--border-focus);
                 box-shadow: 0 0 0 3px rgba(93, 124, 255, 0.2);
                 background-color: var(--bg-elevated);
-=======
-                border-color: var(--accent-primary);
-                box-shadow: 0 0 0 3px rgba(79, 107, 255, 0.2);
-                background-color: rgba(255, 255, 255, 0.06);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
             }
         }
 
@@ -215,13 +209,8 @@
                     justify-content: center;
                     width: 32px;
                     height: 32px;
-<<<<<<< HEAD
                     background-color: rgba(93, 124, 255, 0.14);
                     color: #5D7CFF;
-=======
-                    background-color: rgba(79, 107, 255, 0.1);
-                    color: var(--accent-primary, #4F6BFF);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                     border-radius: 8px;
                     flex-shrink: 0;
                 }
@@ -417,12 +406,8 @@
                         top: 0;
                         bottom: 0;
                         width: 3px;
-<<<<<<< HEAD
-                        background-color: #5D7CFF;
-=======
                         background-color: #4F6BFF;
                         /* Blue accent for unread strip */
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                     }
                 }
 
@@ -678,18 +663,32 @@
     }
 
     &.expanded {
-        color: #5D7CFF;
-        background-color: rgba(93, 124, 255, 0.14);
-        border-color: rgba(93, 124, 255, 0.32);
-        box-shadow: 0 0 0 1px rgba(93, 124, 255, 0.14) inset;
-
+        color: var(--text-primary);
+        background-color: rgba(59, 130, 246, 0.05);
+        border-color: rgba(59, 130, 246, 0.1);
+        
         .header-main .icon {
-            color: #5D7CFF;
+            color: var(--primary);
+            filter: drop-shadow(0 0 5px var(--primary-glow));
         }
 
         .chevron {
-            transform: rotate(90deg);
-            color: #5D7CFF;
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+    }
+
+    &.active-group {
+        border-left: 4px solid var(--primary);
+        border-radius: 0 8px 8px 0;
+        margin-left: -1rem;
+        padding-left: calc(1rem + 12px);
+        background: linear-gradient(90deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+        color: white;
+
+        .header-main .icon {
+            color: var(--primary);
+            filter: drop-shadow(0 0 8px var(--primary-glow));
         }
     }
 }
@@ -705,8 +704,21 @@
     transform-origin: top;
 
     .nav-item.child-item {
-        font-size: 0.75rem;
-        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+        padding: 0.6rem 1rem 0.6rem 2.5rem;
+        border-left: none !important;
+        margin-left: 0 !important;
+        border-radius: 8px;
+
+        &.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            box-shadow: none;
+            
+            .icon {
+                filter: none;
+            }
+        }
 
         .icon {
             font-size: 1rem;

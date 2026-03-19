@@ -291,6 +291,13 @@
                         border-color: rgba(93, 124, 255, 0.3);
                         box-shadow: 0 5px 15px rgba(93, 124, 255, 0.2);
                     }
+
+                    &.disabled {
+                        opacity: 0.3;
+                        cursor: not-allowed;
+                        pointer-events: none;
+                        filter: grayscale(1);
+                    }
                 }
             }
         }

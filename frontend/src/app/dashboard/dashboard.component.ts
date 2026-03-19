@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
@@ -22,7 +22,7 @@ export interface NavItem {
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [CommonModule, RouterLink, RouterOutlet, FormsModule, LucideAngularModule],
+    imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, FormsModule, LucideAngularModule],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
