@@ -1,5 +1,5 @@
 .contact-page {
-    background: #03040b;
+    background: #060C18;
     min-height: 100vh;
     color: white;
     font-family: 'Inter', sans-serif;
@@ -51,17 +51,17 @@
             cursor: pointer;
 
             .logo-icon {
-                color: #8b5cf6;
-                filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+                color: #5D7CFF;
+                filter: drop-shadow(0 0 8px rgba(93, 124, 255, 0.4));
             }
 
             .highlight {
-                color: #8b5cf6;
+                color: #5D7CFF;
             }
         }
 
         .nav-links a {
-            color: #94a3b8;
+            color: #A8B6D6;
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
@@ -89,7 +89,7 @@
 
         .hero-desc {
             font-size: 1.25rem;
-            color: #94a3b8;
+            color: #A8B6D6;
             max-width: 800px;
             margin: 0 auto;
             line-height: 1.7;
@@ -102,7 +102,7 @@
             transform: translateX(-50%);
             width: 60%;
             height: 400px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(93, 124, 255, 0.1) 0%, transparent 70%);
             z-index: -1;
             filter: blur(40px);
         }
@@ -137,14 +137,14 @@
         }
 
         .info-desc, .form-desc {
-            color: #94a3b8;
+            color: #A8B6D6;
             font-size: 1.1rem;
             margin-bottom: 40px;
             line-height: 1.6;
         }
 
         &.form-card {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(8, 11, 18, 0.9) 100%);
+            background: linear-gradient(145deg, rgba(10, 19, 38, 0.6) 0%, rgba(8, 11, 18, 0.9) 100%);
         }
     }
 
@@ -160,14 +160,14 @@
             gap: 20px;
 
             .icon-box {
-                background: rgba(139, 92, 246, 0.1);
-                color: #a78bfa;
+                background: rgba(93, 124, 255, 0.1);
+                color: #5D7CFF;
                 padding: 14px;
                 border-radius: 12px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border: 1px solid rgba(139, 92, 246, 0.2);
+                border: 1px solid rgba(93, 124, 255, 0.2);
             }
 
             .details {
@@ -179,17 +179,17 @@
                 }
 
                 p {
-                    color: #94a3b8;
+                    color: #A8B6D6;
                     line-height: 1.6;
                     margin: 0;
 
                     a {
-                        color: #a78bfa;
+                        color: #3EA0FF;
                         text-decoration: none;
                         transition: color 0.2s;
 
                         &:hover {
-                            color: #d8b4fe;
+                            color: #18D8FF;
                         }
                     }
                 }
@@ -223,7 +223,7 @@
         text-align: center;
 
         .trust-title {
-            color: #64748b;
+            color: #7483A3;
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -242,14 +242,14 @@
                 align-items: center;
                 gap: 6px;
                 font-size: 0.85rem;
-                color: #94a3b8;
-                background: rgba(15, 23, 42, 0.6);
+                color: #A8B6D6;
+                background: rgba(10, 19, 38, 0.6);
                 padding: 6px 12px;
                 border-radius: 20px;
-                border: 1px solid rgba(139, 92, 246, 0.15);
+                border: 1px solid rgba(93, 124, 255, 0.15);
 
                 lucide-icon {
-                    color: #8b5cf6;
+                    color: #5D7CFF;
                 }
             }
         }
@@ -266,7 +266,7 @@
             width: 80px;
             height: 80px;
             background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            color: #22C55E;
             border-radius: 50%;
             margin-bottom: 24px;
         }
@@ -277,7 +277,7 @@
         }
 
         p {
-            color: #94a3b8;
+            color: #A8B6D6;
             margin-bottom: 32px;
             line-height: 1.6;
         }
@@ -285,7 +285,7 @@
 
     /* Global Utils Reused */
     .gradient-text {
-        background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+        background: linear-gradient(135deg, #ffffff 0%, #A8B6D6 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -308,7 +308,7 @@
             }
 
             p {
-                color: #94a3b8;
+                color: #A8B6D6;
                 font-size: 1.15rem;
                 margin-bottom: 32px;
                 line-height: 1.6;
@@ -352,7 +352,7 @@
 
         .footer-brand {
             p {
-                color: #94a3b8;
+                color: #A8B6D6;
                 margin: 20px 0;
                 line-height: 1.6;
                 max-width: 300px;
@@ -367,8 +367,8 @@
                 gap: 12px;
 
                 .logo-icon {
-                    color: #8b5cf6;
-                    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+                    color: #5D7CFF;
+                    filter: drop-shadow(0 0 8px rgba(93, 124, 255, 0.4));
                 }
             }
             .socials {
@@ -376,7 +376,7 @@
                 gap: 16px;
 
                 a {
-                    color: #64748b;
+                    color: #7483A3;
                     transition: color 0.3s;
 
                     &:hover {
@@ -396,7 +396,7 @@
 
             a {
                 display: block;
-                color: #94a3b8;
+                color: #A8B6D6;
                 text-decoration: none;
                 margin-bottom: 16px;
                 transition: color 0.3s;
@@ -413,7 +413,7 @@
             align-items: center;
             padding-top: 32px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: #64748b;
+            color: #7483A3;
             font-size: 0.9rem;
 
             .legal-links {
@@ -421,7 +421,7 @@
                 gap: 24px;
 
                 a {
-                    color: #64748b;
+                    color: #7483A3;
                     text-decoration: none;
                     transition: color 0.3s;
 
