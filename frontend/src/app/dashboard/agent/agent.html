@@ -6,9 +6,9 @@
         <lucide-icon [name]="ShieldIcon" class="header-icon" (click)="backToEndpoints()" style="cursor: pointer;"></lucide-icon>
         <h1 (click)="backToEndpoints()" style="cursor: pointer;">{{ agentId }}</h1>
       </div>
-      <div class="status-badge" [class.active]="agentDetails?.status === 'active'">
-        <span class="status-pulse" *ngIf="agentDetails?.status === 'active'"></span>
-        {{ agentDetails?.status === 'active' ? 'Active' : 'Offline' }}
+      <div class="status-badge" [class.active]="agentDetails?.status === 'online'">
+        <span class="status-pulse" *ngIf="agentDetails?.status === 'online'"></span>
+        {{ agentDetails?.status === 'online' ? 'Online' : 'Offline' }}
       </div>
     </div>
 
@@ -25,82 +25,235 @@
         <lucide-icon [name]="ClockIcon" class="meta-icon"></lucide-icon>
         <span>Last check-in: {{ agentDetails?.last_seen }}</span>
       </div>
+
+      <button class="history-toggle-btn" (click)="openCommandHistoryModal()" [class.active]="showCommandHistoryModal">
+        <lucide-icon [name]="HistoryIcon" [size]="16"></lucide-icon>
+        <span>Command History</span>
+      </button>
     </div>
   </header>
 
   <div class="action-bar-container">
     <section class="action-panel">
       <div class="action-buttons">
-        <button (click)="runNetworkScan()" [disabled]="loadingCommands['network']">
-          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['network']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['network']"></lucide-icon>
-          {{ loadingCommands['network'] ? 'Command Queued...' : 'Network Scan' }}
+        <button (click)="runRemoteScan()" [disabled]="loadingCommands['remoteScan']" class="full-scan-btn">
+          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['remoteScan']"></lucide-icon>
+          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['remoteScan']"></lucide-icon>
+          {{ loadingCommands['remoteScan'] ? 'Initializing Remote Scan...' : 'Initiate Remote Scan' }}
         </button>
 
-        <button (click)="runSystemScan()" [disabled]="loadingCommands['system']">
-          <lucide-icon [name]="ShieldIcon" *ngIf="!loadingCommands['system']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['system']"></lucide-icon>
-          {{ loadingCommands['system'] ? 'Command Queued...' : 'Run System Scan' }}
-        </button>
-
-        <button (click)="updateConfig()" [disabled]="loadingCommands['config']">
-          <lucide-icon [name]="SettingsIcon" *ngIf="!loadingCommands['config']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['config']"></lucide-icon>
-          {{ loadingCommands['config'] ? 'Command Queued...' : 'Update Config' }}
+        <button (click)="openConfigureAgentModal()" class="configure-agent-btn">
+          <lucide-icon [name]="SettingsIcon"></lucide-icon>
+          Configure Agent
         </button>
       </div>
     </section>
   </div>
 
-  <div class="content-grid">
+  <div class="content-grid single-column">
     <!-- 4. Local Threat Feed -->
     <section class="threat-feed">
       <h2 class="section-title">Local Threat Feed</h2>
-      <div class="table-container">
+      <div class="feed-body">
+        <div class="feed-main">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Alert Name</th>
+                  <th>Description</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let alert of paginatedAlerts" (click)="openAlertDetails(alert, $event)" [class.is-selected]="selectedAlert === alert" style="cursor: pointer;">
+                  <td>
+                    <span class="severity-tag" [ngClass]="getSeverityClass(alert.severity)">
+                      {{ alert.severity }}
+                    </span>
+                  </td>
+                  <td class="alert-name">{{ alert.name }}</td>
+                  <td class="alert-desc" [title]="alert.description">{{ alert.description }}</td>
+                  <td class="alert-time">{{ alert.displayTime }}</td>
+                </tr>
+                <tr *ngIf="alerts.length === 0">
+                  <td colspan="4" class="no-data">No alerts found for this agent.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="pagination-footer" *ngIf="alerts.length > pageSize">
+            <div class="pagination-info">
+              Showing <strong>{{ (currentPage - 1) * pageSize + 1 }}</strong> - 
+              <strong>{{ Math.min(currentPage * pageSize, alerts.length) }}</strong> of 
+              <strong>{{ alerts.length }}</strong> alerts
+            </div>
+            <div class="pagination-controls">
+              <button class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1">
+                <lucide-icon [name]="ChevronLeftIcon" [size]="14"></lucide-icon>
+                Prev
+              </button>
+              <div class="page-numbers">
+                <button *ngFor="let p of pageNumbers" 
+                        class="page-num" 
+                        [class.active]="p === currentPage"
+                        (click)="goToPage(p)">
+                  {{ p }}
+                </button>
+              </div>
+              <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+                Next
+                <lucide-icon [name]="ChevronRightIcon" [size]="14"></lucide-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Split View Details Panel -->
+        <div class="threat-details-panel" *ngIf="selectedAlert" aria-live="polite">
+          <div class="panel-head">
+            <div class="headline">
+              <span class="label">Alert details</span>
+              <h4>{{ selectedAlert.name }}</h4>
+            </div>
+            <button class="dismiss-btn" type="button" (click)="closeAlertDetails($event)">
+              <lucide-icon [name]="EyeIcon" [size]="14"></lucide-icon>
+              Dismiss
+            </button>
+          </div>
+        
+          <p class="panel-desc">{{ selectedAlert.description }}</p>
+        
+          <div class="panel-fields">
+            <div class="field">
+              <span class="field-label">Category</span>
+              <span class="field-value">{{ selectedAlert.Category || selectedAlert.name }}</span>
+            </div>
+            <div class="field">
+              <span class="field-label">Detected Time</span>
+              <span class="field-value">{{ formatAlertTime(selectedAlert.Timestamp || selectedAlert.timestamp) }}</span>
+            </div>
+            <div class="field">
+              <span class="field-label">Severity</span>
+              <span class="field-value severity" [ngClass]="getSeverityClass(selectedAlert.severity)">{{ selectedAlert.severity }}</span>
+            </div>
+
+            <!-- Rule Specific Details -->
+            <div class="field" *ngIf="selectedAlert.ruleInfo?.description">
+              <span class="field-label">Rule Description</span>
+              <span class="field-value">{{ selectedAlert.ruleInfo.description }}</span>
+            </div>
+            <div class="field" *ngIf="selectedAlert.ruleInfo?.mitigation">
+              <span class="field-label">Primary Mitigation</span>
+              <span class="field-value">{{ selectedAlert.ruleInfo.mitigation }}</span>
+            </div>
+
+            <!-- Technical Detail Fields -->
+            <div class="field" *ngIf="selectedAlert.Details">
+              <span class="field-label">Raw Data</span>
+              <div class="raw-data-box">
+                <pre>{{ selectedAlert.Details | json }}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Command History Modal -->
+<div class="modal-overlay" *ngIf="showCommandHistoryModal" (click)="closeCommandHistoryModal()">
+  <div class="modal-content history-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="title-group">
+        <div class="icon-circle">
+          <lucide-icon [name]="HistoryIcon" [size]="20"></lucide-icon>
+        </div>
+        <div>
+          <h2>Command History</h2>
+          <span class="subtitle">Agent: {{ agentId }}</span>
+        </div>
+      </div>
+      <button class="close-btn" (click)="closeCommandHistoryModal()">×</button>
+    </div>
+
+    <div class="pending-status-line" *ngIf="commands.length > 0">
+      <lucide-icon [name]="ClockIcon" [size]="16"></lucide-icon>
+      <span>There are <strong>{{ commandStats.pending }}</strong> pending commands for this agent.</span>
+    </div>
+
+    <div class="modal-body custom-scrollbar">
+      <div class="history-table-container" *ngIf="commands.length > 0">
         <table>
           <thead>
             <tr>
-              <th>Severity</th>
-              <th>Alert Name</th>
-              <th>Description</th>
+              <th>Status</th>
+              <th>Command</th>
+              <th>Triggered By</th>
               <th>Time</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let alert of alerts">
+            <tr *ngFor="let cmd of commands">
               <td>
-                <span class="severity-tag" [ngClass]="getSeverityClass(alert.severity)">
-                  {{ alert.severity }}
-                </span>
+                <div class="status-pill" [ngClass]="cmd.status">
+                  <lucide-icon [name]="cmd.status === 'completed' ? CheckCircleIcon : (cmd.status === 'pending' ? ClockIcon : XCircleIcon)" [size]="14"></lucide-icon>
+                  <span>{{ cmd.status | titlecase }}</span>
+                </div>
               </td>
-              <td class="alert-name">{{ alert.name }}</td>
-              <td class="alert-desc" [title]="alert.description">{{ alert.description }}</td>
-              <td class="alert-time">{{ alert.displayTime }}</td>
-            </tr>
-            <tr *ngIf="alerts.length === 0">
-              <td colspan="4" class="no-data">No alerts found for this agent.</td>
+              <td class="cmd-cell">
+                <div class="cmd-inner">
+                  <lucide-icon [name]="getCommandIcon(cmd.command)" [size]="16" class="cmd-type-icon"></lucide-icon>
+                  <span>{{ cmd.command }}</span>
+                </div>
+              </td>
+              <td class="creator-cell">{{ cmd.created_by || 'system' }}</td>
+              <td class="time-cell">{{ formatAlertTime(cmd.timestamp) }}</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </section>
 
-    <!-- 3. Task Queue -->
-    <section class="task-queue">
-      <h2 class="section-title">Command History</h2>
-      <div class="queue-list">
-        <div class="queue-item" *ngFor="let cmd of commands">
-          <div class="cmd-info">
-            <span class="cmd-time">{{ formatAlertTime(cmd.timestamp) }}</span>
-            <span class="cmd-name">{{ cmd.command }}</span>
-          </div>
-          <div class="cmd-status" [ngClass]="cmd.status">
-            <lucide-icon [name]="cmd.status === 'completed' ? CheckCircleIcon : (cmd.status === 'pending' ? ClockIcon : XCircleIcon)"></lucide-icon>
-            {{ cmd.status | titlecase }}
-          </div>
+      <div class="no-commands-v2" *ngIf="commands.length === 0">
+        <div class="empty-icon-wrapper">
+          <lucide-icon [name]="TerminalIcon" [size]="48"></lucide-icon>
         </div>
-        <div class="no-data" *ngIf="commands.length === 0">No recent commands found.</div>
+        <h3>No Command History</h3>
+        <p>This agent hasn't received any remote commands yet.</p>
       </div>
-    </section>
+    </div>
+  </div>
+</div>
+
+<!-- Configure Agent Modal -->
+<div class="modal-overlay" *ngIf="showConfigureAgentModal" (click)="closeConfigureAgentModal()">
+  <div class="modal-content config-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="title-group">
+        <div class="icon-circle">
+          <lucide-icon [name]="SettingsIcon" [size]="24"></lucide-icon>
+        </div>
+        <div>
+          <h2>Configure Agent</h2>
+          <span class="subtitle">Adjust parameters for {{ agentId }}</span>
+        </div>
+      </div>
+      <button class="close-btn" (click)="closeConfigureAgentModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="config-info-box">
+        <lucide-icon [name]="SettingsIcon" [size]="32" class="info-icon"></lucide-icon>
+        <p>Agent configuration options are currently under construction. Future updates will allow you to edit these settings from this interface.</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeConfigureAgentModal()">Close</button>
+    </div>
   </div>
 </div>

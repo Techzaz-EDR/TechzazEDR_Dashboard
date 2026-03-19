@@ -2,14 +2,13 @@ import os
 import sys
 import firebase_admin
 from firebase_admin import credentials, firestore
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from app.core.config import settings
+from firebase_init import init_firebase
 
 def main():
-    cred = credentials.Certificate(settings.FIREBASE_SERVICE_ACCOUNT_PATH)
-    firebase_admin.initialize_app(cred)
-    db = firestore.client()
+    db, _ = init_firebase()
+    if not db:
+        print("Could not initialize Firebase")
+        return
     
     users = db.collection("users").stream()
     for user in users:

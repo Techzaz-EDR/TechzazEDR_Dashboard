@@ -22,9 +22,16 @@ async def poll_commands(
     organization_id = "demo-org"
     
     # query: organizations/{org}/agents/{agent}/commands where status == 'pending'
-    commands_ref = db.collection("organizations").document(organization_id) \
-                     .collection("agents").document(agent_id) \
-                     .collection("commands")
+    agent_ref = db.collection("organizations").document(organization_id) \
+                     .collection("agents").document(agent_id)
+    
+    # Update agent last_seen/status
+    agent_ref.set({
+        "last_seen": datetime.utcnow().isoformat() + 'Z',
+        "status": "online"
+    }, merge=True)
+
+    commands_ref = agent_ref.collection("commands")
     
     query = commands_ref.where("status", "==", "pending").limit(5)
     docs = query.stream()
@@ -64,9 +71,18 @@ async def update_command_status(
     if not doc.exists:
         raise HTTPException(status_code=404, detail="Command not found")
     
+    # Update agent last_seen as well
+    agent_ref = db.collection("organizations").document(organization_id) \
+                  .collection("agents").document(agent_id)
+    
+    agent_ref.set({
+        "last_seen": datetime.utcnow().isoformat() + 'Z',
+        "status": "online"
+    }, merge=True)
+
     cmd_ref.update({
         "status": status,
-        "updated_at": datetime.utcnow().isoformat()
+        "updated_at": datetime.utcnow().isoformat() + 'Z'
     })
     
     return {"status": "success", "message": f"Command status updated to {status}"}

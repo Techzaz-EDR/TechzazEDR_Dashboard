@@ -13,7 +13,11 @@ import {
   RefreshCw,
   CheckCircle,
   XCircle,
-  Play
+  Play,
+  History,
+  Eye,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-angular';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
@@ -38,13 +42,62 @@ export class AgentComponent implements OnInit, OnDestroy {
   readonly CheckCircleIcon = CheckCircle;
   readonly XCircleIcon = XCircle;
   readonly PlayIcon = Play;
+  readonly HistoryIcon = History;
+  readonly EyeIcon = Eye;
+  readonly ChevronLeftIcon = ChevronLeft;
+  readonly ChevronRightIcon = ChevronRight;
+  readonly Math = Math;
 
   agentId: string | null = null;
   agentDetails: any = null;
   alerts: any[] = [];
   commands: any[] = [];
+  commandStats: { total: number, completed: number, pending: number, failed: number } = { total: 0, completed: 0, pending: 0, failed: 0 };
   
+  showCommandHistoryModal: boolean = false;
+  showConfigureAgentModal: boolean = false;
   loadingCommands: { [key: string]: boolean } = {};
+
+  // Pagination for Alerts
+  currentPage: number = 1;
+  pageSize: number = 50;
+  ruleDescriptions: { [key: string]: any } = {};
+
+  get totalPages(): number {
+    return Math.ceil(this.alerts.length / this.pageSize);
+  }
+
+  get paginatedAlerts(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.alerts.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get pageNumbers(): number[] {
+    const pages = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.cdr.detectChanges();
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.cdr.detectChanges();
+    }
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.cdr.detectChanges();
+  }
 
   private subscriptions: Subscription = new Subscription();
 
@@ -72,6 +125,7 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.agentDetails = null; // Reset
     this.alerts = [];
     this.commands = [];
+    this.currentPage = 1;
 
     // Real-time Firestore Subscriptions
     this.subscriptions.add(
@@ -96,14 +150,56 @@ export class AgentComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.firestoreService.getAgentAlerts(agentId).subscribe(alerts => {
-        this.alerts = alerts.map(a => ({
-          ...a,
-          severity: a.Severity || a.severity || 'Medium',
-          name: a.Category || a.RuleId || a.name || 'Security Alert',
-          description: a.Details?.description || a.description || (a.Details ? JSON.stringify(a.Details) : 'Alert details not available'),
-          // Handle both Firestore Timestamp and ISO string
-          displayTime: this.formatAlertTime(a.Timestamp || a.timestamp)
-        }));
+        this.alerts = alerts.map(a => {
+          let description = a.description || '';
+          
+          // If description is missing or looks like raw JSON, try to extract better info
+          if (a.Details) {
+            const d = a.Details;
+            // Prioritize specific fields if description is generic or missing
+            if (!description || description.startsWith('{')) {
+              const parts = [];
+              if (d.Source) parts.push(`Source: ${d.Source}`);
+              if (d.Target) parts.push(`Target: ${d.Target}`);
+              if (d.Reason) parts.push(`Reason: ${d.Reason}`);
+              if (d.Action) parts.push(`Action: ${d.Action}`);
+              
+              if (parts.length > 0) {
+                description = parts.join(' | ');
+              } else if (d.description) {
+                description = d.description;
+              } else if (!description) {
+                description = JSON.stringify(d);
+              }
+            }
+          }
+
+          if (!description) {
+            description = 'Security event details not available';
+          }
+
+          return {
+            ...a,
+            severity: a.Severity || a.severity || 'Medium',
+            name: a.RuleId || a.Category || a.name || 'Security Alert',
+            description: description,
+            ruleInfo: this.ruleDescriptions[a.RuleId] || null,
+            displayTime: this.formatAlertTime(a.Timestamp || a.timestamp)
+          };
+        });
+
+        // Trigger rule info fetching for all unique RuleIds
+        this.enrichAlertsWithRules();
+        
+        // Ensure selectedAlert remains valid if it's still in the list
+        if (this.selectedAlert) {
+          const updated = this.alerts.find(a => 
+            (a.Timestamp && a.Timestamp === this.selectedAlert.Timestamp) || 
+            (a.id && a.id === this.selectedAlert.id)
+          );
+          if (updated) this.selectedAlert = updated;
+        }
+
         this.cdr.detectChanges();
       })
     );
@@ -111,43 +207,81 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.firestoreService.getAgentCommands(agentId).subscribe(commands => {
         this.commands = commands;
+        this.calculateCommandStats();
         this.cdr.detectChanges();
       })
     );
+  }
+
+  private enrichAlertsWithRules() {
+    const ruleIds = [...new Set(this.alerts.map(a => a.RuleId).filter(id => id && !this.ruleDescriptions[id]))];
+    
+    ruleIds.forEach(ruleId => {
+      // Initialize with a pending state to avoid redundant fetches
+      this.ruleDescriptions[ruleId] = { loading: true };
+      
+      this.subscriptions.add(
+        this.firestoreService.getRule(ruleId).subscribe(rule => {
+          if (rule) {
+            this.ruleDescriptions[ruleId] = rule;
+            // Update the name and description of all matching alerts
+            this.alerts.forEach(a => {
+              if (a.RuleId === ruleId) {
+                a.ruleInfo = rule;
+                // If the rule has a better name, use it (keep RuleId prefix if preferred)
+                if (rule.name) {
+                  a.name = `${ruleId}: ${rule.name}`;
+                }
+              }
+            });
+            this.cdr.detectChanges();
+          } else {
+            this.ruleDescriptions[ruleId] = { notFound: true };
+          }
+        })
+      );
+    });
+  }
+
+  private calculateCommandStats() {
+    this.commandStats = {
+      total: this.commands.length,
+      completed: this.commands.filter(c => c.status === 'completed').length,
+      pending: this.commands.filter(c => c.status === 'pending').length,
+      failed: this.commands.filter(c => c.status === 'failed').length
+    };
+  }
+
+  getCommandIcon(command: string): any {
+    const cmd = command.toLowerCase();
+    if (cmd.includes('scan') || cmd.includes('network')) return this.ActivityIcon;
+    if (cmd.includes('system') || cmd.includes('hids')) return this.ShieldIcon;
+    if (cmd.includes('config')) return this.SettingsIcon;
+    return this.TerminalIcon;
   }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  async runNetworkScan() {
+  async runRemoteScan() {
     if (!this.agentId) return;
-    this.loadingCommands['network'] = true;
+    this.loadingCommands['remoteScan'] = true;
     try {
-      await this.firestoreService.sendCommand(this.agentId, 'run_network_scan');
+      await this.firestoreService.sendCommand(this.agentId, 'run_remote_scan');
     } finally {
-      setTimeout(() => this.loadingCommands['network'] = false, 2000);
+      setTimeout(() => this.loadingCommands['remoteScan'] = false, 2000);
     }
   }
 
-  async runSystemScan() {
-    if (!this.agentId) return;
-    this.loadingCommands['system'] = true;
-    try {
-      await this.firestoreService.sendCommand(this.agentId, 'run_hids_scan');
-    } finally {
-      setTimeout(() => this.loadingCommands['system'] = false, 2000);
-    }
+  openConfigureAgentModal() {
+    this.showConfigureAgentModal = true;
+    this.cdr.detectChanges();
   }
 
-  async updateConfig() {
-    if (!this.agentId) return;
-    this.loadingCommands['config'] = true;
-    try {
-      await this.firestoreService.sendCommand(this.agentId, 'update_config');
-    } finally {
-      setTimeout(() => this.loadingCommands['config'] = false, 2000);
-    }
+  closeConfigureAgentModal() {
+    this.showConfigureAgentModal = false;
+    this.cdr.detectChanges();
   }
 
   getSeverityClass(severity: string): string {
@@ -162,6 +296,21 @@ export class AgentComponent implements OnInit, OnDestroy {
 
   backToEndpoints() {
     this.router.navigate(['/dashboard/endpoints']);
+  }
+
+  toggleCommandHistory() {
+    this.showCommandHistoryModal = !this.showCommandHistoryModal;
+    this.cdr.detectChanges();
+  }
+
+  openCommandHistoryModal() {
+    this.showCommandHistoryModal = true;
+    this.cdr.detectChanges();
+  }
+
+  closeCommandHistoryModal() {
+    this.showCommandHistoryModal = false;
+    this.cdr.detectChanges();
   }
 
   public formatAlertTime(timestamp: any): string {
@@ -209,5 +358,25 @@ export class AgentComponent implements OnInit, OnDestroy {
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
     return date.toLocaleDateString();
+  }
+
+  selectedAlert: any | null = null;
+
+  openAlertDetails(alert: any, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.selectedAlert = alert;
+    this.cdr.detectChanges();
+  }
+
+  closeAlertDetails(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.selectedAlert = null;
+    this.cdr.detectChanges();
   }
 }

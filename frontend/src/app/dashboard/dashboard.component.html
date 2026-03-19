@@ -92,18 +92,6 @@
             </div>
 
             <div class="top-actions">
-                <!-- Global Time Filter -->
-                <div class="time-filter">
-                    <span class="icon"><lucide-icon [name]="Clock" [size]="18"></lucide-icon></span>
-                    <select class="time-select">
-                        <option value="24h" selected>Last 24 Hours</option>
-                        <option value="7d">Last 7 Days</option>
-                        <option value="30d">Last 30 Days</option>
-                        <option value="custom">Custom Range</option>
-                    </select>
-                </div>
-
-                <div class="divider"></div>
 
                 <button class="icon-btn notification-btn" (click)="toggleNotifications()"
                     [class.active]="isNotificationOpen">
@@ -122,7 +110,7 @@
                     <div class="dropdown-content">
                         @for (note of notifications; track note.time) {
                         <div class="notification-item" [class.unread]="!note.read" (click)="openMessages(note)">
-                            <div class="avatar" [style.background-color]="note.read ? '#374151' : note.color">
+                            <div class="avatar" [style.background-color]="note.read ? '#233252' : note.color">
                                 {{ note.avatar }}
                             </div>
                             <div class="note-details">

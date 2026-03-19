@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, getIdTokenResult } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, getIdTokenResult, sendPasswordResetEmail } from 'firebase/auth';
 import { getFirestore, doc, getDoc, updateDoc, serverTimestamp, collection, addDoc, deleteDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { environment } from '../../../environments/environment';
@@ -86,6 +86,10 @@ export class AuthService {
             .catch(error => console.error('Error updating last_login_at:', error));
 
         return userCredential;
+    }
+
+    async requestPasswordReset(email: string) {
+        return sendPasswordResetEmail(this.auth, email);
     }
 
     async logout() {

@@ -22,6 +22,12 @@ export class LoginComponent implements AfterViewInit, OnInit {
     errorMessage = '';
     loginSubmitted = false;
 
+    // Forgot Password Fields
+    isForgotPasswordMode = false;
+    forgotPasswordEmail = '';
+    forgotPasswordSuccess = false;
+    forgotPasswordSubmitted = false;
+
     // Sign Up Fields
     signupFirstName = '';
     signupLastName = '';
@@ -185,7 +191,9 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
     goToLogin() {
         this.isSignUpMode = false;
+        this.isForgotPasswordMode = false;
         this.signupSuccess = false;
+        this.forgotPasswordSuccess = false;
         this.router.navigate(['/login']);
     }
 
@@ -195,9 +203,36 @@ export class LoginComponent implements AfterViewInit, OnInit {
 
     toggleMode() {
         this.isSignUpMode = !this.isSignUpMode;
+        this.isForgotPasswordMode = false;
         this.signupSuccess = false;
         this.errorMessage = '';
         this.signupError = '';
+    }
+
+    toggleForgotPasswordMode() {
+        this.isForgotPasswordMode = true;
+        this.isSignUpMode = false;
+        this.forgotPasswordSuccess = false;
+        this.errorMessage = '';
+        this.forgotPasswordSubmitted = false;
+        this.forgotPasswordEmail = '';
+    }
+
+    async resetPassword(resetForm: any) {
+        this.forgotPasswordSubmitted = true;
+        this.errorMessage = '';
+        
+        if (resetForm.invalid) {
+            return;
+        }
+
+        try {
+            await this.authService.requestPasswordReset(this.forgotPasswordEmail);
+            this.forgotPasswordSuccess = true;
+        } catch (error: any) {
+            console.error('Password reset failed', error);
+            this.errorMessage = error.message || 'Failed to send reset email. Please try again.';
+        }
     }
 }
 

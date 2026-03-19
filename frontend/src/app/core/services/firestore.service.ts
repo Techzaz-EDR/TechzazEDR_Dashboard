@@ -10,6 +10,7 @@ import {
   collectionGroup,
   doc,
   getDoc,
+  updateDoc,
   orderBy,
   limit
 } from 'firebase/firestore';
@@ -99,7 +100,7 @@ export class FirestoreService {
         const tenantId = tId || 'demo-org';
         const subject = new ReplaySubject<any[]>(1);
         const alertsRef = collection(this.db, 'organizations', tenantId, 'agents', agentId, 'alerts');
-        const q = query(alertsRef, orderBy('Timestamp', 'desc'), limit(50));
+        const q = query(alertsRef, orderBy('Timestamp', 'desc'), limit(250));
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
           this.zone.run(() => {
@@ -163,6 +164,65 @@ export class FirestoreService {
     });
   }
 
+  async updateAlertStatus(agentId: string, alertId: string, status: string) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const alertRef = doc(this.db, 'organizations', tenantId, 'agents', agentId, 'alerts', alertId);
+    
+    await updateDoc(alertRef, {
+        status: status,
+        updated_at: serverTimestamp()
+    });
+  }
+
+  getOrganizationAlerts(): Observable<any[]> {
+    return this.authService.tenantId$.pipe(
+      switchMap(tId => {
+        const tenantId = tId || 'demo-org';
+        const subject = new ReplaySubject<any[]>(1);
+        
+        // Use collectionGroup to find alerts across all agents
+        const alertsRef = collectionGroup(this.db, 'alerts');
+        const q = query(
+          alertsRef, 
+          where('organization_id', '==', tenantId),
+          orderBy('timestamp', 'desc'),
+          limit(100)
+        );
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          this.zone.run(() => {
+            const alerts: any[] = [];
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              const pathSegments = doc.ref.path.split('/');
+              // Path: organizations/{orgId}/agents/{agentId}/alerts/{alertId}
+              const agentId = pathSegments[3]; 
+
+              alerts.push({ 
+                id: doc.id, 
+                agent_id: agentId,
+                ...data,
+                // Map fields for consistency
+                time: data['timestamp']?.toDate ? this.formatTime(data['timestamp'].toDate()) : 'Recently'
+              });
+            });
+
+            subject.next(alerts);
+          });
+        }, (error) => {
+          console.error("Error fetching organization alerts:", error);
+          // If index is missing, it will log an error with a link to create it
+          this.zone.run(() => subject.next([]));
+        });
+
+        return subject.asObservable().pipe(
+          finalize(() => unsubscribe())
+        );
+      })
+    );
+  }
+
   getIncidents(): Observable<any[]> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
@@ -203,15 +263,27 @@ export class FirestoreService {
     );
   }
 
-  async addIncident(incident: any) {
-    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
-    const tenantId = tId || 'demo-org';
-    const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
-    
-    await addDoc(incidentsRef, {
-      ...incident,
-      timestamp: serverTimestamp()
+
+  getRule(ruleId: string): Observable<any> {
+    const ruleRef = doc(this.db, 'rules', ruleId);
+    const subject = new ReplaySubject<any>(1);
+
+    const unsubscribe = onSnapshot(ruleRef, (docSnap) => {
+      this.zone.run(() => {
+        if (docSnap.exists()) {
+          subject.next({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          subject.next(null);
+        }
+      });
+    }, (error) => {
+      console.error(`Error fetching rule ${ruleId}:`, error);
+      this.zone.run(() => subject.next(null));
     });
+
+    return subject.asObservable().pipe(
+      finalize(() => unsubscribe())
+    );
   }
 
   private formatTime(date: Date): string {

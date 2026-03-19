@@ -6,6 +6,18 @@ import {
     RefreshCw, Monitor, Eye
 } from 'lucide-angular';
 
+type ThreatLogEntry = {
+    id: number;
+    title: string;
+    description: string;
+    endpoint: string;
+    time: string;
+    severity: string;
+    type: string;
+    status: string;
+    icon: string;
+};
+
 @Component({
     selector: 'app-threats',
     standalone: true,
@@ -32,12 +44,12 @@ export class Threats {
     classificationStats = [
         { label: 'Malware', count: 145, trend: '+12%', color: 'critical' },
         { label: 'Exploits', count: 32, trend: '+5%', color: 'high' },
-        { label: 'PUPs', count: 89, trend: '-2%', color: 'medium' },
+        { label: 'PUPs', expandedLabel: 'Potentially Unwanted Programs', count: 89, trend: '-2%', color: 'medium' },
         { label: 'Network Attacks', count: 24, trend: '+8%', color: 'high' },
         { label: 'Privilege Escalation', count: 7, trend: '0%', color: 'critical' }
     ];
 
-    threats = [
+    threats: ThreatLogEntry[] = [
         {
             id: 1,
             title: 'Suspicious Process Execution',
@@ -117,10 +129,22 @@ export class Threats {
         }
     ];
 
+    selectedThreat: ThreatLogEntry | null = null;
+
     // Filters
     filterSeverity = 'All Severities';
     filterStatus = 'All Status';
     filterTimeRange = 'Last 30 Days'; // Default to show more
+
+    private readonly chartMarkersByRange: Record<string, string[]> = {
+        'Last 24 Hours': ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+        'Last 7 Days': ['6d ago', '5d', '4d', '3d', '2d', '1d', 'Now'],
+        'Last 30 Days': ['30d', '25d', '20d', '15d', '10d', '5d', 'Now']
+    };
+
+    get chartTimeMarkers(): string[] {
+        return this.chartMarkersByRange[this.filterTimeRange] ?? this.chartMarkersByRange['Last 24 Hours'];
+    }
 
     get filteredThreats() {
         return this.threats.filter(threat => {
@@ -140,6 +164,16 @@ export class Threats {
 
             return matchSeverity && matchStatus && matchTime;
         });
+    }
+
+    openThreatDetails(threat: ThreatLogEntry, event?: Event): void {
+        event?.stopPropagation();
+        this.selectedThreat = threat;
+    }
+
+    closeThreatDetails(event?: Event): void {
+        event?.stopPropagation();
+        this.selectedThreat = null;
     }
 
     parseTimeAgo(timeString: string): number {
