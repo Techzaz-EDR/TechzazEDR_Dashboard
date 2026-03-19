@@ -263,6 +263,63 @@ export class FirestoreService {
     );
   }
 
+  getUsers(): Observable<any[]> {
+    return this.authService.userProfile$.pipe(
+      switchMap(profile => {
+        if (profile && profile.organization_id) {
+          const subject = new ReplaySubject<any[]>(1);
+          const usersRef = collection(this.db, 'users');
+          const q = query(usersRef, where('organization_id', '==', profile.organization_id));
+          
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            this.zone.run(() => {
+              const users = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                name: doc.data()['name'] || doc.data()['email'] || 'Unknown User'
+              }));
+              subject.next(users);
+            });
+          }, (error) => {
+            console.error("Error fetching users:", error);
+            this.zone.run(() => subject.next([]));
+          });
+
+          return subject.asObservable().pipe(
+            finalize(() => unsubscribe())
+          );
+        } else {
+          const emptySubject = new BehaviorSubject<any[]>([]);
+          return emptySubject.asObservable();
+        }
+      })
+    );
+  }
+
+  async createIncident(incidentData: any) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
+    
+    return await addDoc(incidentsRef, {
+      ...incidentData,
+      timestamp: serverTimestamp(),
+      status: incidentData.status || 'open'
+    });
+  }
+
+  async assignAlert(agentId: string, alertId: string, assignee: string) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const alertRef = doc(this.db, 'organizations', tenantId, 'agents', agentId, 'alerts', alertId);
+    
+    await updateDoc(alertRef, {
+      assignee: assignee,
+      status: 'investigating',
+      updated_at: serverTimestamp()
+    });
+  }
+
 
   getRule(ruleId: string): Observable<any> {
     const ruleRef = doc(this.db, 'rules', ruleId);

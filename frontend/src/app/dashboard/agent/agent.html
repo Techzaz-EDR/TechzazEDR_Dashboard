@@ -116,39 +116,55 @@
         <div class="threat-details-panel" *ngIf="selectedAlert" aria-live="polite">
           <div class="panel-head">
             <div class="headline">
-              <span class="label">Alert details</span>
+              <span class="label">Alert Context</span>
               <h4>{{ selectedAlert.name }}</h4>
             </div>
-            <button class="dismiss-btn" type="button" (click)="closeAlertDetails($event)">
-              <lucide-icon [name]="EyeIcon" [size]="14"></lucide-icon>
-              Dismiss
-            </button>
+            <div class="panel-actions">
+              <button class="action-icon-btn" (click)="openDetailModal()" title="Full Screen">
+                <lucide-icon [name]="MaximizeIcon" [size]="16"></lucide-icon>
+              </button>
+              <button class="action-icon-btn close" (click)="closeAlertDetails()" title="Close">
+                <lucide-icon [name]="XIcon" [size]="18"></lucide-icon>
+              </button>
+            </div>
           </div>
-        
+          
           <p class="panel-desc">{{ selectedAlert.description }}</p>
-        
+
           <div class="panel-fields">
             <div class="field">
-              <span class="field-label">Category</span>
-              <span class="field-value">{{ selectedAlert.Category || selectedAlert.name }}</span>
+              <span class="field-label">Severity Level</span>
+              <span class="field-value severity" [ngClass]="getSeverityClass(selectedAlert.severity)">
+                {{ selectedAlert.severity }}
+              </span>
             </div>
+            
             <div class="field">
-              <span class="field-label">Detected Time</span>
-              <span class="field-value">{{ formatAlertTime(selectedAlert.Timestamp || selectedAlert.timestamp) }}</span>
-            </div>
-            <div class="field">
-              <span class="field-label">Severity</span>
-              <span class="field-value severity" [ngClass]="getSeverityClass(selectedAlert.severity)">{{ selectedAlert.severity }}</span>
+              <span class="field-label">Detection Time</span>
+              <span class="field-value">{{ selectedAlert.displayTime }}</span>
             </div>
 
-            <!-- Rule Specific Details -->
-            <div class="field" *ngIf="selectedAlert.ruleInfo?.description">
-              <span class="field-label">Rule Description</span>
-              <span class="field-value">{{ selectedAlert.ruleInfo.description }}</span>
+            <div class="field" *ngIf="selectedAlert.RuleId">
+              <span class="field-label">Rule ID</span>
+              <span class="field-value">{{ selectedAlert.RuleId }}</span>
             </div>
+
+            <div class="field" *ngIf="selectedAlert.ruleInfo?.category">
+              <span class="field-label">Category</span>
+              <span class="field-value">{{ selectedAlert.ruleInfo.category }}</span>
+            </div>
+
             <div class="field" *ngIf="selectedAlert.ruleInfo?.mitigation">
-              <span class="field-label">Primary Mitigation</span>
+              <span class="field-label">Mitigation</span>
               <span class="field-value">{{ selectedAlert.ruleInfo.mitigation }}</span>
+            </div>
+
+            <div class="field" *ngIf="selectedAlert.assignee">
+              <span class="field-label">Assigned To</span>
+              <span class="field-value assignee-display">
+                <div class="assignee-avatar">{{ selectedAlert.assignee.charAt(0) }}</div>
+                {{ selectedAlert.assignee }}
+              </span>
             </div>
 
             <!-- Technical Detail Fields -->
@@ -158,10 +174,123 @@
                 <pre>{{ selectedAlert.Details | json }}</pre>
               </div>
             </div>
+
+            <!-- Investigate Section -->
+            <div class="field invest-section" *ngIf="!selectedAlert.assignee">
+              <span class="field-label">Create Investigation</span>
+              <div class="invest-box">
+                <div class="assignee-selector">
+                  <select [(ngModel)]="selectedAssignee" class="assignee-select" [disabled]="isCreatingIncident">
+                    <option value="" disabled selected>Assign to user...</option>
+                    <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+                  </select>
+                </div>
+                <button class="invest-btn" (click)="createInvestigate()" [disabled]="!selectedAssignee || isCreatingIncident">
+                  <lucide-icon [name]="ActivityIcon" *ngIf="!isCreatingIncident" [size]="14"></lucide-icon>
+                  <lucide-icon [name]="RefreshCwIcon" *ngIf="isCreatingIncident" class="spin" [size]="14"></lucide-icon>
+                  <span>{{ isCreatingIncident ? 'Creating...' : 'Create Incident' }}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
+  </div>
+</div>
+
+<!-- Full Screen Alert Details Modal -->
+<div class="modal-overlay" *ngIf="showDetailModal" (click)="closeDetailModal()">
+  <div class="modal-content detail-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="title-group">
+        <div class="icon-circle" [ngClass]="getSeverityClass(selectedAlert?.severity)">
+          <lucide-icon [name]="AlertTriangleIcon" [size]="24"></lucide-icon>
+        </div>
+        <div>
+          <h2>{{ selectedAlert?.name }}</h2>
+          <span class="subtitle">Full Alert Investigation Details</span>
+        </div>
+      </div>
+      <button class="close-btn" (click)="closeDetailModal()">
+        <lucide-icon [name]="XIcon" [size]="20"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="modal-body custom-scrollbar" *ngIf="selectedAlert">
+      <div class="modal-grid">
+        <div class="modal-main">
+          <section class="info-section">
+            <h3 class="section-label">Description</h3>
+            <p class="description-text">{{ selectedAlert.description }}</p>
+          </section>
+
+          <section class="info-section" *ngIf="selectedAlert.ruleInfo?.mitigation">
+            <h3 class="section-label">Mitigation</h3>
+            <div class="mitigation-box">
+              {{ selectedAlert.ruleInfo.mitigation }}
+            </div>
+          </section>
+
+          <section class="info-section">
+            <h3 class="section-label">Technical Data</h3>
+            <div class="technical-scroll-box">
+              <pre>{{ selectedAlert.Details | json }}</pre>
+            </div>
+          </section>
+        </div>
+
+        <div class="modal-sidebar">
+          <div class="meta-card">
+            <div class="meta-item">
+              <span class="meta-label">Severity Level</span>
+              <span class="severity-pill" [ngClass]="getSeverityClass(selectedAlert.severity)">
+                {{ selectedAlert.severity }}
+              </span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Detection Time</span>
+              <span class="meta-value">{{ selectedAlert.displayTime }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Rule ID</span>
+              <span class="meta-value">{{ selectedAlert.RuleId }}</span>
+            </div>
+            <div class="meta-item" *ngIf="selectedAlert.ruleInfo?.category">
+              <span class="meta-label">Category</span>
+              <span class="meta-value">{{ selectedAlert.ruleInfo.category }}</span>
+            </div>
+          </div>
+
+          <div class="assignment-card">
+            <h3 class="card-title">Create Investigation</h3>
+            <div class="status-content">
+              <div class="assigned-user" *ngIf="selectedAlert.assignee">
+                <span class="meta-label">Assigned To</span>
+                <div class="user-pill">
+                  <div class="user-avatar">{{ selectedAlert.assignee.charAt(0) }}</div>
+                  {{ selectedAlert.assignee }}
+                </div>
+              </div>
+
+              <div class="investigate-form" *ngIf="!selectedAlert.assignee">
+                <span class="meta-label">Create Investigation</span>
+                <div class="form-group">
+                  <select [(ngModel)]="selectedAssignee" class="modal-select">
+                    <option value="" disabled selected>Select investigator...</option>
+                    <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+                  </select>
+                  <button class="modal-invest-btn" (click)="createInvestigate()" [disabled]="!selectedAssignee || isCreatingIncident">
+                    <lucide-icon [name]="ActivityIcon" *ngIf="!isCreatingIncident" [size]="16"></lucide-icon>
+                    <span>Create Incident</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

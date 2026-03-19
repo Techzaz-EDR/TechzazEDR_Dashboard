@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
     LucideAngularModule,
-    Search, Monitor, AlertTriangle, ShieldOff, Shield, Eye, Circle
+    Search, Monitor, AlertTriangle, ShieldOff, Shield, Circle
 } from 'lucide-angular';
 
 @Component({
@@ -23,7 +23,6 @@ export class Incidents implements OnInit, OnDestroy {
     readonly AlertTriangleIcon = AlertTriangle;
     readonly ShieldOffIcon = ShieldOff;
     readonly ShieldIcon = Shield;
-    readonly EyeIcon = Eye;
     readonly CircleIcon = Circle;
 
     incidents: any[] = [];
@@ -32,18 +31,8 @@ export class Incidents implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subs.add(
-            this.firestoreService.getOrganizationAlerts().subscribe(data => {
-                this.incidents = data.map(item => ({
-                    ...item,
-                    title: item.title || item.RuleId || item.rule_name || 'Security Alert',
-                    description: item.description || item.Details?.description || item.reason || 'Potential threat detected',
-                    severity: (item.severity || item.Severity || 'medium').toLowerCase(),
-                    priority: (item.severity || item.Severity || 'medium').toLowerCase(),
-                    status: item.status || item.Status || 'open',
-                    endpoints: item.agent_id || 'Unknown',
-                    threats: 1,
-                    assignee: item.assignee || 'Unassigned'
-                }));
+            this.firestoreService.getIncidents().subscribe(data => {
+                this.incidents = data; // getIncidents already maps fields for us
             })
         );
     }
@@ -113,23 +102,6 @@ export class Incidents implements OnInit, OnDestroy {
         } catch (error) {
             console.error('Failed to block threat:', error);
             alert('Failed to create block rule. Check console for details.');
-        }
-    }
-
-    async investigate(incident: any) {
-        if (!incident.agent_id) {
-            alert('Error: Agent ID missing for this incident.');
-            return;
-        }
-
-        console.log(`Updating status to 'investigating' for Incident #${incident.id}`);
-        try {
-            await this.firestoreService.updateAlertStatus(incident.agent_id, incident.id, 'investigating');
-            // UI will automatically update via Firestore onSnapshot
-            console.log('Status updated successfully');
-        } catch (error) {
-            console.error('Failed to update incident status:', error);
-            alert('Failed to update status. Check console for details.');
         }
     }
 }

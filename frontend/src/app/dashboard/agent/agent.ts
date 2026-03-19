@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { 
   LucideAngularModule, 
   Terminal, 
@@ -17,7 +18,9 @@ import {
   History,
   Eye,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  X,
+  Maximize2
 } from 'lucide-angular';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
@@ -25,7 +28,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-agent',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, FormsModule],
   templateUrl: './agent.html',
   styleUrl: './agent.scss'
 })
@@ -46,6 +49,8 @@ export class AgentComponent implements OnInit, OnDestroy {
   readonly EyeIcon = Eye;
   readonly ChevronLeftIcon = ChevronLeft;
   readonly ChevronRightIcon = ChevronRight;
+  readonly XIcon = X;
+  readonly MaximizeIcon = Maximize2;
   readonly Math = Math;
 
   agentId: string | null = null;
@@ -56,7 +61,13 @@ export class AgentComponent implements OnInit, OnDestroy {
   
   showCommandHistoryModal: boolean = false;
   showConfigureAgentModal: boolean = false;
+  showDetailModal: boolean = false;
   loadingCommands: { [key: string]: boolean } = {};
+  
+  // Investigate Logic
+  users: any[] = [];
+  selectedAssignee: string = '';
+  isCreatingIncident: boolean = false;
 
   // Pagination for Alerts
   currentPage: number = 1;
@@ -117,6 +128,14 @@ export class AgentComponent implements OnInit, OnDestroy {
           // If no agent selected, redirect back
           this.router.navigate(['/dashboard/endpoints']);
         }
+      })
+    );
+
+    // Load users for assignment
+    this.subscriptions.add(
+      this.firestoreService.getUsers().subscribe(users => {
+        this.users = users;
+        this.cdr.detectChanges();
       })
     );
   }
@@ -377,6 +396,58 @@ export class AgentComponent implements OnInit, OnDestroy {
       event.stopPropagation();
     }
     this.selectedAlert = null;
+    this.selectedAssignee = '';
+    this.showDetailModal = false;
     this.cdr.detectChanges();
+  }
+
+  openDetailModal() {
+    this.showDetailModal = true;
+    this.cdr.detectChanges();
+  }
+
+  closeDetailModal() {
+    this.showDetailModal = false;
+    this.cdr.detectChanges();
+  }
+
+  async createInvestigate() {
+    if (!this.selectedAlert || !this.selectedAssignee || !this.agentId) return;
+    
+    this.isCreatingIncident = true;
+    this.cdr.detectChanges();
+
+    const assigneeUser = this.users.find(u => u.id === this.selectedAssignee);
+    const assigneeName = assigneeUser ? (assigneeUser.name || assigneeUser.email) : 'Unknown';
+
+    try {
+      // 1. Create incident doc
+      await this.firestoreService.createIncident({
+        title: `Incident: ${this.selectedAlert.name}`,
+        description: this.selectedAlert.description,
+        severity: this.selectedAlert.severity,
+        priority: this.selectedAlert.severity,
+        assignee: assigneeName,
+        agent_id: this.agentId,
+        alert_id: this.selectedAlert.id || this.selectedAlert.Timestamp, // fallback to timestamp if ID missing
+        status: 'open',
+        organization_id: this.agentDetails?.organization_id // Assuming agentDetails has this
+      });
+
+      // 2. Assign alert & update status
+      if (this.selectedAlert.id) {
+        await this.firestoreService.assignAlert(this.agentId, this.selectedAlert.id, assigneeName);
+      }
+      
+      this.selectedAssignee = '';
+      // Selected alert will be updated via Firestore stream
+      alert('Investigation created successfully!');
+    } catch (error) {
+      console.error('Error creating investigation:', error);
+      alert('Failed to create investigation. See console for details.');
+    } finally {
+      this.isCreatingIncident = false;
+      this.cdr.detectChanges();
+    }
   }
 }
