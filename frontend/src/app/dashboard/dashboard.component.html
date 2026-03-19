@@ -11,35 +11,42 @@
 
         <nav class="side-nav">
             @for (item of navItems; track item.label) {
-            @if (item.children) {
-            <!-- Group Header -->
-            <div class="nav-group-header" (click)="toggleGroup(item)" [class.expanded]="item.expanded">
-                <div class="header-main">
-                    <span class="icon"><lucide-icon [name]="item.icon" [size]="20"></lucide-icon></span>
-                    <span class="label">{{ item.label }}</span>
-                </div>
-                <span class="chevron"><lucide-icon [name]="ChevronDown" [size]="16"
-                        [class.rotate-180]="item.expanded"></lucide-icon></span>
-            </div>
+                @if (item.children) {
+                    <!-- Group Header with Active State Detection -->
+                    <div class="nav-group-wrapper" #rlaGroup="routerLinkActive" routerLinkActive="parent-active">
+                        <div class="nav-group-header" (click)="toggleGroup(item)" [class.expanded]="item.expanded || rlaGroup.isActive" [class.active-group]="rlaGroup.isActive">
+                            <div class="header-main">
+                                <span class="icon"><lucide-icon [name]="item.icon" [size]="20"></lucide-icon></span>
+                                <span class="label">{{ item.label }}</span>
+                            </div>
+                            <span class="chevron"><lucide-icon [name]="ChevronDown" [size]="16"
+                                    [class.rotate-180]="item.expanded || rlaGroup.isActive"></lucide-icon></span>
+                        </div>
 
-            <!-- Children -->
-            @if (item.expanded) {
-            <div class="nav-group-children">
-                @for (child of item.children; track child.label) {
-                <a [routerLink]="child.route" routerLinkActive="active" class="nav-item child-item">
-                    <span class="icon"><lucide-icon [name]="child.icon" [size]="18"></lucide-icon></span>
-                    {{ child.label }}
-                </a>
+                        <!-- Invisible links for parent-active detection -->
+                        @for (child of item.children; track child.route) {
+                            <div [routerLink]="child.route" routerLinkActive="active" style="display: none;"></div>
+                        }
+
+                        <!-- Children -->
+                        @if (item.expanded || rlaGroup.isActive) {
+                            <div class="nav-group-children">
+                                @for (child of item.children; track child.label) {
+                                    <a [routerLink]="child.route" routerLinkActive="active" class="nav-item child-item">
+                                        <span class="icon"><lucide-icon [name]="child.icon" [size]="18"></lucide-icon></span>
+                                        {{ child.label }}
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <!-- Standard Link -->
+                    <a [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}" class="nav-item">
+                        <span class="icon"><lucide-icon [name]="item.icon" [size]="20"></lucide-icon></span>
+                        {{ item.label }}
+                    </a>
                 }
-            </div>
-            }
-            } @else {
-            <!-- Standard Link -->
-            <a [routerLink]="item.route" routerLinkActive="active" class="nav-item">
-                <span class="icon"><lucide-icon [name]="item.icon" [size]="20"></lucide-icon></span>
-                {{ item.label }}
-            </a>
-            }
             }
         </nav>
 
