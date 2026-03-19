@@ -2,9 +2,9 @@
     display: block;
     height: 100vh;
     font-family: 'Inter', sans-serif;
-    --neon-blue: #3b82f6; /* Keep for legacy floaters */
+    --neon-blue: #3EA0FF; /* Keep for legacy floaters */
     --bg-dark: var(--bg-primary);
-    --glass-bg: #0b1120;
+    --glass-bg: #0D152B;
     --border-color: rgba(255, 255, 255, 0.05);
     --transition-speed: 0.8s;
 }
@@ -29,7 +29,7 @@
     left: 0;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+    background: radial-gradient(circle, rgba(93, 124, 255, 0.15), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
@@ -76,7 +76,7 @@
     border: 1px solid var(--border-color);
     overflow: hidden;
     z-index: 10;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(59, 130, 246, 0.05);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(93, 124, 255, 0.05);
 
     /* Cinematic Intro Animation */
     opacity: 0;
@@ -85,7 +85,7 @@
     transition: box-shadow 0.5s ease, border-color 0.5s ease;
 
     &:hover {
-        box-shadow: 0 0 60px rgba(59, 130, 246, 0.1), 0 0 20px rgba(255, 255, 255, 0.02);
+        box-shadow: 0 0 60px rgba(93, 124, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.02);
         border-color: rgba(255, 255, 255, 0.1);
     }
 }
@@ -103,19 +103,6 @@
 .sign-in-view {
     opacity: 1;
     z-index: 2;
-}
-
-.forgot-password-view {
-    position: relative;
-    width: 100%;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 1;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 0;
 }
 
 /* Signup view: column layout — header always on top, form scrolls below */
@@ -163,27 +150,6 @@
     }
 }
 
-.super-auth-container.forgot-password-mode {
-    .sign-in-view {
-        opacity: 0;
-        pointer-events: none;
-        display: none;
-    }
-
-    .sign-up-view {
-        opacity: 0;
-        pointer-events: none;
-        display: none;
-    }
-
-    .forgot-password-view {
-        opacity: 1;
-        pointer-events: auto;
-        z-index: 3;
-        display: flex;
-    }
-}
-
 .toggle-link {
     margin-top: 20px;
     font-size: 0.85rem;
@@ -228,10 +194,10 @@ form {
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 25px;
-            background: rgba(59, 130, 246, 0.05);
+            background: rgba(93, 124, 255, 0.05);
             padding: 3px 10px;
             border-radius: 20px;
-            border: 1px solid rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(93, 124, 255, 0.1);
             opacity: 0;
             transform: translateY(10px);
             animation: slide-up-fade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards;
@@ -246,9 +212,9 @@ form {
             .status-dot {
                 width: 6px;
                 height: 6px;
-                background-color: #10b981;
+                background-color: #22C55E;
                 border-radius: 50%;
-                box-shadow: 0 0 8px #10b981;
+                box-shadow: 0 0 8px #22C55E;
                 display: inline-block;
             }
         }
@@ -317,7 +283,7 @@ form {
     }
 
     .required {
-        color: #ff4d4f !important;
+        color: #EF4444 !important;
         margin-left: 4px;
         font-weight: 600;
         opacity: 1 !important;
@@ -332,7 +298,7 @@ form {
         background: rgba(239, 68, 68, 0.1);
         border: 1px solid rgba(239, 68, 68, 0.3);
         border-radius: 10px;
-        color: #fca5a5;
+        color: #EF4444;
         font-size: 0.85rem;
         margin-bottom: 15px;
         backdrop-filter: blur(4px);
@@ -382,8 +348,8 @@ form {
 
                     &:focus {
                         background: rgba(8, 11, 18, 1);
-                        border-color: rgba(59, 130, 246, 0.5);
-                        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+                        border-color: #5D7CFF;
+                        box-shadow: 0 0 0 3px rgba(93, 124, 255, 0.20);
                     }
                 }
 
@@ -527,10 +493,10 @@ form {
         text-transform: uppercase;
         letter-spacing: 1.5px;
         margin-bottom: 20px;
-        background: rgba(59, 130, 246, 0.05);
+        background: rgba(93, 124, 255, 0.05);
         padding: 3px 10px;
         border-radius: 20px;
-        border: 1px solid rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(93, 124, 255, 0.1);
         opacity: 1 !important;
         transform: translateY(0) !important;
         animation: none !important;
@@ -545,9 +511,9 @@ form {
         .status-dot {
             width: 6px;
             height: 6px;
-            background-color: #10b981;
+            background-color: #22C55E;
             border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
+            box-shadow: 0 0 8px #22C55E;
             display: inline-block;
         }
     }
@@ -586,14 +552,14 @@ form {
     text-align: center;
     background: transparent;
     scrollbar-width: thin;
-    scrollbar-color: rgba(59, 130, 246, 0.2) transparent;
+    scrollbar-color: rgba(93, 124, 255, 0.2) transparent;
 
     &::-webkit-scrollbar {
         width: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-        background: rgba(59, 130, 246, 0.25);
+        background: rgba(93, 124, 255, 0.25);
         border-radius: 4px;
     }
 
@@ -636,9 +602,9 @@ form {
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(139, 92, 246, 0.08) 100%);
-        border: 1px solid rgba(59, 130, 246, 0.25);
-        box-shadow: 0 0 30px rgba(59, 130, 246, 0.15), inset 0 0 20px rgba(59, 130, 246, 0.05);
+        background: linear-gradient(135deg, rgba(93, 124, 255, 0.12) 0%, rgba(93, 124, 255, 0.08) 100%);
+        border: 1px solid rgba(93, 124, 255, 0.25);
+        box-shadow: 0 0 30px rgba(93, 124, 255, 0.15), inset 0 0 20px rgba(93, 124, 255, 0.05);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -648,8 +614,8 @@ form {
         lucide-icon {
             position: static;
             transform: none;
-            color: #3b82f6;
-            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+            color: #3EA0FF;
+            filter: drop-shadow(0 0 8px rgba(93, 124, 255, 0.5));
         }
     }
 
@@ -687,7 +653,7 @@ form {
         width: 100%;
         max-width: 280px;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+        background: linear-gradient(90deg, transparent, rgba(93, 124, 255, 0.2), transparent);
         margin-bottom: 18px;
     }
 
@@ -718,12 +684,12 @@ form {
 
 @keyframes success-ring-pulse {
     0%, 100% {
-        box-shadow: 0 0 20px rgba(59, 130, 246, 0.1), inset 0 0 20px rgba(59, 130, 246, 0.05);
-        border-color: rgba(59, 130, 246, 0.2);
+        box-shadow: 0 0 20px rgba(93, 124, 255, 0.1), inset 0 0 20px rgba(93, 124, 255, 0.05);
+        border-color: rgba(93, 124, 255, 0.2);
     }
     50% {
-        box-shadow: 0 0 40px rgba(59, 130, 246, 0.25), inset 0 0 25px rgba(59, 130, 246, 0.08);
-        border-color: rgba(59, 130, 246, 0.45);
+        box-shadow: 0 0 40px rgba(93, 124, 255, 0.25), inset 0 0 25px rgba(93, 124, 255, 0.08);
+        border-color: rgba(93, 124, 255, 0.45);
     }
 }
 
@@ -756,7 +722,7 @@ form {
         height: 16px;
         margin-top: 1px;
         border-radius: 4px;
-        border: 1px solid rgba(59, 130, 246, 0.35);
+        border: 1px solid rgba(93, 124, 255, 0.35);
         background: rgba(8, 11, 18, 0.8);
         transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
         position: relative;
@@ -778,9 +744,9 @@ form {
     }
 
     input[type="checkbox"]:checked + .checkmark {
-        background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+        background: linear-gradient(135deg, var(--primary) 0%, #5D7CFF 100%);
         border-color: var(--primary);
-        box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+        box-shadow: 0 0 8px rgba(93, 124, 255, 0.4);
 
         &::after {
             opacity: 1;

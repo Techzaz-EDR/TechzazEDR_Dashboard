@@ -9,7 +9,7 @@
                      [style.background-image]="user.photoUrl ? 'url(' + user.photoUrl + ')' : 'none'" 
                      [style.background-size]="'cover'" 
                      [style.background-position]="'center'">
-                    <lucide-icon *ngIf="!user.photoUrl" [name]="User" [size]="48" color="#1a1a1a"></lucide-icon>
+                    <lucide-icon *ngIf="!user.photoUrl" [name]="User" [size]="48" class="avatar-icon"></lucide-icon>
                     <div class="camera-badge">
                         <lucide-icon [name]="Camera" [size]="14"></lucide-icon>
                     </div>
@@ -21,7 +21,7 @@
                         {{ uploading ? 'Uploading...' : 'Upload New Picture' }}
                     </button>
                     <span class="upload-hint">JPG, PNG or GIF. Max size 5MB. Recommended 400x400px.</span>
-                    <div *ngIf="uploadError" class="feedback-error" style="margin-top: 8px; font-size: 12px; padding: 6px;">
+                    <div *ngIf="uploadError" class="feedback-error upload-error">
                         <lucide-icon [name]="AlertCircle" [size]="14"></lucide-icon>
                         {{ uploadError }}
                     </div>

@@ -52,9 +52,9 @@
     gap: 16px;
 
     .report-item {
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--bg-card);
         backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border-color);
         border-radius: 16px;
         padding: 1.5rem 2rem;
         display: flex;
@@ -85,15 +85,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(93, 124, 255, 0.1);
             border-radius: 12px;
-            color: #3b82f6;
+            color: #3EA0FF;
             transition: all 0.4s ease;
 
             // Varied colors for icons based on child position for variety
             &:nth-of-type(1) {
-                color: #3b82f6;
-                background: rgba(59, 130, 246, 0.1);
+                color: #3EA0FF;
+                background: rgba(93, 124, 255, 0.1);
             }
         }
 
@@ -109,7 +109,7 @@
         }
 
         &:nth-child(4) .report-icon {
-            color: #a855f7;
+            color: #5D7CFF;
             background: rgba(168, 85, 247, 0.1);
         }
 
@@ -122,7 +122,7 @@
             flex: 1;
 
             .report-title {
-                color: #f8fafc;
+                color: #F2F6FF;
                 font-size: 1.1rem;
                 font-weight: 700;
                 margin-bottom: 4px;
@@ -132,12 +132,12 @@
                 display: flex;
                 align-items: center;
                 gap: 12px;
-                color: #94a3b8;
+                color: #A8B6D6;
                 font-size: 0.85rem;
                 font-weight: 500;
 
                 .separator {
-                    color: rgba(255, 255, 255, 0.1);
+                    color: var(--border-soft);
                 }
             }
         }
@@ -157,7 +157,7 @@
 
                 &.ready {
                     background: rgba(34, 197, 94, 0.1);
-                    color: #4ade80;
+                    color: #22C55E;
                     border: 1px solid rgba(34, 197, 94, 0.2);
                 }
             }
@@ -167,12 +167,12 @@
                 gap: 1rem;
 
                 .icon-btn {
-                    background: rgba(255, 255, 255, 0.03);
-                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    background: var(--bg-input);
+                    border: 1px solid var(--border-color);
                     border-radius: 8px;
                     width: 36px;
                     height: 36px;
-                    color: #94a3b8;
+                    color: #A8B6D6;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -182,16 +182,16 @@
 
                     &:hover {
                         opacity: 1 !important;
-                        background: rgba(59, 130, 246, 0.1);
-                        color: #3b82f6;
-                        border-color: rgba(59, 130, 246, 0.3);
+                        background: rgba(93, 124, 255, 0.1);
+                        color: #3EA0FF;
+                        border-color: rgba(93, 124, 255, 0.3);
                         transform: translateY(-2px);
                         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
                     }
 
                     &.delete:hover {
                         background: rgba(239, 68, 68, 0.1);
-                        color: #f87171;
+                        color: #EF4444;
                         border-color: rgba(239, 68, 68, 0.3);
                     }
                 }

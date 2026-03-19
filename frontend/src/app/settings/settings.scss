@@ -33,33 +33,41 @@
     }
 
     .tabs-header {
-        border-bottom: 1px solid #1e293b;
+        border-bottom: 1px solid var(--border-color);
         margin-bottom: 0;
 
         .tabs-nav {
             display: flex;
-            gap: 4px;
+            gap: 6px;
 
             .tab-item {
                 display: flex;
                 align-items: center;
                 padding: 10px 16px;
-                color: #64748b;
+                color: var(--text-muted);
                 text-decoration: none;
                 font-size: 0.875rem;
                 font-weight: 500;
+                border: 1px solid transparent;
                 border-bottom: 2px solid transparent;
+                border-radius: 10px 10px 0 0;
+                background: transparent;
                 margin-bottom: -1px;
-                transition: color 0.2s, border-color 0.2s;
+                transition: color 0.2s, border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
                 white-space: nowrap;
 
                 &:hover {
-                    color: #e2e8f0;
+                    color: var(--text-primary);
+                    background: var(--bg-elevated);
+                    border-color: var(--border-color);
                 }
 
                 &.active {
-                    color: #e2e8f0;
-                    border-bottom-color: #94a3b8;
+                    color: var(--accent-primary);
+                    background: rgba(93, 124, 255, 0.14);
+                    border-color: rgba(93, 124, 255, 0.32);
+                    border-bottom-color: var(--accent-primary);
+                    box-shadow: 0 0 0 1px rgba(93, 124, 255, 0.14) inset;
                 }
             }
         }
@@ -79,11 +87,11 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--border-soft);
             border-radius: 3px;
 
             &:hover {
-                background: rgba(255, 255, 255, 0.14);
+                background: var(--border-focus);
             }
         }
     }

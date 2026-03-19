@@ -110,7 +110,7 @@
                     <div class="dropdown-content">
                         @for (note of notifications; track note.time) {
                         <div class="notification-item" [class.unread]="!note.read" (click)="openMessages(note)">
-                            <div class="avatar" [style.background-color]="note.read ? '#374151' : note.color">
+                            <div class="avatar" [style.background-color]="note.read ? '#233252' : note.color">
                                 {{ note.avatar }}
                             </div>
                             <div class="note-details">
