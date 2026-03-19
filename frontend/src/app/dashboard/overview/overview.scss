@@ -78,7 +78,7 @@
 
                 &:hover {
                     color: var(--text-white);
-                    background: rgba(255, 255, 255, 0.05);
+                    background: var(--bg-elevated);
                 }
 
                 &.active {
@@ -152,7 +152,7 @@
             height: 48px;
             border-radius: 12px;
             /* Soft square */
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg-elevated);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -271,7 +271,7 @@
 
         &.protected {
             stroke: var(--chart-primary);
-            filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.3));
+            filter: drop-shadow(0 0 4px rgba(93, 124, 255, 0.3));
         }
 
         &.at-risk {
@@ -556,7 +556,7 @@
         border-left: 3px solid transparent;
 
         &:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--bg-elevated);
         }
 
         &.status-critical:hover {
@@ -571,7 +571,7 @@
 
         &.status-neutral:hover {
             border-left-color: var(--chart-neutral);
-            background: linear-gradient(90deg, rgba(148, 163, 184, 0.1), transparent);
+            background: linear-gradient(90deg, rgba(168, 182, 214, 0.1), transparent);
         }
 
         .bar-info {
@@ -653,7 +653,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.02);
+            background: var(--bg-input);
             border-radius: 8px;
             border: 1px solid transparent;
             border-left: 3px solid transparent;
@@ -680,7 +680,7 @@
 
             &.impact-medium:hover {
                 border-left-color: var(--status-medium);
-                background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
+                background: linear-gradient(90deg, rgba(93, 124, 255, 0.1), transparent);
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
@@ -801,7 +801,7 @@
 
     td {
         padding: 16px 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid var(--border-light);
         color: var(--text-white);
         font-size: 0.9rem;
     }
@@ -813,7 +813,7 @@
 
         /* Border left doesn't work well on tr, so we use box-shadow or background */
         &:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--bg-elevated);
         }
 
         &.severity-critical:hover {
@@ -829,7 +829,7 @@
         }
 
         &.severity-medium:hover {
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
+            background: linear-gradient(90deg, rgba(93, 124, 255, 0.1), transparent);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
@@ -900,13 +900,13 @@
         gap: 12px;
         padding: 12px;
         border-left: 2px solid transparent;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        border-bottom: 1px solid var(--border-light);
         animation: slideIn 0.3s ease-out;
         cursor: pointer;
         transition: all 0.2s ease;
 
         &:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--bg-elevated);
             border-left-width: 4px;
             /* Thicken border on hover */
         }
@@ -935,7 +935,7 @@
             border-left-color: var(--status-medium);
 
             &:hover {
-                background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
+                background: linear-gradient(90deg, rgba(93, 124, 255, 0.1), transparent);
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
@@ -1094,8 +1094,8 @@
     animation: slideUpFade 0.5s ease-out forwards;
 
     .action-sm {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
         color: var(--text-secondary);
         padding: 4px 12px;
         border-radius: 4px;
@@ -1109,7 +1109,7 @@
         justify-content: center;
 
         &:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--bg-hover);
             color: var(--text-primary);
         }
 
@@ -1119,9 +1119,9 @@
         }
 
         &.processing {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(93, 124, 255, 0.12);
             color: var(--primary);
-            border-color: var(--primary-low);
+            border-color: var(--border-focus);
         }
 
         .spin-icon {

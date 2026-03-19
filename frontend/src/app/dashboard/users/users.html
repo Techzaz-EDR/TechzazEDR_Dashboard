@@ -22,7 +22,7 @@
         </div>
 
         @if (isLoading) {
-            <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+            <div class="users-loading">
                 Loading team members...
             </div>
         } @else {
@@ -60,16 +60,15 @@
                             <button class="icon-btn" title="Delete" (click)="deleteUser(user.id)">
                                 <lucide-icon [name]="TrashIcon" [size]="18"></lucide-icon>
                             </button>
-                            <div class="options-wrapper" style="position: relative; display: inline-block;">
+                            <div class="options-wrapper">
                                 <button class="icon-btn" title="More" (click)="toggleOptions(user.id)">
                                     <lucide-icon [name]="MoreVerticalIcon" [size]="18"></lucide-icon>
                                 </button>
                                 
                                 @if (activeOptionsId === user.id) {
-                                <div class="options-dropdown" 
-                                     style="position: absolute; right: 0; top: 100%; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 100; min-width: 140px; padding: 0.5rem 0;">
+                                <div class="options-dropdown">
                                     <button (click)="toggleUserStatus(user)" 
-                                            style="width: 100%; text-align: left; padding: 0.6rem 1rem; background: none; border: none; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                                            class="options-item">
                                         <lucide-icon [name]="ShieldIcon" [size]="14"></lucide-icon>
                                         {{ user.status === 'active' ? 'Suspend User' : 'Activate User' }}
                                     </button>
@@ -79,7 +78,7 @@
                         </div>
                     </div>
                     } @empty {
-                    <div class="table-row" style="justify-content: center; padding: 2rem; color: var(--text-muted);">
+                    <div class="table-row users-empty-state">
                         No users found in your organization.
                     </div>
                     }

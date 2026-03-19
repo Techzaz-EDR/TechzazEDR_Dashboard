@@ -1,8 +1,8 @@
 :host {
     display: block;
     min-height: 100vh;
-    background-color: #03040b;
-    color: #e5e7eb;
+    background-color: #060C18;
+    color: #F2F6FF;
     overflow-x: hidden;
 }
 
@@ -19,7 +19,7 @@
     padding: 32px 0;
 
     .back-link {
-        color: #8b5cf6;
+        color: #3EA0FF;
         text-decoration: none;
         font-weight: 500;
         transition: transform 0.2s;
@@ -33,7 +33,7 @@
         font-weight: 700;
 
         span {
-            color: #8b5cf6;
+            color: #5D7CFF;
         }
     }
 }
@@ -51,7 +51,7 @@
     .topic-icon-large {
         font-size: 5rem;
         margin-bottom: 24px;
-        filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.3));
+        filter: drop-shadow(0 0 30px rgba(93, 124, 255, 0.3));
     }
 
     h1 {
@@ -64,7 +64,7 @@
 
     .hero-desc {
         font-size: 1.25rem;
-        color: #9ca3af;
+        color: #A8B6D6;
         max-width: 700px;
         margin: 0 auto 32px;
     }
@@ -79,17 +79,17 @@
 
     .feature-pill {
         padding: 6px 16px;
-        background: rgba(139, 92, 246, 0.1);
-        border: 1px solid rgba(139, 92, 246, 0.2);
+        background: rgba(62, 160, 255, 0.1);
+        border: 1px solid rgba(62, 160, 255, 0.2);
         border-radius: 100px;
-        color: #a78bfa;
+        color: #3EA0FF;
         font-size: 0.9rem;
         font-weight: 500;
         transition: all 0.3s ease;
 
         &:hover {
-            background: rgba(139, 92, 246, 0.2);
-            border-color: rgba(139, 92, 246, 0.5);
+            background: rgba(62, 160, 255, 0.18);
+            border-color: rgba(62, 160, 255, 0.45);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
@@ -100,8 +100,8 @@
     margin-bottom: 80px;
 
     .glow-box {
-        background: rgba(17, 24, 39, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
         border-radius: 24px;
         padding: 60px;
         backdrop-filter: blur(12px);
@@ -114,7 +114,7 @@
         }
 
         p {
-            color: #9ca3af;
+            color: #A8B6D6;
             margin-bottom: 32px;
             max-width: 500px;
             margin-left: auto;
@@ -137,13 +137,13 @@
     transition: all 0.2s;
 
     &-primary {
-        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        background: #5D7CFF;
         color: white;
         border: none;
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        box-shadow: 0 4px 15px rgba(93, 124, 255, 0.4);
 
         &:hover {
-            background: linear-gradient(135deg, #9d72ff 0%, #8b5cf6 100%);
+            background: #6C88FF;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
@@ -151,12 +151,12 @@
 
     &-outline {
         background: transparent;
-        border: 1px solid rgba(139, 92, 246, 0.4);
+        border: 1px solid rgba(93, 124, 255, 0.4);
         color: white;
 
         &:hover {
-            background: rgba(139, 92, 246, 0.05);
-            border-color: #8b5cf6;
+            background: rgba(93, 124, 255, 0.05);
+            border-color: #5D7CFF;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
@@ -178,18 +178,18 @@
 
     .topic-pill {
         padding: 8px 20px;
-        background: rgba(139, 92, 246, 0.1);
-        border: 1px solid rgba(139, 92, 246, 0.2);
+        background: rgba(62, 160, 255, 0.1);
+        border: 1px solid rgba(62, 160, 255, 0.2);
         border-radius: 100px;
-        color: #a78bfa;
+        color: #3EA0FF;
         font-size: 0.9rem;
     }
 }
 
 .minimal-footer {
     padding: 40px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--border-light);
     text-align: center;
-    color: #4b5563;
+    color: #7483A3;
     font-size: 0.875rem;
 }

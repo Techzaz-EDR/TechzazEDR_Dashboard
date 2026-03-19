@@ -42,10 +42,9 @@
           {{ loadingCommands['remoteScan'] ? 'Initializing Remote Scan...' : 'Initiate Remote Scan' }}
         </button>
 
-        <button (click)="updateConfig()" [disabled]="loadingCommands['config']">
-          <lucide-icon [name]="SettingsIcon" *ngIf="!loadingCommands['config']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['config']"></lucide-icon>
-          {{ loadingCommands['config'] ? 'Command Queued...' : 'Update Config' }}
+        <button (click)="openConfigureAgentModal()" class="configure-agent-btn">
+          <lucide-icon [name]="SettingsIcon"></lucide-icon>
+          Configure Agent
         </button>
       </div>
     </section>
@@ -226,6 +225,35 @@
         <h3>No Command History</h3>
         <p>This agent hasn't received any remote commands yet.</p>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Configure Agent Modal -->
+<div class="modal-overlay" *ngIf="showConfigureAgentModal" (click)="closeConfigureAgentModal()">
+  <div class="modal-content config-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="title-group">
+        <div class="icon-circle">
+          <lucide-icon [name]="SettingsIcon" [size]="24"></lucide-icon>
+        </div>
+        <div>
+          <h2>Configure Agent</h2>
+          <span class="subtitle">Adjust parameters for {{ agentId }}</span>
+        </div>
+      </div>
+      <button class="close-btn" (click)="closeConfigureAgentModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="config-info-box">
+        <lucide-icon [name]="SettingsIcon" [size]="32" class="info-icon"></lucide-icon>
+        <p>Agent configuration options are currently under construction. Future updates will allow you to edit these settings from this interface.</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeConfigureAgentModal()">Close</button>
     </div>
   </div>
 </div>

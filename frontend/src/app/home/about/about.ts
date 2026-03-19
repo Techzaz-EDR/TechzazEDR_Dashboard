@@ -26,7 +26,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
             name: 'Inuka Wijerathna',
             role: 'Project Lead',
             avatar: '/assets/team/avatar-male.svg',
-            linkedin: '#',
+            linkedin: 'https://www.linkedin.com/in/inukawijerathna',
             github: '#'
         },
         {
@@ -40,28 +40,28 @@ export class AboutComponent implements OnInit, AfterViewInit {
             name: 'Kavya Dissanayake',
             role: 'Frontend Lead',
             avatar: '/assets/team/avatar-female.svg',
-            linkedin: '#',
+            linkedin: 'https://www.linkedin.com/in/kavya-dissanayake-95a463263/',
             github: '#'
         },
         {
             name: 'Limuthu Lohiru',
             role: 'Backend Lead',
             avatar: '/assets/team/avatar-male.svg',
-            linkedin: '#',
+            linkedin: 'https://www.linkedin.com/in/limuthu',
             github: '#'
         },
         {
             name: 'Tharuki Jayasuriya',
             role: 'Architecture & Documentation Lead',
             avatar: '/assets/team/avatar-female.svg',
-            linkedin: '#',
+            linkedin: 'https://www.linkedin.com/in/tharuki-jayasuriya-a9a8b3319',
             github: '#'
         },
         {
             name: 'Yeheni Alwis',
             role: 'QA & Validation Lead',
             avatar: '/assets/team/avatar-female.svg',
-            linkedin: '#',
+            linkedin: 'https://www.linkedin.com/in/yeheni-alwis-3836a5353',
             github: '#'
         }
     ];

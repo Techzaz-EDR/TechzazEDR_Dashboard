@@ -1,4 +1,4 @@
-<!-- TRACER_12345 --><div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" [class.success-mode]="signupSuccess" (mousemove)="onMouseMove($event)"
+<!-- TRACER_12345 --><div class="super-auth-container" [class.sign-up-mode]="isSignUpMode" [class.forgot-password-mode]="isForgotPasswordMode" [class.success-mode]="signupSuccess" (mousemove)="onMouseMove($event)"
     (mouseleave)="onMouseLeave()">
     <div class="hover-glow"></div>
 
@@ -39,7 +39,7 @@
                     <div class="form-group">
                         <label>Work Email <span class="required">*</span></label>
                         <div class="input-with-icon">
-                            <lucide-icon [img]="User" [size]="16"></lucide-icon>
+                            <lucide-icon [img]="Mail" [size]="16"></lucide-icon>
                             <input
                                 type="email"
                                 name="email"
@@ -52,7 +52,7 @@
                         </div>
                         <span class="error-message" *ngIf="loginSubmitted && emailCtrl.invalid">Work email is required.</span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group password-field-group">
                         <label>Password <span class="required">*</span></label>
                         <div class="input-with-icon">
                             <lucide-icon [img]="Lock" [size]="16"></lucide-icon>
@@ -65,13 +65,16 @@
                                 required
                                 autocomplete="current-password"
                             />
+                            <button type="button" class="password-toggle" (click)="togglePassword()">
+                                <lucide-icon [img]="showPassword ? EyeOff : Eye" [size]="16"></lucide-icon>
+                            </button>
                         </div>
                         <span class="error-message" *ngIf="loginSubmitted && passwordCtrl.invalid">Password is required.</span>
                     </div>
                 </div>
 
                 <!-- Forgot Password -->
-                <a class="forgot-password" href="#">Forgot password?</a>
+                <a class="forgot-password" (click)="toggleForgotPasswordMode()" style="cursor: pointer;">Forgot password?</a>
 
                 <!-- Sign In Button -->
                 <div class="btn-submit-wrapper">
@@ -279,6 +282,81 @@
             </div>
             } <!-- end @if (signupSuccess) -->
 
+        </div>
+
+        <!-- Forgot Password View -->
+        <div class="auth-view forgot-password-view">
+            @if (!forgotPasswordSuccess) {
+            <form (ngSubmit)="resetPassword(resetForm)" #resetForm="ngForm">
+                <div class="form-header">
+                    <div class="status-line" style="opacity: 1; transform: translateY(0); animation: none; margin-bottom: 20px;">
+                        <span class="status-dot" style="background-color: #facc15; box-shadow: 0 0 8px #facc15;"></span>
+                        <lucide-icon [img]="Lock" [size]="12"></lucide-icon>
+                        RECOVERY
+                    </div>
+                    <h2 style="opacity: 1; transform: translateY(0); animation: none; font-size: 1.5rem;">Reset Password</h2>
+                    <p class="subtitle" style="opacity: 1; transform: translateY(0); animation: none; font-size: 0.85rem; padding: 0 10px;">
+                        Enter your work email and we'll send you a link to reset your password.
+                    </p>
+                </div>
+
+                <!-- Error Banner -->
+                @if (errorMessage) {
+                    <div class="error-banner" style="animation: none;">{{ errorMessage }}</div>
+                }
+
+                <div class="inputs-group">
+                    <div class="form-group" style="opacity: 1; transform: translateY(0); animation: none; text-align: left;">
+                        <label>Work Email <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <lucide-icon [img]="Mail" [size]="16"></lucide-icon>
+                            <input
+                                type="email"
+                                name="resetEmail"
+                                #resetEmailCtrl="ngModel"
+                                [(ngModel)]="forgotPasswordEmail"
+                                placeholder="Work Email"
+                                required
+                                autocomplete="email"
+                            />
+                        </div>
+                        <span class="error-message" *ngIf="forgotPasswordSubmitted && resetEmailCtrl.invalid">Valid email is required.</span>
+                    </div>
+                </div>
+
+                <div class="btn-submit-wrapper" style="opacity: 1; transform: translateY(0); animation: none; margin-top: 15px;">
+                    <button type="submit" class="btn btn-primary full-width-btn">Send Reset Link</button>
+                </div>
+
+                <div class="toggle-link" style="opacity: 1; transform: translateY(0); animation: none; margin-top: 20px;">
+                    Remember your password? <a (click)="goToLogin()">Log in</a>
+                </div>
+            </form>
+            }
+
+            @if (forgotPasswordSuccess) {
+            <div class="success-view">
+                <div class="success-icon-ring" style="box-shadow: 0 0 30px rgba(16, 185, 129, 0.15), inset 0 0 20px rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.25);">
+                    <lucide-icon [img]="Mail" [size]="36" style="color: #10b981; filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));"></lucide-icon>
+                </div>
+                <div class="status-line success-badge">
+                    <span class="status-dot"></span>
+                    <lucide-icon [img]="ShieldCheck" [size]="12"></lucide-icon>
+                    EMAIL SENT
+                </div>
+                <h2 class="success-title">Check Your Inbox</h2>
+                <p class="success-secondary">
+                    We've sent password reset instructions to <strong>{{ forgotPasswordEmail }}</strong>.
+                </p>
+                <div class="success-note">
+                    If you don't see the email in your inbox within a few minutes, please check your spam folder.
+                </div>
+                <div class="success-divider"></div>
+                <div class="success-actions">
+                    <button class="btn btn-primary" (click)="goToLogin()">Back to Login</button>
+                </div>
+            </div>
+            }
         </div>
 
     </div>

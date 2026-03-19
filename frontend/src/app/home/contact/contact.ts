@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Shield, MapPin, Phone, Clock, Mail, Twitter, Instagram, Youtube, User, MessageSquare, ArrowRight, ChevronRight, Play } from 'lucide-angular';
+import { LucideAngularModule, Shield, MapPin, Phone, Clock, Mail, Twitter, Instagram, Linkedin, Facebook, Youtube, User, MessageSquare, ArrowRight, ChevronRight, Play } from 'lucide-angular';
 
 @Component({
     selector: 'app-contact',
@@ -20,6 +20,8 @@ export class ContactComponent {
     Mail = Mail;
     Twitter = Twitter;
     Instagram = Instagram;
+    Linkedin = Linkedin;
+    Facebook = Facebook;
     Youtube = Youtube;
     User = User;
     MessageSquare = MessageSquare;

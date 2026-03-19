@@ -2,7 +2,7 @@ import { Component, HostListener, ElementRef, ViewChild, ViewChildren, QueryList
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Shield, Activity, Cloud, Lock, Cpu, Radar, Zap, FileText, Youtube, Users, Check, Crosshair, Eye, Bot, Brain, Globe, BarChart, X, Bug, Twitter, Linkedin, Server, Network, Search, Fingerprint, Share2, Key, Upload, Layout, Rocket, Play } from 'lucide-angular';
+import { LucideAngularModule, Shield, Activity, Cloud, Lock, Cpu, Radar, Zap, FileText, Youtube, Users, Check, Crosshair, Eye, Bot, Brain, Globe, BarChart, X, Bug, Twitter, Linkedin, Facebook, Instagram, Server, Network, Search, Fingerprint, Share2, Key, Upload, Layout, Rocket, Play } from 'lucide-angular';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -45,6 +45,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     readonly BarChart = BarChart;
     readonly Twitter = Twitter;
     readonly Linkedin = Linkedin;
+    readonly Facebook = Facebook;
+    readonly Instagram = Instagram;
     readonly Youtube = Youtube;
     readonly Bug = Bug;
     readonly Share2 = Share2;
