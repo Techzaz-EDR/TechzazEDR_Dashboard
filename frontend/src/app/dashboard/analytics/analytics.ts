@@ -173,15 +173,6 @@ export class Analytics {
             severity: 'HIGH'
         },
         {
-            time: '3 hours ago',
-            device: 'WORKSTATION-023',
-            category: 'Privilege Esc',
-            title: 'Privilege Escalation Attempt',
-            description: 'Detected attempt to escalate privileges using UAC bypass',
-            status: 'BLOCKED',
-            severity: 'HIGH'
-        },
-        {
             time: '5 hours ago',
             device: 'DESKTOP-002',
             category: 'Network',

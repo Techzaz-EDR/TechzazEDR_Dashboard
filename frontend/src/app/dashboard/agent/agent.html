@@ -119,10 +119,14 @@
               <span class="label">Alert details</span>
               <h4>{{ selectedAlert.name }}</h4>
             </div>
-            <button class="dismiss-btn" type="button" (click)="closeAlertDetails($event)">
-              <lucide-icon [name]="EyeIcon" [size]="14"></lucide-icon>
-              Dismiss
-            </button>
+            <div class="panel-actions">
+              <button class="icon-btn expand-btn" type="button" (click)="openAlertModal()" title="Expand to Fullscreen">
+                <lucide-icon [name]="MaximizeIcon" [size]="16"></lucide-icon>
+              </button>
+              <button class="icon-btn close-btn" type="button" (click)="closeAlertDetails($event)" title="Close Details">
+                <lucide-icon [name]="CloseIcon" [size]="18"></lucide-icon>
+              </button>
+            </div>
           </div>
         
           <p class="panel-desc">{{ selectedAlert.description }}</p>
@@ -254,6 +258,103 @@
 
     <div class="modal-footer">
       <button class="cancel-btn" (click)="closeConfigureAgentModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Details Fullscreen Modal & Investigation -->
+<div class="modal-overlay" *ngIf="showAlertModal" (click)="closeAlertModal()">
+  <div class="modal-content alert-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="title-group">
+        <div class="icon-circle" [ngClass]="getSeverityClass(selectedAlert?.severity || '')">
+          <lucide-icon [name]="AlertTriangleIcon" [size]="24"></lucide-icon>
+        </div>
+        <div>
+          <h2>{{ selectedAlert?.name }}</h2>
+          <span class="subtitle">Detailed Alert Analysis</span>
+        </div>
+      </div>
+      <button class="close-btn" (click)="closeAlertModal()">×</button>
+    </div>
+
+    <div class="modal-body custom-scrollbar">
+      <div class="alert-modal-grid">
+        <!-- 1. Alert Content -->
+        <div class="alert-info-section">
+          <p class="modal-desc">{{ selectedAlert?.description }}</p>
+          
+          <div class="detail-cards">
+            <div class="detail-card">
+              <span class="card-label">Category</span>
+              <span class="card-value">{{ selectedAlert?.Category || selectedAlert?.name }}</span>
+            </div>
+            <div class="detail-card">
+              <span class="card-label">Severity</span>
+              <span class="card-value severity" [ngClass]="getSeverityClass(selectedAlert?.severity || '')">{{ selectedAlert?.severity }}</span>
+            </div>
+            <div class="detail-card">
+              <span class="card-label">Detected Time</span>
+              <span class="card-value">{{ formatAlertTime(selectedAlert?.Timestamp || selectedAlert?.timestamp) }}</span>
+            </div>
+          </div>
+
+          <div class="technical-details" *ngIf="selectedAlert?.Details">
+            <h3 class="subsection-title">Technical Raw Data</h3>
+            <div class="raw-data-container">
+              <pre>{{ selectedAlert?.Details | json }}</pre>
+            </div>
+          </div>
+
+          <div class="rule-context" *ngIf="selectedAlert?.ruleInfo?.description">
+            <h3 class="subsection-title">Detection Context</h3>
+            <div class="info-block">
+              <strong>Description:</strong>
+              <p>{{ selectedAlert.ruleInfo.description }}</p>
+            </div>
+            <div class="info-block" *ngIf="selectedAlert.ruleInfo.mitigation">
+              <strong>Mitigation Strategy:</strong>
+              <p>{{ selectedAlert.ruleInfo.mitigation }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Investigation Panel -->
+        <div class="investigation-sidepanel">
+          <div class="investigation-header">
+            <lucide-icon [name]="ShieldIcon" [size]="20"></lucide-icon>
+            <h3>Create Investigation</h3>
+          </div>
+          
+          <div class="form-group">
+            <label>Update Severity</label>
+            <select [(ngModel)]="investigationSeverity" class="custom-select">
+              <option value="Critical">Critical</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Assign to Analyst</label>
+            <select [(ngModel)]="investigationAssignee" class="custom-select">
+              <option *ngIf="isLoadingUsers" value="" disabled>Loading users...</option>
+              <option *ngIf="!isLoadingUsers && availableUsers.length === 0" value="" disabled>No users found</option>
+              <option *ngFor="let user of availableUsers" [value]="user.email">{{ user.name }} ({{ user.role }})</option>
+            </select>
+          </div>
+
+          <div class="investigation-footer">
+            <button class="create-incident-btn" (click)="createInvestigation()" [disabled]="isCreatingIncident">
+              <lucide-icon [name]="ActivityIcon" *ngIf="!isCreatingIncident"></lucide-icon>
+              <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="isCreatingIncident"></lucide-icon>
+              {{ isCreatingIncident ? 'Creating Incident...' : 'Create Incident' }}
+            </button>
+            <p class="footer-note">Saving will create a new entry in the incidents collection and notify the assignee.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

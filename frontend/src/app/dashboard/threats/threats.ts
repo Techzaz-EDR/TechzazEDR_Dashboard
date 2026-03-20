@@ -45,8 +45,7 @@ export class Threats {
         { label: 'Malware', count: 145, trend: '+12%', color: 'critical' },
         { label: 'Exploits', count: 32, trend: '+5%', color: 'high' },
         { label: 'PUPs', expandedLabel: 'Potentially Unwanted Programs', count: 89, trend: '-2%', color: 'medium' },
-        { label: 'Network Attacks', count: 24, trend: '+8%', color: 'high' },
-        { label: 'Privilege Escalation', count: 7, trend: '0%', color: 'critical' }
+        { label: 'Network Attacks', count: 24, trend: '+8%', color: 'high' }
     ];
 
     threats: ThreatLogEntry[] = [
@@ -82,17 +81,6 @@ export class Threats {
             type: 'Malware',
             status: 'quarantined',
             icon: '⚠️'
-        },
-        {
-            id: 4,
-            title: 'Privilege Escalation Attempt',
-            description: 'Detected attempt to escalate privileges using UAC bypass',
-            endpoint: 'WORKSTATION-023',
-            time: '3 hours ago',
-            severity: 'high',
-            type: 'Privilege Esc',
-            status: 'blocked',
-            icon: '🔒'
         },
         {
             id: 5,

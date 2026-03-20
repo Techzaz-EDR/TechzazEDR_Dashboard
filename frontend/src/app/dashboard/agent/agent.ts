@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { 
   LucideAngularModule, 
   Terminal, 
@@ -17,15 +18,20 @@ import {
   History,
   Eye,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Maximize2,
+  X
 } from 'lucide-angular';
 import { FirestoreService } from '../../core/services/firestore.service';
+import { AuthService } from '../../core/services/auth.service';
 import { Subscription } from 'rxjs';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 @Component({
   selector: 'app-agent',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, FormsModule],
   templateUrl: './agent.html',
   styleUrl: './agent.scss'
 })
@@ -46,6 +52,8 @@ export class AgentComponent implements OnInit, OnDestroy {
   readonly EyeIcon = Eye;
   readonly ChevronLeftIcon = ChevronLeft;
   readonly ChevronRightIcon = ChevronRight;
+  readonly MaximizeIcon = Maximize2;
+  readonly CloseIcon = X;
   readonly Math = Math;
 
   agentId: string | null = null;
@@ -56,7 +64,18 @@ export class AgentComponent implements OnInit, OnDestroy {
   
   showCommandHistoryModal: boolean = false;
   showConfigureAgentModal: boolean = false;
+  showAlertModal: boolean = false;
   loadingCommands: { [key: string]: boolean } = {};
+
+  // Investigation Form
+  investigationSeverity: string = 'High';
+  investigationAssignee: string = '';
+  isCreatingIncident: boolean = false;
+
+  // Real organization users for assignment
+  availableUsers: { id: string; name: string; email: string; role: string }[] = [];
+  isLoadingUsers: boolean = false;
+  private firestoreDb = getFirestore(getAuth().app);
 
   // Pagination for Alerts
   currentPage: number = 1;
@@ -104,6 +123,7 @@ export class AgentComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private firestoreService: FirestoreService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -116,6 +136,42 @@ export class AgentComponent implements OnInit, OnDestroy {
         } else {
           // If no agent selected, redirect back
           this.router.navigate(['/dashboard/endpoints']);
+        }
+      })
+    );
+
+    // Load real organization users for the assignee dropdown
+    this.loadOrganizationUsers();
+  }
+
+  private loadOrganizationUsers() {
+    this.isLoadingUsers = true;
+    this.subscriptions.add(
+      this.authService.userProfile$.subscribe(async profile => {
+        if (profile && profile.organization_id) {
+          try {
+            const usersRef = collection(this.firestoreDb, 'users');
+            const q = query(usersRef, where('organization_id', '==', profile.organization_id));
+            const snapshot = await getDocs(q);
+            this.availableUsers = snapshot.docs.map(doc => {
+              const data = doc.data();
+              return {
+                id: doc.id,
+                name: data['name'] || data['email'] || 'Unknown',
+                email: data['email'] || '',
+                role: data['role'] || 'Analyst'
+              };
+            });
+            // Default assignee to the first user if available
+            if (this.availableUsers.length > 0 && !this.investigationAssignee) {
+              this.investigationAssignee = this.availableUsers[0].email;
+            }
+          } catch (error) {
+            console.error('Error loading organization users:', error);
+          } finally {
+            this.isLoadingUsers = false;
+            this.cdr.detectChanges();
+          }
         }
       })
     );
@@ -377,6 +433,59 @@ export class AgentComponent implements OnInit, OnDestroy {
       event.stopPropagation();
     }
     this.selectedAlert = null;
+    this.showAlertModal = false;
     this.cdr.detectChanges();
+  }
+
+  openAlertModal(): void {
+    this.showAlertModal = true;
+    if (this.selectedAlert) {
+      this.investigationSeverity = this.selectedAlert.severity || 'High';
+    }
+    this.cdr.detectChanges();
+  }
+
+  closeAlertModal(): void {
+    this.showAlertModal = false;
+    this.cdr.detectChanges();
+  }
+
+  async createInvestigation() {
+    if (!this.selectedAlert || !this.agentId) return;
+
+    this.isCreatingIncident = true;
+    this.cdr.detectChanges();
+
+    const incidentData = {
+      name: this.selectedAlert.name,
+      description: this.selectedAlert.description,
+      severity: this.investigationSeverity,
+      assignee: this.investigationAssignee,
+      agent_id: this.agentId,
+      alert_id: this.selectedAlert.id || 'unknown',
+      org_id: this.agentDetails?.org_id || 'demo-org',
+      type: this.selectedAlert.Category || 'Malware',
+      source_alert: {
+        id: this.selectedAlert.id,
+        name: this.selectedAlert.name,
+        severity: this.selectedAlert.severity
+      }
+    };
+
+    try {
+      await this.firestoreService.createIncident(incidentData);
+      // Optionally update alert status to 'investigating'
+      if (this.selectedAlert.id) {
+        await this.firestoreService.updateAlertStatus(this.agentId, this.selectedAlert.id, 'investigating');
+      }
+      
+      this.closeAlertModal();
+      // Show some success feedback if needed, but for now just close
+    } catch (error) {
+      console.error("Error creating incident:", error);
+    } finally {
+      this.isCreatingIncident = false;
+      this.cdr.detectChanges();
+    }
   }
 }

@@ -143,7 +143,6 @@ export class Overview implements OnInit, OnDestroy {
 
   private mockThreatsPool = [
     { name: 'Cobalt Strike Beacon', host: 'FIN-WKS-023', severity: 'critical', type: 'Malware', technique: 'Command & Control' },
-    { name: 'Mimikatz Dump', host: 'IT-ADM-001', severity: 'critical', type: 'Privilege Escalation', technique: 'Credential Dumping' },
     { name: 'Cryptominer', host: 'DEV-SRV-004', severity: 'medium', type: 'PUP', technique: 'Resource Hijacking' },
     { name: 'Port Scan', host: 'EXT-FW-01', severity: 'low', type: 'Recon', technique: 'Network Discovery' },
     { name: 'Emotet Trojan', host: 'SALES-PC-05', severity: 'critical', type: 'Trojan', technique: 'Phishing Payload' }
@@ -288,8 +287,7 @@ export class Overview implements OnInit, OnDestroy {
     // Initial population
     this.recentThreats = [
       { id: '1', time: '2m ago', name: 'Cobalt Strike Beacon', host: 'FIN-WKS-023', severity: 'critical', type: 'Malware', technique: 'Command & Control' },
-      { id: '2', time: '15m ago', name: 'PowerShell Empire', host: 'HR-LAP-009', severity: 'high', type: 'Exploit', technique: 'Lateral Movement' },
-      { id: '3', time: '1h ago', name: 'Mimikatz Dump', host: 'IT-ADM-001', severity: 'critical', type: 'Privilege Escalation', technique: 'Credential Dumping' }
+      { id: '2', time: '15m ago', name: 'PowerShell Empire', host: 'HR-LAP-009', severity: 'high', type: 'Exploit', technique: 'Lateral Movement' }
     ];
 
     this.intervalId = setInterval(() => {
