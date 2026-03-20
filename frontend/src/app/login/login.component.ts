@@ -96,8 +96,8 @@ export class LoginComponent implements AfterViewInit, OnInit {
             const rect = card.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            const rotateX = (e.clientY - centerY) / 25;
-            const rotateY = (centerX - e.clientX) / 25;
+            const rotateX = (e.clientY - centerY) / 35;
+            const rotateY = (centerX - e.clientX) / 35;
 
             gsap.to(card, {
                 rotateX: rotateX,
