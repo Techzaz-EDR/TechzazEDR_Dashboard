@@ -5,9 +5,10 @@ import { Router, RouterLink } from '@angular/router';
 import { FirestoreService } from '../../core/services/firestore.service';
 import {
     LucideAngularModule,
-    Shield, Plus, Search
+    Shield, Plus, Search, Download
 } from 'lucide-angular';
 import { Subscription } from 'rxjs';
+import { BootstrapService, BootstrapResponse } from '../../core/services/bootstrap.service';
 
 @Component({
   selector: 'app-endpoints',
@@ -21,6 +22,7 @@ export class Endpoints implements OnInit, OnDestroy {
     readonly ShieldIcon = Shield;
     readonly PlusIcon = Plus;
     readonly SearchIcon = Search;
+    readonly DownloadIcon = Download;
 
     filteredEndpoints: any[] = [];
     searchQuery: string = '';
@@ -29,6 +31,7 @@ export class Endpoints implements OnInit, OnDestroy {
 
     constructor(
         private firestoreService: FirestoreService,
+        private bootstrapService: BootstrapService,
         private router: Router,
         private cdr: ChangeDetectorRef
     ) {}
@@ -91,11 +94,14 @@ export class Endpoints implements OnInit, OnDestroy {
     showAddModal = false;
     newEndpoint = {
         name: '',
-        ip: '',
         os: 'Windows 11',
-        type: 'Workstation',
-        status: 'protected'
+        type: 'Workstation'
     };
+    
+    // Bootstrap Script State
+    isGenerating = false;
+    generatedScript: BootstrapResponse | null = null;
+    errorMessage: string | null = null;
 
     openModal() {
         this.showAddModal = true;
@@ -103,21 +109,56 @@ export class Endpoints implements OnInit, OnDestroy {
 
     closeModal() {
         this.showAddModal = false;
-        // Reset form
+        // Reset form and state
         this.newEndpoint = {
             name: '',
-            ip: '',
             os: 'Windows 11',
-            type: 'Workstation',
-            status: 'protected'
+            type: 'Workstation'
         };
+        this.isGenerating = false;
+        this.generatedScript = null;
+        this.errorMessage = null;
     }
 
     addEndpoint() {
-        if (!this.newEndpoint.name || !this.newEndpoint.ip) return;
-        // In a real app, this would write to Firestore
-        // For now, we'll just log or implement the write if we want it to be "real"
-        console.log('Adding endpoint:', this.newEndpoint);
-        this.closeModal();
+        if (!this.newEndpoint.name) return;
+        
+        this.isGenerating = true;
+        this.errorMessage = null;
+        
+        this.bootstrapService.generateBootstrapScript(
+            this.newEndpoint.name,
+            this.newEndpoint.os,
+            this.newEndpoint.type
+        ).subscribe({
+            next: (response) => {
+                this.isGenerating = false;
+                this.generatedScript = response;
+                console.log('Bootstrap script generated:', response.filename);
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                this.isGenerating = false;
+                const errMsg = err?.error?.detail || err?.message || 'Unknown error';
+                const status = err?.status || 'No status';
+                this.errorMessage = `Failed: [${status}] ${errMsg}`;
+                console.error('Error generating script:', err);
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    downloadScript() {
+        if (!this.generatedScript) return;
+        
+        const blob = new Blob([this.generatedScript.script_content], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = this.generatedScript.filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
     }
 }
