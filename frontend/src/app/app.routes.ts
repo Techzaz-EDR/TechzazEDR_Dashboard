@@ -19,7 +19,6 @@ export const routes: Routes = [
             { path: 'agent', loadComponent: () => import('./dashboard/agent/agent').then(m => m.AgentComponent) },
             { path: 'users', loadComponent: () => import('./dashboard/users/users').then(m => m.Users) },
             { path: 'incidents', loadComponent: () => import('./dashboard/incidents/incidents').then(m => m.Incidents) },
-            { path: 'analytics', loadComponent: () => import('./dashboard/analytics/analytics').then(m => m.Analytics) },
             { path: 'reports', loadComponent: () => import('./dashboard/reports/reports').then(m => m.Reports) },
             { path: 'threats', loadComponent: () => import('./dashboard/threats/threats').then(m => m.Threats) },
             {
