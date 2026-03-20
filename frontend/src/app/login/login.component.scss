@@ -2,17 +2,10 @@
     display: block;
     height: 100vh;
     font-family: 'Inter', sans-serif;
-<<<<<<< HEAD
     --neon-blue: #3EA0FF; /* Keep for legacy floaters */
     --bg-dark: var(--bg-primary);
     --glass-bg: #0D152B;
     --border-color: rgba(255, 255, 255, 0.05);
-=======
-    --neon-blue: #4F6BFF; /* Keep for legacy floaters */
-    --bg-dark: var(--bg-primary);
-    --glass-bg: #0D152B;
-    --border-color: rgba(79, 107, 255, 0.1);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
     --transition-speed: 0.8s;
 }
 
@@ -36,20 +29,12 @@
     left: 0;
     width: 600px;
     height: 600px;
-<<<<<<< HEAD
     background: radial-gradient(circle, rgba(93, 124, 255, 0.15), transparent 70%);
-=======
-    background: radial-gradient(circle, rgba(79, 107, 255, 0.15), transparent 70%);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
     opacity: 0;
     transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-
-     --neon-blue: #4F6BFF; /* Keep for legacy floaters */
-        opacity: 1;
-    }
 }
 
 .data-fragments {
@@ -80,33 +65,12 @@
 .auth-card {
     position: relative;
     width: 400px;
-     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(79, 107, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(93, 124, 255, 0.05);
     backdrop-filter: blur(16px) saturate(180%);
     border-radius: 20px;
     border: 1px solid #1D2A45;
     overflow: hidden;
     z-index: 10;
-<<<<<<< HEAD
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(93, 124, 255, 0.05);
-=======
-          box-shadow: 0 0 60px rgba(79, 107, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.02);
-          border-color: #22314F;
-
-    /* Cinematic Intro Animation */
-    opacity: 0;
-    transform: scale(0.98) translateY(20px);
-    animation: card-entry 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
-    transition: box-shadow 0.5s ease, border-color 0.5s ease;
-
-    &:hover {
-<<<<<<< HEAD
-        box-shadow: 0 0 60px rgba(93, 124, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.02);
-        border-color: rgba(255, 255, 255, 0.1);
-=======
-        box-shadow: 0 0 60px rgba(79, 107, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.02);
-        border-color: #22314F;
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
-    }
 }
 
 /* Auth View */

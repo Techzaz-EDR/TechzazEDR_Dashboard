@@ -45,17 +45,28 @@ export class Users implements OnInit, OnDestroy {
                     const usersRef = collection(this.db, 'users');
                     const q = query(usersRef, where('organization_id', '==', profile.organization_id));
                     const querySnapshot = await getDocs(q);
-                    
-                    this.users = querySnapshot.docs.map(doc => {
+
+                    const colorPalette = ['#3EA0FF', '#4F6BFF', '#5D7CFF', '#6C88FF', '#7A6CFF', '#8B6CFF'];
+                    const emailToName: { [key: string]: string } = {
+                        "yeheni.20240416@iit.ac.lk": "Yeheni Alwis",
+                        "rashmi.20222048@iit.ac.lk": "Rashmi Kavya",
+                        "limuthu.20240920@iit.ac.lk": "Limuthu Lohiru",
+                        "tharuki.20240894@iit.ac.lk": "Tharuki Jayasuriya"
+                    };
+
+                    this.users = querySnapshot.docs.map((doc, index) => {
                         const data = doc.data();
+                        const email = data['email'] || '';
+                        const displayName = emailToName[email] || data['name'] || email || 'Unknown User';
+
                         return {
                             id: doc.id,
-                            name: data['name'] || data['email'] || 'Unknown User',
-                            email: data['email'] || 'No Email',
+                            name: displayName,
+                            email: email || 'No Email',
                             role: data['role'] || 'Unknown',
                             status: data['status'] || 'active',
                             lastLogin: this.formatLastLogin(data['last_login_at']),
-                            avatarColor: '#' + Math.floor(Math.random() * 16777215).toString(16) // Random color for now
+                            avatarColor: colorPalette[index % colorPalette.length]
                         };
                     });
                 } catch (error) {
@@ -125,7 +136,7 @@ export class Users implements OnInit, OnDestroy {
         this.editingUser = { ...user };
         // Map UI role back to dropdown values if needed
         const role = user.role === 'Administrator' ? 'Admin' :
-                    user.role === 'Security Analyst' ? 'Analyst' : 'Viewer';
+            user.role === 'Security Analyst' ? 'Analyst' : 'Viewer';
         this.editingUser.internalRole = role;
         this.showEditUserModal = true;
     }
@@ -146,15 +157,15 @@ export class Users implements OnInit, OnDestroy {
 
         try {
             const role = this.newUser.role === 'Admin' ? 'Administrator' :
-                        this.newUser.role === 'Analyst' ? 'Security Analyst' : 'Viewer';
+                this.newUser.role === 'Analyst' ? 'Security Analyst' : 'Viewer';
 
             const result = await this.authService.addUserToFirestore(
                 this.newUser.email,
                 this.newUser.name,
                 role,
-                { 
-                    password: this.newUser.password, 
-                    department: this.newUser.department 
+                {
+                    password: this.newUser.password,
+                    department: this.newUser.department
                 }
             );
 
@@ -165,7 +176,7 @@ export class Users implements OnInit, OnDestroy {
                 role: role,
                 status: 'active',
                 lastLogin: 'Just now',
-                avatarColor: '#' + Math.floor(Math.random() * 16777215).toString(16)
+                avatarColor: '#5D7CFF'
             });
 
             this.closeModal();
@@ -187,7 +198,7 @@ export class Users implements OnInit, OnDestroy {
 
         try {
             const role = this.editingUser.internalRole === 'Admin' ? 'Administrator' :
-                        this.editingUser.internalRole === 'Analyst' ? 'Security Analyst' : 'Viewer';
+                this.editingUser.internalRole === 'Analyst' ? 'Security Analyst' : 'Viewer';
 
             await this.authService.updateUserInFirestore(this.editingUser.id, {
                 name: this.editingUser.name,
@@ -275,22 +286,22 @@ export class Users implements OnInit, OnDestroy {
             const now = new Date();
             const diffMs = now.getTime() - date.getTime();
             const diffSeconds = Math.floor(diffMs / 1000);
-            
+
             if (diffSeconds < 60) return 'Just now';
-            
+
             const diffMinutes = Math.floor(diffSeconds / 60);
             if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
-            
+
             const diffHours = Math.floor(diffMinutes / 60);
             if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-            
+
             const diffDays = Math.floor(diffHours / 24);
             if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-            
-            return new Intl.DateTimeFormat('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
+
+            return new Intl.DateTimeFormat('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
             }).format(date);
         } catch (e) {
             console.error('Error formatting date:', e);
