@@ -264,6 +264,18 @@ export class FirestoreService {
   }
 
 
+  async createIncident(incidentData: any) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
+    
+    return await addDoc(incidentsRef, {
+      ...incidentData,
+      timestamp: serverTimestamp(),
+      status: 'open'
+    });
+  }
+
   getRule(ruleId: string): Observable<any> {
     const ruleRef = doc(this.db, 'rules', ruleId);
     const subject = new ReplaySubject<any>(1);
