@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
     readonly Send = Send;
 
     navItems: NavItem[] = [
-        { label: 'Security Overview', icon: Activity, route: '/dashboard/overview' },
+        { label: 'Overview', icon: Activity, route: '/dashboard/overview' },
         { label: 'Endpoints', icon: Shield, route: '/dashboard/endpoints' },
         { label: 'Incidents', icon: Zap, route: '/dashboard/incidents' },
         { label: 'Reports', icon: FileText, route: '/dashboard/reports' },
