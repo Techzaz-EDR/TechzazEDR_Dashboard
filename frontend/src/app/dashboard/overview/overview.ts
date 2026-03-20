@@ -96,30 +96,21 @@ export class Overview implements OnInit, OnDestroy {
     protected: 298,
     protectedPct: 85,
     atRisk: 35,
-    offline: 17
+    offline: 17,
+    totalCriticalAlerts: 0
   };
 
   // 3. Secondary Row
   // Agent Health & Updates
   agentHealth: any[] = [
-    { label: 'Outdated Agents', count: 42, color: 'warning', action: 'Update', isProcessing: false },
-    { label: 'Failed Updates', count: 3, color: 'critical', action: 'Retry', isProcessing: false },
-    { label: 'Pending Restart', count: 12, color: 'neutral', action: 'Reboot', isProcessing: false }
+    { label: 'Outdated Agents', count: 0, color: 'warning', action: 'Update', isProcessing: false },
+    { label: 'Failed Updates', count: 0, color: 'critical', action: 'Retry', isProcessing: false },
+    { label: 'Pending Restart', count: 0, color: 'neutral', action: 'Reboot', isProcessing: false }
   ];
 
   handleHealthAction(item: any) {
-    if (item.isProcessing || item.count === 0) return;
-
-    item.isProcessing = true;
-
-    // Simulate background process
-    const duration = 1500 + Math.random() * 1500;
-    setTimeout(() => {
-      item.isProcessing = false;
-      if (item.count > 0) {
-        item.count--;
-      }
-    }, duration);
+    // No-op for now as it's real data
+    console.log(`Action ${item.action} requested for ${item.label}`);
   }
 
   // Top Risk Contributors
@@ -141,14 +132,10 @@ export class Overview implements OnInit, OnDestroy {
   // Threat Feed
   recentThreats: any[] = [];
 
-  private mockThreatsPool = [
-    { name: 'Cobalt Strike Beacon', host: 'FIN-WKS-023', severity: 'critical', type: 'Malware', technique: 'Command & Control' },
-    { name: 'Cryptominer', host: 'DEV-SRV-004', severity: 'medium', type: 'PUP', technique: 'Resource Hijacking' },
-    { name: 'Port Scan', host: 'EXT-FW-01', severity: 'low', type: 'Recon', technique: 'Network Discovery' },
-    { name: 'Emotet Trojan', host: 'SALES-PC-05', severity: 'critical', type: 'Trojan', technique: 'Phishing Payload' }
-  ];
-
   private intervalId: any;
+
+  // Real incident count from Firestore (null = loading)
+  activeIncidentsCount: number | null = null;
 
   // Animation properties
   animatedProtectionPct = 0;
@@ -164,17 +151,120 @@ export class Overview implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setTrendPeriod('24h');
-    this.initThreatSimulation();
     this.animateDonutChart();
-    
-    // Fetch real incident count
+
+    // Fetch real incident count from Firestore
     this.subs.add(
-      this.firestoreService.getOrganizationAlerts().subscribe(alerts => {
-        if (this.kpiData && this.kpiData.activeIncidents) {
-          this.kpiData.activeIncidents.value = alerts.length;
-        }
+      this.firestoreService.getOrganizationIncidents().subscribe(incidents => {
+        this.activeIncidentsCount = incidents.length;
+        
+        // Populate recent incidents table (limit to 5)
+        this.recentIncidents = incidents.slice(0, 5).map(inc => ({
+          id: inc.id,
+          endpoint: inc.agent_name || inc.endpoint_name || 'Unknown',
+          threat: inc.title || inc.name || 'Untitled Incident',
+          severity: inc.priority || inc.severity || 'medium',
+          status: inc.status || 'Active',
+          detectedTime: inc.time || 'Recently'
+        }));
       })
     );
+
+    // Fetch agents and calculate protection stats
+    this.subs.add(
+      this.firestoreService.getAgents().subscribe(agents => {
+        this.calculateProtectionStats(agents);
+      })
+    );
+
+    // Fetch real threat feed (alerts)
+    this.subs.add(
+      this.firestoreService.getOrganizationAlerts().subscribe(alerts => {
+        this.recentThreats = alerts.slice(0, 5).map(alert => ({
+          id: alert.id,
+          time: alert.time || 'Recently',
+          name: alert.RuleName || alert.name || 'Detection Alert',
+          host: alert.agent_id || alert.hostname || 'Unknown Host',
+          severity: alert.Severity?.toLowerCase() || 'medium',
+          type: alert.Type || 'Detection',
+          technique: alert.Technique || alert.rule_id || ''
+        }));
+      })
+    );
+  }
+
+  private calculateProtectionStats(agents: any[]) {
+    const total = agents.length || 0;
+    if (total === 0) {
+      this.protectionStats = { total: 0, protected: 0, protectedPct: 0, atRisk: 0, offline: 0, totalCriticalAlerts: 0 };
+      this.animateDonutChart();
+      return;
+    }
+
+    const now = new Date().getTime();
+    const oneDayMs = 24 * 60 * 60 * 1000;
+
+    let offline = 0;
+    let atRisk = 0;
+    let ok = 0;
+    
+    let totalCriticalAlerts = 0;
+    
+    let outdated = 0;
+    let failedUpdates = 0;
+    let pendingRestart = 0;
+
+    let offline30d = 0;
+    let criticalMalwareHosts = 0;
+
+    const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+
+    agents.forEach(agent => {
+      const lastSeen = agent.last_seen?.toDate ? agent.last_seen.toDate().getTime() : 0;
+      const isOffline = (now - lastSeen) > oneDayMs;
+      const isOffline30d = (now - lastSeen) > thirtyDaysMs;
+
+      if (isOffline) {
+        offline++;
+        if (isOffline30d) offline30d++;
+      } else if (agent.status === 'at_risk' || agent.critical_alerts > 0) {
+        atRisk++;
+        if (agent.critical_alerts > 0) criticalMalwareHosts++;
+      } else {
+        ok++;
+      }
+
+      // Health heuristics
+      if (agent.version && agent.version !== '1.2.0') outdated++;
+      if (agent.update_status === 'failed') failedUpdates++;
+      if (agent.restart_pending === true) pendingRestart++;
+
+      totalCriticalAlerts += (agent.critical_alerts || 0);
+    });
+
+    this.protectionStats = {
+      total,
+      protected: ok,
+      protectedPct: total > 0 ? Math.round((ok / total) * 100) : 0,
+      atRisk,
+      offline,
+      totalCriticalAlerts
+    };
+
+    this.agentHealth = [
+      { label: 'Outdated Agents', count: outdated, color: 'warning', action: 'Update', isProcessing: false },
+      { label: 'Failed Updates', count: failedUpdates, color: 'critical', action: 'Retry', isProcessing: false },
+      { label: 'Pending Restart', count: pendingRestart, color: 'neutral', action: 'Reboot', isProcessing: false }
+    ];
+
+    this.riskContributors = [
+      { name: 'Active Critical Malware', count: criticalMalwareHosts, impact: 'Critical', devices: criticalMalwareHosts },
+      { name: 'Offline Devices (>30d)', count: offline30d, impact: 'Medium', devices: offline30d },
+      { name: 'Unpatched Endpoints', count: 12, impact: 'High', devices: 27 }, // Still mock
+      { name: 'Weak Passwords', count: 8, impact: 'Medium', devices: 31 } // Still mock
+    ];
+
+    this.animateDonutChart();
   }
 
   animateDonutChart() {
@@ -209,6 +299,7 @@ export class Overview implements OnInit, OnDestroy {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+    this.subs.unsubscribe();
   }
 
   setTimeFilter(filter: string) {
@@ -281,33 +372,5 @@ export class Overview implements OnInit, OnDestroy {
 
   hideTooltip() {
     this.tooltipVisible = false;
-  }
-
-  initThreatSimulation() {
-    // Initial population
-    this.recentThreats = [
-      { id: '1', time: '2m ago', name: 'Cobalt Strike Beacon', host: 'FIN-WKS-023', severity: 'critical', type: 'Malware', technique: 'Command & Control' },
-      { id: '2', time: '15m ago', name: 'PowerShell Empire', host: 'HR-LAP-009', severity: 'high', type: 'Exploit', technique: 'Lateral Movement' }
-    ];
-
-    this.intervalId = setInterval(() => {
-      this.addNewThreat();
-    }, 5000);
-  }
-
-  addNewThreat() {
-    const randomThreat = this.mockThreatsPool[Math.floor(Math.random() * this.mockThreatsPool.length)];
-    const newThreat = {
-      id: Math.random().toString(36).substr(2, 9),
-      time: 'Just now',
-      name: randomThreat.name,
-      host: randomThreat.host,
-      severity: randomThreat.severity,
-      type: randomThreat.type,
-      technique: randomThreat.technique
-    };
-
-    this.recentThreats.unshift(newThreat);
-    if (this.recentThreats.length > 5) this.recentThreats.pop();
   }
 }
