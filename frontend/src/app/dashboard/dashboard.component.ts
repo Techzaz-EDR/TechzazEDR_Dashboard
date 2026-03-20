@@ -93,15 +93,7 @@ export class DashboardComponent implements OnInit {
         { label: 'Security Overview', icon: Activity, route: '/dashboard/overview' },
         { label: 'Endpoints', icon: Shield, route: '/dashboard/endpoints' },
         { label: 'Incidents', icon: Zap, route: '/dashboard/incidents' },
-        {
-            label: 'Analytics & Reports',
-            icon: BarChart2,
-            expanded: false,
-            children: [
-                { label: 'Analytics', icon: BarChart2, route: '/dashboard/analytics' },
-                { label: 'Reports', icon: FileText, route: '/dashboard/reports' }
-            ]
-        },
+        { label: 'Reports', icon: FileText, route: '/dashboard/reports' },
         { label: 'Threats', icon: ShieldAlert, route: '/dashboard/threats' },
         { label: 'Users', icon: Users, route: '/dashboard/users' },
         { label: 'Settings', icon: Settings, route: '/dashboard/settings' }
