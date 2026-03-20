@@ -26,9 +26,9 @@
         }
 
         .refresh-btn {
-            background-color: transparent;
-            color: #4F6BFF;
-            border: 1px solid #4F6BFF;
+            background-color: var(--bg-input);
+            color: var(--accent-sky);
+            border: 1px solid var(--border-color);
             padding: 8px 16px;
             border-radius: 6px;
             font-weight: 500;
@@ -39,8 +39,10 @@
             transition: all 0.2s;
 
             &:hover {
-                background-color: rgba(79, 107, 255, 0.1);
-            }
+                background-color: rgba(93, 124, 255, 0.14);
+                border-color: rgba(93, 124, 255, 0.32);
+                color: var(--accent-primary);
+                transform: translateY(-1px);
             }
 
             &.loading {
