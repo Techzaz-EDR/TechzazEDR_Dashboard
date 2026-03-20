@@ -1,4 +1,4 @@
-/* Global Styles */
+﻿/* Global Styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
@@ -9,27 +9,27 @@
     --bg-card: #191a24;
     --bg-elevated: #20212e;
     --bg-input: #191a24;
-    --bg-hover: rgba(94, 27, 181, 0.08);
+    --bg-hover: rgba(93, 124, 255, 0.08);
 
-    --primary: #5e1bb5;
-    --primary-hover: #7b2cbf;
-    --secondary: #a855f7;
-    --highlight: #7b2cbf;
-    --accent-bright: #d8b4fe;
+    --primary: #5D7CFF;
+    --primary-hover: #4F6BFF;
+    --secondary: #3EA0FF;
+    --highlight: #4F6BFF;
+    --accent-bright: #6C88FF;
 
-    --accent-primary: #5e1bb5;
-    --accent-secondary: #7b2cbf;
-    --accent-cyan: #d8b4fe;
-    --accent-sky: #a855f7;
-    --accent-purple: #7b2cbf;
+    --accent-primary: #5D7CFF;
+    --accent-secondary: #4F6BFF;
+    --accent-cyan: #6C88FF;
+    --accent-sky: #3EA0FF;
+    --accent-purple: #4F6BFF;
 
-    --link-color: #a855f7;
-    --link-hover: #d8b4fe;
-    --focus-glow: rgba(94, 27, 181, 0.20);
+    --link-color: #3EA0FF;
+    --link-hover: #6C88FF;
+    --focus-glow: rgba(93, 124, 255, 0.20);
 
-    --primary-glow: rgba(94, 27, 181, 0.4);
-    --secondary-glow: rgba(168, 85, 247, 0.35);
-    --accent-glow: rgba(94, 27, 181, 0.3);
+    --primary-glow: rgba(93, 124, 255, 0.4);
+    --secondary-glow: rgba(62, 160, 255, 0.35);
+    --accent-glow: rgba(93, 124, 255, 0.3);
 
     --text-primary: #eee;
     --text-secondary: #9d9bb6;
@@ -39,13 +39,13 @@
 
     --border-color: #373659;
     --border-soft: #4a4970;
-    --border-focus: #5e1bb5;
+    --border-focus: #5D7CFF;
     --border-strong: #373659;
     --border-light: rgba(55, 54, 89, 0.7);
     --border-hover: #4a4970;
 
-    --chart-primary: #5e1bb5;
-    --chart-secondary: #a855f7;
+    --chart-primary: #5D7CFF;
+    --chart-secondary: #3EA0FF;
     --chart-warning: #F59E0B;
     --chart-critical: #EF4444;
     --chart-neutral: #64748B;
@@ -64,11 +64,11 @@
 
     /* Shadows */
     --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-    --shadow-glow: 0 0 15px rgba(94, 27, 181, 0.20);
+    --shadow-glow: 0 0 15px rgba(93, 124, 255, 0.20);
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    --gradient-text: linear-gradient(90deg, #5e1bb5 0%, #7b2cbf 100%);
+    --gradient-text: linear-gradient(90deg, #5D7CFF 0%, #4F6BFF 100%);
     --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
 
     /* Transitions */
@@ -243,10 +243,10 @@ h6 {
     &.btn-primary {
         background: var(--primary);
         color: white;
-        box-shadow: 0 8px 25px rgba(94, 27, 181, 0.35);
+        box-shadow: 0 8px 25px rgba(93, 124, 255, 0.35);
 
         &.glow:hover {
-            box-shadow: 0 0 30px rgba(94, 27, 181, 0.55);
+            box-shadow: 0 0 30px rgba(93, 124, 255, 0.55);
         }
 
         &:hover {
@@ -257,12 +257,12 @@ h6 {
 
     &.btn-outline {
         background: transparent;
-        border: 2px solid rgba(94, 27, 181, 0.4);
+        border: 2px solid rgba(93, 124, 255, 0.4);
         color: var(--text-primary);
 
         &:hover {
-            background: rgba(94, 27, 181, 0.12);
-            border-color: #5e1bb5;
+            background: rgba(93, 124, 255, 0.12);
+            border-color: #5D7CFF;
             transform: translateY(-2px);
         }
     }
@@ -359,9 +359,9 @@ textarea:focus-visible {
 .glass-panel {
     background: linear-gradient(145deg, rgba(25, 26, 36, 0.5) 0%, rgba(13, 8, 26, 0.8) 100%);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(94, 27, 181, 0.2);
+    border: 1px solid rgba(93, 124, 255, 0.2);
     border-radius: 20px;
-    box-shadow: 0 0 20px rgba(94, 27, 181, 0.05);
+    box-shadow: 0 0 20px rgba(93, 124, 255, 0.05);
 }
 
 /* Scrollbar */

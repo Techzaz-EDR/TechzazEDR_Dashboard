@@ -40,23 +40,26 @@
             </div>
         </div>
 
-        <div class="kpi-card" [class.status-critical]="kpiData.activeIncidents.value > 0">
+        <div class="kpi-card" [class.status-critical]="activeIncidentsCount !== null && activeIncidentsCount > 0">
             <div class="kpi-icon">
                 <lucide-icon [name]="kpiData.activeIncidents.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ kpiData.activeIncidents.value }}</span>
+                <span class="value">{{ activeIncidentsCount !== null ? activeIncidentsCount : '—' }}</span>
                 <span class="label">{{ kpiData.activeIncidents.label }}</span>
             </div>
         </div>
 
-        <div class="kpi-card" [class.status-critical]="kpiData.atRiskEndpoints.value > 0">
+        <div class="kpi-card" [class.status-critical]="protectionStats.atRisk > 0">
             <div class="kpi-icon">
                 <lucide-icon [name]="kpiData.atRiskEndpoints.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ kpiData.atRiskEndpoints.value }}</span>
+                <span class="value">{{ protectionStats.total > 0 ? protectionStats.atRisk : '—' }}</span>
                 <span class="label">{{ kpiData.atRiskEndpoints.label }}</span>
+                <span class="subtitle" *ngIf="protectionStats.total > 0 && protectionStats.totalCriticalAlerts > 0">
+                    {{ protectionStats.totalCriticalAlerts }} Critical detections
+                </span>
             </div>
         </div>
 
@@ -65,7 +68,7 @@
                 <lucide-icon [name]="kpiData.unmanagedDevices.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ kpiData.unmanagedDevices.value }}</span>
+                <span class="value">{{ protectionStats.total > 0 ? protectionStats.offline : '—' }}</span>
                 <span class="label">{{ kpiData.unmanagedDevices.label }}</span>
             </div>
         </div>
