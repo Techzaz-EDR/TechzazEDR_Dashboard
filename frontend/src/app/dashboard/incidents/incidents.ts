@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -28,24 +28,49 @@ export class Incidents implements OnInit, OnDestroy {
 
     incidents: any[] = [];
 
-    constructor(private firestoreService: FirestoreService, private zone: NgZone) {}
+    constructor(
+        private firestoreService: FirestoreService,
+        private zone: NgZone,
+        private cdr: ChangeDetectorRef
+    ) {}
 
     ngOnInit() {
         this.subs.add(
-            this.firestoreService.getOrganizationAlerts().subscribe(data => {
+            this.firestoreService.getOrganizationIncidents().subscribe(data => {
                 this.incidents = data.map(item => ({
                     ...item,
-                    title: item.title || item.RuleId || item.rule_name || 'Security Alert',
-                    description: item.description || item.Details?.description || item.reason || 'Potential threat detected',
-                    severity: (item.severity || item.Severity || 'medium').toLowerCase(),
-                    priority: (item.severity || item.Severity || 'medium').toLowerCase(),
-                    status: item.status || item.Status || 'open',
-                    endpoints: item.agent_id || 'Unknown',
-                    threats: 1,
-                    assignee: item.assignee || 'Unassigned'
+                    incidentId: item.incidentId || `#${item.id?.slice(0, 6).toUpperCase()}`,
+                    title: item.title || item.name || 'Security Alert',
+                    description: item.description || 'No description provided.',
+                    severity: (item.severity || 'medium').toLowerCase(),
+                    priority: (item.severity || 'medium').toLowerCase(),
+                    status: item.status || 'open',
+                    endpoints: item.affectedAssets?.[0]?.hostname || item.agent_id || 'Unknown',
+                    endpointIp: item.affectedAssets?.[0]?.ip || '',
+                    threats: item.affectedAssets?.length || 1,
+                    time: this.formatTime(item.createdAt || item.timestamp),
+                    assignee: item.assigneeName || item.assignee || 'Unassigned',
+                    assigneeEmail: item.assignee || '',
                 }));
+                this.cdr.detectChanges();
             })
         );
+    }
+
+    private formatTime(value: any): string {
+        if (!value) return 'Unknown';
+        try {
+            // Firestore Timestamp
+            const date = value?.toDate ? value.toDate() : new Date(value);
+            if (isNaN(date.getTime())) return String(value);
+            const diffMs = Date.now() - date.getTime();
+            const mins = Math.floor(diffMs / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return `${mins}m ago`;
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return `${hrs}h ago`;
+            return `${Math.floor(hrs / 24)}d ago`;
+        } catch { return String(value); }
     }
 
     ngOnDestroy() {
