@@ -12,7 +12,8 @@ import {
   getDoc,
   updateDoc,
   orderBy,
-  limit
+  limit,
+  getCountFromServer
 } from 'firebase/firestore';
 import { AuthService } from './auth.service';
 import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
@@ -264,15 +265,47 @@ export class FirestoreService {
   }
 
 
+  getOrganizationIncidents(): Observable<any[]> {
+    return this.authService.tenantId$.pipe(
+      switchMap(tId => {
+        const tenantId = tId || 'demo-org';
+        const subject = new ReplaySubject<any[]>(1);
+        const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
+        const q = query(incidentsRef, orderBy('createdAt', 'desc'));
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          this.zone.run(() => {
+            const incidents = snapshot.docs.map(d => ({
+              id: d.id,
+              ...d.data()
+            }));
+            subject.next(incidents);
+          });
+        }, (error) => {
+          console.error('Error fetching organization incidents:', error);
+          this.zone.run(() => subject.next([]));
+        });
+
+        return subject.asObservable().pipe(finalize(() => unsubscribe()));
+      })
+    );
+  }
+
   async createIncident(incidentData: any) {
     const tId = await this.authService.tenantId$.pipe(first()).toPromise();
     const tenantId = tId || 'demo-org';
     const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
+
+    // Generate sequential incident ID: INC-001, INC-002, ...
+    const countSnap = await getCountFromServer(incidentsRef);
+    const nextNum = (countSnap.data().count || 0) + 1;
+    const incidentId = `INC-${String(nextNum).padStart(3, '0')}`;
     
     return await addDoc(incidentsRef, {
       ...incidentData,
+      incidentId,
       timestamp: serverTimestamp(),
-      status: 'open'
+      status: incidentData.status || 'open'
     });
   }
 

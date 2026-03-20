@@ -57,7 +57,7 @@
             <tbody>
                 @for (incident of filteredIncidents; track incident.id) {
                 <tr [class.selected-row]="false">
-                    <td class="id-col">#{{ incident.id }}</td>
+                    <td class="id-col">{{ incident.incidentId }}</td>
                     <td>
                         <span class="badge" [class]="incident.priority">{{ incident.priority }}</span>
                     </td>
@@ -70,14 +70,14 @@
                     </td>
                     <td>
                         <div class="assets-info">
-                            <span><lucide-icon [name]="MonitorIcon" [size]="14"></lucide-icon> Agent: {{ incident.endpoints }}</span>
-                            <span class="sub"><lucide-icon [name]="AlertTriangleIcon" [size]="14"></lucide-icon> {{
-                                incident.threats }} Threats</span>
+                            <span><lucide-icon [name]="MonitorIcon" [size]="14"></lucide-icon> {{ incident.endpoints }}</span>
+                            <span class="sub" *ngIf="incident.endpointIp">{{ incident.endpointIp }}</span>
                         </div>
                     </td>
                     <td class="time-col">{{ incident.time }}</td>
                     <td>
-                        <div class="assignee-badge">{{ incident.assignee.charAt(0) }}</div>
+                        <div class="assignee-badge" [title]="incident.assigneeEmail || incident.assignee">{{ incident.assignee?.charAt(0)?.toUpperCase() }}</div>
+                        <span class="assignee-name">{{ incident.assignee }}</span>
                     </td>
                     <td>
                         <div class="action-buttons">
@@ -94,6 +94,12 @@
                     </td>
                 </tr>
                 }
+                <!-- Empty state -->
+                <tr *ngIf="filteredIncidents.length === 0">
+                    <td colspan="8" style="text-align:center; padding: 3rem; color: #7483A3;">
+                        No incidents found. Create one from the Alert Details modal on the Agent page.
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

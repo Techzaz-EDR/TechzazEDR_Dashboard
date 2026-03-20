@@ -456,19 +456,49 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.isCreatingIncident = true;
     this.cdr.detectChanges();
 
+    // Find the selected assignee's display info
+    const assigneeUser = this.availableUsers.find(u => u.email === this.investigationAssignee);
+
     const incidentData = {
-      name: this.selectedAlert.name,
-      description: this.selectedAlert.description,
+      // Core identity
+      title: this.selectedAlert.name,
+      description: this.selectedAlert.description || 'No description provided.',
       severity: this.investigationSeverity,
+      status: 'open',                // Default status
+
+      // Affected assets
+      affectedAssets: [
+        {
+          type: 'endpoint',
+          id: this.agentId,
+          hostname: this.agentDetails?.name || this.agentId,
+          os: this.agentDetails?.os || 'Unknown',
+          ip: this.agentDetails?.ip || 'Unknown'
+        }
+      ],
+
+      // Time fields
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+
+      // Assignment
       assignee: this.investigationAssignee,
-      agent_id: this.agentId,
+      assigneeName: assigneeUser?.name || this.investigationAssignee,
+
+      // Empty actions log (to be filled as investigation progresses)
+      actions: [],
+
+      // References
       alert_id: this.selectedAlert.id || 'unknown',
+      agent_id: this.agentId,
       org_id: this.agentDetails?.org_id || 'demo-org',
       type: this.selectedAlert.Category || 'Malware',
       source_alert: {
         id: this.selectedAlert.id,
         name: this.selectedAlert.name,
-        severity: this.selectedAlert.severity
+        severity: this.selectedAlert.severity,
+        ruleId: this.selectedAlert.RuleId || null,
+        timestamp: this.selectedAlert.Timestamp || this.selectedAlert.timestamp || null
       }
     };
 
