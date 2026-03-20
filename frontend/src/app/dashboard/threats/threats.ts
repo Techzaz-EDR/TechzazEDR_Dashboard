@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Important for @for and ngClass
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import {
     LucideAngularModule,
     RefreshCw, Monitor, Eye
 } from 'lucide-angular';
+import { FirestoreService } from '../../core/services/firestore.service';
 
 type ThreatLogEntry = {
-    id: number;
+    id: string; // Changed from number to string for Firestore doc IDs
     title: string;
     description: string;
     endpoint: string;
@@ -16,6 +18,7 @@ type ThreatLogEntry = {
     type: string;
     status: string;
     icon: string;
+    rawTime?: any;
 };
 
 @Component({
@@ -25,7 +28,9 @@ type ThreatLogEntry = {
     templateUrl: './threats.html',
     styleUrl: './threats.scss',
 })
-export class Threats {
+export class Threats implements OnInit, OnDestroy {
+    private subs = new Subscription();
+
     // Icons
     readonly RefreshIcon = RefreshCw;
     readonly MonitorIcon = Monitor;
@@ -33,89 +38,97 @@ export class Threats {
 
     isRefreshing = false;
 
+    constructor(
+        private firestoreService: FirestoreService,
+        private cdr: ChangeDetectorRef,
+        private zone: NgZone
+    ) {}
+
+    ngOnInit() {
+        this.loadThreats();
+    }
+
+    ngOnDestroy() {
+        this.subs.unsubscribe();
+    }
+
+    private loadThreats() {
+        this.isRefreshing = true;
+        this.subs.add(
+            this.firestoreService.getOrganizationAlerts().subscribe(alerts => {
+                this.zone.run(() => {
+                    this.threats = alerts.map(alert => ({
+                        id: alert.id,
+                        title: alert.RuleId || alert.title || 'Security Alert',
+                        description: alert.Details?.msg || alert.description || 'No additional details available.',
+                        endpoint: alert.agent_id || 'Unknown',
+                        time: alert.time || 'Recently',
+                        rawTime: alert.Timestamp || alert.timestamp,
+                        severity: (alert.Severity || alert.severity || 'medium').toLowerCase(),
+                        type: alert.Category || alert.type || 'Detection',
+                        status: (alert.Status || alert.status || 'active').toLowerCase(),
+                        icon: this.getIconForCategory(alert.Category || alert.type || '')
+                    }));
+                    
+                    this.updateStats();
+                    this.isRefreshing = false;
+                    this.cdr.detectChanges();
+                });
+            })
+        );
+    }
+
+    private getIconForCategory(category: string): string {
+        const cat = category.toLowerCase();
+        if (cat.includes('malware')) return '⚡';
+        if (cat.includes('network')) return '🌐';
+        if (cat.includes('account') || cat.includes('user')) return '👤';
+        return '⚠️';
+    }
+
     refresh() {
+        // Since Firestore is real-time, we just trigger a visual refresh state
         this.isRefreshing = true;
         setTimeout(() => {
             this.isRefreshing = false;
-        }, 1500);
+            this.cdr.detectChanges();
+        }, 1000);
     }
 
     // Classification Stats
-    classificationStats = [
-        { label: 'Malware', count: 145, trend: '+12%', color: 'critical' },
-        { label: 'Exploits', count: 32, trend: '+5%', color: 'high' },
-        { label: 'PUPs', expandedLabel: 'Potentially Unwanted Programs', count: 89, trend: '-2%', color: 'medium' },
-        { label: 'Network Attacks', count: 24, trend: '+8%', color: 'high' }
+    classificationStats: any[] = [
+        { label: 'Malware', count: 0, trend: '0%', color: 'critical' },
+        { label: 'Exploits', count: 0, trend: '0%', color: 'high' },
+        { label: 'PUPs', expandedLabel: 'Potentially Unwanted Programs', count: 0, trend: '0%', color: 'medium' },
+        { label: 'Network Attacks', count: 0, trend: '0%', color: 'high' }
     ];
 
-    threats: ThreatLogEntry[] = [
-        {
-            id: 1,
-            title: 'Suspicious Process Execution',
-            description: 'Detected execution of unsigned binary from temp directory',
-            endpoint: 'DESKTOP-001',
-            time: '2 minutes ago',
-            severity: 'critical',
-            type: 'Malware',
-            status: 'active',
-            icon: '⚡'
-        },
-        {
-            id: 2,
-            title: 'Unauthorized Network Connection',
-            description: 'Outbound connection to known C2 server detected',
-            endpoint: 'LAPTOP-042',
-            time: '15 minutes ago',
-            severity: 'high',
-            type: 'Network',
-            status: 'investigating',
-            icon: '🌐'
-        },
-        {
-            id: 3,
-            title: 'Malware Signature Detected',
-            description: 'File matched known malware signature in threat database',
-            endpoint: 'SERVER-005',
-            time: '1 hour ago',
-            severity: 'high',
-            type: 'Malware',
-            status: 'quarantined',
-            icon: '⚠️'
-        },
-        {
-            id: 5,
-            title: 'DNS Tunneling Detected',
-            description: 'Suspicious DNS queries detected indicating data exfiltration',
-            endpoint: 'DESKTOP-002',
-            time: '5 hours ago',
-            severity: 'medium',
-            type: 'Network',
-            status: 'investigating',
-            icon: '🌐'
-        },
-        {
-            id: 6,
-            title: 'Legacy Protocol Usage',
-            description: 'SMBv1 traffic detected on internal segment',
-            endpoint: 'FILE-SRV-01',
-            time: '2 days ago',
-            severity: 'medium',
-            type: 'Policy',
-            status: 'resolved',
-            icon: '⚠️'
-        },
-        {
-            id: 7,
-            title: 'Suspicious Admin Login',
-            description: 'Login from unusual IP address detected',
-            endpoint: 'DC-01',
-            time: '2 weeks ago',
-            severity: 'high',
-            type: 'Account',
-            status: 'investigating',
-            icon: '👤'
-        }
-    ];
+    private updateStats() {
+        const statsMapping = [
+            { label: 'Malware', categories: ['malware', 'virus', 'trojan', 'ransomware'], count: 0, color: 'critical' },
+            { label: 'Exploits', categories: ['exploit', 'vulnerability', 'cve'], count: 0, color: 'high' },
+            { label: 'PUPs', categories: ['pup', 'adware', 'unwanted'], count: 0, color: 'medium', expandedLabel: 'Potentially Unwanted Programs' },
+            { label: 'Network Attacks', categories: ['network', 'dns', 'brute', 'scanning'], count: 0, color: 'high' }
+        ];
+
+        this.threats.forEach(t => {
+            const type = t.type.toLowerCase();
+            const stat = statsMapping.find(s => s.categories.some(c => type.includes(c)));
+            if (stat) {
+                stat.count++;
+            }
+        });
+
+        this.classificationStats = statsMapping.map(s => ({
+            label: s.label,
+            count: s.count,
+            trend: '0%', // Mock trend for now
+            color: s.color,
+            expandedLabel: s.expandedLabel
+        }));
+    }
+
+    threats: ThreatLogEntry[] = [];
 
     selectedThreat: ThreatLogEntry | null = null;
 
@@ -166,10 +179,12 @@ export class Threats {
 
     parseTimeAgo(timeString: string): number {
         const value = parseInt(timeString);
-        if (timeString.includes('minute')) return value / 60;
+        if (isNaN(value)) return 0;
+        if (timeString.includes('min')) return value / 60;
         if (timeString.includes('hour')) return value;
         if (timeString.includes('day')) return value * 24;
         if (timeString.includes('week')) return value * 24 * 7;
         return 0; // Just now or unknown
     }
 }
+

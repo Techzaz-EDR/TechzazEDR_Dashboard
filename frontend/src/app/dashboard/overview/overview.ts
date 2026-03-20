@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import {
   LucideAngularModule,
   Info, ArrowUp, AlertTriangle, XCircle, RefreshCw, Ban, Search,
-  CheckCircle, Shield, Activity
+  CheckCircle, Shield, Activity, Monitor
 } from 'lucide-angular';
 
 import { Subscription } from 'rxjs';
@@ -30,6 +30,7 @@ export class Overview implements OnInit, OnDestroy {
   readonly CheckCircle = CheckCircle;
   readonly Shield = Shield;
   readonly Activity = Activity;
+  readonly Monitor = Monitor;
 
   // Global time filter
   activeTimeFilter = '24h';
@@ -136,6 +137,7 @@ export class Overview implements OnInit, OnDestroy {
 
   // Real incident count from Firestore (null = loading)
   activeIncidentsCount: number | null = null;
+  activeCriticalIncidentsCount: number | null = null;
 
   // Animation properties
   animatedProtectionPct = 0;
@@ -156,7 +158,12 @@ export class Overview implements OnInit, OnDestroy {
     // Fetch real incident count from Firestore
     this.subs.add(
       this.firestoreService.getOrganizationIncidents().subscribe(incidents => {
-        this.activeIncidentsCount = incidents.length;
+        const active = incidents.filter(i => (i.status || 'open').toLowerCase() !== 'resolved');
+        this.activeIncidentsCount = active.length;
+        
+        this.activeCriticalIncidentsCount = active.filter(i => 
+          (i.priority || i.severity || '').toLowerCase() === 'critical'
+        ).length;
         
         // Populate recent incidents table (limit to 5)
         this.recentIncidents = incidents.slice(0, 5).map(inc => ({
