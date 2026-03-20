@@ -1,5 +1,8 @@
 .incidents-container {
-    padding: 0;
+    padding: 2rem;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
 }
 
 .page-header {
@@ -106,8 +109,10 @@
     backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: visible;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
 }
 
 .soc-table {
@@ -169,16 +174,23 @@
         }
 
         .desc-col {
+            max-width: 280px;
             .title {
                 color: #fff;
                 font-weight: 600;
                 margin-bottom: 3px;
                 font-size: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .subtitle {
                 font-size: 0.8rem;
                 color: var(--text-muted);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
 
@@ -209,9 +221,17 @@
             }
         }
 
+        .assignee-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 0;
+        }
+
         .assignee-badge {
             width: 32px;
             height: 32px;
+            flex-shrink: 0;
             background: var(--bg-elevated);
             border: 1px solid var(--border-soft);
             border-radius: 8px;
@@ -222,6 +242,15 @@
             font-weight: 700;
             color: #fff;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .assignee-name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
         }
 
         .action-buttons {

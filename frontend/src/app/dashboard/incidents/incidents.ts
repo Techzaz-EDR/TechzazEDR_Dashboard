@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -28,7 +28,11 @@ export class Incidents implements OnInit, OnDestroy {
 
     incidents: any[] = [];
 
-    constructor(private firestoreService: FirestoreService, private zone: NgZone) {}
+    constructor(
+        private firestoreService: FirestoreService,
+        private zone: NgZone,
+        private cdr: ChangeDetectorRef
+    ) {}
 
     ngOnInit() {
         this.subs.add(
@@ -41,16 +45,14 @@ export class Incidents implements OnInit, OnDestroy {
                     severity: (item.severity || 'medium').toLowerCase(),
                     priority: (item.severity || 'medium').toLowerCase(),
                     status: item.status || 'open',
-                    // Affected Assets: use structured affectedAssets array or fallback
                     endpoints: item.affectedAssets?.[0]?.hostname || item.agent_id || 'Unknown',
                     endpointIp: item.affectedAssets?.[0]?.ip || '',
                     threats: item.affectedAssets?.length || 1,
-                    // Time: use createdAt ISO string or timestamp
                     time: this.formatTime(item.createdAt || item.timestamp),
-                    // Assignee: prefer display name
                     assignee: item.assigneeName || item.assignee || 'Unassigned',
                     assigneeEmail: item.assignee || '',
                 }));
+                this.cdr.detectChanges();
             })
         );
     }

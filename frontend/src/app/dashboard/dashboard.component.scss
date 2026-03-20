@@ -125,6 +125,7 @@
     flex-direction: column;
     background-color: var(--bg-primary);
     overflow: hidden;
+    min-width: 0;
 }
 
 /* Top Bar */
@@ -593,8 +594,10 @@
 .content-area {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 1.5rem;
     position: relative;
+    min-width: 0;
 
     /* Custom scrollbar for content area */
     &::-webkit-scrollbar {
