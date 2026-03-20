@@ -14,7 +14,7 @@
     flex-direction: column;
     gap: 2rem;
     background: var(--bg-primary);
-    border: 1px solid var(--border-color, #1D2A45); // Primary border color
+    border: 1px solid var(--border-color); // White/10 border
     border-radius: 24px;
     animation: fadeIn 0.8s var(--ease-out);
 }
@@ -92,19 +92,19 @@
 
     0%,
     100% {
-        box-shadow: 0 0 15px rgba(79, 107, 255, 0.2);
+        box-shadow: 0 0 15px rgba(93, 124, 255, 0.2);
     }
 
     50% {
-        box-shadow: 0 0 25px rgba(79, 107, 255, 0.4);
+        box-shadow: 0 0 25px rgba(93, 124, 255, 0.4);
     }
 }
 
 /* Glassmorphism Base */
 .glass-card {
-    background: var(--bg-card, #0D152B);
+    background: var(--bg-card);
     backdrop-filter: blur(16px);
-    border: 1px solid var(--border-color, #1D2A45);
+    border: 1px solid var(--border-color);
     border-radius: 20px;
     box-shadow: var(--shadow-card);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -121,11 +121,11 @@
         background: linear-gradient(90deg, transparent, rgba(35, 50, 82, 0.9), transparent);
     }
 
-        &:hover {
+    &:hover {
         transform: translateY(-2px);
-        border-color: var(--primary, #4F6BFF);
+        border-color: var(--primary, #3EA0FF);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
+    }
 }
 
 /* Stats Grid */
@@ -178,35 +178,13 @@
                 letter-spacing: 1.5px;
                 margin: 0;
             }
-=======
-                h3 {
-                    color: var(--primary, #5D7CFF);
-                    font-size: 0.8rem;
-                    font-weight: 700;
-                    text-transform: uppercase;
-                    letter-spacing: 1.5px;
-                    margin: 0;
-                }
->>>>>>> 51b4ab5 (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
 
             .stat-icon {
                 font-size: 1.25rem;
                 padding: 12px;
-<<<<<<< HEAD
                 background: rgba(93, 124, 255, 0.08);
                 border-radius: 14px;
                 color: var(--primary, #3EA0FF);
-=======
-<<<<<<< HEAD
-                background: rgba(59, 130, 246, 0.08);
-                border-radius: 14px;
-                color: var(--primary, #3b82f6);
-=======
-                background: var(--bg-hover, rgba(93, 124, 255, 0.08));
-                border-radius: 14px;
-                color: var(--primary, #5D7CFF);
->>>>>>> 51b4ab5 (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
->>>>>>> 4cb2b8e (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                 transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
@@ -339,7 +317,7 @@
 
     .y-axis {
         grid-column: 1;
-                background: var(--primary, #5D7CFF);
+        grid-row: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -352,7 +330,6 @@
             line-height: 1;
             position: relative;
 
-<<<<<<< HEAD
             &::after {
                 content: '';
                 position: absolute;
@@ -362,32 +339,8 @@
                 height: 1px;
                 background: rgba(168, 182, 214, 0.35);
                 transform: translateY(-50%);
-=======
-            &:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-
-                .stat-icon {
-                    background: var(--primary, #5D7CFF);
-                    color: #fff;
-                }
-
-                .value {
-                    color: #fff;
-                }
->>>>>>> 4cb2b8e (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
             }
-        h3 {
-            font-size: 1.25rem;
-            color: var(--primary, #5D7CFF);
-            margin: 0;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-<<<<<<< HEAD
     }
 
     svg {
@@ -400,8 +353,6 @@
 
         .grid-line {
             stroke: rgba(168, 182, 214, 0.24);
-=======
->>>>>>> 4cb2b8e (style: unify Analytics and Reports with cyan-blue-violet brand palette, remove non-status accent colors)
             stroke-dasharray: 3 5;
             stroke-width: 1;
         }

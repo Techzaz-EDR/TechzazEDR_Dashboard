@@ -13,7 +13,7 @@
         .app-preloader {
             position: fixed;
             inset: 0;
-            background: #040810;
+            background: #060C18;
             z-index: 10000;
             display: flex;
             justify-content: center;
@@ -31,11 +31,7 @@
                     top: -20%;
                     width: 15vh;
                     height: 140%;
-<<<<<<< HEAD
-                    background: linear-gradient(to bottom, transparent, rgba(79, 107, 255, 0.05), transparent);
-=======
-                    background: linear-gradient(to bottom, transparent, rgba(79, 107, 255, 0.05), transparent);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
+                    background: linear-gradient(to bottom, transparent, rgba(62, 160, 255, 0.05), transparent);
                     transform: rotate(25deg);
                     filter: blur(50px);
 
@@ -55,13 +51,8 @@
                     width: 200%;
                     height: 60%;
                     background-image:
-<<<<<<< HEAD
-                        linear-gradient(rgba(79, 107, 255, 0.2) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(79, 107, 255, 0.2) 1px, transparent 1px);
-=======
-                        linear-gradient(rgba(79, 107, 255, 0.2) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(79, 107, 255, 0.2) 1px, transparent 1px);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
+                        linear-gradient(rgba(93, 124, 255, 0.2) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(93, 124, 255, 0.2) 1px, transparent 1px);
                     background-size: 50px 50px;
                     transform: perspective(600px) rotateX(60deg);
                     mask-image: linear-gradient(to top, black, transparent 80%);
@@ -76,11 +67,7 @@
                     transform: translateX(-50%);
                     width: 80%;
                     height: 30%;
-<<<<<<< HEAD
-                    background: radial-gradient(ellipse at center, rgba(79, 107, 255, 0.15) 0%, transparent 70%);
-=======
-                    background: radial-gradient(ellipse at center, rgba(79, 107, 255, 0.15) 0%, transparent 70%);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
+                    background: radial-gradient(ellipse at center, rgba(62, 160, 255, 0.15) 0%, transparent 70%);
                     filter: blur(30px);
                 }
             }
@@ -116,11 +103,7 @@
                         -webkit-background-clip: text;
                         background-clip: text;
                         color: transparent;
-<<<<<<< HEAD
                         filter: drop-shadow(0 0 15px rgba(93, 124, 255, 0.8));
-=======
-                        filter: drop-shadow(0 0 15px rgba(79, 107, 255, 0.8));
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                     }
                 }
             }
@@ -152,11 +135,7 @@
                         left: 0;
                         width: 40px;
                         height: 40px;
-<<<<<<< HEAD
                         background: radial-gradient(circle, rgba(93, 124, 255, 0.4), transparent 70%);
-=======
-                        background: radial-gradient(circle, rgba(79, 107, 255, 0.4), transparent 70%);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                         transform: translate(-50%, -50%);
                         pointer-events: none;
                         opacity: 0;
@@ -246,21 +225,13 @@
             100% {
                 transform: scale(1);
                 opacity: 0.9;
-<<<<<<< HEAD
                 box-shadow: 0 0 20px 5px rgba(93, 124, 255, 0.9);
-=======
-                box-shadow: 0 0 20px 5px rgba(79, 107, 255, 0.9);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
             }
 
             50% {
                 transform: scale(1.2);
                 opacity: 1;
-<<<<<<< HEAD
                 box-shadow: 0 0 30px 10px rgba(93, 124, 255, 1);
-=======
-                box-shadow: 0 0 30px 10px rgba(79, 107, 255, 1);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
             }
         }
 
@@ -392,17 +363,10 @@
                         }
 
                         &:hover {
-<<<<<<< HEAD
                             background: rgba(93, 124, 255, 0.2);
                             border-color: #3EA0FF;
                             transform: translateY(-2px);
                             box-shadow: 0 0 20px rgba(93, 124, 255, 0.2);
-=======
-                            background: rgba(79, 107, 255, 0.2);
-                            border-color: #4F6BFF;
-                            transform: translateY(-2px);
-                            box-shadow: 0 0 20px rgba(79, 107, 255, 0.2);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                         }
                     }
                 }
@@ -498,11 +462,7 @@
             width: 100%;
             display: flex;
             align-items: center;
-<<<<<<< HEAD
             background: radial-gradient(circle at 10% 20%, #091224 0%, #060C18 100%);
-=======
-            background: radial-gradient(circle at 10% 20%, #0a0f1e 0%, #06081a 100%);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
             overflow: hidden;
             z-index: 10;
             padding: 0;
@@ -542,13 +502,8 @@
                 .grid-overlay {
                     position: absolute;
                     inset: 0;
-<<<<<<< HEAD
                     background-image: linear-gradient(rgba(93, 124, 255, 0.04) 1px, transparent 1px),
                         linear-gradient(90deg, rgba(93, 124, 255, 0.04) 1px, transparent 1px);
-=======
-                    background-image: linear-gradient(rgba(79, 107, 255, 0.04) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(79, 107, 255, 0.04) 1px, transparent 1px);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                     background-size: 50px 50px;
                     transform: perspective(1000px) rotateX(60deg) scale(2);
                     transform-origin: center top;
@@ -580,24 +535,15 @@
                     display: inline-flex;
                     align-items: center;
                     padding: 8px 16px;
-<<<<<<< HEAD
                     background: rgba(93, 124, 255, 0.08);
                     border: 1px solid rgba(93, 124, 255, 0.2);
-=======
-                    background: rgba(79, 107, 255, 0.08);
-                    border: 1px solid rgba(79, 107, 255, 0.2);
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                     border-radius: 100px;
                     margin-bottom: 32px;
                     position: relative;
                     overflow: hidden;
 
                     .badge-text {
-<<<<<<< HEAD
                         color: #18D8FF;
-=======
-                        color: #4F6BFF;
->>>>>>> c74eb20 (Apply purplish-blue color system across entire EDR platform)
                         font-size: 0.85rem;
                         font-weight: 600;
                         letter-spacing: 0.5px;

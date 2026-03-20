@@ -83,16 +83,22 @@
         }
 
         &.active {
-            background-color: rgba(79, 107, 255, 0.1);
-            color: #4F6BFF;
-            border-color: #4F6BFF;
-            box-shadow: 0 0 15px rgba(79, 107, 255, 0.2) inset;
-            /* Subtle inset glow */
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.02) 100%);
+            color: #ffffff;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 8px 8px 0;
+            margin-left: -1rem; /* Offset the parent padding to make the indicator touch the edge */
+            padding-left: calc(1rem + 12px); /* Maintain internal alignment */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(59, 130, 246, 0.05);
+            font-weight: 600;
 
             .icon {
-                color: #4F6BFF;
-                filter: drop-shadow(0 0 5px rgba(79, 107, 255, 0.3));
+                color: var(--primary);
+                filter: drop-shadow(0 0 8px var(--primary-glow));
             }
+
+            &:hover {
+                background: linear-gradient(90deg, rgba(59, 130, 246, 0.18) 0%, rgba(59, 130, 246, 0.05) 100%);
             }
         }
 
@@ -406,8 +412,7 @@
                         top: 0;
                         bottom: 0;
                         width: 3px;
-                        background-color: #4F6BFF;
-                        /* Blue accent for unread strip */
+                        background-color: #5D7CFF;
                     }
                 }
 
