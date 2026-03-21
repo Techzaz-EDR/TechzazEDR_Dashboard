@@ -46,6 +46,10 @@ export class Threats implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadThreats();
+        setTimeout(() => {
+            this.isRefreshing = false;
+            this.cdr.detectChanges();
+        }, 1000);
     }
 
     ngOnDestroy() {
@@ -72,7 +76,6 @@ export class Threats implements OnInit, OnDestroy {
                     
                     this.updateStats();
                     this.updateChartData();
-                    this.isRefreshing = false;
                     this.cdr.detectChanges();
                 });
             })
@@ -88,8 +91,13 @@ export class Threats implements OnInit, OnDestroy {
     }
 
     refresh() {
-        // Since Firestore is real-time, we just trigger a visual refresh state
         this.isRefreshing = true;
+        // Unsubscribe and re-subscribe to ensure fresh data and clean state
+        this.subs.unsubscribe();
+        this.subs = new Subscription();
+        this.loadThreats();
+        
+        // Force a small delay for better UX visibility of the spinner if data loads too fast
         setTimeout(() => {
             this.isRefreshing = false;
             this.cdr.detectChanges();
@@ -196,6 +204,7 @@ export class Threats implements OnInit, OnDestroy {
 
     onFilterChange() {
         this.updateChartData();
+        this.updateStats();
     }
 
     // Chart Properties

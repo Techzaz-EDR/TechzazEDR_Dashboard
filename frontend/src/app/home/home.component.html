@@ -48,8 +48,7 @@
     <nav class="navbar" [class.scrolled]="scrolled" #navbar>
         <div class="container nav-container">
             <div class="logo">
-                <span class="logo-icon"><lucide-icon [name]="Shield" [size]="24"></lucide-icon></span>
-                TECHZAZ <span class="highlight">EDR</span>
+                <img src="assets/Logo.png" alt="Techzaz EDR Logo" class="nav-logo-img">
             </div>
             <div class="nav-links">
                 <a href="#features" (click)="scrollToSection('features', $event)" #navItem>Platform</a>
@@ -66,7 +65,7 @@
     <!-- 1. HERO SECTION (STABLE RENDER) -->
     <header class="hero-section">
         <video class="hero-video" #heroVideo autoplay muted loop playsinline preload="auto" disablePictureInPicture>
-            <source src="videos/hero-background.mp4" type="video/mp4">
+            <source src="assets/videos/hero-background.mp4" type="video/mp4">
         </video>
         <div class="hero-video-overlay"></div>
         <div class="hero-background">
@@ -82,7 +81,8 @@
                 </h1>
 
                 <p class="hero-subheadline">
-                    Techzaz EDR continuously monitors every endpoint, detects malicious behavior in real time, and gives your security team the intelligence to respond before damage is done.
+                    Techzaz EDR continuously monitors every endpoint, detects malicious behavior in real time, and gives
+                    your security team the intelligence to respond before damage is done.
                 </p>
 
                 <div class="cta-actions">
@@ -269,7 +269,7 @@
                                 <span class="value warning">2</span>
                             </div>
                         </div>
-                        
+
                         <div class="threat-activity">
                             <h4 class="activity-title">Threat Activity (Last 24h)</h4>
                             <div class="mini-graph">
@@ -332,13 +332,19 @@
                 <div class="arch-left">
                     <div class="section-badge">PLATFORM ARCHITECTURE</div>
                     <h2>Architecture <span class="arch-accent">Overview</span></h2>
-                    <p class="arch-desc">Scalable microservice architecture built for real-time threat detection and response.</p>
+                    <p class="arch-desc">Scalable microservice architecture built for real-time threat detection and
+                        response.</p>
                     <ul class="arch-points">
-                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Multi-tenant isolation for data security</li>
-                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Endpoint agents for telemetry collection</li>
-                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Centralized analysis for threat detection</li>
-                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Secure channels for agent communication</li>
-                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Role-based access for system control</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Multi-tenant isolation for data
+                            security</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Endpoint agents for telemetry
+                            collection</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Centralized analysis for threat
+                            detection</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Secure channels for agent
+                            communication</li>
+                        <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Role-based access for system control
+                        </li>
                     </ul>
                 </div>
                 <!-- Right: 6 Architecture Cards in 3x2 Grid -->
@@ -440,7 +446,8 @@
                 <div class="comparison-card">
                     <div class="side traditional">
                         <div class="icon-bg">
-                            <div class="cross"><lucide-icon [name]="X" [size]="56" color="rgba(239, 68, 68, 0.5)"></lucide-icon></div>
+                            <div class="cross"><lucide-icon [name]="X" [size]="56"
+                                    color="rgba(239, 68, 68, 0.5)"></lucide-icon></div>
                         </div>
                         <h5>Traditional AV</h5>
                         <p>Signature-based</p>
@@ -448,7 +455,8 @@
                     </div>
                     <div class="side next-gen">
                         <div class="icon-bg">
-                            <div class="check"><lucide-icon [name]="Check" [size]="64" color="#8b5cf6"></lucide-icon></div>
+                            <div class="check"><lucide-icon [name]="Check" [size]="64" color="#8b5cf6"></lucide-icon>
+                            </div>
                         </div>
                         <h5>Techzaz EDR</h5>
                         <p>Behavior-based</p>
@@ -458,16 +466,19 @@
             </div>
             <div class="edr-text">
                 <h2>Beyond Traditional <span class="accent-text">Antivirus</span></h2>
-                <p class="lead">Traditional antivirus relies on signatures. Techzaz EDR detects threats based on behavior.</p>
+                <p class="lead">Traditional antivirus relies on signatures. Techzaz EDR detects threats based on
+                    behavior.</p>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Bug" [size]="24"></lucide-icon></span>
-                    <p><strong><span class="accent-text">Detect Unknowns:</span></strong> Analyze what software <em>does</em>, not just what it
+                    <p><strong><span class="accent-text">Detect Unknowns:</span></strong> Analyze what software
+                        <em>does</em>, not just what it
                         <em>is</em>.
                     </p>
                 </div>
                 <div class="point">
                     <span class="icon"><lucide-icon [name]="Search" [size]="24"></lucide-icon></span>
-                    <p><strong><span class="accent-text">Deep Investigation:</span></strong> Root cause analysis for every incident.</p>
+                    <p><strong><span class="accent-text">Deep Investigation:</span></strong> Root cause analysis for
+                        every incident.</p>
                 </div>
             </div>
         </div>
@@ -506,9 +517,9 @@
             <div class="section-header center">
                 <h2>Pricing</h2>
                 <p>Flexible security plans tailored for teams of all sizes.<br>
-                Contact us to schedule a guided product demo.</p>
+                    Contact us to schedule a guided product demo.</p>
             </div>
-            
+
             <div class="pricing-grid">
                 <!-- Starter Plan -->
                 <div class="pricing-card">
@@ -524,7 +535,8 @@
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Security dashboard</li>
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Email support</li>
                         </ul>
-                        <button class="btn btn-outline full-width" (click)="openDemoModal('Starter')">Request Demo</button>
+                        <button class="btn btn-outline full-width" (click)="openDemoModal('Starter')">Request
+                            Demo</button>
                     </div>
                 </div>
 
@@ -543,7 +555,8 @@
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Threat timeline analytics</li>
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Risk scoring</li>
                         </ul>
-                        <button class="btn btn-primary-blue full-width" (click)="openDemoModal('Professional')">Request Demo</button>
+                        <button class="btn btn-primary-blue full-width" (click)="openDemoModal('Professional')">Request
+                            Demo</button>
                     </div>
                     <div class="card-glow"></div>
                 </div>
@@ -563,7 +576,8 @@
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Dedicated security support</li>
                             <li><lucide-icon [name]="Check" [size]="16"></lucide-icon> Custom integrations</li>
                         </ul>
-                        <button class="btn btn-outline full-width" (click)="openDemoModal('Enterprise')">Contact Sales</button>
+                        <button class="btn btn-outline full-width" (click)="openDemoModal('Enterprise')">Contact
+                            Sales</button>
                     </div>
                 </div>
             </div>
@@ -579,62 +593,78 @@
 
             <div class="modal-body" *ngIf="!formSubmitted">
                 <div class="modal-header">
-                    <h2>{{ demoFormData.selectedPlan === 'Enterprise' ? 'Contact Enterprise Sales' : 'Request a Guided Demo' }}</h2>
+                    <h2>{{ demoFormData.selectedPlan === 'Enterprise' ? 'Contact Enterprise Sales' : 'Request a Guided
+                        Demo' }}</h2>
                     <p>Experience the power of Techzaz EDR. Our experts will show you how to secure your enterprise.</p>
                 </div>
 
                 <form class="demo-form" #demoForm="ngForm" (ngSubmit)="submitDemoForm($event, demoForm)" novalidate>
                     <div class="form-group" *ngIf="isPlanDropdownMode">
                         <label>Plan of Interest <span class="required">*</span></label>
-                        <select name="selectedPlan" #demoPlanCtrl="ngModel" [(ngModel)]="demoFormData.selectedPlan" required>
+                        <select name="selectedPlan" #demoPlanCtrl="ngModel" [(ngModel)]="demoFormData.selectedPlan"
+                            required>
                             <option value="">Select a plan</option>
                             <option value="Starter">Starter</option>
                             <option value="Professional">Professional</option>
                             <option value="Enterprise">Enterprise</option>
                         </select>
-                        <span class="error-message" *ngIf="demoSubmitted && demoPlanCtrl.invalid">Please select a plan.</span>
+                        <span class="error-message" *ngIf="demoSubmitted && demoPlanCtrl.invalid">Please select a
+                            plan.</span>
                     </div>
 
                     <div class="form-group" *ngIf="!isPlanDropdownMode">
                         <label>Requested Plan</label>
-                        <input type="text" name="selectedPlan" [(ngModel)]="demoFormData.selectedPlan" readonly style="opacity: 0.7; cursor: not-allowed;">
+                        <input type="text" name="selectedPlan" [(ngModel)]="demoFormData.selectedPlan" readonly
+                            style="opacity: 0.7; cursor: not-allowed;">
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label>First Name <span class="required">*</span></label>
-                            <input type="text" name="firstName" #demoFirstNameCtrl="ngModel" [(ngModel)]="demoFormData.firstName" placeholder="John" required>
-                            <span class="error-message" *ngIf="demoSubmitted && demoFirstNameCtrl.invalid">First name is required.</span>
+                            <input type="text" name="firstName" #demoFirstNameCtrl="ngModel"
+                                [(ngModel)]="demoFormData.firstName" placeholder="John" required>
+                            <span class="error-message" *ngIf="demoSubmitted && demoFirstNameCtrl.invalid">First name is
+                                required.</span>
                         </div>
                         <div class="form-group">
                             <label>Last Name <span class="required">*</span></label>
-                            <input type="text" name="lastName" #demoLastNameCtrl="ngModel" [(ngModel)]="demoFormData.lastName" placeholder="Deo" required>
-                            <span class="error-message" *ngIf="demoSubmitted && demoLastNameCtrl.invalid">Last name is required.</span>
+                            <input type="text" name="lastName" #demoLastNameCtrl="ngModel"
+                                [(ngModel)]="demoFormData.lastName" placeholder="Deo" required>
+                            <span class="error-message" *ngIf="demoSubmitted && demoLastNameCtrl.invalid">Last name is
+                                required.</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Work Email <span class="required">*</span></label>
-                        <input type="email" name="workEmail" #demoEmailCtrl="ngModel" [(ngModel)]="demoFormData.workEmail" placeholder="john@company.lk" required>
-                        <span class="error-message" *ngIf="demoSubmitted && demoEmailCtrl.invalid">Work email is required.</span>
+                        <input type="email" name="workEmail" #demoEmailCtrl="ngModel"
+                            [(ngModel)]="demoFormData.workEmail" placeholder="john@company.lk" required>
+                        <span class="error-message" *ngIf="demoSubmitted && demoEmailCtrl.invalid">Work email is
+                            required.</span>
                     </div>
 
                     <div class="form-group">
                         <label>Company Name <span class="required">*</span></label>
-                        <input type="text" name="companyName" #demoCompanyCtrl="ngModel" [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Networks" required>
-                        <span class="error-message" *ngIf="demoSubmitted && demoCompanyCtrl.invalid">Company name is required.</span>
+                        <input type="text" name="companyName" #demoCompanyCtrl="ngModel"
+                            [(ngModel)]="demoFormData.companyName" placeholder="Techzaz Networks" required>
+                        <span class="error-message" *ngIf="demoSubmitted && demoCompanyCtrl.invalid">Company name is
+                            required.</span>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label>Country <span class="required">*</span></label>
-                            <input type="text" name="country" #demoCountryCtrl="ngModel" [(ngModel)]="demoFormData.country" placeholder="Sri Lanka" required>
-                            <span class="error-message" *ngIf="demoSubmitted && demoCountryCtrl.invalid">Country is required.</span>
+                            <input type="text" name="country" #demoCountryCtrl="ngModel"
+                                [(ngModel)]="demoFormData.country" placeholder="Sri Lanka" required>
+                            <span class="error-message" *ngIf="demoSubmitted && demoCountryCtrl.invalid">Country is
+                                required.</span>
                         </div>
                         <div class="form-group">
                             <label>Phone Number <span class="required">*</span></label>
-                            <input type="tel" name="phone" #demoPhoneCtrl="ngModel" [(ngModel)]="demoFormData.phone" placeholder="+94 XX XXXXXXX" required>
-                            <span class="error-message" *ngIf="demoSubmitted && demoPhoneCtrl.invalid">Phone number is required.</span>
+                            <input type="tel" name="phone" #demoPhoneCtrl="ngModel" [(ngModel)]="demoFormData.phone"
+                                placeholder="+94 XX XXXXXXX" required>
+                            <span class="error-message" *ngIf="demoSubmitted && demoPhoneCtrl.invalid">Phone number is
+                                required.</span>
                         </div>
                     </div>
 
@@ -652,11 +682,13 @@
 
                     <div class="form-checkbox">
                         <input type="checkbox" id="agreed" name="agreed" [(ngModel)]="demoFormData.agreed" required>
-                        <label for="agreed">I agree to be contacted by Techzaz regarding product demonstrations and platform access.</label>
+                        <label for="agreed">I agree to be contacted by Techzaz regarding product demonstrations and
+                            platform access.</label>
                     </div>
 
                     <p class="legal-text">
-                        By submitting this form, you agree to our <a routerLink="/privacy-policy">Privacy Policy</a> and <a routerLink="/terms-conditions">Terms of Service</a>.
+                        By submitting this form, you agree to our <a routerLink="/privacy-policy">Privacy Policy</a> and
+                        <a routerLink="/terms-conditions">Terms of Service</a>.
                     </p>
 
                     <button type="submit" class="btn btn-primary-blue full-width">Request Demo</button>
@@ -680,7 +712,8 @@
         <div class="container">
             <div class="cta-box glass-panel">
                 <h2>Start Protecting Your Endpoints Today</h2>
-                <p>Deploy lightweight agents in minutes, monitor threats in real time, and respond instantly from a unified security dashboard.</p>
+                <p>Deploy lightweight agents in minutes, monitor threats in real time, and respond instantly from a
+                    unified security dashboard.</p>
                 <div class="cta-group center">
                     <button class="btn btn-primary large glow" routerLink="/login">
                         <lucide-icon [name]="Rocket" [size]="18" class="btn-icon"></lucide-icon>
@@ -719,14 +752,16 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <div class="logo">
-                        <span class="logo-icon"><lucide-icon [name]="Shield" [size]="20"></lucide-icon></span>
-                        TECHZAZ <strong>EDR</strong>
+                        <img src="assets/Logo.png" alt="Techzaz EDR Logo" class="footer-logo-img">
                     </div>
                     <p>Next-generation endpoint detection and response for modern security operations.</p>
                     <div class="socials">
-                        <a href="https://www.instagram.com/techzaz.networks/" target="_blank" rel="noopener noreferrer"><lucide-icon [name]="Instagram" [size]="20"></lucide-icon></a>
-                        <a href="https://www.linkedin.com/company/techzaz-networks/" target="_blank" rel="noopener noreferrer"><lucide-icon [name]="Linkedin" [size]="20"></lucide-icon></a>
-                        <a href="https://www.facebook.com/profile.php?id=61577707007880" target="_blank" rel="noopener noreferrer"><lucide-icon [name]="Facebook" [size]="20"></lucide-icon></a>
+                        <a href="https://www.instagram.com/techzaz.networks/" target="_blank"
+                            rel="noopener noreferrer"><lucide-icon [name]="Instagram" [size]="20"></lucide-icon></a>
+                        <a href="https://www.linkedin.com/company/techzaz-networks/" target="_blank"
+                            rel="noopener noreferrer"><lucide-icon [name]="Linkedin" [size]="20"></lucide-icon></a>
+                        <a href="https://www.facebook.com/profile.php?id=61577707007880" target="_blank"
+                            rel="noopener noreferrer"><lucide-icon [name]="Facebook" [size]="20"></lucide-icon></a>
                     </div>
                 </div>
                 <div class="footer-links">

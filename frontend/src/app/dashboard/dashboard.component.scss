@@ -25,31 +25,14 @@
     .brand {
         display: flex;
         align-items: center;
-        gap: 12px;
         padding: 0 0.75rem 2rem 0.75rem;
 
-        .logo-icon {
-            font-size: 1.75rem;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-
-            .main {
-                color: var(--text-primary);
-                font-weight: 700;
-                font-size: 1.25rem;
-                letter-spacing: -0.5px;
-            }
-
-            .sub {
-                font-size: 0.75rem;
-                color: var(--accent-primary);
-                font-weight: 500;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            }
+        .sidebar-logo-img {
+            height: 24px;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(93, 124, 255, 0.2));
         }
     }
 

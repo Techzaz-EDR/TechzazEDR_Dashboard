@@ -68,18 +68,12 @@ html {
   .nav-logo {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #fff;
 
-    .logo-icon {
-      color: #a855f7;
-    }
-
-    strong {
-      color: #a855f7;
+    .nav-logo-img {
+      height: 24px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(94, 27, 181, 0.3));
     }
   }
 }

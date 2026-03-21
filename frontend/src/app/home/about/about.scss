@@ -42,21 +42,15 @@
         }
 
         .logo {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: white;
             display: flex;
             align-items: center;
-            gap: 12px;
             cursor: pointer;
 
-            .logo-icon {
-                color: #5D7CFF;
-                filter: drop-shadow(0 0 8px rgba(93, 124, 255, 0.4));
-            }
-
-            .highlight {
-                color: #5D7CFF;
+            .nav-logo-img {
+                height: 24px;
+                width: auto;
+                object-fit: contain;
+                filter: drop-shadow(0 0 8px rgba(93, 124, 255, 0.3));
             }
         }
 
