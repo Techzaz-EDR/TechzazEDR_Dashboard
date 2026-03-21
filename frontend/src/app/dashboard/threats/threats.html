@@ -7,7 +7,7 @@
             </div>
             <button class="refresh-btn" (click)="refresh()" [class.loading]="isRefreshing">
                 <lucide-icon [name]="RefreshIcon" [size]="18" [class.spin]="isRefreshing"></lucide-icon> {{ isRefreshing
-                ? 'Refreshing...' : 'Refresh Feed' }}
+                ? 'Refereshing...' : 'Referesh' }}
             </button>
         </div>
 
@@ -20,7 +20,7 @@
                 <div class="filters-controls-left">
                     <div class="filter-group">
                         <div class="select-wrapper">
-                            <select [(ngModel)]="filterSeverity">
+                            <select [(ngModel)]="filterSeverity" (change)="onFilterChange()">
                                 <option>All Severities</option>
                                 <option>Critical</option>
                                 <option>High</option>
@@ -32,7 +32,7 @@
 
                     <div class="filter-group">
                         <div class="select-wrapper">
-                            <select [(ngModel)]="filterStatus">
+                            <select [(ngModel)]="filterStatus" (change)="onFilterChange()">
                                 <option>All Status</option>
                                 <option>Active</option>
                                 <option>Investigating</option>
@@ -46,7 +46,7 @@
                 <div class="filters-controls-right">
                     <div class="filter-group">
                         <div class="select-wrapper">
-                            <select [(ngModel)]="filterTimeRange">
+                            <select [(ngModel)]="filterTimeRange" (change)="onFilterChange()">
                                 <option>Last 24 Hours</option>
                                 <option>Last 7 Days</option>
                                 <option>Last 30 Days</option>
@@ -86,11 +86,9 @@
             <p class="time-range-note">Synced with the page time filter</p>
             <div class="chart-container threat-volume-chart">
                 <div class="y-axis-hints" aria-hidden="true">
-                    <span>40</span>
-                    <span>30</span>
-                    <span>20</span>
-                    <span>10</span>
-                    <span>0</span>
+                    @for (label of yAxisLabels; track $index) {
+                        <span>{{ label }}</span>
+                    }
                 </div>
 
                 <div class="plot-wrapper">
@@ -113,12 +111,12 @@
 
                         <!-- Area Path (Fill) -->
                         <path
-                            d="M24,92 L71,73 L118,82 L165,35 L212,55 L259,24 L306,43 L353,16 L400,54 L447,73 L494,63 L541,82 L588,73 L588,108 L24,108 Z"
+                            [attr.d]="chartAreaPath"
                             class="threat-volume-area" />
 
                         <!-- Line Path -->
                         <path
-                            d="M24,92 L71,73 L118,82 L165,35 L212,55 L259,24 L306,43 L353,16 L400,54 L447,73 L494,63 L541,82 L588,73"
+                            [attr.d]="chartLinePath"
                             class="threat-volume-line" fill="none" stroke-width="2" vector-effect="non-scaling-stroke" />
                     </svg>
 

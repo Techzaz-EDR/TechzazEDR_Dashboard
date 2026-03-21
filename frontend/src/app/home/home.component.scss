@@ -1,4 +1,4 @@
-﻿:host {
+:host {
     display: block;
     background-color: #0d081a;
     /* Deepest Navy from screenshot */
@@ -289,26 +289,22 @@
             }
 
             .logo {
-                font-weight: 800;
-                font-size: 1.3rem;
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                letter-spacing: -0.5px;
-                color: #ffffff;
+                cursor: pointer;
                 position: relative;
                 z-index: 2;
 
-                .logo-icon {
-                    color: #3EA0FF;
-                    display: flex;
-                    align-items: center;
-                    filter: drop-shadow(0 0 8px rgba(93, 124, 255, 0.5));
-                }
+                .nav-logo-img {
+                    height: 24px;
+                    width: auto;
+                    object-fit: contain;
+                    filter: drop-shadow(0 0 12px rgba(93, 124, 255, 0.3));
+                    transition: transform 0.3s ease;
 
-                .highlight {
-                    color: #3EA0FF;
-                    margin-left: 4px;
+                    &:hover {
+                        transform: scale(1.05);
+                    }
                 }
             }
 
@@ -2341,21 +2337,20 @@
 
             .footer-brand {
                 .logo {
-                    font-size: 1.5rem;
-                    font-weight: 800;
-                    color: white;
                     margin-bottom: 24px;
                     display: flex;
                     align-items: center;
-                    gap: 12px;
 
-                    .logo-icon {
-                        color: #5D7CFF;
-                        filter: drop-shadow(0 0 8px rgba(93, 124, 255, 0.4));
-                    }
+                    .footer-logo-img {
+                        height: 24px;
+                        width: auto;
+                        object-fit: contain;
+                        opacity: 0.9;
+                        transition: opacity 0.3s ease;
 
-                    strong {
-                        color: #5D7CFF;
+                        &:hover {
+                            opacity: 1;
+                        }
                     }
                 }
 

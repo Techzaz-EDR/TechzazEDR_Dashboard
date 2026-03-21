@@ -20,8 +20,10 @@
                 </div>
             }
             <span class="last-updated"><lucide-icon [name]="CheckCircle" [size]="14"></lucide-icon> Live Updated</span>
-            <button class="action-btn primary"><lucide-icon [name]="RefreshCw" [size]="16"></lucide-icon>
-                Refresh</button>
+            <button class="action-btn primary" (click)="refresh()" [class.loading]="isRefreshing">
+                <lucide-icon [name]="RefreshCw" [size]="16" [class.spin]="isRefreshing"></lucide-icon>
+                {{ isRefreshing ? 'Refereshing...' : 'Referesh' }}
+            </button>
         </div>
     </div>
 

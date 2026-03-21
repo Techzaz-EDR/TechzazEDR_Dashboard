@@ -94,19 +94,17 @@ export class Overview implements OnInit, OnDestroy {
 
   // Endpoint Protection Status (Donut)
   protectionStats = {
-    total: 350,
-    protected: 298,
-    protectedPct: 85,
-    atRisk: 35,
-    offline: 17,
+    total: 0,
+    protected: 0,
+    protectedPct: 0,
+    atRisk: 0,
+    offline: 0,
     totalCriticalAlerts: 0
   };
 
   // 3. Secondary Row
-  // 3. Secondary Row
   // Most Detected Alerts
   topDetectedRules: { name: string, count: number, severity: string, maxPct: number }[] = [];
-
 
   // Top Risk Contributors
   riskContributors = [
@@ -117,12 +115,7 @@ export class Overview implements OnInit, OnDestroy {
   ];
 
   // 4. Bottom Row
-  recentIncidents = [
-    { id: 'INC-001', endpoint: 'CEO-LAPTOP', threat: 'Ransomware Precursor', severity: 'critical', status: 'Active', detectedTime: '2 minutes ago' },
-    { id: 'INC-002', endpoint: 'FILE-SRV-02', threat: 'Data Exfiltration', severity: 'high', status: 'Investigating', detectedTime: '18 minutes ago' },
-    { id: 'INC-003', endpoint: 'HR-LAP-009', threat: 'Powershell Empire', severity: 'high', status: 'Blocked', detectedTime: '1 hour ago' },
-    { id: 'INC-004', endpoint: 'GUEST-WIFI', threat: 'Network Scan', severity: 'medium', status: 'Monitored', detectedTime: '3 hours ago' }
-  ];
+  recentIncidents: any[] = [];
 
   // Cyber Threat News Feed
   cyberNews: { title: string, link: string, pubDate: string, source: string }[] = [];
@@ -157,6 +150,7 @@ export class Overview implements OnInit, OnDestroy {
   targetMedium = 0;
   targetLow = 0;
 
+  isRefreshing = false;
   private subs = new Subscription();
 
   constructor(
@@ -169,6 +163,23 @@ export class Overview implements OnInit, OnDestroy {
   ngOnInit() {
     this.setTrendPeriod('24h');
     this.animateIncidentDonutChart();
+    this.loadDashboardData();
+  }
+
+  refresh() {
+    this.isRefreshing = true;
+    this.loadDashboardData();
+    // Force a small delay for better UX visibility of the spinner
+    setTimeout(() => {
+      this.isRefreshing = false;
+      this.cdr.detectChanges();
+    }, 1000);
+  }
+
+  private loadDashboardData() {
+    // Clear existing subscriptions to avoid duplicates on manual refresh
+    this.subs.unsubscribe();
+    this.subs = new Subscription();
 
     // Fetch real incident count from Firestore
     this.subs.add(
@@ -268,10 +279,6 @@ export class Overview implements OnInit, OnDestroy {
     
     let totalCriticalAlerts = 0;
     
-    let outdated = 0;
-    let failedUpdates = 0;
-    let pendingRestart = 0;
-
     let offline30d = 0;
     let criticalMalwareHosts = 0;
 
@@ -291,11 +298,6 @@ export class Overview implements OnInit, OnDestroy {
       } else {
         ok++;
       }
-
-      // Health heuristics
-      if (agent.version && agent.version !== '1.2.0') outdated++;
-      if (agent.update_status === 'failed') failedUpdates++;
-      if (agent.restart_pending === true) pendingRestart++;
 
       totalCriticalAlerts += (agent.critical_alerts || 0);
     });
@@ -317,14 +319,11 @@ export class Overview implements OnInit, OnDestroy {
       }
     });
 
-    // agentHealth removed
-
-
     this.riskContributors = [
       { name: 'Active Critical Malware', count: criticalMalwareHosts, impact: 'Critical', devices: criticalMalwareHosts },
       { name: 'Offline Devices (>30d)', count: offline30d, impact: 'Medium', devices: offline30d },
-      { name: 'Unpatched Endpoints', count: 12, impact: 'High', devices: 27 }, // Still mock
-      { name: 'Weak Passwords', count: 8, impact: 'Medium', devices: 31 } // Still mock
+      { name: 'Unpatched Endpoints', count: 12, impact: 'High', devices: 27 }, 
+      { name: 'Weak Passwords', count: 8, impact: 'Medium', devices: 31 } 
     ];
 
     this.calculateSecurityScore();
@@ -338,15 +337,12 @@ export class Overview implements OnInit, OnDestroy {
     }
 
     const offlineAgents = this.protectionStats.offline;
-    
-    // Status !== 'resolved' (Active alerts)
     const activeAlerts = this.currentAlerts.filter(a => (a.status || 'open').toLowerCase() !== 'resolved');
     
     const critical = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'critical').length;
     const high = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'high').length;
     const medium = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'medium').length;
 
-    // Formula: Security Score = max(0, 100 - ((C*20 + H*10 + M*5 + O*10) / E))
     const penalty = ((critical * 20) + (high * 10) + (medium * 5) + (offlineAgents * 10)) / totalEndpoints;
     const score = Math.max(0, 100 - penalty);
     
@@ -357,7 +353,6 @@ export class Overview implements OnInit, OnDestroy {
     const roundedScore = Math.round(score);
     const valueStr = `${roundedScore}%`;
     
-    // Thresholds: >=90 (Secure), >=70 (Degraded), <70 (Critical)
     let status = 'secure';
     if (roundedScore < 70) {
       status = 'critical';
@@ -365,13 +360,11 @@ export class Overview implements OnInit, OnDestroy {
       status = 'degraded';
     }
 
-    // Update current KPI
     if (this.kpiData.securityStatus) {
       this.kpiData.securityStatus.value = valueStr;
       this.kpiData.securityStatus.status = status;
     }
 
-    // Update snapshots to keep state across filter changes
     Object.values(this.kpiSnapshots).forEach(snap => {
        if (snap.securityStatus) {
          snap.securityStatus.value = valueStr;
@@ -420,7 +413,6 @@ export class Overview implements OnInit, OnDestroy {
       let progress = (time - start) / duration;
       if (progress > 1) progress = 1;
 
-      // Easing function (easeOutQuart)
       const easeProgress = 1 - Math.pow(1 - progress, 4);
 
       this.animatedCriticalPct = Math.round(this.targetCritical * easeProgress);
@@ -447,7 +439,6 @@ export class Overview implements OnInit, OnDestroy {
     const ruleCounts = new Map<string, { count: number, severity: string }>();
     
     items.forEach(item => {
-      // Support both alert fields (RuleName/Severity) and incident fields (title/priority)
       const name = item.RuleName || item.rule_name || item.title || item.name || 'Unknown Rule';
       const severity = (item.Severity || item.severity || item.priority || 'medium').toLowerCase();
       
