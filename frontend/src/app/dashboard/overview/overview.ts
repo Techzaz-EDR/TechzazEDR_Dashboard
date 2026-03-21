@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -149,7 +149,11 @@ export class Overview implements OnInit, OnDestroy {
 
   private subs = new Subscription();
 
-  constructor(private firestoreService: FirestoreService) {}
+  constructor(
+    private firestoreService: FirestoreService,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
+  ) {}
 
   ngOnInit() {
     this.setTrendPeriod('24h');
@@ -158,44 +162,53 @@ export class Overview implements OnInit, OnDestroy {
     // Fetch real incident count from Firestore
     this.subs.add(
       this.firestoreService.getOrganizationIncidents().subscribe(incidents => {
-        const active = incidents.filter(i => (i.status || 'open').toLowerCase() !== 'resolved');
-        this.activeIncidentsCount = active.length;
-        
-        this.activeCriticalIncidentsCount = active.filter(i => 
-          (i.priority || i.severity || '').toLowerCase() === 'critical'
-        ).length;
-        
-        // Populate recent incidents table (limit to 5)
-        this.recentIncidents = incidents.slice(0, 5).map(inc => ({
-          id: inc.id,
-          endpoint: inc.agent_name || inc.endpoint_name || 'Unknown',
-          threat: inc.title || inc.name || 'Untitled Incident',
-          severity: inc.priority || inc.severity || 'medium',
-          status: inc.status || 'Active',
-          detectedTime: inc.time || 'Recently'
-        }));
+        this.zone.run(() => {
+          const active = incidents.filter(i => (i.status || 'open').toLowerCase() !== 'resolved');
+          this.activeIncidentsCount = active.length;
+          
+          this.activeCriticalIncidentsCount = active.filter(i => 
+            (i.priority || i.severity || '').toLowerCase() === 'critical'
+          ).length;
+          
+          // Populate recent incidents table (limit to 5)
+          this.recentIncidents = incidents.slice(0, 5).map(inc => ({
+            id: inc.id,
+            endpoint: inc.agent_name || inc.endpoint_name || 'Unknown',
+            threat: inc.title || inc.name || 'Untitled Incident',
+            severity: inc.priority || inc.severity || 'medium',
+            status: inc.status || 'Active',
+            detectedTime: inc.time || 'Recently'
+          }));
+          this.cdr.detectChanges();
+        });
       })
     );
 
     // Fetch agents and calculate protection stats
     this.subs.add(
       this.firestoreService.getAgents().subscribe(agents => {
-        this.calculateProtectionStats(agents);
+        this.zone.run(() => {
+          this.calculateProtectionStats(agents);
+          this.cdr.detectChanges();
+        });
       })
     );
 
     // Fetch real threat feed (alerts)
     this.subs.add(
       this.firestoreService.getOrganizationAlerts().subscribe(alerts => {
-        this.recentThreats = alerts.slice(0, 5).map(alert => ({
-          id: alert.id,
-          time: alert.time || 'Recently',
-          name: alert.RuleName || alert.name || 'Detection Alert',
-          host: alert.agent_id || alert.hostname || 'Unknown Host',
-          severity: alert.Severity?.toLowerCase() || 'medium',
-          type: alert.Type || 'Detection',
-          technique: alert.Technique || alert.rule_id || ''
-        }));
+        this.zone.run(() => {
+          this.recentThreats = alerts.slice(0, 5).map(alert => ({
+            id: alert.id,
+            time: alert.time || 'Recently',
+            name: alert.RuleName || alert.name || 'Detection Alert',
+            host: alert.agent_id || alert.hostname || 'Unknown Host',
+            severity: alert.Severity?.toLowerCase() || 'medium',
+            type: alert.Type || 'Detection',
+            technique: alert.Technique || alert.rule_id || ''
+          }));
+          this.cdr.detectChanges();
+        });
       })
     );
   }
