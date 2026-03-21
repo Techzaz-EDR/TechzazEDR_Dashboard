@@ -34,9 +34,6 @@ export class Profile implements OnInit, OnDestroy {
         role: '...',
         phone: '',
         bio: '',
-        companyName: '...',
-        companyEmail: '',
-        companyAddress: '',
         photoUrl: ''
     };
 
@@ -51,9 +48,6 @@ export class Profile implements OnInit, OnDestroy {
                     role:           profile.role         || 'Analyst',
                     phone:          profile.phone        || '',
                     bio:            profile.bio          || '',
-                    companyName:    profile.organization_id || profile.tenantId || 'Unknown Organization',
-                    companyEmail:   profile.companyEmail  || '',
-                    companyAddress: profile.companyAddress || '',
                     photoUrl:       profile.photoUrl      || ''
                 };
                 // Force Angular to re-render regardless of which zone this fires in
@@ -75,9 +69,7 @@ export class Profile implements OnInit, OnDestroy {
             this.authService.updateProfile({
                 name:           this.user.fullName,
                 phone:          this.user.phone,
-                bio:            this.user.bio,
-                companyEmail:   this.user.companyEmail,
-                companyAddress: this.user.companyAddress
+                bio:            this.user.bio
             });
             this.saving = false;
             this.saveSuccess = true;

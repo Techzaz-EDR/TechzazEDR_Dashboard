@@ -25,11 +25,10 @@ export const routes: Routes = [
                 path: 'settings',
                 loadComponent: () => import('./settings/settings').then(m => m.Settings),
                 children: [
-                    { path: '', redirectTo: 'organization', pathMatch: 'full' },
+                    { path: '', redirectTo: 'security', pathMatch: 'full' },
                     { path: 'organization', loadComponent: () => import('./settings/organization/organization').then(m => m.Organization) },
                     { path: 'security', loadComponent: () => import('./settings/security/security').then(m => m.Security) },
                     { path: 'notifications', loadComponent: () => import('./settings/notifications/notifications').then(m => m.Notifications) },
-                    { path: 'api-keys', loadComponent: () => import('./settings/api-keys/api-keys').then(m => m.ApiKeys) },
                     { path: 'profile', loadComponent: () => import('./settings/profile/profile').then(m => m.Profile) }
                 ]
             },

@@ -40,9 +40,7 @@
                     @for (user of filteredUsers; track user.id) {
                     <div class="table-row">
                         <div class="col name">
-                            <div class="avatar" [style.background-color]="user.avatarColor">
-                                <lucide-icon [name]="ShieldIcon" [size]="16"></lucide-icon>
-                            </div>
+                            <lucide-icon [name]="UserIcon" [size]="22" class="user-icon"></lucide-icon>
                             <span class="user-name">{{ user.name }}</span>
                         </div>
                         <div class="col email">{{ user.email }}</div>
@@ -60,21 +58,7 @@
                             <button class="icon-btn" title="Delete" (click)="deleteUser(user.id)">
                                 <lucide-icon [name]="TrashIcon" [size]="18"></lucide-icon>
                             </button>
-                            <div class="options-wrapper">
-                                <button class="icon-btn" title="More" (click)="toggleOptions(user.id)">
-                                    <lucide-icon [name]="MoreVerticalIcon" [size]="18"></lucide-icon>
-                                </button>
-                                
-                                @if (activeOptionsId === user.id) {
-                                <div class="options-dropdown">
-                                    <button (click)="toggleUserStatus(user)" 
-                                            class="options-item">
-                                        <lucide-icon [name]="ShieldIcon" [size]="14"></lucide-icon>
-                                        {{ user.status === 'active' ? 'Suspend User' : 'Activate User' }}
-                                    </button>
-                                </div>
-                                }
-                            </div>
+
                         </div>
                     </div>
                     } @empty {

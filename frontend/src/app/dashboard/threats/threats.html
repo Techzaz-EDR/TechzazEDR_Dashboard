@@ -162,12 +162,9 @@
                     </div>
                 </div>
 
-                <div class="col-status">
-                    <span class="badge status" [class]="threat.status">{{ threat.status }}</span>
-                </div>
 
                 <div class="col-severity">
-                    <span class="badge severity" [class]="threat.severity">{{ threat.severity }}</span>
+                    <span class="badge severity {{ threat.severity }}">{{ threat.severity }}</span>
                 </div>
 
                 <div class="col-actions">
@@ -212,12 +209,9 @@
                 </div>
                 <div class="field">
                     <span class="field-label">Severity</span>
-                    <span class="field-value severity" [class]="selectedThreat.severity">{{ selectedThreat.severity }}</span>
+                    <span class="field-value severity {{ selectedThreat.severity }}">{{ selectedThreat.severity }}</span>
                 </div>
-                <div class="field">
-                    <span class="field-label">Status</span>
-                    <span class="field-value status" [class]="selectedThreat.status">{{ selectedThreat.status }}</span>
-                </div>
+
             </div>
         </div>
         }

@@ -389,6 +389,37 @@
     }
 }
 
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.73rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+
+    &.Critical, &.CRITICAL, &.critical {
+        color: var(--status-critical, #FF4C4C);
+        background: var(--status-critical-bg, rgba(255, 76, 76, 0.15));
+    }
+
+    &.High, &.HIGH, &.high {
+        color: var(--status-high, #F59E0B);
+        background: var(--status-high-bg, rgba(245, 158, 11, 0.15));
+    }
+
+    &.Medium, &.MEDIUM, &.medium {
+        color: var(--status-medium, #3EA0FF);
+        background: var(--status-medium-bg, rgba(62, 160, 255, 0.15));
+    }
+
+    &.Low, &.LOW, &.low {
+        color: var(--status-low, #22C55E);
+        background: var(--status-low-bg, rgba(34, 197, 94, 0.15));
+    }
+}
+
 /* Modal Styles */
 .modal-overlay {
     position: fixed;

@@ -45,6 +45,16 @@ export class AuthService {
                     this.userSubject.next(user);
                 });
 
+                // Update last_seen immediately and start interval
+                const updateLastSeen = () => {
+                    const userDocRef = doc(this.db, 'users', user.uid);
+                    updateDoc(userDocRef, { last_seen: serverTimestamp() })
+                        .catch(error => console.error('Error updating last_seen:', error));
+                };
+                updateLastSeen();
+                if ((window as any).lastSeenInterval) clearInterval((window as any).lastSeenInterval);
+                (window as any).lastSeenInterval = setInterval(updateLastSeen, 60000); // every 60s
+
                 // Load claims then profile, each .next() wrapped in zone.run()
                 this.refreshClaims(user).then(() => {
                     const userDocRef = doc(this.db, 'users', user.uid);
@@ -65,6 +75,7 @@ export class AuthService {
                 });
 
             } else {
+                if ((window as any).lastSeenInterval) clearInterval((window as any).lastSeenInterval);
                 this.zone.run(() => {
                     this.userSubject.next(null);
                     this.role = null;

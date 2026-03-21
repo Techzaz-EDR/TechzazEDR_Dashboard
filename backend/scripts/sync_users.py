@@ -58,7 +58,8 @@ def sync_users_to_demo_org():
                     # Using current time as a fallback if user creation time isn't explicitly available, 
                     # but we can try to use user.user_metadata.creation_timestamp
                     "createdAt": datetime.now(UTC),
-                    "createdBy": "system_sync_script"
+                    "createdBy": "system_sync_script",
+                    "last_seen": datetime.now(UTC)
                 }
                 
                 # If the user has a creation timestamp, use it
