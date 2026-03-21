@@ -886,47 +886,9 @@
         &:hover {
             background: var(--bg-elevated);
             border-left-width: 4px;
-            /* Thicken border on hover */
-        }
-
-        &.severity-critical {
-            border-left-color: var(--chart-critical);
-
-            &:hover {
-                background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), transparent);
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            }
-        }
-
-        &.severity-high {
-            border-left-color: var(--chart-warning);
-
-            &:hover {
-                background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent);
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            }
-        }
-
-        &.severity-medium {
-            border-left-color: var(--status-medium);
-
-            &:hover {
-                background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent);
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            }
-        }
-
-        &.severity-low {
-            border-left-color: var(--status-low);
-
-            &:hover {
-                background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), transparent);
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            }
+            border-left-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .feed-time {

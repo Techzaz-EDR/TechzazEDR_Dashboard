@@ -10,6 +10,7 @@ import {
 
 import { Subscription } from 'rxjs';
 import { FirestoreService } from '../../core/services/firestore.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-overview',
@@ -123,8 +124,8 @@ export class Overview implements OnInit, OnDestroy {
     { id: 'INC-004', endpoint: 'GUEST-WIFI', threat: 'Network Scan', severity: 'medium', status: 'Monitored', detectedTime: '3 hours ago' }
   ];
 
-  // Threat Feed
-  recentThreats: any[] = [];
+  // Cyber Threat News Feed
+  cyberNews: { title: string, link: string, pubDate: string, source: string }[] = [];
 
   private intervalId: any;
 
@@ -161,7 +162,8 @@ export class Overview implements OnInit, OnDestroy {
   constructor(
     private firestoreService: FirestoreService,
     private cdr: ChangeDetectorRef,
-    private zone: NgZone
+    private zone: NgZone,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -204,26 +206,50 @@ export class Overview implements OnInit, OnDestroy {
       })
     );
 
-    // Fetch real threat feed (alerts)
+    // Fetch real threat feed (alerts) for Top Rules and Security Score
     this.subs.add(
       this.firestoreService.getOrganizationAlerts().subscribe(alerts => {
         this.zone.run(() => {
           this.currentAlerts = alerts;
-          this.recentThreats = alerts.slice(0, 5).map(alert => ({
-            id: alert.id,
-            time: alert.time || 'Recently',
-            name: alert.RuleName || alert.name || 'Detection Alert',
-            host: alert.agent_id || alert.hostname || 'Unknown Host',
-            severity: alert.Severity?.toLowerCase() || 'medium',
-            type: alert.Type || 'Detection',
-            technique: alert.Technique || alert.rule_id || ''
-          }));
           this.calculateSecurityScore();
           this.updateTopRules(alerts);
           this.cdr.detectChanges();
         });
       })
     );
+
+    // Fetch Cyber Threat News
+    this.subs.add(
+      this.http.get<any>('https://api.rss2json.com/v1/api.json?rss_url=https://feeds.feedburner.com/TheHackersNews')
+        .subscribe({
+          next: (response) => {
+            if (response && response.items) {
+              this.zone.run(() => {
+                this.cyberNews = response.items.slice(0, 5).map((item: any) => ({
+                  title: item.title,
+                  link: item.link,
+                  pubDate: this.formatNewsDate(item.pubDate),
+                  source: 'The Hacker News'
+                }));
+                this.cdr.detectChanges();
+              });
+            }
+          },
+          error: (err) => console.error('Error fetching cyber news:', err)
+        })
+    );
+  }
+
+  private formatNewsDate(dateString: string): string {
+    if (!dateString) return 'Recently';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    const diffMs = Date.now() - date.getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
   }
 
   private calculateProtectionStats(agents: any[]) {
