@@ -137,25 +137,6 @@
                 </div>
             </div>
 
-            <div class="action-section">
-                <h3>Response Actions</h3>
-                <div class="actions-grid">
-                    <button class="action-card isolate" (click)="isolateEndpoint(selectedIncident)">
-                        <lucide-icon [name]="ShieldOffIcon" [size]="20"></lucide-icon>
-                        <div class="action-info">
-                            <span class="title">Isolate Host</span>
-                            <span class="desc">Cut off network access</span>
-                        </div>
-                    </button>
-                    <button class="action-card block" (click)="blockThreat(selectedIncident)">
-                        <lucide-icon [name]="AlertTriangleIcon" [size]="20"></lucide-icon>
-                        <div class="action-info">
-                            <span class="title">Block Threat</span>
-                            <span class="desc">Create global block rule</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
             
             <div class="footer-links">
                 <a class="view-agent-link" [routerLink]="['/dashboard/endpoints', selectedIncident.agent_id]">

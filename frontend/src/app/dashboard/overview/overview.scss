@@ -607,37 +607,35 @@
     gap: 24px;
 }
 
-/* Recent Incidents Status Badges */
+/* Recent Incidents Status Badges - mirrors threats page .badge.severity */
 .status-pill {
     display: inline-block;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.73rem;
+    font-weight: 700;
     text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
 
     &.open {
-        background: rgba(93, 124, 255, 0.15);
-        color: #18D8FF;
-        border: 1px solid rgba(93, 124, 255, 0.3);
+        color: var(--status-critical);
+        background: var(--status-critical-bg);
     }
 
     &.investigating {
-        background: rgba(245, 158, 11, 0.15);
-        color: #F59E0B;
-        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: var(--status-high);
+        background: var(--status-high-bg);
     }
 
     &.contained {
-        background: rgba(16, 185, 129, 0.15);
-        color: #22C55E;
-        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: var(--status-medium);
+        background: var(--status-medium-bg);
     }
 
     &.resolved {
-        background: rgba(116, 131, 163, 0.15);
-        color: #F2F6FF;
-        border: 1px solid rgba(116, 131, 163, 0.3);
+        color: var(--status-low);
+        background: var(--status-low-bg);
     }
 }
 

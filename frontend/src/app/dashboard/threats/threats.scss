@@ -550,13 +550,30 @@
                     padding: 4px 8px;
                     border-radius: 4px;
                     text-transform: uppercase;
-                    font-weight: 600;
-                    background: var(--bg-input);
-                    border: 1px solid var(--border-color);
-                    color: var(--text-secondary);
+                    font-weight: 700;
                     text-align: center;
                     width: 100%;
                     white-space: nowrap;
+
+                    &.Active, &.active {
+                        color: var(--status-critical);
+                        background: var(--status-critical-bg);
+                    }
+
+                    &.Investigating, &.investigating {
+                        color: var(--status-high);
+                        background: var(--status-high-bg);
+                    }
+
+                    &.Quarantined, &.quarantined {
+                        color: var(--status-medium);
+                        background: var(--status-medium-bg);
+                    }
+
+                    &.Blocked, &.blocked {
+                        color: var(--status-low);
+                        background: var(--status-low-bg);
+                    }
                 }
             }
 
