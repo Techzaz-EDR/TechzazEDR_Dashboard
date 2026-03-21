@@ -276,8 +276,8 @@
         }
 
         &.incident-high {
-            stroke: #F59E0B;
-            filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.3));
+            stroke: #f97316;
+            filter: drop-shadow(0 0 4px rgba(249, 115, 22, 0.3));
         }
 
         &.incident-medium {
@@ -321,7 +321,7 @@
             }
 
             &.incident-high {
-                background: #F59E0B;
+                background: #f97316;
             }
 
             &.incident-medium {
@@ -553,105 +553,72 @@
     gap: 24px;
 }
 
-.health-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+/* Top Detected Rules Card */
+.top-rules-card {
+    .no-data {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        padding: 12px 0;
+    }
 
-    .health-bar-row {
-        padding: 8px;
-        margin: 0 -8px;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        cursor: pointer;
-        border-left: 3px solid transparent;
+    .rules-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
 
-        &:hover {
-            background: var(--bg-elevated);
-        }
+    .rule-row {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
 
-        &.status-critical:hover {
-            border-left-color: var(--chart-critical);
-            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), transparent);
-        }
+    .rule-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+    }
 
-        &.status-warning:hover {
-            border-left-color: var(--chart-warning);
-            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent);
-        }
+    .rule-name {
+        font-size: 0.82rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 75%;
+    }
 
-        &.status-neutral:hover {
-            border-left-color: var(--primary);
-            background: linear-gradient(90deg, rgba(93, 124, 255, 0.1), transparent);
-        }
+    .rule-count {
+        font-size: 0.85rem;
+        font-weight: 700;
+        flex-shrink: 0;
 
-        .bar-info {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
+        &.sev-critical { color: #EF4444; }
+        &.sev-high     { color: #f97316; }
+        &.sev-medium   { color: #EAB308; }
+        &.sev-low      { color: #3B82F6; }
+    }
 
-            .label {
-                color: var(--text-muted);
-            }
+    .rule-bar-track {
+        height: 6px;
+        background: var(--bg-dark);
+        border-radius: 4px;
+        overflow: hidden;
+    }
 
-            .count {
-                font-weight: 700;
-                color: var(--text-white);
-            }
+    .rule-bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 1s ease-out;
 
-            .count.text-critical {
-                color: var(--chart-critical);
-            }
-
-            .count.text-warning {
-                color: var(--chart-warning);
-            }
-        }
-
-        .bar-track {
-            height: 8px;
-            background: var(--bg-dark);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-
-        .bar-fill {
-            height: 100%;
-            border-radius: 4px;
-
-            &.fill-critical {
-                background: var(--chart-critical);
-            }
-
-            &.fill-warning {
-                background: var(--chart-warning);
-            }
-
-            &.fill-neutral {
-                background: var(--primary);
-            }
-        }
-
-        .action-sm {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            /* Corrected from text-accent */
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-
-            &:hover {
-                border-color: var(--primary);
-                color: var(--primary);
-            }
-        }
+        &.fill-critical { background: #EF4444; }
+        &.fill-high     { background: #f97316; }
+        &.fill-medium   { background: #EAB308; }
+        &.fill-low      { background: #3B82F6; }
     }
 }
+
 
 .risk-contributors-card {
     .contributors-list {

@@ -206,38 +206,42 @@
 
     <!-- 3. Secondary Row -->
     <div class="secondary-row">
-        <!-- Agent Health -->
-        <div class="card agent-health-card">
+
+        <!-- Recent Incidents -->
+        <div class="card incidents-table-card">
             <div class="card-header">
-                <h3>Agent Health & Updates</h3>
+                <h3>Recent Incidents</h3>
+                <a routerLink="/dashboard/incidents" class="view-all-btn">View All</a>
             </div>
             <div class="card-body">
-                <div class="health-bars">
-                    @for (item of agentHealth; track item.label) {
-                    <div class="health-bar-row" [ngClass]="'status-' + item.color">
-                        <div class="bar-info">
-                            <span class="label">{{ item.label }}:</span>
-                            <span class="count" [class.text-critical]="item.color === 'critical'"
-                                [class.text-warning]="item.color === 'warning'">
-                                {{ item.count }}
-                            </span>
-                        </div>
-                        <div class="bar-track">
-                            <div class="bar-fill" [class.fill-critical]="item.color === 'critical'"
-                                [class.fill-warning]="item.color === 'warning'"
-                                [class.fill-neutral]="item.color === 'neutral'"
-                                [style.width.%]="(item.count / 50) * 100"></div> <!-- Mock pct -->
-                        </div>
-                        <button class="action-sm" 
-                                (click)="handleHealthAction(item)"
-                                [disabled]="item.isProcessing || item.count === 0"
-                                [class.processing]="item.isProcessing">
-                            <lucide-icon *ngIf="item.isProcessing" [name]="RefreshCw" class="spin-icon"></lucide-icon>
-                            <span>{{ item.isProcessing ? 'Processing' : item.action }}</span>
-                        </button>
-                    </div>
-                    }
-                </div>
+                <table class="clean-table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Threat</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+                            <th>Detected Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (incident of recentIncidents; track incident.id) {
+                        <tr [ngClass]="'severity-' + incident.severity">
+                            <td class="primary-text">{{ incident.endpoint }}</td>
+                            <td>{{ incident.threat }}</td>
+                            <td>
+                                <span class="severity-dot" [class.critical]="incident.severity === 'critical'"
+                                    [class.high]="incident.severity === 'high'"
+                                    [class.medium]="incident.severity === 'medium'"></span>
+                                {{ incident.severity | titlecase }}
+                            </td>
+                            <td><span class="status-badge {{incident.status.toLowerCase()}}">{{ incident.status
+                                    }}</span></td>
+                            <td class="detected-time">{{ incident.detectedTime }}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -277,44 +281,6 @@
 
     <!-- 4. Bottom Row -->
     <div class="bottom-row">
-        <!-- Recent Incidents -->
-        <div class="card incidents-table-card">
-            <div class="card-header">
-                <h3>Recent Incidents</h3>
-                <a routerLink="/dashboard/incidents" class="view-all-btn">View All</a>
-            </div>
-            <div class="card-body">
-                <table class="clean-table">
-                    <thead>
-                        <tr>
-                            <th>Endpoint</th>
-                            <th>Threat</th>
-                            <th>Severity</th>
-                            <th>Status</th>
-                            <th>Detected Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (incident of recentIncidents; track incident.id) {
-                        <tr [ngClass]="'severity-' + incident.severity">
-                            <td class="primary-text">{{ incident.endpoint }}</td>
-                            <td>{{ incident.threat }}</td>
-                            <td>
-                                <span class="severity-dot" [class.critical]="incident.severity === 'critical'"
-                                    [class.high]="incident.severity === 'high'"
-                                    [class.medium]="incident.severity === 'medium'"></span>
-                                {{ incident.severity | titlecase }}
-                            </td>
-                            <td><span class="status-badge {{incident.status.toLowerCase()}}">{{ incident.status
-                                    }}</span></td>
-                            <td class="detected-time">{{ incident.detectedTime }}</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         <!-- Live Threat Feed -->
         <div class="card threat-feed-card">
             <div class="card-header">
@@ -342,4 +308,6 @@
             </div>
         </div>
     </div>
+
+
 </div>

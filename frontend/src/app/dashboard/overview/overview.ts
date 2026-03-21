@@ -102,17 +102,10 @@ export class Overview implements OnInit, OnDestroy {
   };
 
   // 3. Secondary Row
-  // Agent Health & Updates
-  agentHealth: any[] = [
-    { label: 'Outdated Agents', count: 0, color: 'warning', action: 'Update', isProcessing: false },
-    { label: 'Failed Updates', count: 0, color: 'critical', action: 'Retry', isProcessing: false },
-    { label: 'Pending Restart', count: 0, color: 'neutral', action: 'Reboot', isProcessing: false }
-  ];
+  // 3. Secondary Row
+  // Most Detected Alerts
+  topDetectedRules: { name: string, count: number, severity: string, maxPct: number }[] = [];
 
-  handleHealthAction(item: any) {
-    // No-op for now as it's real data
-    console.log(`Action ${item.action} requested for ${item.label}`);
-  }
 
   // Top Risk Contributors
   riskContributors = [
@@ -186,10 +179,11 @@ export class Overview implements OnInit, OnDestroy {
             (i.priority || i.severity || '').toLowerCase() === 'critical'
           ).length;
           
-          // Populate recent incidents table (limit to 5)
+          this.updateIncidentStats(active);
+          
           this.recentIncidents = incidents.slice(0, 5).map(inc => ({
             id: inc.id,
-            endpoint: inc.agent_name || inc.endpoint_name || 'Unknown',
+            endpoint: inc.affectedAssets?.[0]?.hostname || inc.agent_id || 'Unknown',
             threat: inc.title || inc.name || 'Untitled Incident',
             severity: inc.priority || inc.severity || 'medium',
             status: inc.status || 'Active',
@@ -225,6 +219,7 @@ export class Overview implements OnInit, OnDestroy {
             technique: alert.Technique || alert.rule_id || ''
           }));
           this.calculateSecurityScore();
+          this.updateTopRules(alerts);
           this.cdr.detectChanges();
         });
       })
@@ -296,11 +291,8 @@ export class Overview implements OnInit, OnDestroy {
       }
     });
 
-    this.agentHealth = [
-      { label: 'Outdated Agents', count: outdated, color: 'warning', action: 'Update', isProcessing: false },
-      { label: 'Failed Updates', count: failedUpdates, color: 'critical', action: 'Retry', isProcessing: false },
-      { label: 'Pending Restart', count: pendingRestart, color: 'neutral', action: 'Reboot', isProcessing: false }
-    ];
+    // agentHealth removed
+
 
     this.riskContributors = [
       { name: 'Active Critical Malware', count: criticalMalwareHosts, impact: 'Critical', devices: criticalMalwareHosts },
@@ -324,11 +316,9 @@ export class Overview implements OnInit, OnDestroy {
     // Status !== 'resolved' (Active alerts)
     const activeAlerts = this.currentAlerts.filter(a => (a.status || 'open').toLowerCase() !== 'resolved');
     
-    this.updateIncidentStats(activeAlerts);
-    
-    const critical = this.incidentStats.critical;
-    const high = this.incidentStats.high;
-    const medium = this.incidentStats.medium;
+    const critical = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'critical').length;
+    const high = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'high').length;
+    const medium = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'medium').length;
 
     // Formula: Security Score = max(0, 100 - ((C*20 + H*10 + M*5 + O*10) / E))
     const penalty = ((critical * 20) + (high * 10) + (medium * 5) + (offlineAgents * 10)) / totalEndpoints;
@@ -364,16 +354,16 @@ export class Overview implements OnInit, OnDestroy {
     });
   }
 
-  updateIncidentStats(activeAlerts: any[]) {
-    const critical = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'critical').length;
-    const high = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'high').length;
-    const medium = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'medium').length;
-    const low = activeAlerts.filter(a => {
-        const sev = (a.Severity || a.severity || '').toLowerCase();
+  updateIncidentStats(activeItems: any[]) {
+    const critical = activeItems.filter(i => (i.priority || i.severity || i.Severity || '').toLowerCase() === 'critical').length;
+    const high = activeItems.filter(i => (i.priority || i.severity || i.Severity || '').toLowerCase() === 'high').length;
+    const medium = activeItems.filter(i => (i.priority || i.severity || i.Severity || '').toLowerCase() === 'medium').length;
+    const low = activeItems.filter(i => {
+        const sev = (i.priority || i.severity || i.Severity || '').toLowerCase();
         return sev === 'low' || sev === 'info';
     }).length;
     
-    const total = activeAlerts.length;
+    const total = activeItems.length;
 
     this.incidentStats = {
       total,
@@ -425,6 +415,35 @@ export class Overview implements OnInit, OnDestroy {
       clearInterval(this.intervalId);
     }
     this.subs.unsubscribe();
+  }
+
+  updateTopRules(items: any[]) {
+    const ruleCounts = new Map<string, { count: number, severity: string }>();
+    
+    items.forEach(item => {
+      // Support both alert fields (RuleName/Severity) and incident fields (title/priority)
+      const name = item.RuleName || item.rule_name || item.title || item.name || 'Unknown Rule';
+      const severity = (item.Severity || item.severity || item.priority || 'medium').toLowerCase();
+      
+      if (ruleCounts.has(name)) {
+        const current = ruleCounts.get(name)!;
+        ruleCounts.set(name, { count: current.count + 1, severity: current.severity });
+      } else {
+        ruleCounts.set(name, { count: 1, severity });
+      }
+    });
+
+    const sortedRules = Array.from(ruleCounts.entries())
+      .map(([name, data]) => ({ name, count: data.count, severity: data.severity }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    const maxCount = sortedRules.length > 0 ? sortedRules[0].count : 1;
+
+    this.topDetectedRules = sortedRules.map(r => ({
+      ...r,
+      maxPct: (r.count / Math.max(maxCount, 1)) * 100
+    }));
   }
 
   setTimeFilter(filter: string) {

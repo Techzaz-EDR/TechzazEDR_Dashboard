@@ -182,13 +182,12 @@ export class FirestoreService {
         const tenantId = tId || 'demo-org';
         const subject = new ReplaySubject<any[]>(1);
         
-        // Use collectionGroup to find alerts across all agents
+        // Simpler query: only filter by organization_id, no orderBy (avoids composite index requirement)
         const alertsRef = collectionGroup(this.db, 'alerts');
         const q = query(
           alertsRef, 
           where('organization_id', '==', tenantId),
-          orderBy('timestamp', 'desc'),
-          limit(100)
+          limit(200)
         );
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -197,23 +196,27 @@ export class FirestoreService {
             querySnapshot.forEach((doc) => {
               const data = doc.data();
               const pathSegments = doc.ref.path.split('/');
-              // Path: organizations/{orgId}/agents/{agentId}/alerts/{alertId}
               const agentId = pathSegments[3]; 
 
               alerts.push({ 
                 id: doc.id, 
                 agent_id: agentId,
                 ...data,
-                // Map fields for consistency
                 time: data['timestamp']?.toDate ? this.formatTime(data['timestamp'].toDate()) : 'Recently'
               });
+            });
+
+            // Sort client-side by timestamp descending
+            alerts.sort((a, b) => {
+              const tA = a['timestamp']?.seconds || 0;
+              const tB = b['timestamp']?.seconds || 0;
+              return tB - tA;
             });
 
             subject.next(alerts);
           });
         }, (error) => {
           console.error("Error fetching organization alerts:", error);
-          // If index is missing, it will log an error with a link to create it
           this.zone.run(() => subject.next([]));
         });
 
