@@ -42,31 +42,31 @@ export class Overview implements OnInit, OnDestroy {
     securityStatus: { label: string; value: string; subtitle: string; status: string; icon: any };
     activeIncidents: { label: string; value: number; status: string; icon: any };
     atRiskEndpoints: { label: string; value: number; status: string; icon: any };
-    unmanagedDevices: { label: string; value: number; status: string; icon: any };
+    protectionCoverage: { label: string; value: string; status: string; icon: any };
   }> = {
     '24h': {
       securityStatus: { label: 'Security Score', value: '85%', subtitle: 'Overall Security Posture', status: 'secure', icon: Info },
       activeIncidents: { label: 'Active Incidents', value: 3, status: 'critical', icon: AlertTriangle },
       atRiskEndpoints: { label: 'At-Risk Endpoints', value: 12, status: 'critical', icon: XCircle },
-      unmanagedDevices: { label: 'Unmanaged Devices', value: 8, status: 'neutral', icon: Ban }
+      protectionCoverage: { label: 'Protection Coverage', value: '85%', status: 'secure', icon: Shield }
     },
     '7d': {
       securityStatus: { label: 'Security Score', value: '78%', subtitle: 'Overall Security Posture', status: 'degraded', icon: Info },
       activeIncidents: { label: 'Active Incidents', value: 11, status: 'critical', icon: AlertTriangle },
       atRiskEndpoints: { label: 'At-Risk Endpoints', value: 24, status: 'critical', icon: XCircle },
-      unmanagedDevices: { label: 'Unmanaged Devices', value: 13, status: 'neutral', icon: Ban }
+      protectionCoverage: { label: 'Protection Coverage', value: '78%', status: 'degraded', icon: Shield }
     },
     '30d': {
       securityStatus: { label: 'Security Score', value: '71%', subtitle: 'Overall Security Posture', status: 'critical', icon: Info },
       activeIncidents: { label: 'Active Incidents', value: 38, status: 'critical', icon: AlertTriangle },
       atRiskEndpoints: { label: 'At-Risk Endpoints', value: 47, status: 'critical', icon: XCircle },
-      unmanagedDevices: { label: 'Unmanaged Devices', value: 21, status: 'neutral', icon: Ban }
+      protectionCoverage: { label: 'Protection Coverage', value: '71%', status: 'critical', icon: Shield }
     },
     'custom': {
       securityStatus: { label: 'Security Score', value: '—', subtitle: 'Select a date range', status: 'secure', icon: Info },
       activeIncidents: { label: 'Active Incidents', value: 0, status: 'critical', icon: AlertTriangle },
       atRiskEndpoints: { label: 'At-Risk Endpoints', value: 0, status: 'critical', icon: XCircle },
-      unmanagedDevices: { label: 'Unmanaged Devices', value: 0, status: 'neutral', icon: Ban }
+      protectionCoverage: { label: 'Protection Coverage', value: '—', status: 'secure', icon: Shield }
     }
   };
 
@@ -138,6 +138,7 @@ export class Overview implements OnInit, OnDestroy {
   // Real incident count from Firestore (null = loading)
   activeIncidentsCount: number | null = null;
   activeCriticalIncidentsCount: number | null = null;
+  private currentAlerts: any[] = [];
 
   // Animation properties
   animatedProtectionPct = 0;
@@ -198,6 +199,7 @@ export class Overview implements OnInit, OnDestroy {
     this.subs.add(
       this.firestoreService.getOrganizationAlerts().subscribe(alerts => {
         this.zone.run(() => {
+          this.currentAlerts = alerts;
           this.recentThreats = alerts.slice(0, 5).map(alert => ({
             id: alert.id,
             time: alert.time || 'Recently',
@@ -207,6 +209,7 @@ export class Overview implements OnInit, OnDestroy {
             type: alert.Type || 'Detection',
             technique: alert.Technique || alert.rule_id || ''
           }));
+          this.calculateSecurityScore();
           this.cdr.detectChanges();
         });
       })
@@ -262,14 +265,31 @@ export class Overview implements OnInit, OnDestroy {
       totalCriticalAlerts += (agent.critical_alerts || 0);
     });
 
+    const protectedCount = ok;
     this.protectionStats = {
       total,
-      protected: ok,
-      protectedPct: total > 0 ? Math.round((ok / total) * 100) : 0,
+      protected: protectedCount,
+      protectedPct: total > 0 ? Math.round((protectedCount / total) * 100) : 0,
       atRisk,
       offline,
       totalCriticalAlerts
     };
+
+    // Update Protection Coverage KPI status and values across all snapshots
+    const coverageVal = `${this.protectionStats.protectedPct}%`;
+    let coverageStatus = 'secure';
+    if (this.protectionStats.protectedPct < 70) {
+      coverageStatus = 'critical';
+    } else if (this.protectionStats.protectedPct < 90) {
+      coverageStatus = 'degraded';
+    }
+
+    Object.values(this.kpiSnapshots).forEach(snap => {
+      if (snap.protectionCoverage) {
+        snap.protectionCoverage.value = coverageVal as any;
+        snap.protectionCoverage.status = coverageStatus;
+      }
+    });
 
     this.agentHealth = [
       { label: 'Outdated Agents', count: outdated, color: 'warning', action: 'Update', isProcessing: false },
@@ -284,7 +304,58 @@ export class Overview implements OnInit, OnDestroy {
       { name: 'Weak Passwords', count: 8, impact: 'Medium', devices: 31 } // Still mock
     ];
 
+    this.calculateSecurityScore();
     this.animateDonutChart();
+  }
+
+  private calculateSecurityScore() {
+    const totalEndpoints = this.protectionStats.total;
+    if (totalEndpoints === 0) {
+      this.updateSecurityKpi(100);
+      return;
+    }
+
+    const offlineAgents = this.protectionStats.offline;
+    
+    // Status !== 'resolved' (Active alerts)
+    const activeAlerts = this.currentAlerts.filter(a => (a.status || 'open').toLowerCase() !== 'resolved');
+    
+    const critical = activeAlerts.filter(a => (a.Severity || '').toLowerCase() === 'critical').length;
+    const high = activeAlerts.filter(a => (a.Severity || '').toLowerCase() === 'high').length;
+    const medium = activeAlerts.filter(a => (a.Severity || '').toLowerCase() === 'medium').length;
+
+    // Formula: Security Score = max(0, 100 - ((C*20 + H*10 + M*5 + O*10) / E))
+    const penalty = ((critical * 20) + (high * 10) + (medium * 5) + (offlineAgents * 10)) / totalEndpoints;
+    const score = Math.max(0, 100 - penalty);
+    
+    this.updateSecurityKpi(score);
+  }
+
+  private updateSecurityKpi(score: number) {
+    const roundedScore = Math.round(score);
+    const valueStr = `${roundedScore}%`;
+    
+    // Thresholds: >=90 (Secure), >=70 (Degraded), <70 (Critical)
+    let status = 'secure';
+    if (roundedScore < 70) {
+      status = 'critical';
+    } else if (roundedScore < 90) {
+      status = 'degraded';
+    }
+
+    // Update current KPI
+    if (this.kpiData.securityStatus) {
+      this.kpiData.securityStatus.value = valueStr;
+      this.kpiData.securityStatus.status = status;
+    }
+
+    // Update snapshots to keep state across filter changes
+    Object.values(this.kpiSnapshots).forEach(snap => {
+       if (snap.securityStatus) {
+         snap.securityStatus.value = valueStr;
+         snap.securityStatus.status = status;
+       }
+    });
   }
 
   animateDonutChart() {

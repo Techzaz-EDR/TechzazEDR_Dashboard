@@ -63,13 +63,15 @@
             </div>
         </div>
 
-        <div class="kpi-card status-neutral">
+        <div class="kpi-card" [class.status-safe]="kpiData.protectionCoverage.status === 'secure'"
+            [class.status-warning]="kpiData.protectionCoverage.status === 'degraded'"
+            [class.status-critical]="kpiData.protectionCoverage.status === 'critical'">
             <div class="kpi-icon">
-                <lucide-icon [name]="kpiData.unmanagedDevices.icon" [size]="24"></lucide-icon>
+                <lucide-icon [name]="kpiData.protectionCoverage.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ protectionStats.total > 0 ? protectionStats.total : '—' }}</span>
-                <span class="label">{{ kpiData.unmanagedDevices.label }}</span>
+                <span class="value">{{ protectionStats.total > 0 ? protectionStats.protectedPct + '%' : '—' }}</span>
+                <span class="label">{{ kpiData.protectionCoverage.label }}</span>
             </div>
         </div>
     </div>
