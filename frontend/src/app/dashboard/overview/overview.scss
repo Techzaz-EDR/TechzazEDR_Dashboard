@@ -268,18 +268,24 @@
         stroke-linecap: round;
         transform: rotate(-90deg);
         transform-origin: center;
+        transition: stroke-dasharray 1.5s ease-out, stroke-dashoffset 1.5s ease-out;
 
-        &.protected {
-            stroke: var(--chart-primary);
-            filter: drop-shadow(0 0 4px rgba(93, 124, 255, 0.3));
+        &.incident-critical {
+            stroke: #EF4444;
+            filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.3));
         }
 
-        &.at-risk {
-            stroke: var(--chart-critical);
+        &.incident-high {
+            stroke: #F59E0B;
+            filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.3));
         }
 
-        &.offline {
-            stroke: var(--chart-neutral);
+        &.incident-medium {
+            stroke: #EAB308;
+        }
+
+        &.incident-low {
+            stroke: #3B82F6;
         }
     }
 
@@ -296,8 +302,9 @@
 .chart-legend {
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 12px;
     margin-top: 24px;
+    flex-wrap: wrap;
 
     .legend-item {
         display: flex;
@@ -309,16 +316,20 @@
             height: 8px;
             border-radius: 50%;
 
-            &.protected {
-                background: var(--chart-primary);
+            &.incident-critical {
+                background: #EF4444;
             }
 
-            &.at-risk {
-                background: var(--chart-critical);
+            &.incident-high {
+                background: #F59E0B;
             }
 
-            &.offline {
-                background: var(--chart-neutral);
+            &.incident-medium {
+                background: #EAB308;
+            }
+
+            &.incident-low {
+                background: #3B82F6;
             }
         }
 
