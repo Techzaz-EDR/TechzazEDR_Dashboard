@@ -6,23 +6,10 @@
             <p>Real-time Threat Monitoring & Risk Posture</p>
         </div>
         <div class="header-actions">
-            <div class="time-filter">
-                <button [class.active]="activeTimeFilter === '24h'" (click)="setTimeFilter('24h')">24h</button>
-                <button [class.active]="activeTimeFilter === '7d'" (click)="setTimeFilter('7d')">7d</button>
-                <button [class.active]="activeTimeFilter === '30d'" (click)="setTimeFilter('30d')">30d</button>
-                <button [class.active]="activeTimeFilter === 'custom'" (click)="setTimeFilter('custom')">Custom</button>
-            </div>
-            @if (activeTimeFilter === 'custom') {
-                <div class="custom-range">
-                    <input type="date" class="date-input" [(ngModel)]="customFrom" />
-                    <span class="range-sep">→</span>
-                    <input type="date" class="date-input" [(ngModel)]="customTo" />
-                </div>
-            }
             <span class="last-updated"><lucide-icon [name]="CheckCircle" [size]="14"></lucide-icon> Live Updated</span>
             <button class="action-btn primary" (click)="refresh()" [class.loading]="isRefreshing">
                 <lucide-icon [name]="RefreshCw" [size]="16" [class.spin]="isRefreshing"></lucide-icon>
-                {{ isRefreshing ? 'Refereshing...' : 'Referesh' }}
+                {{ isRefreshing ? 'Refreshing...' : 'Refresh' }}
             </button>
         </div>
     </div>
@@ -57,7 +44,8 @@
                 <lucide-icon [name]="kpiData.atRiskEndpoints.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ activeCriticalIncidentsCount !== null ? activeCriticalIncidentsCount : '—' }}</span>
+                <span class="value">{{ activeCriticalIncidentsCount !== null ? activeCriticalIncidentsCount : '—'
+                    }}</span>
                 <span class="label">{{ kpiData.atRiskEndpoints.label }}</span>
                 <span class="subtitle" *ngIf="protectionStats.total > 0 && protectionStats.totalCriticalAlerts > 0">
                     {{ protectionStats.totalCriticalAlerts }} Critical detections
@@ -82,29 +70,25 @@
         <!-- Active Incidents Donut -->
         <div class="card protection-card">
             <div class="card-header">
-                <h3>Active Incidents by Severity</h3>
+                <h3>Active Incidents</h3>
             </div>
             <div class="card-body donut-layout">
                 <div class="donut-chart-container">
                     <svg viewBox="0 0 36 36" class="circular-chart">
                         <path class="circle-bg"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle incident-critical" 
-                            [style.stroke-dasharray]="targetCritical + ', 100'"
+                        <path class="circle incident-critical" [style.stroke-dasharray]="targetCritical + ', 100'"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle incident-high" 
-                              [style.stroke-dasharray]="targetHigh + ', 100'"
-                              [style.stroke-dashoffset]="-targetCritical"
+                        <path class="circle incident-high" [style.stroke-dasharray]="targetHigh + ', 100'"
+                            [style.stroke-dashoffset]="-targetCritical"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle incident-medium" 
-                              [style.stroke-dasharray]="targetMedium + ', 100'"
-                              [style.stroke-dashoffset]="-(targetCritical + targetHigh)"
+                        <path class="circle incident-medium" [style.stroke-dasharray]="targetMedium + ', 100'"
+                            [style.stroke-dashoffset]="-(targetCritical + targetHigh)"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle incident-low" 
-                              [style.stroke-dasharray]="targetLow + ', 100'"
-                              [style.stroke-dashoffset]="-(targetCritical + targetHigh + targetMedium)"
+                        <path class="circle incident-low" [style.stroke-dasharray]="targetLow + ', 100'"
+                            [style.stroke-dashoffset]="-(targetCritical + targetHigh + targetMedium)"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        
+
                         <text x="18" y="20.35" class="percentage">{{ incidentStats.total }}</text>
                     </svg>
                 </div>
@@ -133,7 +117,7 @@
                     <div class="legend-item">
                         <span class="dot incident-low"></span>
                         <div class="legend-info">
-                            <span class="label">Low/Info:</span>
+                            <span class="label">Low:</span>
                             <span class="count">{{ incidentStats.low }}</span>
                         </div>
                     </div>
@@ -148,13 +132,13 @@
             </div>
             <div class="card-body trend-layout">
                 <div class="line-chart-container">
-                    <span class="y-axis-label">Risk Score</span>
+                    <span class="y-axis-label">Incidents</span>
                     <div class="y-axis-scale">
-                        <span>100</span>
-                        <span>75</span>
-                        <span>50</span>
-                        <span>25</span>
-                        <span>0</span>
+                        <span>{{ yAxisLabels[0] }}</span>
+                        <span>{{ yAxisLabels[1] }}</span>
+                        <span>{{ yAxisLabels[2] }}</span>
+                        <span>{{ yAxisLabels[3] }}</span>
+                        <span>{{ yAxisLabels[4] }}</span>
                     </div>
                     <div class="chart-area">
                         <div class="chart-grid">
@@ -178,28 +162,25 @@
                             <!-- Tooltip data points overlay -->
                             <div class="data-points-overlay">
                                 @for (point of getTrendDataPoints(); track point.index) {
-                                    <div class="data-point"
-                                        [style.left.%]="point.x"
-                                        [style.top.%]="point.y * 2"
-                                        (mouseenter)="showTooltip($event, point)"
-                                        (mouseleave)="hideTooltip()">
-                                    </div>
+                                <div class="data-point" [style.left.%]="point.x" [style.top.%]="point.y * 2"
+                                    (mouseenter)="showTooltip($event, point)" (mouseleave)="hideTooltip()">
+                                </div>
                                 }
                             </div>
                         </div>
                         <div class="x-axis-labels">
                             @for (label of trendTimeLabels; track label) {
-                                <span>{{ label }}</span>
+                            <span>{{ label }}</span>
                             }
                         </div>
                     </div>
                     <span class="x-axis-label">Time</span>
                     <!-- Tooltip -->
                     @if (tooltipVisible) {
-                        <div class="chart-tooltip" [style.left.px]="tooltipX" [style.top.px]="tooltipY">
-                            <div class="tooltip-row"><span class="tooltip-label">Risk Score:</span> {{ tooltipScore }}</div>
-                            <div class="tooltip-row"><span class="tooltip-label">Time:</span> {{ tooltipTime }}</div>
-                        </div>
+                    <div class="chart-tooltip" [style.left.px]="tooltipX" [style.top.px]="tooltipY">
+                        <div class="tooltip-row"><span class="tooltip-label">Incidents:</span> {{ tooltipScore }}</div>
+                        <div class="tooltip-row"><span class="tooltip-label">Time:</span> {{ tooltipTime }}</div>
+                    </div>
                     }
                 </div>
             </div>
@@ -286,15 +267,15 @@
         <!-- Latest Cyber Threat News -->
         <div class="card threat-feed-card news-feed-card">
             <div class="card-header">
-                <h3>Latest Cyber Threat News</h3>
+                <h3>Latest Cyber News</h3>
                 <span class="live-pulse">● Updated</span>
             </div>
             <div class="card-body feed-container">
                 <div class="feed-list">
                     @if (cyberNews.length === 0) {
-                        <div class="no-data" style="padding: 12px; color: var(--text-muted); font-size: 0.85rem;">
-                            Fetching latest news...
-                        </div>
+                    <div class="no-data" style="padding: 12px; color: var(--text-muted); font-size: 0.85rem;">
+                        Fetching latest news...
+                    </div>
                     }
                     @for (news of cyberNews; track news.link) {
                     <a [href]="news.link" target="_blank" rel="noopener noreferrer" class="feed-item news-item">
@@ -302,10 +283,12 @@
                         <div class="feed-content">
                             <span class="feed-threat">{{ news.title }}</span>
                             <div class="feed-details">
-                                <span class="feed-detail"><span class="detail-label">Source:</span> {{ news.source }}</span>
+                                <span class="feed-detail"><span class="detail-label">Source:</span> {{ news.source
+                                    }}</span>
                             </div>
                         </div>
-                        <lucide-icon [name]="ArrowUp" style="transform: rotate(45deg); width: 14px; height: 14px; color: var(--text-muted);"></lucide-icon>
+                        <lucide-icon [name]="ArrowUp"
+                            style="transform: rotate(45deg); width: 14px; height: 14px; color: var(--text-muted);"></lucide-icon>
                     </a>
                     }
                 </div>

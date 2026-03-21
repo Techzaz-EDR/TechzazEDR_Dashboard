@@ -75,15 +75,17 @@ export class Overview implements OnInit, OnDestroy {
   kpiData = this.kpiSnapshots['24h'];
 
   // 2. Main Visual Row - Risk Trend
-  currentTrendPeriod = '24h'; // 24h, 7d, 30d
+  currentTrendPeriod = '7d'; // Default to one week
   riskTrendData: number[] = [];
 
   // Mock trend data
   trends = {
     '24h': [65, 68, 72, 70, 68, 65, 62, 60, 58, 55, 58, 62],
     '7d': [45, 52, 58, 62, 70, 65, 60],
-    '30d': [30, 35, 42, 48, 55, 60, 58, 62, 65, 70, 72, 68]
+    '30d': [30, 35, 42, 48, 55, 60, 58, 62, 65, 70, 72, 68, 65, 60, 55, 50, 48, 45, 42, 40, 38, 35, 32, 30, 28, 25, 22, 20, 18, 15]
   };
+
+  yAxisLabels: string[] = ['100', '75', '50', '25', '0'];
 
   trendTimeLabels: string[] = [];
   tooltipVisible = false;
@@ -161,7 +163,7 @@ export class Overview implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.setTrendPeriod('24h');
+    this.setTrendPeriod('7d');
     this.animateIncidentDonutChart();
     this.loadDashboardData();
   }
@@ -193,6 +195,7 @@ export class Overview implements OnInit, OnDestroy {
           ).length;
           
           this.updateIncidentStats(active);
+          this.updateTrendData(incidents, this.currentTrendPeriod);
           
           this.recentIncidents = incidents.slice(0, 5).map(inc => ({
             id: inc.id,
@@ -236,7 +239,7 @@ export class Overview implements OnInit, OnDestroy {
           next: (response) => {
             if (response && response.items) {
               this.zone.run(() => {
-                this.cyberNews = response.items.slice(0, 5).map((item: any) => ({
+                this.cyberNews = response.items.slice(0, 15).map((item: any) => ({
                   title: item.title,
                   link: item.link,
                   pubDate: this.formatNewsDate(item.pubDate),
@@ -399,6 +402,55 @@ export class Overview implements OnInit, OnDestroy {
     this.animateIncidentDonutChart();
   }
 
+  private updateTrendData(incidents: any[], period: string = '7d') {
+    const now = new Date();
+    let trendData: number[];
+    let lookbackMs: number;
+    let slots: number;
+
+    if (period === '24h') {
+      lookbackMs = 24 * 60 * 60 * 1000;
+      slots = 12;
+    } else if (period === '30d') {
+      lookbackMs = 30 * 24 * 60 * 60 * 1000;
+      slots = 30;
+    } else {
+      // Default to 7 days
+      lookbackMs = 7 * 24 * 60 * 60 * 1000;
+      slots = 7;
+    }
+
+    trendData = new Array(slots).fill(0);
+    const startTime = new Date(now.getTime() - lookbackMs);
+
+    incidents.forEach(incident => {
+      const createdDate = incident.createdAt?.toDate ? incident.createdAt.toDate() :
+        (incident.createdAt ? new Date(incident.createdAt) : null);
+
+      if (createdDate && createdDate >= startTime) {
+        const diffMs = now.getTime() - createdDate.getTime();
+        
+        let slot: number;
+        if (period === '24h') {
+          const diffHrs = diffMs / (60 * 60 * 1000);
+          slot = Math.floor((24 - diffHrs) / 2);
+        } else {
+          const diffDays = diffMs / (24 * 60 * 60 * 1000);
+          const totalDays = period === '30d' ? 30 : 7;
+          slot = Math.floor((totalDays - 0.001 - diffDays));
+        }
+
+        if (slot >= 0 && slot < slots) {
+          trendData[slot]++;
+        }
+      }
+    });
+
+    this.riskTrendData = trendData;
+    this.trendTimeLabels = this.generateTimeLabels(period, trendData.length);
+    this.updateYAxisLabels();
+  }
+
   animateIncidentDonutChart() {
     const duration = 1500;
     let start: number | null = null;
@@ -474,16 +526,38 @@ export class Overview implements OnInit, OnDestroy {
     this.currentTrendPeriod = period;
     this.riskTrendData = this.trends[period as keyof typeof this.trends];
     this.trendTimeLabels = this.generateTimeLabels(period, this.riskTrendData.length);
+    this.updateYAxisLabels();
+  }
+
+  updateYAxisLabels() {
+    const data = this.riskTrendData;
+    if (!data || data.length === 0) {
+      this.yAxisLabels = ['100', '75', '50', '25', '0'];
+      return;
+    }
+    const maxVal = Math.max(...data, 10);
+    const steppedMax = Math.ceil(maxVal / 10) * 10;
+    this.yAxisLabels = [
+      String(steppedMax),
+      String(Math.round(steppedMax * 0.75)),
+      String(Math.round(steppedMax * 0.5)),
+      String(Math.round(steppedMax * 0.25)),
+      '0'
+    ];
   }
 
   generateTimeLabels(period: string, count: number): string[] {
     const labels: string[] = [];
+    const now = new Date();
+    
     for (let i = 0; i < count; i++) {
       if (period === '24h') {
         labels.push(`${i * 2}h`);
       } else if (period === '7d') {
-        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        labels.push(days[i % 7]);
+        const date = new Date(now);
+        date.setDate(now.getDate() - (6 - i));
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        labels.push(dayNames[date.getDay()]);
       } else {
         labels.push(`Day ${i + 1}`);
       }
@@ -494,10 +568,11 @@ export class Overview implements OnInit, OnDestroy {
   getTrendPolylinePoints(): string {
     const data = this.riskTrendData;
     if (!data || data.length === 0) return '';
-    const maxVal = 100;
+    const maxVal = Math.max(...data, 10);
+    const steppedMax = Math.ceil(maxVal / 10) * 10;
     return data.map((val, i) => {
       const x = (i / (data.length - 1)) * 100;
-      const y = 50 - (val / maxVal) * 50;
+      const y = 50 - (val / steppedMax) * 50;
       return `${x},${y}`;
     }).join(' ');
   }
@@ -511,10 +586,11 @@ export class Overview implements OnInit, OnDestroy {
   getTrendDataPoints(): { x: number; y: number; value: number; index: number }[] {
     const data = this.riskTrendData;
     if (!data || data.length === 0) return [];
-    const maxVal = 100;
+    const maxVal = Math.max(...data, 10);
+    const steppedMax = Math.ceil(maxVal / 10) * 10;
     return data.map((val, i) => ({
       x: (i / (data.length - 1)) * 100,
-      y: 50 - (val / maxVal) * 50,
+      y: 50 - (val / steppedMax) * 50,
       value: val,
       index: i
     }));
