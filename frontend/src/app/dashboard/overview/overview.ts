@@ -142,6 +142,19 @@ export class Overview implements OnInit, OnDestroy {
     lowPct: 0
   };
 
+  // Incident Status Distribution
+  incidentStatusStats = {
+    total: 0,
+    open: 0,
+    investigating: 0,
+    contained: 0,
+    resolved: 0,
+    openPct: 0,
+    investigatingPct: 0,
+    containedPct: 0,
+    resolvedPct: 0
+  };
+
   // Animation properties
   animatedCriticalPct = 0;
   animatedHighPct = 0;
@@ -151,6 +164,16 @@ export class Overview implements OnInit, OnDestroy {
   targetHigh = 0;
   targetMedium = 0;
   targetLow = 0;
+
+  // Status Animation properties
+  animatedOpenPct = 0;
+  animatedInvestigatingPct = 0;
+  animatedContainedPct = 0;
+  animatedResolvedPct = 0;
+  targetOpen = 0;
+  targetInvestigating = 0;
+  targetContained = 0;
+  targetResolved = 0;
 
   isRefreshing = false;
   private subs = new Subscription();
@@ -165,6 +188,7 @@ export class Overview implements OnInit, OnDestroy {
   ngOnInit() {
     this.setTrendPeriod('7d');
     this.animateIncidentDonutChart();
+    this.animateStatusDonutChart();
     this.loadDashboardData();
   }
 
@@ -195,6 +219,7 @@ export class Overview implements OnInit, OnDestroy {
           ).length;
           
           this.updateIncidentStats(active);
+          this.updateIncidentStatusDistribution(incidents);
           this.updateTrendData(incidents, this.currentTrendPeriod);
           
           this.recentIncidents = incidents.slice(0, 5).map(inc => ({
@@ -471,6 +496,61 @@ export class Overview implements OnInit, OnDestroy {
       this.animatedHighPct = Math.round(this.targetHigh * easeProgress);
       this.animatedMediumPct = Math.round(this.targetMedium * easeProgress);
       this.animatedLowPct = Math.round(this.targetLow * easeProgress);
+
+      this.cdr.detectChanges();
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }
+
+  updateIncidentStatusDistribution(allIncidents: any[]) {
+    const total = allIncidents.length;
+    const open = allIncidents.filter(i => (i.status || 'open').toLowerCase() === 'open').length;
+    const investigating = allIncidents.filter(i => (i.status || '').toLowerCase() === 'investigating').length;
+    const contained = allIncidents.filter(i => (i.status || '').toLowerCase() === 'contained').length;
+    const resolved = allIncidents.filter(i => (i.status || '').toLowerCase() === 'resolved').length;
+
+    this.incidentStatusStats = {
+      total,
+      open,
+      investigating,
+      contained,
+      resolved,
+      openPct: total > 0 ? Math.round((open / total) * 100) : 0,
+      investigatingPct: total > 0 ? Math.round((investigating / total) * 100) : 0,
+      containedPct: total > 0 ? Math.round((contained / total) * 100) : 0,
+      resolvedPct: total > 0 ? Math.round((resolved / total) * 100) : 0
+    };
+
+    this.animateStatusDonutChart();
+  }
+
+  animateStatusDonutChart() {
+    const duration = 1500;
+    let start: number | null = null;
+
+    this.targetOpen = this.incidentStatusStats.openPct;
+    this.targetInvestigating = this.incidentStatusStats.investigatingPct;
+    this.targetContained = this.incidentStatusStats.containedPct;
+    this.targetResolved = this.incidentStatusStats.resolvedPct;
+
+    const animate = (time: number) => {
+      if (!start) start = time;
+      let progress = (time - start) / duration;
+      if (progress > 1) progress = 1;
+
+      const easeProgress = 1 - Math.pow(1 - progress, 4);
+
+      this.animatedOpenPct = Math.round(this.targetOpen * easeProgress);
+      this.animatedInvestigatingPct = Math.round(this.targetInvestigating * easeProgress);
+      this.animatedContainedPct = Math.round(this.targetContained * easeProgress);
+      this.animatedResolvedPct = Math.round(this.targetResolved * easeProgress);
+
+      this.cdr.detectChanges();
 
       if (progress < 1) {
         requestAnimationFrame(animate);

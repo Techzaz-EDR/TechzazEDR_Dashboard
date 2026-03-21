@@ -3,15 +3,16 @@ import { FirestoreService } from '../../core/services/firestore.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import {
     LucideAngularModule,
-    Search, Monitor, AlertTriangle, ShieldOff, Shield, Eye, Circle
+    Search, Monitor, AlertTriangle, ShieldOff, Shield, Eye, Circle, X, CheckCircle, Clock, User, MessageSquare, ArrowRight, ExternalLink
 } from 'lucide-angular';
 
 @Component({
     selector: 'app-incidents',
     standalone: true,
-    imports: [CommonModule, FormsModule, LucideAngularModule],
+    imports: [CommonModule, FormsModule, LucideAngularModule, RouterModule],
     templateUrl: './incidents.html',
     styleUrl: './incidents.scss',
 })
@@ -25,8 +26,16 @@ export class Incidents implements OnInit, OnDestroy {
     readonly ShieldIcon = Shield;
     readonly EyeIcon = Eye;
     readonly CircleIcon = Circle;
+    readonly XIcon = X;
+    readonly CheckCircleIcon = CheckCircle;
+    readonly ClockIcon = Clock;
+    readonly UserIcon = User;
+    readonly MessageSquareIcon = MessageSquare;
+    readonly ArrowRightIcon = ArrowRight;
+    readonly ExternalLinkIcon = ExternalLink;
 
     incidents: any[] = [];
+    selectedIncident: any = null;
 
     constructor(
         private firestoreService: FirestoreService,
@@ -154,6 +163,35 @@ export class Incidents implements OnInit, OnDestroy {
             console.log('Status updated successfully');
         } catch (error) {
             console.error('Failed to update incident status:', error);
+            alert('Failed to update status. Check console for details.');
+        }
+    }
+
+    selectIncident(incident: any) {
+        console.log('CLICK: selectIncident called for', incident.incidentId);
+        this.selectedIncident = { ...incident };
+        this.cdr.detectChanges();
+    }
+
+    closeDetails() {
+        console.log('CLICK: closeDetails called');
+        this.selectedIncident = null;
+        this.cdr.detectChanges();
+    }
+
+    async updateStatus(newStatus: string) {
+        if (!this.selectedIncident) return;
+        
+        const incident = this.selectedIncident;
+        console.log(`Updating status for Incident #${incident.id} to ${newStatus}`);
+        
+        try {
+            await this.firestoreService.updateIncidentStatus(incident.id, newStatus.toLowerCase());
+            // Update local state for immediate feedback
+            this.selectedIncident.status = newStatus.toLowerCase();
+            this.cdr.detectChanges();
+        } catch (error) {
+            console.error('Failed to update status:', error);
             alert('Failed to update status. Check console for details.');
         }
     }

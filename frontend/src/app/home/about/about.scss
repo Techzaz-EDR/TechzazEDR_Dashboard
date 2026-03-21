@@ -366,16 +366,16 @@
         -webkit-text-fill-color: transparent;
     }
 
-    .highlight-purple {
-        color: #5D7CFF;
-        background: linear-gradient(135deg, #5D7CFF, #5D7CFF);
+    .highlight-blue {
+        color: var(--primary);
+        background: linear-gradient(135deg, var(--primary), var(--primary));
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-    .gradient-purple-text {
-        background: linear-gradient(135deg, #ffffff 0%, #5D7CFF 100%);
+    .gradient-blue-text {
+        background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
