@@ -250,8 +250,8 @@ export class DashboardComponent implements OnInit {
             .substring(0, 2);
     }
 
-    logout() {
+    async logout() {
         console.log('Logging out...');
-        this.authService.logout();
+        await this.authService.logout();
     }
 }

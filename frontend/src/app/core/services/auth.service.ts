@@ -95,7 +95,7 @@ export class AuthService {
     async logout() {
         await signOut(this.auth);
         this.tenantIdSubject.next(null);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
     }
 
     async getToken(): Promise<string | null> {
