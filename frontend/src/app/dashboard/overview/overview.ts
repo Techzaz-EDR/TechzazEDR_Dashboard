@@ -42,31 +42,31 @@ export class Overview implements OnInit, OnDestroy {
     securityStatus: { label: string; value: string; subtitle: string; status: string; icon: any };
     activeIncidents: { label: string; value: number; status: string; icon: any };
     atRiskEndpoints: { label: string; value: number; status: string; icon: any };
-    protectionCoverage: { label: string; value: string; status: string; icon: any };
+    totalEndpoints: { label: string; value: string; status: string; icon: any };
   }> = {
     '24h': {
       securityStatus: { label: 'Security Score', value: '85%', subtitle: 'Overall Security Posture', status: 'secure', icon: Info },
       activeIncidents: { label: 'Active Incidents', value: 3, status: 'critical', icon: AlertTriangle },
       atRiskEndpoints: { label: 'At-Risk Endpoints', value: 12, status: 'critical', icon: XCircle },
-      protectionCoverage: { label: 'Protection Coverage', value: '85%', status: 'secure', icon: Shield }
+      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'critical', icon: Monitor }
     },
     '7d': {
       securityStatus: { label: 'Security Score', value: '78%', subtitle: 'Overall Security Posture', status: 'degraded', icon: Info },
       activeIncidents: { label: 'Active Incidents', value: 11, status: 'critical', icon: AlertTriangle },
       atRiskEndpoints: { label: 'At-Risk Endpoints', value: 24, status: 'critical', icon: XCircle },
-      protectionCoverage: { label: 'Protection Coverage', value: '78%', status: 'degraded', icon: Shield }
+      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'critical', icon: Monitor }
     },
     '30d': {
       securityStatus: { label: 'Security Score', value: '71%', subtitle: 'Overall Security Posture', status: 'critical', icon: Info },
       activeIncidents: { label: 'Active Incidents', value: 38, status: 'critical', icon: AlertTriangle },
       atRiskEndpoints: { label: 'At-Risk Endpoints', value: 47, status: 'critical', icon: XCircle },
-      protectionCoverage: { label: 'Protection Coverage', value: '71%', status: 'critical', icon: Shield }
+      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'critical', icon: Monitor }
     },
     'custom': {
       securityStatus: { label: 'Security Score', value: '—', subtitle: 'Select a date range', status: 'secure', icon: Info },
       activeIncidents: { label: 'Active Incidents', value: 0, status: 'critical', icon: AlertTriangle },
       atRiskEndpoints: { label: 'At-Risk Endpoints', value: 0, status: 'critical', icon: XCircle },
-      protectionCoverage: { label: 'Protection Coverage', value: '—', status: 'secure', icon: Shield }
+      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'critical', icon: Monitor }
     }
   };
 
@@ -140,13 +140,28 @@ export class Overview implements OnInit, OnDestroy {
   activeCriticalIncidentsCount: number | null = null;
   private currentAlerts: any[] = [];
 
+  // Incident Stats
+  incidentStats = {
+    total: 0,
+    critical: 0,
+    high: 0,
+    medium: 0,
+    low: 0,
+    criticalPct: 0,
+    highPct: 0,
+    mediumPct: 0,
+    lowPct: 0
+  };
+
   // Animation properties
-  animatedProtectionPct = 0;
-  animatedAtRiskPct = 0;
-  animatedOfflinePct = 0;
-  targetProtected = 0;
-  targetAtRisk = 0;
-  targetOffline = 0;
+  animatedCriticalPct = 0;
+  animatedHighPct = 0;
+  animatedMediumPct = 0;
+  animatedLowPct = 0;
+  targetCritical = 0;
+  targetHigh = 0;
+  targetMedium = 0;
+  targetLow = 0;
 
   private subs = new Subscription();
 
@@ -158,7 +173,7 @@ export class Overview implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setTrendPeriod('24h');
-    this.animateDonutChart();
+    this.animateIncidentDonutChart();
 
     // Fetch real incident count from Firestore
     this.subs.add(
@@ -220,7 +235,6 @@ export class Overview implements OnInit, OnDestroy {
     const total = agents.length || 0;
     if (total === 0) {
       this.protectionStats = { total: 0, protected: 0, protectedPct: 0, atRisk: 0, offline: 0, totalCriticalAlerts: 0 };
-      this.animateDonutChart();
       return;
     }
 
@@ -275,19 +289,10 @@ export class Overview implements OnInit, OnDestroy {
       totalCriticalAlerts
     };
 
-    // Update Protection Coverage KPI status and values across all snapshots
-    const coverageVal = `${this.protectionStats.protectedPct}%`;
-    let coverageStatus = 'secure';
-    if (this.protectionStats.protectedPct < 70) {
-      coverageStatus = 'critical';
-    } else if (this.protectionStats.protectedPct < 90) {
-      coverageStatus = 'degraded';
-    }
-
+    // Update Total Endpoints KPI across all snapshots
     Object.values(this.kpiSnapshots).forEach(snap => {
-      if (snap.protectionCoverage) {
-        snap.protectionCoverage.value = coverageVal as any;
-        snap.protectionCoverage.status = coverageStatus;
+      if ((snap as any).totalEndpoints) {
+        (snap as any).totalEndpoints.value = String(this.protectionStats.total);
       }
     });
 
@@ -305,7 +310,6 @@ export class Overview implements OnInit, OnDestroy {
     ];
 
     this.calculateSecurityScore();
-    this.animateDonutChart();
   }
 
   private calculateSecurityScore() {
@@ -320,9 +324,11 @@ export class Overview implements OnInit, OnDestroy {
     // Status !== 'resolved' (Active alerts)
     const activeAlerts = this.currentAlerts.filter(a => (a.status || 'open').toLowerCase() !== 'resolved');
     
-    const critical = activeAlerts.filter(a => (a.Severity || '').toLowerCase() === 'critical').length;
-    const high = activeAlerts.filter(a => (a.Severity || '').toLowerCase() === 'high').length;
-    const medium = activeAlerts.filter(a => (a.Severity || '').toLowerCase() === 'medium').length;
+    this.updateIncidentStats(activeAlerts);
+    
+    const critical = this.incidentStats.critical;
+    const high = this.incidentStats.high;
+    const medium = this.incidentStats.medium;
 
     // Formula: Security Score = max(0, 100 - ((C*20 + H*10 + M*5 + O*10) / E))
     const penalty = ((critical * 20) + (high * 10) + (medium * 5) + (offlineAgents * 10)) / totalEndpoints;
@@ -358,13 +364,40 @@ export class Overview implements OnInit, OnDestroy {
     });
   }
 
-  animateDonutChart() {
+  updateIncidentStats(activeAlerts: any[]) {
+    const critical = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'critical').length;
+    const high = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'high').length;
+    const medium = activeAlerts.filter(a => (a.Severity || a.severity || '').toLowerCase() === 'medium').length;
+    const low = activeAlerts.filter(a => {
+        const sev = (a.Severity || a.severity || '').toLowerCase();
+        return sev === 'low' || sev === 'info';
+    }).length;
+    
+    const total = activeAlerts.length;
+
+    this.incidentStats = {
+      total,
+      critical,
+      high,
+      medium,
+      low,
+      criticalPct: total > 0 ? Math.round((critical / total) * 100) : 0,
+      highPct: total > 0 ? Math.round((high / total) * 100) : 0,
+      mediumPct: total > 0 ? Math.round((medium / total) * 100) : 0,
+      lowPct: total > 0 ? Math.round((low / total) * 100) : 0,
+    };
+    
+    this.animateIncidentDonutChart();
+  }
+
+  animateIncidentDonutChart() {
     const duration = 1500;
     let start: number | null = null;
 
-    this.targetProtected = this.protectionStats.protectedPct;
-    this.targetAtRisk = Math.round((this.protectionStats.atRisk / this.protectionStats.total) * 100);
-    this.targetOffline = Math.round((this.protectionStats.offline / this.protectionStats.total) * 100);
+    this.targetCritical = this.incidentStats.criticalPct;
+    this.targetHigh = this.incidentStats.highPct;
+    this.targetMedium = this.incidentStats.mediumPct;
+    this.targetLow = this.incidentStats.lowPct;
 
     const animate = (time: number) => {
       if (!start) start = time;
@@ -374,9 +407,10 @@ export class Overview implements OnInit, OnDestroy {
       // Easing function (easeOutQuart)
       const easeProgress = 1 - Math.pow(1 - progress, 4);
 
-      this.animatedProtectionPct = Math.round(this.targetProtected * easeProgress);
-      this.animatedAtRiskPct = Math.round(this.targetAtRisk * easeProgress);
-      this.animatedOfflinePct = Math.round(this.targetOffline * easeProgress);
+      this.animatedCriticalPct = Math.round(this.targetCritical * easeProgress);
+      this.animatedHighPct = Math.round(this.targetHigh * easeProgress);
+      this.animatedMediumPct = Math.round(this.targetMedium * easeProgress);
+      this.animatedLowPct = Math.round(this.targetLow * easeProgress);
 
       if (progress < 1) {
         requestAnimationFrame(animate);

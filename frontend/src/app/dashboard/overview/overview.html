@@ -63,15 +63,13 @@
             </div>
         </div>
 
-        <div class="kpi-card" [class.status-safe]="kpiData.protectionCoverage.status === 'secure'"
-            [class.status-warning]="kpiData.protectionCoverage.status === 'degraded'"
-            [class.status-critical]="kpiData.protectionCoverage.status === 'critical'">
+        <div class="kpi-card status-critical">
             <div class="kpi-icon">
-                <lucide-icon [name]="kpiData.protectionCoverage.icon" [size]="24"></lucide-icon>
+                <lucide-icon [name]="kpiData.totalEndpoints.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ protectionStats.total > 0 ? protectionStats.protectedPct + '%' : '—' }}</span>
-                <span class="label">{{ kpiData.protectionCoverage.label }}</span>
+                <span class="value">{{ protectionStats.total }}</span>
+                <span class="label">{{ kpiData.totalEndpoints.label }}</span>
             </div>
         </div>
     </div>
@@ -79,71 +77,62 @@
     <!-- 2. Main Visual Row -->
     <div class="visual-row">
         <!-- Protection Coverage Donut -->
+        <!-- Active Incidents Donut -->
         <div class="card protection-card">
             <div class="card-header">
-                <h3>Protection Coverage</h3>
+                <h3>Active Incidents by Severity</h3>
             </div>
             <div class="card-body donut-layout">
                 <div class="donut-chart-container">
-                    <svg viewBox="0 0 36 36" class="circular-chart" 
-                         [style.--target-protected]="targetProtected"
-                         [style.--target-at-risk]="targetAtRisk"
-                         [style.--target-offline]="targetOffline"
-                         [style.--offset-at-risk]="'-' + targetProtected"
-                         [style.--offset-offline]="'-' + (targetProtected + targetAtRisk)">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
                         <path class="circle-bg"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle protected" stroke-dasharray="0, 100"
-                            [style.animation]="'fillProtected 1.5s ease-out forwards'"
+                        <path class="circle incident-critical" 
+                            [style.stroke-dasharray]="targetCritical + ', 100'"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle at-risk" stroke-dasharray="0, 100"
-                              [style.animation]="'fillAtRisk 1.5s ease-out forwards'"
+                        <path class="circle incident-high" 
+                              [style.stroke-dasharray]="targetHigh + ', 100'"
+                              [style.stroke-dashoffset]="-targetCritical"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle offline" stroke-dasharray="0, 100"
-                              [style.animation]="'fillOffline 1.5s ease-out forwards'"
+                        <path class="circle incident-medium" 
+                              [style.stroke-dasharray]="targetMedium + ', 100'"
+                              [style.stroke-dashoffset]="-(targetCritical + targetHigh)"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle incident-low" 
+                              [style.stroke-dasharray]="targetLow + ', 100'"
+                              [style.stroke-dashoffset]="-(targetCritical + targetHigh + targetMedium)"
                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                         
-                        <!-- Dynamic CSS Animations based on CSS variables -->
-                        <style>
-                            @keyframes fillProtected {
-                                to { stroke-dasharray: var(--target-protected), 100; }
-                            }
-                            @keyframes fillAtRisk {
-                                to { 
-                                    stroke-dasharray: var(--target-at-risk), 100; 
-                                    stroke-dashoffset: var(--offset-at-risk); 
-                                }
-                            }
-                            @keyframes fillOffline {
-                                to { 
-                                    stroke-dasharray: var(--target-offline), 100; 
-                                    stroke-dashoffset: var(--offset-offline); 
-                                }
-                            }
-                        </style>
-                        <text x="18" y="20.35" class="percentage">{{ protectionStats.protectedPct }}%</text>
+                        <text x="18" y="20.35" class="percentage">{{ incidentStats.total }}</text>
                     </svg>
                 </div>
-                <div class="chart-legend">
+                <div class="chart-legend incident-legend">
                     <div class="legend-item">
-                        <span class="dot protected"></span>
+                        <span class="dot incident-critical"></span>
                         <div class="legend-info">
-                            <span class="label">Protected:</span>
-                            <span class="count">{{ protectionStats.protected }}</span>
+                            <span class="label">Critical:</span>
+                            <span class="count">{{ incidentStats.critical }}</span>
                         </div>
                     </div>
                     <div class="legend-item">
-                        <span class="dot at-risk"></span>
+                        <span class="dot incident-high"></span>
                         <div class="legend-info">
-                            <span class="label">At Risk:</span>
-                            <span class="count">{{ protectionStats.atRisk }}</span>
+                            <span class="label">High:</span>
+                            <span class="count">{{ incidentStats.high }}</span>
                         </div>
                     </div>
                     <div class="legend-item">
-                        <span class="dot offline"></span>
+                        <span class="dot incident-medium"></span>
                         <div class="legend-info">
-                            <span class="label">Offline:</span>
-                            <span class="count">{{ protectionStats.offline }}</span>
+                            <span class="label">Medium:</span>
+                            <span class="count">{{ incidentStats.medium }}</span>
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <span class="dot incident-low"></span>
+                        <div class="legend-info">
+                            <span class="label">Low/Info:</span>
+                            <span class="count">{{ incidentStats.low }}</span>
                         </div>
                     </div>
                 </div>
