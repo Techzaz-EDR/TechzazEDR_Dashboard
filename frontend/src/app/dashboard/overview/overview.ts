@@ -249,10 +249,18 @@ export class Overview implements OnInit, OnDestroy {
       totalCriticalAlerts += (agent.critical_alerts || 0);
     });
 
+<<<<<<< Updated upstream
     this.protectionStats = {
       total,
       protected: ok,
       protectedPct: total > 0 ? Math.round((ok / total) * 100) : 0,
+=======
+    const totalForCoverage = ok + atRisk + offline;
+    this.protectionStats = {
+      total,
+      protected: ok,
+      protectedPct: totalForCoverage > 0 ? Math.round((ok / totalForCoverage) * 100) : 0,
+>>>>>>> Stashed changes
       atRisk,
       offline,
       totalCriticalAlerts
