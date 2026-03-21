@@ -281,28 +281,30 @@
 
     <!-- 4. Bottom Row -->
     <div class="bottom-row">
-        <!-- Live Threat Feed -->
-        <div class="card threat-feed-card">
+        <!-- Latest Cyber Threat News -->
+        <div class="card threat-feed-card news-feed-card">
             <div class="card-header">
-                <h3>Live Threat Feed</h3>
-                <span class="live-pulse">● Live</span>
+                <h3>Latest Cyber Threat News</h3>
+                <span class="live-pulse">● Updated</span>
             </div>
             <div class="card-body feed-container">
                 <div class="feed-list">
-                    @for (threat of recentThreats; track threat.id) {
-                    <div class="feed-item" [ngClass]="'severity-' + threat.severity">
-                        <div class="feed-time">{{ threat.time }}</div>
+                    @if (cyberNews.length === 0) {
+                        <div class="no-data" style="padding: 12px; color: var(--text-muted); font-size: 0.85rem;">
+                            Fetching latest news...
+                        </div>
+                    }
+                    @for (news of cyberNews; track news.link) {
+                    <a [href]="news.link" target="_blank" rel="noopener noreferrer" class="feed-item news-item">
+                        <div class="feed-time">{{ news.pubDate }}</div>
                         <div class="feed-content">
-                            <span class="feed-threat">{{ threat.name }}</span>
+                            <span class="feed-threat">{{ news.title }}</span>
                             <div class="feed-details">
-                                <span class="feed-detail"><span class="detail-label">Host:</span> {{ threat.host }}</span>
-                                <span class="feed-detail"><span class="detail-label">Technique:</span> {{ threat.technique || threat.type }}</span>
+                                <span class="feed-detail"><span class="detail-label">Source:</span> {{ news.source }}</span>
                             </div>
                         </div>
-                        <span class="feed-severity" [ngClass]="'severity-chip-' + threat.severity">
-                            {{ threat.severity | titlecase }}
-                        </span>
-                    </div>
+                        <lucide-icon [name]="ArrowUp" style="transform: rotate(45deg); width: 14px; height: 14px; color: var(--text-muted);"></lucide-icon>
+                    </a>
                     }
                 </div>
             </div>
