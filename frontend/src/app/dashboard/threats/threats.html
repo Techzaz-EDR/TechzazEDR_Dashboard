@@ -5,10 +5,7 @@
                 <h1>Threat Monitoring</h1>
                 <p>Real-time threat detection, classification, and analysis</p>
             </div>
-            <button class="refresh-btn" (click)="refresh()" [class.loading]="isRefreshing">
-                <lucide-icon [name]="RefreshIcon" [size]="18" [class.spin]="isRefreshing"></lucide-icon> {{ isRefreshing
-                ? 'Refereshing...' : 'Referesh' }}
-            </button>
+
         </div>
 
         <div class="filters-bar">
