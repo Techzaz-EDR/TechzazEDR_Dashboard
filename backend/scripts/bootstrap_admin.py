@@ -56,7 +56,8 @@ def bootstrap():
             "tenantId": tenant_id,
             "role": "Admin",
             "status": "active",
-            "createdAt": datetime.now(UTC)
+            "createdAt": datetime.now(UTC),
+            "last_seen": datetime.now(UTC)
         }
         db.collection("users").document(user_record.uid).set(user_doc)
         print(f"Created/Updated Firestore user document.")

@@ -473,7 +473,7 @@
                 object-position: center;
                 transform: scale(1.04);
                 transform-origin: center;
-                filter: saturate(1.15) contrast(1.08) brightness(0.92);
+                filter: saturate(1.15) contrast(1.08) brightness(1.05);
                 backface-visibility: hidden;
                 will-change: transform, filter;
                 z-index: 1;
@@ -483,9 +483,9 @@
                 position: absolute;
                 inset: 0;
                 background: linear-gradient(110deg,
-                        rgba(3, 4, 11, 0.56) 0%,
-                        rgba(3, 4, 11, 0.48) 42%,
-                        rgba(3, 4, 11, 0.64) 100%),
+                        rgba(3, 4, 11, 0.40) 0%,
+                        rgba(3, 4, 11, 0.32) 42%,
+                        rgba(3, 4, 11, 0.50) 100%),
                     linear-gradient(to bottom, transparent 70%, #0d081a 100%);
                 z-index: 2;
             }
@@ -1724,6 +1724,66 @@
                         justify-content: center;
                         border-radius: 20px;
                         transition: all 0.5s ease;
+                    }
+
+                    .step-circle {
+                        width: 68px;
+                        height: 68px;
+                        background: rgba(13, 8, 26, 0.8);
+                        border: 1px solid rgba(93, 124, 255, 0.2);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: relative;
+                        z-index: 10;
+                        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+
+                        .step-icon {
+                            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                        }
+
+                        .number {
+                            display: none;
+                        }
+                    }
+
+                    // Step-specific Colors
+                    &:nth-child(1) {
+                        .step-circle {
+                            border-color: rgba(62, 160, 255, 0.3);
+                            .step-icon { color: #3EA0FF; filter: drop-shadow(0 0 8px rgba(62, 160, 255, 0.5)); }
+                            .circle-glow { background: radial-gradient(circle, rgba(62, 160, 255, 0.2) 0%, transparent 70%); }
+                            .circle-pulse { border-color: rgba(62, 160, 255, 0.4); }
+                        }
+                    }
+
+                    &:nth-child(2) {
+                        .step-circle {
+                            border-color: rgba(0, 229, 255, 0.3);
+                            .step-icon { color: #00E5FF; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.5)); }
+                            .circle-glow { background: radial-gradient(circle, rgba(0, 229, 255, 0.2) 0%, transparent 70%); }
+                            .circle-pulse { border-color: rgba(0, 229, 255, 0.4); }
+                        }
+                    }
+
+                    &:nth-child(3) {
+                        .step-circle {
+                            border-color: rgba(122, 108, 255, 0.3);
+                            .step-icon { color: #7A6CFF; filter: drop-shadow(0 0 8px rgba(122, 108, 255, 0.5)); }
+                            .circle-glow { background: radial-gradient(circle, rgba(122, 108, 255, 0.2) 0%, transparent 70%); }
+                            .circle-pulse { border-color: rgba(122, 108, 255, 0.4); }
+                        }
+                    }
+
+                    &:nth-child(4) {
+                        .step-circle {
+                            border-color: rgba(93, 124, 255, 0.3);
+                            .step-icon { color: #5D7CFF; filter: drop-shadow(0 0 8px rgba(93, 124, 255, 0.5)); }
+                            .circle-glow { background: radial-gradient(circle, rgba(93, 124, 255, 0.2) 0%, transparent 70%); }
+                            .circle-pulse { border-color: rgba(93, 124, 255, 0.4); }
+                        }
                     }
 
                     h5 {

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
     LucideAngularModule,
-    Search, Shield, Edit2, Trash2, MoreVertical, Plus
+    Search, Shield, Edit2, Trash2, MoreVertical, Plus, User
 } from 'lucide-angular';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import { AuthService } from '../../core/services/auth.service';
@@ -25,6 +25,7 @@ export class Users implements OnInit, OnDestroy {
     readonly TrashIcon = Trash2;
     readonly MoreVerticalIcon = MoreVertical;
     readonly PlusIcon = Plus;
+    readonly UserIcon = User;
 
     searchTerm = '';
     isLoading = true;
@@ -48,14 +49,20 @@ export class Users implements OnInit, OnDestroy {
                     
                     this.users = querySnapshot.docs.map(doc => {
                         const data = doc.data();
+                        const lastSeenDate = data['last_seen']?.toDate ? data['last_seen'].toDate() : (data['last_seen'] ? new Date(data['last_seen']) : null);
+                        let status = 'offline';
+                        if (lastSeenDate) {
+                            const now = new Date();
+                            const diffMs = now.getTime() - lastSeenDate.getTime();
+                            if (diffMs < 60000) status = 'online';
+                        }
                         return {
                             id: doc.id,
                             name: data['name'] || data['email'] || 'Unknown User',
                             email: data['email'] || 'No Email',
                             role: data['role'] || 'Unknown',
-                            status: data['status'] || 'active',
-                            lastLogin: this.formatLastLogin(data['last_login_at']),
-                            avatarColor: '#' + Math.floor(Math.random() * 16777215).toString(16) // Random color for now
+                            status,
+                            lastLogin: this.formatLastLogin(data['last_login_at'])
                         };
                     });
                 } catch (error) {

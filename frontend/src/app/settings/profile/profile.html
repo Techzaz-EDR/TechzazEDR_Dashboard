@@ -5,17 +5,17 @@
             <h2>Profile Picture</h2>
 
             <div class="avatar-upload">
-                <div class="avatar-circle" 
-                     [style.background-image]="user.photoUrl ? 'url(' + user.photoUrl + ')' : 'none'" 
-                     [style.background-size]="'cover'" 
-                     [style.background-position]="'center'">
+                <div class="avatar-circle"
+                    [style.background-image]="user.photoUrl ? 'url(' + user.photoUrl + ')' : 'none'"
+                    [style.background-size]="'cover'" [style.background-position]="'center'">
                     <lucide-icon *ngIf="!user.photoUrl" [name]="User" [size]="48" class="avatar-icon"></lucide-icon>
                     <div class="camera-badge">
                         <lucide-icon [name]="Camera" [size]="14"></lucide-icon>
                     </div>
                 </div>
                 <div class="upload-actions">
-                    <input type="file" #fileInput (change)="onFileSelected($event)" hidden accept="image/png, image/jpeg, image/gif">
+                    <input type="file" #fileInput (change)="onFileSelected($event)" hidden
+                        accept="image/png, image/jpeg, image/gif">
                     <button class="btn-upload" (click)="fileInput.click()" [disabled]="uploading">
                         <lucide-icon *ngIf="!uploading" [name]="Upload" [size]="16" class="icon-left"></lucide-icon>
                         {{ uploading ? 'Uploading...' : 'Upload New Picture' }}
@@ -52,32 +52,14 @@
                     <input type="text" [(ngModel)]="user.phone" placeholder="e.g. +94 77 123 4567">
                 </div>
                 <div class="form-group full-width">
-                    <label>Bio</label>
-                    <textarea rows="3" [(ngModel)]="user.bio" placeholder="Tell us a little about yourself..."></textarea>
+                    <label>Description</label>
+                    <textarea rows="3" [(ngModel)]="user.bio"
+                        placeholder="Tell us a little about yourself..."></textarea>
                 </div>
             </div>
         </section>
 
-        <!-- Company Information Section -->
-        <section class="form-section">
-            <h2>Company Information</h2>
-            <p class="section-desc">Update your organization details</p>
 
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Company Name</label>
-                    <input type="text" [value]="user.companyName" disabled title="Company name is managed by your administrator">
-                </div>
-                <div class="form-group">
-                    <label>Company Email</label>
-                    <input type="email" [(ngModel)]="user.companyEmail" placeholder="company@example.com">
-                </div>
-                <div class="form-group full-width">
-                    <label>Company Address</label>
-                    <input type="text" [(ngModel)]="user.companyAddress" placeholder="123 Main St, City, Country">
-                </div>
-            </div>
-        </section>
 
         <!-- Save Feedback -->
         <div class="save-feedback" *ngIf="saveSuccess || saveError">

@@ -221,19 +221,18 @@
     }
 
     .avatar {
+        display: none;
+    }
+
+    .user-icon {
         width: 32px;
         height: 32px;
-        border-radius: 8px;
-        /* Hexagon-ish or rounded square like in design? Design is hexagon. Circle for now as placeholder or use CSS clip-path for hex */
-        /* Let's stick to the hexagon-like shape from previous designs or standard circle. The screenshot users have hexagon icons. */
-        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.8rem;
-        border: 1px solid var(--border-soft);
-        box-shadow: inset 0 0 0 1px rgba(35, 50, 82, 0.35);
         color: var(--text-primary);
+        font-size: 22px;
+        margin-right: 8px;
     }
 
     .badge {
@@ -250,10 +249,10 @@
         min-width: 100px;
 
         &.administrator {
-            background-color: var(--status-critical-bg);
-            color: var(--status-critical);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
+            background-color: rgba(116, 131, 163, 0.10);
+            color: #6b7280;
+            border: 1.5px solid #6b7280;
+            box-shadow: 0 0 10px #6b728033;
         }
 
         &.security-analyst {
@@ -287,14 +286,19 @@
         letter-spacing: 0.5px;
         line-height: 1;
 
-        &.active {
+        &.online {
             background-color: var(--status-low-bg);
             color: var(--status-low);
             border: 1px solid rgba(34, 197, 94, 0.3);
             box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
         }
 
-        &.inactive,
+        &.offline {
+            background-color: var(--status-critical-bg);
+            color: var(--status-critical);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
+        }
         &.suspended {
             background-color: var(--status-neutral-bg);
             color: var(--text-secondary);

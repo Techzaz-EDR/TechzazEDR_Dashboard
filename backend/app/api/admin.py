@@ -51,7 +51,8 @@ async def invite_user(
             "role": req.role,
             "status": "active",
             "createdAt": datetime.now(UTC),
-            "createdBy": ctx.uid
+            "createdBy": ctx.uid,
+            "last_seen": datetime.now(UTC)
         }
         db.collection("users").document(user_record.uid).set(user_doc)
         

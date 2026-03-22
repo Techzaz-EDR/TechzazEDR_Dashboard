@@ -74,50 +74,57 @@
             </div>
             <div class="card-body donut-layout">
                 <div class="donut-chart-container">
-                    <svg viewBox="0 0 36 36" class="circular-chart">
-                        <path class="circle-bg"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle incident-critical" [style.stroke-dasharray]="targetCritical + ', 100'"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle incident-high" [style.stroke-dasharray]="targetHigh + ', 100'"
-                            [style.stroke-dashoffset]="-targetCritical"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle incident-medium" [style.stroke-dasharray]="targetMedium + ', 100'"
-                            [style.stroke-dashoffset]="-(targetCritical + targetHigh)"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="circle incident-low" [style.stroke-dasharray]="targetLow + ', 100'"
-                            [style.stroke-dashoffset]="-(targetCritical + targetHigh + targetMedium)"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-
-                        <text x="18" y="20.35" class="percentage">{{ incidentStats.total }}</text>
-                    </svg>
+                    <div class="donut-visual-container">
+                        <svg viewBox="0 0 36 36" class="donut-chart-svg">
+                            <circle class="circle-bg" cx="18" cy="18" r="15.9155"></circle>
+                            <circle class="circle critical" cx="18" cy="18" r="15.9155"
+                                [attr.stroke-dasharray]="animatedCriticalPct + ' 100'" [attr.stroke-dashoffset]="0">
+                            </circle>
+                            <circle class="circle high" cx="18" cy="18" r="15.9155"
+                                [attr.stroke-dasharray]="animatedHighPct + ' 100'"
+                                [attr.stroke-dashoffset]="-animatedCriticalPct">
+                            </circle>
+                            <circle class="circle medium" cx="18" cy="18" r="15.9155"
+                                [attr.stroke-dasharray]="animatedMediumPct + ' 100'"
+                                [attr.stroke-dashoffset]="-(animatedCriticalPct + animatedHighPct)">
+                            </circle>
+                            <circle class="circle low" cx="18" cy="18" r="15.9155"
+                                [attr.stroke-dasharray]="animatedLowPct + ' 100'"
+                                [attr.stroke-dashoffset]="-(animatedCriticalPct + animatedHighPct + animatedMediumPct)">
+                            </circle>
+                            <text x="50%" y="50%" class="center-label"
+                                style="font-size: 8px; font-weight: 800; fill: var(--text-white);">
+                                {{ incidentStats.total }}
+                            </text>
+                        </svg>
+                    </div>
                 </div>
                 <div class="chart-legend incident-legend">
                     <div class="legend-item">
                         <span class="dot incident-critical"></span>
                         <div class="legend-info">
-                            <span class="label">Critical:</span>
+                            <span class="label">Critical ({{incidentStats.criticalPct}}%):</span>
                             <span class="count">{{ incidentStats.critical }}</span>
                         </div>
                     </div>
                     <div class="legend-item">
                         <span class="dot incident-high"></span>
                         <div class="legend-info">
-                            <span class="label">High:</span>
+                            <span class="label">High ({{incidentStats.highPct}}%):</span>
                             <span class="count">{{ incidentStats.high }}</span>
                         </div>
                     </div>
                     <div class="legend-item">
                         <span class="dot incident-medium"></span>
                         <div class="legend-info">
-                            <span class="label">Medium:</span>
+                            <span class="label">Medium ({{incidentStats.mediumPct}}%):</span>
                             <span class="count">{{ incidentStats.medium }}</span>
                         </div>
                     </div>
                     <div class="legend-item">
                         <span class="dot incident-low"></span>
                         <div class="legend-info">
-                            <span class="label">Low:</span>
+                            <span class="label">Low ({{incidentStats.lowPct}}%):</span>
                             <span class="count">{{ incidentStats.low }}</span>
                         </div>
                     </div>
@@ -202,24 +209,24 @@
                         <tr>
                             <th>Endpoint</th>
                             <th>Threat</th>
-                            <th>Severity</th>
                             <th>Status</th>
                             <th>Detected Time</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for (incident of recentIncidents; track incident.id) {
-                        <tr [ngClass]="'severity-' + incident.severity">
+                        @for (incident of recentIncidents.slice(0, 4); track incident.id) {
+                        <tr>
                             <td class="primary-text">{{ incident.endpoint }}</td>
                             <td>{{ incident.threat }}</td>
                             <td>
-                                <span class="severity-dot" [class.critical]="incident.severity === 'critical'"
-                                    [class.high]="incident.severity === 'high'"
-                                    [class.medium]="incident.severity === 'medium'"></span>
-                                {{ incident.severity | titlecase }}
+                                <span class="status-pill"
+                                    [class.open]="incident.status.toLowerCase() === 'open'"
+                                    [class.investigating]="incident.status.toLowerCase() === 'investigating'"
+                                    [class.contained]="incident.status.toLowerCase() === 'contained'"
+                                    [class.resolved]="incident.status.toLowerCase() === 'resolved'">
+                                    {{ incident.status }}
+                                </span>
                             </td>
-                            <td><span class="status-badge {{incident.status.toLowerCase()}}">{{ incident.status
-                                    }}</span></td>
                             <td class="detected-time">{{ incident.detectedTime }}</td>
                         </tr>
                         }
@@ -228,35 +235,71 @@
             </div>
         </div>
 
-        <!-- Risk Contributors -->
-        <div class="card risk-contributors-card">
+        <!-- Incident Status Distribution -->
+        <div class="card incident-status-card">
             <div class="card-header">
-                <h3>Top Risk Contributors</h3>
+                <h3>Incident Status</h3>
             </div>
             <div class="card-body">
-                <div class="contributors-list">
-                    @for (item of riskContributors; track item.name) {
-                    <div class="contributor-row" [ngClass]="'impact-' + item.impact.toLowerCase()">
-                        <div class="contributor-info">
-                            <span class="name">{{ item.name }}</span>
-                            <div class="contributor-details">
-                                <span class="detail-item">
-                                    <span class="detail-label">Risk Impact:</span>
-                                    <span class="impact-chip" [class.impact-critical]="item.impact === 'Critical'"
-                                        [class.impact-high]="item.impact === 'High'"
-                                        [class.impact-medium]="item.impact === 'Medium'">
-                                        {{ item.impact }}
-                                    </span>
-                                </span>
-                                <span class="detail-item">
-                                    <span class="detail-label">Affected Devices:</span>
-                                    <span class="detail-value">{{ item.devices }}</span>
-                                </span>
-                            </div>
-                        </div>
-                        <button class="fix-btn">Fix</button>
+                <div class="donut-chart-container">
+                    <div class="donut-visual-container">
+                        <svg viewBox="0 0 42 42" class="donut-chart-svg shadow-glow">
+                            <!-- Background Circle -->
+                            <circle class="circle-bg" cx="21" cy="21" r="15.9155"></circle>
+
+                            <!-- Open Segment -->
+                            <circle class="circle-segment status-open" cx="21" cy="21" r="15.9155"
+                                [attr.stroke-dasharray]="animatedOpenPct + ' 100'" [attr.stroke-dashoffset]="0">
+                            </circle>
+
+                            <!-- Investigating Segment -->
+                            <circle class="circle-segment status-investigating" cx="21" cy="21" r="15.9155"
+                                [attr.stroke-dasharray]="animatedInvestigatingPct + ' 100'"
+                                [attr.stroke-dashoffset]="-animatedOpenPct">
+                            </circle>
+
+                            <!-- Contained Segment -->
+                            <circle class="circle-segment status-contained" cx="21" cy="21" r="15.9155"
+                                [attr.stroke-dasharray]="animatedContainedPct + ' 100'"
+                                [attr.stroke-dashoffset]="-(animatedOpenPct + animatedInvestigatingPct)">
+                            </circle>
+
+                            <!-- Resolved Segment -->
+                            <circle class="circle-segment status-resolved" cx="21" cy="21" r="15.9155"
+                                [attr.stroke-dasharray]="animatedResolvedPct + ' 100'"
+                                [attr.stroke-dashoffset]="-(animatedOpenPct + animatedInvestigatingPct + animatedContainedPct)">
+                            </circle>
+
+                            <!-- Center Label -->
+                            <text class="center-label">
+                                <tspan x="50%" y="45%" style="font-size: 3px; fill: var(--text-muted);">Investigating</tspan>
+                                <tspan x="50%" y="58%" style="font-size: 6px; font-weight: 800;">{{incidentStatusStats.investigating}}</tspan>
+                            </text>
+                        </svg>
                     </div>
-                    }
+
+                    <div class="horizontal-legend">
+                        <div class="legend-item">
+                            <span class="dot status-open"></span>
+                            <span class="label">Open ({{incidentStatusStats.openPct}}%)</span>
+                            <span class="count">{{incidentStatusStats.open}}</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="dot status-investigating"></span>
+                            <span class="label">Investigating ({{incidentStatusStats.investigatingPct}}%)</span>
+                            <span class="count">{{incidentStatusStats.investigating}}</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="dot status-contained"></span>
+                            <span class="label">Contained ({{incidentStatusStats.containedPct}}%)</span>
+                            <span class="count">{{incidentStatusStats.contained}}</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="dot status-resolved"></span>
+                            <span class="label">Resolved ({{incidentStatusStats.resolvedPct}}%)</span>
+                            <span class="count">{{incidentStatusStats.resolved}}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

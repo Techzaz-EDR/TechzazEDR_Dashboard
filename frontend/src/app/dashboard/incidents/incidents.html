@@ -55,7 +55,7 @@
             </thead>
             <tbody>
                 @for (incident of filteredIncidents; track incident.id) {
-                <tr [class.selected-row]="false">
+                <tr (click)="selectIncident(incident); $event.stopPropagation()" [class.selected-row]="selectedIncident?.id === incident.id" class="clickable-row">
                     <td class="id-col">{{ incident.incidentId }}</td>
                     <td>
                         <span class="badge" [class]="incident.priority">{{ incident.priority }}</span>
@@ -89,4 +89,60 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div>
+
+    <!-- Incident Detail Side Panel Overlay -->
+    <div class="side-panel-overlay" *ngIf="selectedIncident" (click)="closeDetails()"></div>
+    
+    <div class="incident-detail-panel" [class.open]="selectedIncident">
+        <div class="panel-header" *ngIf="selectedIncident">
+            <div class="header-left">
+                <span class="incident-id">{{ selectedIncident.incidentId }}</span>
+                <span class="badge" [class]="selectedIncident.priority">{{ selectedIncident.priority }}</span>
+            </div>
+            <button class="close-btn" (click)="closeDetails()">
+                <lucide-icon [name]="XIcon" [size]="20"></lucide-icon>
+            </button>
+        </div>
+
+        <div class="panel-body" *ngIf="selectedIncident">
+            <div class="detail-section">
+                <h2>{{ selectedIncident.title }}</h2>
+                <p class="description">{{ selectedIncident.description }}</p>
+            </div>
+
+            <div class="status-control">
+                <label>Change Status</label>
+                <div class="status-options">
+                    <button class="status-btn open" [class.active]="selectedIncident.status === 'open'" (click)="updateStatus('open')">Open</button>
+                    <button class="status-btn investigating" [class.active]="selectedIncident.status === 'investigating'" (click)="updateStatus('investigating')">Investigating</button>
+                    <button class="status-btn contained" [class.active]="selectedIncident.status === 'contained'" (click)="updateStatus('contained')">Contained</button>
+                    <button class="status-btn resolved" [class.active]="selectedIncident.status === 'resolved'" (click)="updateStatus('resolved')">Resolved</button>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label"><lucide-icon [name]="MonitorIcon" [size]="14"></lucide-icon> Affected Asset</div>
+                    <div class="value">{{ selectedIncident.endpoints }}</div>
+                    <div class="sub-value">{{ selectedIncident.endpointIp }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label"><lucide-icon [name]="ClockIcon" [size]="14"></lucide-icon> Detected Time</div>
+                    <div class="value">{{ selectedIncident.time }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label"><lucide-icon [name]="UserIcon" [size]="14"></lucide-icon> Assignee</div>
+                    <div class="value">{{ selectedIncident.assignee }}</div>
+                </div>
+            </div>
+
+            
+            <div class="footer-links">
+                <a class="view-agent-link" [routerLink]="['/dashboard/endpoints', selectedIncident.agent_id]">
+                    View Agent Details <lucide-icon [name]="ArrowRightIcon" [size]="14"></lucide-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

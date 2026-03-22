@@ -1,0 +1,1 @@
+web: npx serve@latest -s dist/endpoint-project/browser -l tcp://0.0.0.0:$PORT

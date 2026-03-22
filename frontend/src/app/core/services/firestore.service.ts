@@ -176,6 +176,17 @@ export class FirestoreService {
     });
   }
 
+  async updateIncidentStatus(incidentId: string, status: string) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const incidentRef = doc(this.db, 'organizations', tenantId, 'incidents', incidentId);
+    
+    await updateDoc(incidentRef, {
+        status: status,
+        updatedAt: serverTimestamp()
+    });
+  }
+
   getOrganizationAlerts(): Observable<any[]> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
