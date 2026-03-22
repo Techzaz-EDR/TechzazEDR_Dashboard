@@ -1,9 +1,10 @@
-# frontend/nixpacks.toml
+providers = ["node"]
+
 [phases.setup]
 nixPkgs = ["nodejs_20"]
 
 [phases.install]
-cmds = ["npm install"]
+cmds = ["npm install --network-timeout=1000000"]
 
 [phases.build]
 cmds = ["npm run build"]
