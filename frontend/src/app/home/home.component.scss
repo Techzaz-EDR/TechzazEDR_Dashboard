@@ -1802,15 +1802,27 @@
 
                     &.traditional {
                         background: rgba(239, 68, 68, 0.01);
-                        border-color: rgba(239, 68, 68, 0.05);
+                        border-color: rgba(239, 68, 68, 0.1);
+                        box-shadow: 0 20px 50px -15px rgba(239, 68, 68, 0.1);
 
                         .icon-bg {
                             background: rgba(239, 68, 68, 0.05);
+                            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.05);
+                        }
+
+                        .cross lucide-icon {
+                            filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.3));
                         }
 
                         &:hover {
                             background: rgba(239, 68, 68, 0.03);
-                            border-color: rgba(239, 68, 68, 0.15);
+                            border-color: rgba(239, 68, 68, 0.2);
+                            box-shadow: 0 30px 60px -10px rgba(239, 68, 68, 0.2);
+
+                            .icon-bg {
+                                background: rgba(239, 68, 68, 0.1);
+                                transform: scale(1.05);
+                            }
                         }
                     }
 

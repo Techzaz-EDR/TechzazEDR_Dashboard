@@ -331,13 +331,13 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
                 position: 'absolute',
                 width: `${size}px`,
                 height: `${size}px`,
-                backgroundColor: isBlue ? '#3b82f6' : '#8b5cf6',
+                backgroundColor: isBlue ? '#3b82f6' : '#4F6BFF',
                 borderRadius: '50%',
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 opacity: (Math.random() * 0.5 + 0.2).toString(),
                 filter: 'blur(1px)',
-                boxShadow: `0 0 10px ${isBlue ? '#3b82f6' : '#8b5cf6'}`
+                boxShadow: `0 0 10px ${isBlue ? '#3b82f6' : '#4F6BFF'}`
             });
 
             container.appendChild(p);
