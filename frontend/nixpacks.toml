@@ -10,4 +10,4 @@ cmds = ["npm install --network-timeout=1000000"]
 cmds = ["npm run build"]
 
 [start]
-cmd = "npx serve@latest -s dist/endpoint-project -l tcp://0.0.0.0:$PORT"
+cmd = "npx serve@latest -s dist/endpoint-project/browser -l tcp://0.0.0.0:$PORT"
