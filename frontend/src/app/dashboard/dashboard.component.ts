@@ -4,11 +4,11 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { filter, Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
+import { FirestoreService } from '../core/services/firestore.service';
 import {
     LucideAngularModule,
     Shield, Activity, Zap, BarChart2, FileText, ShieldAlert, Wrench, Users, Clipboard, Settings,
-    Search, Clock, Bell, MessageSquare, Home, LogOut, ChevronDown, CheckCircle, AlertTriangle, Check,
-    Phone, Send
+    Search, Clock, Bell, MessageSquare, Home, LogOut, ChevronDown, CheckCircle, AlertTriangle, Check
 } from 'lucide-angular';
 
 export interface NavItem {
@@ -86,8 +86,6 @@ export class DashboardComponent implements OnInit {
     readonly LogOut = LogOut;
     readonly ChevronDown = ChevronDown;
     readonly Check = Check;
-    readonly Phone = Phone;
-    readonly Send = Send;
 
     navItems: NavItem[] = [
         { label: 'Security Overview', icon: Activity, route: '/dashboard/overview' },
@@ -100,99 +98,9 @@ export class DashboardComponent implements OnInit {
     ];
 
     isNotificationOpen = false;
-    showMessagesModal = false;
 
-    // Mock Messages Data
-    currentConversationId = 2; // Default to Florencio
-    newMessageText = '';
 
-    conversations = [
-        { id: 1, user: 'Elmer Laverty', avatar: 'EL', message: 'Haha oh man', time: '12m', unread: true },
-        { id: 2, user: 'Florencio Dorrance', avatar: 'FD', message: 'woohoooo', time: '24m', unread: false },
-        { id: 3, user: 'Lavern Laboy', avatar: 'LL', message: 'Haha that\'s terrifying', time: '1h', unread: false },
-        { id: 4, user: 'Titus Kitamura', avatar: 'TK', message: 'omg, this is amazing', time: '5h', unread: false }
-    ];
-
-    allMessages: any = {
-        1: [
-            { id: 1, sender: 'them', text: 'Haha oh man', time: '12m ago' },
-            { id: 2, sender: 'me', text: 'I know right? crazy stuff.', time: '10m ago' }
-        ],
-        2: [
-            { id: 1, sender: 'them', text: 'omg, this is amazing', time: '2:00 PM' },
-            { id: 2, sender: 'me', text: 'perfect!', time: '2:01 PM' },
-            { id: 3, sender: 'me', text: 'Wow, this is really epic', time: '2:02 PM' },
-            { id: 4, sender: 'them', text: 'just ideas for next time', time: '2:05 PM' },
-            { id: 5, sender: 'them', text: 'I\'ll be there in 2 mins', time: '2:06 PM' }
-        ],
-        3: [
-            { id: 1, sender: 'them', text: 'Haha that\'s terrifying', time: '1h ago' }
-        ],
-        4: [
-            { id: 1, sender: 'them', text: 'omg, this is amazing', time: '5h ago' }
-        ]
-    };
-
-    get activeChat() {
-        return this.allMessages[this.currentConversationId] || [];
-    }
-
-    get activeUser() {
-        return this.conversations.find(c => c.id === this.currentConversationId);
-    }
-
-    selectConversation(id: number) {
-        this.currentConversationId = id;
-        // Mark as read logic could go here
-        const conv = this.conversations.find(c => c.id === id);
-        if (conv) conv.unread = false;
-    }
-
-    sendMessage() {
-        if (!this.newMessageText.trim()) return;
-
-        if (!this.allMessages[this.currentConversationId]) {
-            this.allMessages[this.currentConversationId] = [];
-        }
-
-        this.allMessages[this.currentConversationId].push({
-            id: Date.now(),
-            sender: 'me',
-            text: this.newMessageText,
-            time: 'Just now'
-        });
-
-        this.newMessageText = '';
-
-        // Optional: auto-scroll to bottom logic would go here
-    }
-
-    notifications = [
-        {
-            user: 'Kate Youn',
-            avatar: 'KY',
-            action: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-            time: '5 mins ago',
-            read: false,
-            color: '#f472b6' // pinkish
-        },
-        {
-            user: 'Brandon Newman',
-            avatar: 'BN',
-            action: 'Lorem Ipsum.',
-            time: '12 mins ago',
-            read: false,
-            color: '#60a5fa' // blueish
-        },
-        {
-            user: 'Dave Wood',
-            avatar: 'DW',
-            action: 'Lorem Ipsum.',
-            time: '1 hr ago',
-            read: true,
-            color: '#fbbf24' // yellowish
-        }
-    ];
+    notifications: any[] = [];
 
     toggleDropdown() {
         this.isDropdownOpen = !this.isDropdownOpen;
@@ -204,15 +112,6 @@ export class DashboardComponent implements OnInit {
         if (this.isNotificationOpen) this.isDropdownOpen = false;
     }
 
-    openMessages(notification?: any) {
-        this.showMessagesModal = true;
-        this.isNotificationOpen = false; // Close dropdown
-        // In real app, load chat based on notification
-    }
-
-    closeMessages() {
-        this.showMessagesModal = false;
-    }
 
     toggleGroup(item: NavItem) {
         if (item.children) {
@@ -220,10 +119,14 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    constructor(private router: Router, private authService: AuthService, private cdr: ChangeDetectorRef) {
+    constructor(private router: Router, private authService: AuthService, private firestoreService: FirestoreService, private cdr: ChangeDetectorRef) {
         this.authService.user$.subscribe(user => {
             this.userEmail = user?.email || 'Guest';
             this.cdr.detectChanges();
+            
+            if (this.userEmail !== 'Guest') {
+                this.listenToAssignedIncidents();
+            }
         });
 
         this.profileSub = this.authService.userProfile$.subscribe(profile => {
@@ -234,10 +137,77 @@ export class DashboardComponent implements OnInit {
         });
     }
 
+    private subscriptions = new Subscription();
+
     ngOnInit() { }
+
+    private incidentsSub: Subscription | null = null;
+
+    listenToAssignedIncidents() {
+        if (this.incidentsSub) return;
+        
+        console.log('[DEBUG] listenToAssignedIncidents called for email:', this.userEmail);
+        this.subscriptions.add(this.authService.tenantId$.subscribe(tid => console.log('[DEBUG] Current Tenant ID from AuthService:', tid)));
+        
+        this.incidentsSub = this.firestoreService.getIncidents().subscribe({
+            next: (incidents) => {
+                const dismissed = JSON.parse(localStorage.getItem('dismissedIncidentNotifications') || '[]');
+                const userEmailLower = (this.userEmail || '').toLowerCase();
+                
+                console.log('[DEBUG] Firestore emitted incidents. Total count:', incidents.length);
+                console.log('[DEBUG] Current userEmailLower for filter:', userEmailLower);
+                
+                const assignedIncidents = incidents.filter(i => {
+                    const assignee = (i.assignee || '').toLowerCase();
+                    const isMatch = assignee === userEmailLower;
+                    const isNotDismissed = !dismissed.includes(i.id);
+                    
+                    if (isMatch) {
+                        console.log(`[DEBUG] Found Incident Match: ${i.id} | Assignee: ${assignee} | Dismissed: ${!isNotDismissed}`);
+                    }
+                    
+                    return isMatch && isNotDismissed;
+                });
+                
+                console.log('[DEBUG] Final assigned notification count:', assignedIncidents.length);
+                
+                this.notifications = assignedIncidents.map(i => ({
+                    id: i.id,
+                    user: 'System',
+                    avatar: 'SYS',
+                    action: `You've been assigned to incident: ${i.title}`,
+                    time: i.time || 'New',
+                    read: false,
+                    color: '#60a5fa' // blueish
+                }));
+                
+                this.cdr.detectChanges();
+            },
+            error: (err) => console.error('[DEBUG] Error in getIncidents subscription:', err)
+        });
+        
+        this.subscriptions.add(this.incidentsSub);
+    }
+
+    handleNotificationClick(note: any) {
+        // Register as dismissed locally
+        const dismissed = JSON.parse(localStorage.getItem('dismissedIncidentNotifications') || '[]');
+        if (!dismissed.includes(note.id)) {
+            dismissed.push(note.id);
+            localStorage.setItem('dismissedIncidentNotifications', JSON.stringify(dismissed));
+        }
+        
+        // Remove locally and update UI immediately
+        this.notifications = this.notifications.filter(n => n.id !== note.id);
+        this.isNotificationOpen = false;
+        
+        // Navigate
+        this.router.navigate(['/dashboard/incidents']);
+    }
 
     ngOnDestroy() {
         this.profileSub?.unsubscribe();
+        this.subscriptions.unsubscribe();
     }
 
     getInitials(name: string): string {
