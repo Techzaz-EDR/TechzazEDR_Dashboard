@@ -14,4 +14,4 @@ RUN npm install -g serve
 COPY --from=builder /app/dist/endpoint-project ./dist/endpoint-project
 
 # Run serve on the dynamic $PORT injected by Railway
-CMD serve -s dist/endpoint-project -l tcp://0.0.0.0:$PORT
+CMD serve -s dist/endpoint-project/browser -l tcp://0.0.0.0:$PORT
