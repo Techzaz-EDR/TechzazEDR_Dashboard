@@ -39,12 +39,17 @@ export class Users implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.profileSub = this.authService.userProfile$.subscribe(async profile => {
-            if (profile && profile.organization_id) {
+            if (profile) {
                 this.isLoading = true;
                 this.cdr.detectChanges();
                 try {
                     const usersRef = collection(this.db, 'users');
-                    const q = query(usersRef, where('organization_id', '==', profile.organization_id));
+                    let q;
+                    if (profile.organization_id) {
+                        q = query(usersRef, where('organization_id', '==', profile.organization_id));
+                    } else {
+                        q = query(usersRef); // Load all users for global admins
+                    }
                     const querySnapshot = await getDocs(q);
                     
                     this.users = querySnapshot.docs.map(doc => {
