@@ -20,7 +20,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Maximize2,
-  X
+  X,
+  Laptop,
+  Check
 } from 'lucide-angular';
 import { FirestoreService } from '../../core/services/firestore.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -48,6 +50,9 @@ export class AgentComponent implements OnInit, OnDestroy {
   readonly CheckCircleIcon = CheckCircle;
   readonly XCircleIcon = XCircle;
   readonly PlayIcon = Play;
+  readonly XIcon = X;
+  readonly LaptopIcon = Laptop;
+  readonly CheckIcon = Check;
   readonly HistoryIcon = History;
   readonly EyeIcon = Eye;
   readonly ChevronLeftIcon = ChevronLeft;
@@ -63,9 +68,16 @@ export class AgentComponent implements OnInit, OnDestroy {
   commandStats: { total: number, completed: number, pending: number, failed: number } = { total: 0, completed: 0, pending: 0, failed: 0 };
   
   showCommandHistoryModal: boolean = false;
-  showConfigureAgentModal: boolean = false;
+  isConfigureAgentModalOpen: boolean = false; // Renamed from showConfigureAgentModal
   showAlertModal: boolean = false;
   loadingCommands: { [key: string]: boolean } = {};
+  reproScore: string | null = null;
+
+  // Agent Editing
+  editableAgent: any = {};
+  agentTagsString: string = '';
+  isSavingAgent: boolean = false;
+  saveSuccess: boolean = false;
 
   // Investigation Form
   investigationSeverity: string = 'High';
@@ -264,6 +276,32 @@ export class AgentComponent implements OnInit, OnDestroy {
       this.firestoreService.getAgentCommands(agentId).subscribe(commands => {
         this.commands = commands;
         this.calculateCommandStats();
+        
+        // Extract the latest reproducibility test command
+        const reproCommands = commands
+          .filter(c => c.command === 'run_test_scan')
+          .sort((a, b) => (b.created_at?.seconds || 0) - (a.created_at?.seconds || 0));
+        
+        const lastTest = reproCommands[0];
+        
+        // Prioritize persistent score from agent document, fallback to command result for real-time update
+        const persistentScore = this.agentDetails?.last_repro_score;
+        
+        if (lastTest) {
+          if (lastTest.status === 'completed') {
+            this.reproScore = lastTest.result || persistentScore || 'No result reported';
+            this.loadingCommands['reproducibilityTest'] = false;
+          } else if (lastTest.status === 'failed') {
+            this.reproScore = persistentScore || 'Test failed';
+            this.loadingCommands['reproducibilityTest'] = false;
+          } else if (lastTest.status === 'pending' || lastTest.status === 'executing') {
+            this.loadingCommands['reproducibilityTest'] = true;
+            this.reproScore = persistentScore || null;
+          }
+        } else {
+          this.reproScore = persistentScore || null;
+        }
+
         this.cdr.detectChanges();
       })
     );
@@ -330,13 +368,70 @@ export class AgentComponent implements OnInit, OnDestroy {
     }
   }
 
+  async runReproducibilityTest() {
+    if (!this.agentId) return;
+    this.loadingCommands['reproducibilityTest'] = true;
+    try {
+      await this.firestoreService.sendCommand(this.agentId, 'run_test_scan');
+    } finally {
+      setTimeout(() => this.loadingCommands['reproducibilityTest'] = false, 2000);
+    }
+  }
+
+  async cancelAgentCommand(commandId: string) {
+    if (!this.agentId || !commandId) return;
+    try {
+      await this.firestoreService.cancelCommand(this.agentId, commandId);
+    } catch (error) {
+      console.error("Error cancelling command:", error);
+    }
+  }
+
   openConfigureAgentModal() {
-    this.showConfigureAgentModal = true;
+    this.isConfigureAgentModalOpen = true;
+    // Initialize editable copy
+    if (this.agentDetails) {
+      this.editableAgent = { ...this.agentDetails };
+      this.agentTagsString = this.agentDetails.tags ? this.agentDetails.tags.join(', ') : '';
+    }
     this.cdr.detectChanges();
   }
 
+  async saveAgentDetails() {
+    if (!this.agentId || this.isSavingAgent) return;
+    
+    this.isSavingAgent = true;
+    this.saveSuccess = false;
+
+    try {
+      const tags = this.agentTagsString
+        .split(',')
+        .map(t => t.trim())
+        .filter(t => t.length > 0);
+
+      const updateData = {
+        hostname: this.editableAgent.hostname,
+        tags: tags
+      };
+
+      await this.firestoreService.updateAgent(this.agentId, updateData);
+      
+      this.saveSuccess = true;
+      setTimeout(() => {
+        this.saveSuccess = false;
+        this.cdr.detectChanges();
+      }, 3000);
+      
+    } catch (err) {
+      console.error('Error updating agent:', err);
+    } finally {
+      this.isSavingAgent = false;
+      this.cdr.detectChanges();
+    }
+  }
+
   closeConfigureAgentModal() {
-    this.showConfigureAgentModal = false;
+    this.isConfigureAgentModalOpen = false; // Renamed from showConfigureAgentModal
     this.cdr.detectChanges();
   }
 

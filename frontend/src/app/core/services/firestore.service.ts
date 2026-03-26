@@ -165,6 +165,17 @@ export class FirestoreService {
     });
   }
 
+  async cancelCommand(agentId: string, commandId: string) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const commandRef = doc(this.db, 'organizations', tenantId, 'agents', agentId, 'commands', commandId);
+    
+    await updateDoc(commandRef, {
+        status: 'cancelled',
+        updated_at: serverTimestamp()
+    });
+  }
+
   async updateAlertStatus(agentId: string, alertId: string, status: string) {
     const tId = await this.authService.tenantId$.pipe(first()).toPromise();
     const tenantId = tId || 'demo-org';
@@ -172,6 +183,17 @@ export class FirestoreService {
     
     await updateDoc(alertRef, {
         status: status,
+        updated_at: serverTimestamp()
+    });
+  }
+
+  async updateAgent(agentId: string, data: any) {
+    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+    const tenantId = tId || 'demo-org';
+    const agentRef = doc(this.db, 'organizations', tenantId, 'agents', agentId);
+    
+    await updateDoc(agentRef, {
+        ...data,
         updated_at: serverTimestamp()
     });
   }

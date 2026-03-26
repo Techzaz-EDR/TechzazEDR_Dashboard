@@ -285,6 +285,8 @@
 
           &.completed { color: #22c55e; }
           &.pending { color: #F59E0B; }
+          &.executing { color: #3EA0FF; }
+          &.cancelled { color: #ef4444; }
           &.failed { color: #ef4444; }
 
           lucide-icon {
@@ -799,6 +801,58 @@
     }
   }
 
+  .history-table-container {
+    table {
+      th {
+        padding: 1rem;
+        background: var(--bg-elevated);
+        color: #7483A3;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid var(--border-color);
+      }
+
+      td {
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid var(--border-soft);
+        vertical-align: middle;
+      }
+
+      .actions-cell {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .cancel-inline-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.75rem;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: 6px;
+        color: #EF4444;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: rgba(239, 68, 68, 0.2);
+          border-color: rgba(239, 68, 68, 0.3);
+          transform: translateY(-1px);
+        }
+
+        lucide-icon {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+
   .modal-body {
     padding: 0 2.5rem 3rem;
     max-height: 60vh;
@@ -849,7 +903,12 @@
             color: #F59E0B;
             border: 1px solid rgba(234, 179, 8, 0.2);
           }
-          &.failed {
+          &.executing {
+            background: rgba(62, 160, 255, 0.1);
+            color: #3EA0FF;
+            border: 1px solid rgba(62, 160, 255, 0.2);
+          }
+          &.cancelled, &.failed {
             background: rgba(239, 68, 68, 0.1);
             color: #EF4444;
             border: 1px solid rgba(239, 68, 68, 0.2);
@@ -932,36 +991,35 @@
   background: var(--bg-elevated);
 
   .modal-body {
-    padding: 2rem 2.5rem;
+    padding: 2.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-  }
+    gap: 2.5rem;
 
-  .config-info-box {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-    background: rgba(93, 124, 255, 0.05);
-    border: 1px solid rgba(93, 124, 255, 0.1);
-    padding: 1.5rem;
-    border-radius: 16px;
+    .config-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
 
-    .info-icon {
-      color: #3EA0FF;
-      filter: drop-shadow(0 0 10px rgba(93, 124, 255, 0.3));
-      flex-shrink: 0;
-    }
+      .section-subtitle {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #fff;
+        
+        lucide-icon {
+          color: #3EA0FF;
+        }
+      }
 
-    p {
-      margin: 0;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #A8B6D6;
-
-      strong {
-        color: #18D8FF;
-        font-weight: 600;
+      .section-description {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #7483A3;
+        line-height: 1.5;
       }
     }
   }
@@ -985,6 +1043,157 @@
     }
   }
 
+  .agent-details-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    .input-group {
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #7483A3;
+      }
+
+      .config-input {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        color: white;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #3EA0FF;
+          background: rgba(62, 160, 255, 0.05);
+          box-shadow: 0 0 0 4px rgba(62, 160, 255, 0.1);
+        }
+
+        &::placeholder {
+          color: rgba(116, 131, 163, 0.5);
+        }
+      }
+    }
+
+    .save-btn {
+      width: 100%;
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      padding: 0.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background: rgba(34, 197, 94, 0.2);
+        border-color: rgba(34, 197, 94, 0.4);
+        transform: translateY(-1px);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .reproducibility-section {
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      .section-subtitle {
+        margin-bottom: 0;
+      }
+
+      .repro-badge {
+        background: rgba(62, 160, 255, 0.1);
+        border: 1px solid rgba(62, 160, 255, 0.2);
+        padding: 0.3rem 0.75rem;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+
+        .badge-label {
+          color: #7483A3;
+        }
+
+        .badge-value {
+          color: #3EA0FF;
+        }
+
+        &.running {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.1);
+          .badge-value {
+            color: #7483A3;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+          }
+        }
+      }
+    }
+
+    .section-description {
+      margin-bottom: 1.25rem;
+      color: #7483A3;
+      font-size: 0.9rem;
+    }
+
+    .initiate-btn {
+      width: 100%;
+      background: #3EA0FF;
+      color: white;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      &:hover:not(:disabled) {
+        background: #2b8ee8;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(62, 160, 255, 0.25);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background: #1e293b !important;
+        color: #64748b !important;
+      }
+    }
+  }
+
   .modal-footer {
     padding: 1.5rem 2.5rem 2rem;
     display: flex;
@@ -1002,6 +1211,36 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
+
+      &.test-scan-btn {
+        background: linear-gradient(135deg, #18D8FF, #3EA0FF);
+        color: white;
+        border: none;
+        padding: 0.85rem 2.5rem;
+        font-size: 0.95rem;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(24, 216, 255, 0.3);
+        width: fit-content;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(24, 216, 255, 0.4);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        lucide-icon {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+      }
 
       &.cancel-btn {
         background: transparent;
