@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Header, Query
+from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 from app.core.firebase import db
@@ -47,10 +48,14 @@ async def poll_commands(
         
     return results
 
+class ResultUpdate(BaseModel):
+    result: Optional[str] = None
+
 @router.patch("/{command_id}")
 async def update_command_status(
     command_id: str,
-    status: str,
+    status: str = Query(..., description="The new status of the command"),
+    body: Optional[ResultUpdate] = None,
     agent_id: str = Query(..., description="The unique ID of the agent"),
     x_api_key: Optional[str] = Header(None)
 ):
@@ -71,18 +76,36 @@ async def update_command_status(
     if not doc.exists:
         raise HTTPException(status_code=404, detail="Command not found")
     
+    cmd_data = doc.to_dict()
+    
     # Update agent last_seen as well
     agent_ref = db.collection("organizations").document(organization_id) \
                   .collection("agents").document(agent_id)
     
-    agent_ref.set({
+    agent_update = {
         "last_seen": datetime.utcnow().isoformat() + 'Z',
         "status": "online"
-    }, merge=True)
+    }
+    
+    # Side-effect: If run_test_scan is completed, save to agent metadata
+    if status == "completed" and cmd_data.get("command") == "run_test_scan":
+        score = body.result if body and body.result else None
+        print(f"DEBUG REPRO: Status is completed for run_test_scan. Incoming body: {body}, score: {score}")
+        if score:
+            agent_update["last_repro_score"] = score
+            print(f"DEBUG REPRO: Updating agent with score {score}")
 
-    cmd_ref.update({
+    agent_ref.set(agent_update, merge=True)
+
+    update_data: Dict[str, Any] = {
         "status": status,
         "updated_at": datetime.utcnow().isoformat() + 'Z'
-    })
+    }
+    
+    if body and body.result:
+        update_data["result"] = body.result
+        print(f"DEBUG REPRO: Updating command with result {body.result}")
+
+    cmd_ref.update(update_data)
     
     return {"status": "success", "message": f"Command status updated to {status}"}

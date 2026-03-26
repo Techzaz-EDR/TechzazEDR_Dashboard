@@ -169,7 +169,7 @@
 
         .id-col {
             font-family: 'Inter', sans-serif;
-            color: #3EA0FF;
+            color: #a8a8a8;
             font-weight: 800;
             font-size: 0.85rem;
             text-shadow: 0 0 10px rgba(93, 124, 255, 0.3);
@@ -177,6 +177,7 @@
 
         .desc-col {
             max-width: 280px;
+
             .title {
                 color: #fff;
                 font-weight: 600;
@@ -297,7 +298,7 @@
                     box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
 
                     &:hover {
-                        background: #f59e0b;
+                        background: #956209;
                         color: #fff;
                         transform: translateY(-2px);
                         box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
@@ -370,22 +371,30 @@
     text-align: center;
     white-space: nowrap;
 
-    &.Open, &.open, &.OPEN {
+    &.Open,
+    &.open,
+    &.OPEN {
         color: #FF4C4C;
         background: rgba(255, 76, 76, 0.12);
     }
 
-    &.Investigating, &.investigating, &.INVESTIGATING {
-        color: #F59E0B;
+    &.Investigating,
+    &.investigating,
+    &.INVESTIGATING {
+        color: #9c6608;
         background: rgba(245, 158, 11, 0.12);
     }
 
-    &.Contained, &.contained, &.CONTAINED {
-        color: #3EA0FF;
-        background: rgba(62, 160, 255, 0.12);
+    &.Contained,
+    &.contained,
+    &.CONTAINED {
+        color: #279107;
+        background: rgba(62, 255, 155, 0.12);
     }
 
-    &.Resolved, &.resolved, &.RESOLVED {
+    &.Resolved,
+    &.resolved,
+    &.RESOLVED {
         color: #22C55E;
         background: rgba(34, 197, 94, 0.12);
     }
@@ -401,22 +410,30 @@
     text-align: center;
     white-space: nowrap;
 
-    &.Critical, &.CRITICAL, &.critical {
+    &.Critical,
+    &.CRITICAL,
+    &.critical {
         color: var(--status-critical, #FF4C4C);
         background: var(--status-critical-bg, rgba(255, 76, 76, 0.15));
     }
 
-    &.High, &.HIGH, &.high {
+    &.High,
+    &.HIGH,
+    &.high {
         color: var(--status-high, #F59E0B);
         background: var(--status-high-bg, rgba(245, 158, 11, 0.15));
     }
 
-    &.Medium, &.MEDIUM, &.medium {
+    &.Medium,
+    &.MEDIUM,
+    &.medium {
         color: var(--status-medium, #3EA0FF);
         background: var(--status-medium-bg, rgba(62, 160, 255, 0.15));
     }
 
-    &.Low, &.LOW, &.low {
+    &.Low,
+    &.LOW,
+    &.low {
         color: var(--status-low, #22C55E);
         background: var(--status-low-bg, rgba(34, 197, 94, 0.15));
     }
@@ -569,7 +586,7 @@
 /* Clickable Row & Selection */
 .clickable-row {
     cursor: pointer;
-    
+
     &:hover {
         background-color: var(--bg-hover) !important;
     }
@@ -577,7 +594,7 @@
     &.selected-row {
         background-color: rgba(93, 124, 255, 0.1) !important;
         border-left: 4px solid var(--accent-primary);
-        
+
         td {
             color: #fff !important;
         }
@@ -709,10 +726,29 @@
                     }
 
                     &.active {
-                        &.open { background: rgba(24, 216, 255, 0.15); color: #18D8FF; border-color: #18D8FF; }
-                        &.investigating { background: rgba(245, 158, 11, 0.15); color: #F59E0B; border-color: #F59E0B; }
-                        &.contained { background: rgba(34, 197, 94, 0.15); color: #22C55E; border-color: #22C55E; }
-                        &.resolved { background: rgba(116, 131, 163, 0.15); color: #F2F6FF; border-color: #7483A3; }
+                        &.open {
+                            background: rgba(24, 216, 255, 0.15);
+                            color: #18D8FF;
+                            border-color: #18D8FF;
+                        }
+
+                        &.investigating {
+                            background: rgba(245, 158, 11, 0.15);
+                            color: #F59E0B;
+                            border-color: #F59E0B;
+                        }
+
+                        &.contained {
+                            background: rgba(34, 197, 94, 0.15);
+                            color: #22C55E;
+                            border-color: #22C55E;
+                        }
+
+                        &.resolved {
+                            background: rgba(116, 131, 163, 0.15);
+                            color: #F2F6FF;
+                            border-color: #7483A3;
+                        }
                     }
                 }
             }
@@ -735,11 +771,13 @@
                     gap: 6px;
                     margin-bottom: 6px;
                 }
+
                 .value {
                     color: #fff;
                     font-weight: 600;
                     font-size: 1rem;
                 }
+
                 .sub-value {
                     font-size: 0.8rem;
                     color: #EF4444;
@@ -788,6 +826,7 @@
                             color: #fff;
                             font-size: 0.95rem;
                         }
+
                         .desc {
                             display: block;
                             font-size: 0.8rem;
@@ -796,13 +835,27 @@
                     }
 
                     &.isolate {
-                        lucide-icon { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
-                        &:hover { border-color: #EF4444; background: rgba(239, 68, 68, 0.05); }
+                        lucide-icon {
+                            background: rgba(239, 68, 68, 0.1);
+                            color: #EF4444;
+                        }
+
+                        &:hover {
+                            border-color: #EF4444;
+                            background: rgba(239, 68, 68, 0.05);
+                        }
                     }
 
                     &.block {
-                        lucide-icon { background: rgba(245, 158, 11, 0.1); color: #F59E0B; }
-                        &:hover { border-color: #F59E0B; background: rgba(245, 158, 11, 0.05); }
+                        lucide-icon {
+                            background: rgba(245, 158, 11, 0.1);
+                            color: #F59E0B;
+                        }
+
+                        &:hover {
+                            border-color: #F59E0B;
+                            background: rgba(245, 158, 11, 0.05);
+                        }
                     }
                 }
             }
@@ -811,7 +864,7 @@
         .footer-links {
             margin-top: auto;
             padding-top: 24px;
-            
+
             .view-agent-link {
                 display: flex;
                 align-items: center;
@@ -836,6 +889,11 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
