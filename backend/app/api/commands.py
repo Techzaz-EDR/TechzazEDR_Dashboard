@@ -48,6 +48,33 @@ async def poll_commands(
         
     return results
 
+@router.get("/{command_id}")
+async def get_command(
+    command_id: str,
+    agent_id: str = Query(..., description="The unique ID of the agent"),
+    x_api_key: Optional[str] = Header(None)
+):
+    """
+    Get the details of a specific command.
+    """
+    if not x_api_key or x_api_key != settings.ALERTS_API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API Key")
+
+    # Hardcoded for demo
+    organization_id = "demo-org"
+    
+    cmd_ref = db.collection("organizations").document(organization_id) \
+                .collection("agents").document(agent_id) \
+                .collection("commands").document(command_id)
+    
+    doc = cmd_ref.get()
+    if not doc.exists:
+        raise HTTPException(status_code=404, detail="Command not found")
+    
+    cmd_data = doc.to_dict()
+    cmd_data["id"] = doc.id
+    return cmd_data
+
 class ResultUpdate(BaseModel):
     result: Optional[str] = None
 
@@ -94,6 +121,13 @@ async def update_command_status(
         if score:
             agent_update["last_repro_score"] = score
             print(f"DEBUG REPRO: Updating agent with score {score}")
+
+    # Check if command was cancelled by user
+    if cmd_data.get("status") == "cancelled":
+        print(f"DEBUG REPRO: Command {command_id} is already cancelled. Skipping status update to {status}.")
+        # Still update agent last_seen as the agent is online and communicative
+        agent_ref.set(agent_update, merge=True)
+        return {"status": "success", "message": "Command is cancelled, skipping update"}
 
     agent_ref.set(agent_update, merge=True)
 

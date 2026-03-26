@@ -294,6 +294,9 @@ export class AgentComponent implements OnInit, OnDestroy {
           } else if (lastTest.status === 'failed') {
             this.reproScore = persistentScore || 'Test failed';
             this.loadingCommands['reproducibilityTest'] = false;
+          } else if (lastTest.status === 'cancelled') {
+            this.loadingCommands['reproducibilityTest'] = false;
+            this.reproScore = persistentScore || null;
           } else if (lastTest.status === 'pending' || lastTest.status === 'executing') {
             this.loadingCommands['reproducibilityTest'] = true;
             this.reproScore = persistentScore || null;
@@ -382,6 +385,7 @@ export class AgentComponent implements OnInit, OnDestroy {
     if (!this.agentId || !commandId) return;
     try {
       await this.firestoreService.cancelCommand(this.agentId, commandId);
+      this.cdr.detectChanges();
     } catch (error) {
       console.error("Error cancelling command:", error);
     }
@@ -404,14 +408,10 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.saveSuccess = false;
 
     try {
-      const tags = this.agentTagsString
-        .split(',')
-        .map(t => t.trim())
-        .filter(t => t.length > 0);
-
       const updateData = {
         hostname: this.editableAgent.hostname,
-        tags: tags
+        ip: this.editableAgent.ip,
+        os: this.editableAgent.os
       };
 
       await this.firestoreService.updateAgent(this.agentId, updateData);

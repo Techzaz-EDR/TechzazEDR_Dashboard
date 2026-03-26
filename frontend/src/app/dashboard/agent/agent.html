@@ -260,59 +260,77 @@
     </div>
 
     <div class="modal-body">
-      <div class="config-section agent-details-section">
-        <h3 class="section-subtitle">
-          <lucide-icon [name]="LaptopIcon" [size]="18"></lucide-icon>
-          Agent details
-        </h3>
-        <p class="section-description">Manage display name and endpoint identifiers.</p>
-        
-        <div class="input-group">
-          <label for="agentHostname">Endpoint Name</label>
-          <input 
-            type="text" 
-            id="agentHostname" 
-            [(ngModel)]="editableAgent.hostname" 
-            placeholder="e.g. Finance-Workstation-01"
-            class="config-input"
-          >
-        </div>
-
-        <div class="input-group">
-          <label for="agentTags">Tags (comma separated)</label>
-          <input 
-            type="text" 
-            id="agentTags" 
-            [(ngModel)]="agentTagsString"
-            placeholder="e.g. windows, workstation, finance"
-            class="config-input"
-          >
-        </div>
-
-        <button class="save-btn" (click)="saveAgentDetails()" [disabled]="isSavingAgent">
-          <lucide-icon [name]="saveSuccess ? CheckCircleIcon : (isSavingAgent ? RefreshCwIcon : CheckIcon)" [class.spin]="isSavingAgent" [size]="16"></lucide-icon>
-          {{ isSavingAgent ? 'Saving...' : (saveSuccess ? 'Saved!' : 'Save changes') }}
-        </button>
-      </div>
-
-      <div class="config-section reproducibility-section">
-        <div class="section-header-row">
+      <div class="config-grid">
+        <!-- Left Side: Agent Details -->
+        <div class="config-section agent-details-section">
           <h3 class="section-subtitle">
-            <lucide-icon [name]="PlayIcon" [size]="18"></lucide-icon>
-            Reproducibility test
+            <lucide-icon [name]="LaptopIcon" [size]="18"></lucide-icon>
+            Agent details
           </h3>
-          <div class="repro-badge" [class.running]="loadingCommands['reproducibilityTest']">
-            <span class="badge-label" *ngIf="!loadingCommands['reproducibilityTest']">Score:</span>
-            <span class="badge-value">{{ loadingCommands['reproducibilityTest'] ? 'Running...' : (reproScore || 'Not run') }}</span>
+          <p class="section-description">Manage display name and endpoint identifiers.</p>
+          
+          <div class="input-group">
+            <label for="agentHostname">Endpoint Name</label>
+            <input 
+              type="text" 
+              id="agentHostname" 
+              [(ngModel)]="editableAgent.hostname" 
+              placeholder="e.g. Finance-Workstation-01"
+              class="config-input"
+            >
           </div>
+  
+          <div class="input-group">
+            <label for="agentIP">IP Address</label>
+            <input 
+              type="text" 
+              id="agentIP" 
+              [(ngModel)]="editableAgent.ip" 
+              placeholder="e.g. 192.168.1.101"
+              class="config-input"
+            >
+          </div>
+  
+          <div class="input-group">
+            <label for="agentOS">OS Version</label>
+            <input 
+              type="text" 
+              id="agentOS" 
+              [(ngModel)]="editableAgent.os" 
+              placeholder="e.g. Windows 10 Pro"
+              class="config-input"
+            >
+          </div>
+  
+          <button class="save-btn" [class.success]="saveSuccess" (click)="saveAgentDetails()" [disabled]="isSavingAgent">
+            <lucide-icon [name]="saveSuccess ? CheckCircleIcon : (isSavingAgent ? RefreshCwIcon : CheckIcon)" [class.spin]="isSavingAgent" [size]="16"></lucide-icon>
+            {{ isSavingAgent ? 'Saving...' : (saveSuccess ? 'Saved!' : 'Save changes') }}
+          </button>
         </div>
-        
-        <p class="section-description">Verify rule detection and connectivity via a controlled silent scan.</p>
-        
-        <button class="initiate-btn" (click)="runReproducibilityTest()" [disabled]="loadingCommands['reproducibilityTest']">
-          <lucide-icon [name]="loadingCommands['reproducibilityTest'] ? RefreshCwIcon : PlayIcon" [class.spin]="loadingCommands['reproducibilityTest']" [size]="16"></lucide-icon>
-          {{ loadingCommands['reproducibilityTest'] ? 'Initiating...' : 'Initiate' }}
-        </button>
+
+        <!-- Vertical Divider -->
+        <div class="config-divider"></div>
+  
+        <!-- Right Side: Reproducibility Test -->
+        <div class="config-section reproducibility-section">
+          <div class="section-header-row">
+            <h3 class="section-subtitle">
+              <lucide-icon [name]="PlayIcon" [size]="18"></lucide-icon>
+              Reproducibility test
+            </h3>
+            <div class="repro-badge" [class.running]="loadingCommands['reproducibilityTest']">
+              <span class="badge-label" *ngIf="!loadingCommands['reproducibilityTest']">Score:</span>
+              <span class="badge-value">{{ loadingCommands['reproducibilityTest'] ? 'Running...' : (reproScore || 'Not run') }}</span>
+            </div>
+          </div>
+          
+          <p class="section-description">Verify rule detection and connectivity via a controlled silent scan.</p>
+          
+          <button class="initiate-btn" (click)="runReproducibilityTest()" [disabled]="loadingCommands['reproducibilityTest']">
+            <lucide-icon [name]="loadingCommands['reproducibilityTest'] ? RefreshCwIcon : PlayIcon" [class.spin]="loadingCommands['reproducibilityTest']" [size]="16"></lucide-icon>
+            {{ loadingCommands['reproducibilityTest'] ? 'Initiating...' : 'Initiate' }}
+          </button>
+        </div>
       </div>
     </div>
 
