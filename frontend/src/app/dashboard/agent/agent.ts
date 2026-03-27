@@ -410,7 +410,7 @@ export class AgentComponent implements OnInit, OnDestroy {
     try {
       const updateData = {
         hostname: this.editableAgent.hostname,
-        agent_name: this.editableAgent.agent_name,
+        agent_name: this.editableAgent.hostname, // Force agent_name to match hostname
         ip: this.editableAgent.ip,
         os: this.editableAgent.os
       };

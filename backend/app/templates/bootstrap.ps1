@@ -126,3 +126,10 @@ Write-Host "Agent ID:   $generatedId"
 Write-Host "Agent Name: $computerName"
 Write-Host "Config saved to: $(Get-Location)\config.json"
 Write-Host "----------------------------------------------------"
+
+# Clean up the bootstrap script itself
+if ($PSCommandPath) {
+    Start-Sleep -Seconds 1 # Give the console a moment to flush output
+    Remove-Item -Path $PSCommandPath -Force -ErrorAction SilentlyContinue
+    Write-Host "Bootstrap script has been securely deleted from disk." -ForegroundColor DarkGray
+}

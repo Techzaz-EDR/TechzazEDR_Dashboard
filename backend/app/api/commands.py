@@ -64,9 +64,12 @@ async def poll_commands(
     for doc in docs:
         cmd_data = doc.to_dict()
         cmd_data["id"] = doc.id
-        # Convert Firestore Timestamp to ISO string for JSON serialization
-        if "timestamp" in cmd_data and hasattr(cmd_data["timestamp"], "isoformat"):
-            cmd_data["timestamp"] = cmd_data["timestamp"].isoformat()
+        
+        # Convert any Firestore DatetimeWithNanoseconds to ISO string for JSON serialization
+        for k, v in cmd_data.items():
+            if hasattr(v, "isoformat"):
+                cmd_data[k] = v.isoformat()
+                
         results.append(cmd_data)
         
     return results
