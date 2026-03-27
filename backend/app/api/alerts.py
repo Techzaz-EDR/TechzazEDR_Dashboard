@@ -10,7 +10,7 @@ from app.schemas.alert import SecurityAlert
 
 router = APIRouter()
 
-def process_alert_background(agent_id: str, organization_id: str, alert: SecurityAlert):
+def process_alert_background(agent_id: str, organization_id: str, alert: SecurityAlert, agent_name: Optional[str] = None, agent_ip: Optional[str] = None, agent_os: Optional[str] = None):
     alert_dict = alert.dict()
     
     # Add organization metadata
@@ -24,10 +24,28 @@ def process_alert_background(agent_id: str, organization_id: str, alert: Securit
     
     # Update agent last_seen/status
     agent_ref = org_ref.collection("agents").document(agent_id)
-    agent_ref.set({
+    
+    # Update agent info, prioritizing the sent name if available
+    agent_update = {
         "last_seen": datetime.utcnow().isoformat() + 'Z',
         "status": "online"
-    }, merge=True)
+    }
+    if agent_name:
+        agent_update["hostname"] = agent_name
+        agent_update["agent_name"] = agent_name
+
+    agent_ref.set(agent_update, merge=True)
+
+    # Conditionally set ip and os ONLY if not already present in Firestore
+    existing_doc = agent_ref.get()
+    existing_data = existing_doc.to_dict() if existing_doc.exists else {}
+    conditional_update = {}
+    if agent_ip and not existing_data.get("ip"):
+        conditional_update["ip"] = agent_ip
+    if agent_os and not existing_data.get("os"):
+        conditional_update["os"] = agent_os
+    if conditional_update:
+        agent_ref.set(conditional_update, merge=True)
     
     # Add the alert document
     alert_id = str(uuid.uuid4())
@@ -40,6 +58,9 @@ async def receive_alert(
     agent_id: str, 
     alert: SecurityAlert, 
     background_tasks: BackgroundTasks,
+    agent_name: Optional[str] = None,
+    agent_ip: Optional[str] = None,
+    agent_os: Optional[str] = None,
     x_api_key: Optional[str] = Header(None)
 ):
     """
@@ -56,12 +77,13 @@ async def receive_alert(
             detail="Invalid or missing API Key"
         )
 
-    # For testing, we map the demo key to "demo-org"
-    # and override agent_id to "DESKTOP-TEST1" as requested
-    organization_id = "demo-org"
-    agent_id = "DESKTOP-TEST1"
+    # Map the API key to an organization
+    if x_api_key == settings.ALERTS_API_KEY:
+        organization_id = "demo-org"
+    else:
+        organization_id = "demo-org"
 
     # Add to background tasks so the agent gets an immediate 202 response
-    background_tasks.add_task(process_alert_background, agent_id, organization_id, alert)
+    background_tasks.add_task(process_alert_background, agent_id, organization_id, alert, agent_name, agent_ip, agent_os)
     
     return {"status": "accepted", "message": "Alert queued for processing"}

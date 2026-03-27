@@ -6,6 +6,9 @@
                 <p>Manage and monitor your protected endpoints</p>
             </div>
             <div class="actions">
+                <button class="btn btn-outline" (click)="downloadGlobalBootstrapScript()" [disabled]="isGeneratingGlobal">
+                    <lucide-icon [name]="DownloadIcon" [size]="18"></lucide-icon> {{ isGeneratingGlobal ? 'Generating...' : 'Download Bootstrap Script' }}
+                </button>
                 <button class="btn btn-primary" (click)="openModal()">
                     <lucide-icon [name]="PlusIcon" [size]="18"></lucide-icon> Add Endpoint
                 </button>

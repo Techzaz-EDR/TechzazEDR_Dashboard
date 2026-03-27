@@ -270,7 +270,18 @@
           <p class="section-description">Manage display name and endpoint identifiers.</p>
           
           <div class="input-group">
-            <label for="agentHostname">Endpoint Name</label>
+            <label for="agentDisplayName">Agent Name (Display)</label>
+            <input 
+              type="text" 
+              id="agentDisplayName" 
+              [(ngModel)]="editableAgent.agent_name" 
+              placeholder="e.g. DESKTOP-001"
+              class="config-input"
+            >
+          </div>
+
+          <div class="input-group">
+            <label for="agentHostname">Hostname</label>
             <input 
               type="text" 
               id="agentHostname" 
