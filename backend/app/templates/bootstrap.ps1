@@ -1,6 +1,9 @@
+$computerName = $env:COMPUTERNAME
+$generatedId = if ("{{AGENT_ID}}" -eq "GENERIC" -or "{{AGENT_ID}}" -eq "") { $computerName } else { "{{AGENT_ID}}" }
 $jsonConfig = @"
 {
-  "AgentId": "{{AGENT_ID}}",
+  "AgentId": "$generatedId",
+  "AgentName": "$computerName",
   "OrganizationApiKey": "{{API_KEY}}",
   "TrustedSystemProcesses": [],
   "TrustedExecutionPaths": [],
@@ -119,6 +122,7 @@ $jsonConfig = @"
 Set-Content -Path "config.json" -Value $jsonConfig -Encoding utf8
 Write-Host "----------------------------------------------------" -ForegroundColor Green
 Write-Host "TechzazEDR Agent Bootstrapped Successfully!" -ForegroundColor Green
-Write-Host "Agent ID: {{AGENT_ID}}"
+Write-Host "Agent ID:   $generatedId"
+Write-Host "Agent Name: $computerName"
 Write-Host "Config saved to: $(Get-Location)\config.json"
 Write-Host "----------------------------------------------------"

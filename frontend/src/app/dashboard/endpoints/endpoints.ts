@@ -43,7 +43,7 @@ export class Endpoints implements OnInit, OnDestroy {
                 console.log('Agents received in component:', agents.length);
                 this.endpoints = agents.map(a => ({
                     ...a,
-                    name: a.hostname || a.id,
+                    name: a.agent_name || a.hostname || a.id,
                     os: a.os || 'Unknown OS',
                     ip: a.ip || '0.0.0.0',
                     status: a.status || 'offline',
@@ -100,6 +100,7 @@ export class Endpoints implements OnInit, OnDestroy {
     
     // Bootstrap Script State
     isGenerating = false;
+    isGeneratingGlobal = false;
     generatedScript: BootstrapResponse | null = null;
     errorMessage: string | null = null;
 
@@ -150,12 +151,35 @@ export class Endpoints implements OnInit, OnDestroy {
 
     downloadScript() {
         if (!this.generatedScript) return;
-        
-        const blob = new Blob([this.generatedScript.script_content], { type: 'text/plain' });
+        this.saveToFile(this.generatedScript.script_content, this.generatedScript.filename);
+    }
+ 
+    downloadGlobalBootstrapScript() {
+        this.isGeneratingGlobal = true;
+        this.errorMessage = null;
+ 
+        this.bootstrapService.generateBootstrapScript("GENERIC").subscribe({
+            next: (response) => {
+                this.isGeneratingGlobal = false;
+                this.saveToFile(response.script_content, response.filename);
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                this.isGeneratingGlobal = false;
+                const errMsg = err?.error?.detail || err?.message || 'Unknown error';
+                this.errorMessage = `Failed to generate bootstrap script: ${errMsg}`;
+                console.error('Error generating global script:', err);
+                this.cdr.detectChanges();
+            }
+        });
+    }
+ 
+    private saveToFile(content: string, filename: string) {
+        const blob = new Blob([content], { type: 'text/plain' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = this.generatedScript.filename;
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);

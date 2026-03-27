@@ -10,6 +10,9 @@ router = APIRouter()
 @router.get("/poll")
 async def poll_commands(
     agent_id: str = Query(..., description="The unique ID of the agent"),
+    agent_name: Optional[str] = None,
+    agent_ip: Optional[str] = None,
+    agent_os: Optional[str] = None,
     x_api_key: Optional[str] = Header(None)
 ):
     """
@@ -19,18 +22,38 @@ async def poll_commands(
     if not x_api_key or x_api_key != settings.ALERTS_API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API Key")
 
-    # Hardcoded for demo as per alerts.py
-    organization_id = "demo-org"
+    # Map the API key to an organization
+    if x_api_key == settings.ALERTS_API_KEY:
+        organization_id = "demo-org"
+    else:
+        # In a multi-tenant environment, look up the organization by its API key
+        organization_id = "demo-org"
     
     # query: organizations/{org}/agents/{agent}/commands where status == 'pending'
     agent_ref = db.collection("organizations").document(organization_id) \
                      .collection("agents").document(agent_id)
     
     # Update agent last_seen/status
-    agent_ref.set({
+    agent_update = {
         "last_seen": datetime.utcnow().isoformat() + 'Z',
         "status": "online"
-    }, merge=True)
+    }
+    if agent_name:
+        agent_update["hostname"] = agent_name
+        agent_update["agent_name"] = agent_name
+
+    agent_ref.set(agent_update, merge=True)
+
+    # Conditionally set ip and os ONLY if not already present in Firestore
+    existing_doc = agent_ref.get()
+    existing_data = existing_doc.to_dict() if existing_doc.exists else {}
+    conditional_update = {}
+    if agent_ip and not existing_data.get("ip"):
+        conditional_update["ip"] = agent_ip
+    if agent_os and not existing_data.get("os"):
+        conditional_update["os"] = agent_os
+    if conditional_update:
+        agent_ref.set(conditional_update, merge=True)
 
     commands_ref = agent_ref.collection("commands")
     
@@ -60,8 +83,12 @@ async def get_command(
     if not x_api_key or x_api_key != settings.ALERTS_API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API Key")
 
-    # Hardcoded for demo
-    organization_id = "demo-org"
+    # Map the API key to an organization
+    if x_api_key == settings.ALERTS_API_KEY:
+        organization_id = "demo-org"
+    else:
+        # In a multi-tenant environment, look up the organization by its API key
+        organization_id = "demo-org"
     
     cmd_ref = db.collection("organizations").document(organization_id) \
                 .collection("agents").document(agent_id) \
@@ -84,6 +111,9 @@ async def update_command_status(
     status: str = Query(..., description="The new status of the command"),
     body: Optional[ResultUpdate] = None,
     agent_id: str = Query(..., description="The unique ID of the agent"),
+    agent_name: Optional[str] = None,
+    agent_ip: Optional[str] = None,
+    agent_os: Optional[str] = None,
     x_api_key: Optional[str] = Header(None)
 ):
     """
@@ -92,8 +122,12 @@ async def update_command_status(
     if not x_api_key or x_api_key != settings.ALERTS_API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API Key")
 
-    # Hardcoded for demo
-    organization_id = "demo-org"
+    # Map the API key to an organization
+    if x_api_key == settings.ALERTS_API_KEY:
+        organization_id = "demo-org"
+    else:
+        # In a multi-tenant environment, look up the organization by its API key
+        organization_id = "demo-org"
     
     cmd_ref = db.collection("organizations").document(organization_id) \
                 .collection("agents").document(agent_id) \
@@ -113,23 +147,36 @@ async def update_command_status(
         "last_seen": datetime.utcnow().isoformat() + 'Z',
         "status": "online"
     }
+    if agent_name:
+        agent_update["hostname"] = agent_name
+        agent_update["agent_name"] = agent_name
     
+    # Conditionally set ip and os ONLY if not already present
+    existing_doc = agent_ref.get()
+    existing_data = existing_doc.to_dict() if existing_doc.exists else {}
+    conditional_update = {}
+    if agent_ip and not existing_data.get("ip"):
+        conditional_update["ip"] = agent_ip
+    if agent_os and not existing_data.get("os"):
+        conditional_update["os"] = agent_os
+
     # Side-effect: If run_test_scan is completed, save to agent metadata
     if status == "completed" and cmd_data.get("command") == "run_test_scan":
         score = body.result if body and body.result else None
-        print(f"DEBUG REPRO: Status is completed for run_test_scan. Incoming body: {body}, score: {score}")
         if score:
             agent_update["last_repro_score"] = score
-            print(f"DEBUG REPRO: Updating agent with score {score}")
 
     # Check if command was cancelled by user
     if cmd_data.get("status") == "cancelled":
-        print(f"DEBUG REPRO: Command {command_id} is already cancelled. Skipping status update to {status}.")
         # Still update agent last_seen as the agent is online and communicative
         agent_ref.set(agent_update, merge=True)
+        if conditional_update:
+            agent_ref.set(conditional_update, merge=True)
         return {"status": "success", "message": "Command is cancelled, skipping update"}
 
     agent_ref.set(agent_update, merge=True)
+    if conditional_update:
+        agent_ref.set(conditional_update, merge=True)
 
     update_data: Dict[str, Any] = {
         "status": status,
@@ -138,7 +185,6 @@ async def update_command_status(
     
     if body and body.result:
         update_data["result"] = body.result
-        print(f"DEBUG REPRO: Updating command with result {body.result}")
 
     cmd_ref.update(update_data)
     
