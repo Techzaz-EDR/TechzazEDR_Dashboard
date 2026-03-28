@@ -95,21 +95,14 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     heroTiltX = 0;
     heroTiltY = 0;
 
-    // Preloader State
-    step = 0;
+
 
     @ViewChild('navbar') navbar!: ElementRef;
     @ViewChildren('navItem') navItems!: QueryList<ElementRef>;
 
     @ViewChild('coreScene') coreScene!: ElementRef;
     @ViewChild('coreAssembly') coreAssembly!: ElementRef;
-    @ViewChild('preloader') preloader!: ElementRef;
-    @ViewChild('progressBar') progressBar!: ElementRef;
-    @ViewChild('progressGlow') progressGlow!: ElementRef;
-    @ViewChild('energyPulse') energyPulse!: ElementRef;
-    @ViewChild('finalFlash') finalFlash!: ElementRef;
     @ViewChild('particlesContainer') particlesContainer!: ElementRef;
-    @ViewChild('centerAssembly') centerAssembly!: ElementRef;
     @ViewChild('cyberCanvas') cyberCanvas!: ElementRef<HTMLCanvasElement>;
     @ViewChild('heroVideo') heroVideo!: ElementRef<HTMLVideoElement>;
     @ViewChild('dashboardInterface') dashboardInterface!: ElementRef;
@@ -128,7 +121,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         this.showDemoModal = true;
         this.formSubmitted = false;
         this.isPlanDropdownMode = !plan;
-        
+
         // Reset form
         this.demoFormData = {
             firstName: '', lastName: '', workEmail: '',
@@ -203,10 +196,9 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         this.initCore3D();
         this.initScrollAnimations();
         this.createParticles();
-        this.initPreloaderParallax();
 
-        // Slight delay to ensure rendering performance check
-        setTimeout(() => this.initHeroIntro(), 100);
+        // Brief delay (70ms) to ensure rendering performance check
+        setTimeout(() => this.initHeroIntro(), 0);
         // Start canvas immediately
         this.initCyberNetwork();
     }
@@ -354,113 +346,36 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    initPreloaderParallax() {
-        window.addEventListener('mousemove', (e) => {
-            if (!this.preloader || this.preloader.nativeElement.style.display === 'none') return;
 
-            const x = (e.clientX - window.innerWidth / 2) / window.innerWidth;
-            const y = (e.clientY - window.innerHeight / 2) / window.innerHeight;
-
-            if (this.centerAssembly) {
-                gsap.to(this.centerAssembly.nativeElement, {
-                    rotationY: x * 10,
-                    rotationX: -y * 10,
-                    duration: 1,
-                    ease: "power2.out"
-                });
-            }
-
-            gsap.to('.digital-grid-floor', {
-                x: x * 30,
-                duration: 1.5,
-                ease: "power2.out"
-            });
-        });
-    }
 
     initHeroIntro() {
         const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-        const preloader = this.preloader?.nativeElement;
 
-        // PART 1: CINEMATIC PRELOADER SEQUENCE
-        if (preloader) {
-            const preTl = gsap.timeline();
-
-            // Initial states for preloader elements
-            gsap.set('.center-assembly', { opacity: 0, scale: 0.9 });
-            gsap.set('.brand-logo', { opacity: 0, y: 20 });
-            gsap.set('.loader-metrics', { opacity: 0 });
-
-            preTl
-                // 1. Background elements appear
-                .to('.preloader-bg-ambient', { duration: 1.5, opacity: 1 })
-
-                // 2. Logo Reveal
-                .to('.center-assembly', { duration: 1, opacity: 1, scale: 1 }, "-=1")
-                .to('.brand-logo', { duration: 1, opacity: 1, y: 0, filter: 'blur(0px)', ease: "power2.out" }, "-=0.5")
-
-                // 4. Progress & Status Sequence
-                .to('.loader-metrics', { duration: 0.8, opacity: 1 }, "-=0.3")
-                .to(this.progressBar.nativeElement, {
-                    width: '100%',
-                    duration: 3,
-                    ease: "power1.inOut",
-                    onUpdate: () => {
-                        const progress = parseFloat(this.progressBar.nativeElement.style.width);
-                        let changed = false;
-                        if (progress > 20 && this.step < 1) { this.step = 1; changed = true; }
-                        if (progress > 50 && this.step < 2) { this.step = 2; changed = true; }
-                        if (progress > 80 && this.step < 3) { this.step = 3; changed = true; }
-                        if (changed) this.cdr.detectChanges();
-                    }
-                })
-                .call(() => { this.step = 4; this.cdr.detectChanges(); }) // SYSTEM READY
-
-                // 5. Final Pulse & Flash
-                .to(this.energyPulse.nativeElement, {
-                    duration: 0.8,
-                    width: "200vw",
-                    height: "200vw",
-                    opacity: 1,
-                    ease: "power4.out"
-                }, "+=0.2")
-                .to(this.finalFlash.nativeElement, { duration: 0.4, opacity: 1 }, "-=0.2")
-
-                // 6. Exit Transition
-                .to(preloader, {
-                    duration: 0.8,
-                    opacity: 0,
-                    pointerEvents: 'none',
-                    display: 'none'
-                })
-                .to(this.finalFlash.nativeElement, { duration: 0.8, opacity: 0 });
-
-            tl.add(preTl, 0);
-        }
-
-        // PART 2: HERO INTRO
-        const heroStart = preloader ? ">-0.5" : 0;
+        // HERO INTRO (Immediate)
+        const heroStart = 0;
 
         // Start video playback
         const vid = this.heroVideo?.nativeElement;
-        if (vid) { vid.muted = true; vid.currentTime = 0; vid.play().catch(() => {}); }
+        if (vid) { vid.muted = true; vid.currentTime = 0; vid.play().catch(() => { }); }
 
-        tl.to('.hero-background', { duration: 1.5, opacity: 1 }, heroStart)
-            .to('.navbar', { duration: 1, y: 0, opacity: 1 }, "-=1")
-            .to('.visual-scene', { duration: 1.5, opacity: 1, scale: 1 }, "-=0.5")
-            .to('.energy-core', { duration: 1.5, scale: 1, opacity: 1, ease: "power2.out" }, "-=1")
+        tl.to('.hero-background', { duration: 1.0, opacity: 1 }, heroStart)
+            .to('.navbar', { duration: 0.8, y: 0, opacity: 1 }, "-=0.8")
+            .to('.visual-scene', { duration: 1.0, opacity: 1, scale: 1 }, "-=0.2")
+            .to('.energy-core', { duration: 1.0, scale: 1, opacity: 1, ease: "power2.out" }, "-=0.8")
             .to('.hero-headline', {
-                duration: 1,
-                opacity: 1,
-                y: 0
-            }, "-=1.5")
-            .to('.hero-subheadline', { duration: 1, opacity: 1, y: 0 }, "-=1")
-            .to('.cta-actions .btn', {
-                duration: 0.8,
+                duration: 0.7,
                 opacity: 1,
                 y: 0,
-                stagger: 0.2
-            }, "-=0.8");
+                ease: "power2.out"
+            }, "-=1.0")
+            .to('.hero-subheadline', { duration: 0.7, opacity: 1, y: 0, ease: "power2.out" }, "-=0.6")
+            .to('.cta-actions .btn', {
+                duration: 0.6,
+                opacity: 1,
+                y: 0,
+                stagger: 0.07,
+                ease: "back.out(1.5)"
+            }, "-=0.4");
     }
 
     initCore3D() {
@@ -555,7 +470,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
         // 2. Feature/Grid/Audience Cards & List Items (Staggered Slide Up)
         ScrollTrigger.batch('.sc-grid-card, .feature-card, .audience-card, .cap-item, .feature-list li, .why-edr .point', {
-            interval: 0.1, // Wait between batches
+            interval: 0.07, // Wait between batches
             onEnter: batch => gsap.to(batch, {
                 opacity: 1,
                 y: 0,
@@ -649,7 +564,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
                     y: 0,
                     rotationX: 0,
                     duration: 1,
-                    delay: i * 0.1, // Manual stagger
+                    delay: i * 0.07, // Manual stagger
                     ease: "power2.out"
                 }
             );
