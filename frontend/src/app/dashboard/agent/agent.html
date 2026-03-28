@@ -4,7 +4,10 @@
     <div class="identity-group">
       <div class="id-wrapper">
         <lucide-icon [name]="ShieldIcon" class="header-icon" (click)="backToEndpoints()" style="cursor: pointer;"></lucide-icon>
-        <h1 (click)="backToEndpoints()" style="cursor: pointer;">{{ agentId }}</h1>
+        <div class="agent-title-group">
+          <h1 (click)="backToEndpoints()" style="cursor: pointer;">{{ agentDetails?.agent_name || agentDetails?.hostname || agentId }}</h1>
+          <span class="agent-uuid-label">ID: {{ agentId }}</span>
+        </div>
       </div>
       <div class="status-badge" [class.active]="agentDetails?.status === 'online'">
         <span class="status-pulse" *ngIf="agentDetails?.status === 'online'"></span>
@@ -269,17 +272,6 @@
           </h3>
           <p class="section-description">Manage display name and endpoint identifiers.</p>
           
-          <div class="input-group">
-            <label for="agentDisplayName">Agent Name (Display)</label>
-            <input 
-              type="text" 
-              id="agentDisplayName" 
-              [(ngModel)]="editableAgent.agent_name" 
-              placeholder="e.g. DESKTOP-001"
-              class="config-input"
-            >
-          </div>
-
           <div class="input-group">
             <label for="agentHostname">Hostname</label>
             <input 

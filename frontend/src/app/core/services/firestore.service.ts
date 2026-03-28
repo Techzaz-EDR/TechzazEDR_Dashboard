@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { 
   getFirestore, 
   collection, 
@@ -13,10 +14,12 @@ import {
   updateDoc,
   orderBy,
   limit,
-  getCountFromServer
+  getCountFromServer,
+  setDoc
 } from 'firebase/firestore';
 import { AuthService } from './auth.service';
-import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { Observable, BehaviorSubject, ReplaySubject, from } from 'rxjs';
 import { switchMap, tap, finalize, first } from 'rxjs/operators';
 
 @Injectable({
@@ -27,9 +30,13 @@ export class FirestoreService {
   private selectedAgentIdSubject = new BehaviorSubject<string | null>(null);
   selectedAgentId$ = this.selectedAgentIdSubject.asObservable();
 
+  // Backend API URL — driven by environment so the token interceptor applies
+  private readonly backendUrl = environment.apiUrl;
+
   constructor(
     private authService: AuthService,
-    private zone: NgZone
+    private zone: NgZone,
+    private http: HttpClient
   ) {}
 
   setSelectedAgent(id: string | null) {
@@ -151,18 +158,28 @@ export class FirestoreService {
     );
   }
 
-  async sendCommand(agentId: string, commandType: string, params: any = {}) {
-    const tId = await this.authService.tenantId$.pipe(first()).toPromise();
-    const tenantId = tId || 'demo-org';
-    const commandsRef = collection(this.db, 'organizations', tenantId, 'agents', agentId, 'commands');
-    
-    await addDoc(commandsRef, {
-      command: commandType,
-      parameters: params,
-      status: 'pending',
-      timestamp: serverTimestamp(),
-      created_by: 'system'
-    });
+  async sendCommand(agentId: string, commandType: string, params: any = {}): Promise<void> {
+    // Route through the backend Admin SDK (token interceptor adds Firebase Bearer token).
+    // This creates the commands subcollection even for brand-new agents.
+    try {
+      await this.http.post(
+        `${this.backendUrl}/commands/agent/${agentId}`,
+        { command: commandType, parameters: params }
+      ).toPromise();
+    } catch (err) {
+      // Fallback: direct Firestore write if backend is unreachable
+      console.warn('[sendCommand] Backend call failed, falling back to direct Firestore write.', err);
+      const tId = await this.authService.tenantId$.pipe(first()).toPromise();
+      const tenantId = tId || 'demo-org';
+      const commandsRef = collection(this.db, 'organizations', tenantId, 'agents', agentId, 'commands');
+      await addDoc(commandsRef, {
+        command: commandType,
+        parameters: params,
+        status: 'pending',
+        timestamp: serverTimestamp(),
+        created_by: 'system'
+      });
+    }
   }
 
   async cancelCommand(agentId: string, commandId: string) {

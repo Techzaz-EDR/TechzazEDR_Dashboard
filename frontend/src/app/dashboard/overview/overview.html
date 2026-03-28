@@ -23,7 +23,7 @@
                 <lucide-icon [name]="kpiData.securityStatus.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ kpiData.securityStatus.value }}</span>
+                <span class="value" [class.kpi-skeleton]="!dataLoaded">{{ dataLoaded ? displaySecurityScore + '%' : '—' }}</span>
                 <span class="label">{{ kpiData.securityStatus.label }}</span>
                 <span class="subtitle">{{ kpiData.securityStatus.subtitle }}</span>
             </div>
@@ -34,7 +34,7 @@
                 <lucide-icon [name]="kpiData.activeIncidents.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ activeIncidentsCount !== null ? activeIncidentsCount : '—' }}</span>
+                <span class="value" [class.kpi-skeleton]="!dataLoaded">{{ dataLoaded ? displayActiveIncidents : '—' }}</span>
                 <span class="label">{{ kpiData.activeIncidents.label }}</span>
             </div>
         </div>
@@ -44,8 +44,7 @@
                 <lucide-icon [name]="kpiData.atRiskEndpoints.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ activeCriticalIncidentsCount !== null ? activeCriticalIncidentsCount : '—'
-                    }}</span>
+                <span class="value" [class.kpi-skeleton]="!dataLoaded">{{ dataLoaded ? displayCriticalIncidents : '—' }}</span>
                 <span class="label">{{ kpiData.atRiskEndpoints.label }}</span>
                 <span class="subtitle" *ngIf="protectionStats.total > 0 && protectionStats.totalCriticalAlerts > 0">
                     {{ protectionStats.totalCriticalAlerts }} Critical detections
@@ -58,7 +57,7 @@
                 <lucide-icon [name]="kpiData.totalEndpoints.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value">{{ protectionStats.total }}</span>
+                <span class="value" [class.kpi-skeleton]="!dataLoaded">{{ dataLoaded ? displayTotalEndpoints : '—' }}</span>
                 <span class="label">{{ kpiData.totalEndpoints.label }}</span>
             </div>
         </div>
@@ -136,6 +135,11 @@
         <div class="card trend-card">
             <div class="card-header">
                 <h3>Risk Trend</h3>
+                <div class="period-selector">
+                    <button [class.active]="currentTrendPeriod === '24h'" (click)="setTrendPeriod('24h')">1 Day</button>
+                    <button [class.active]="currentTrendPeriod === '7d'"  (click)="setTrendPeriod('7d')">7 Days</button>
+                    <button [class.active]="currentTrendPeriod === '30d'" (click)="setTrendPeriod('30d')">30 Days</button>
+                </div>
             </div>
             <div class="card-body trend-layout">
                 <div class="line-chart-container">
@@ -156,15 +160,37 @@
                             <div class="grid-line" style="top: 100%"></div>
                         </div>
                         <div class="trend-line-wrapper">
+                            @if (!dataLoaded) {
+                            <!-- Skeleton shimmer while loading -->
+                            <div class="trend-skeleton"></div>
+                            }
+                            @if (trendChartVisible) {
+                            <!-- SVG destroyed+recreated each time data changes; JS-driven stroke-dashoffset animates the line -->
                             <svg class="trend-svg" viewBox="0 0 100 50" preserveAspectRatio="none">
                                 <defs>
-                                    <linearGradient id="trendGradient" x1="0" x2="0" y1="0" y2="1">
-                                        <stop offset="0%" stop-color="#5D7CFF" stop-opacity="0.5" />
-                                        <stop offset="100%" stop-color="#5D7CFF" stop-opacity="0" />
+                                    <linearGradient [id]="'trendGrad' + trendAnimationKey" x1="0" x2="0" y1="0" y2="1">
+                                        <stop offset="0%" stop-color="#5D7CFF" stop-opacity="0.35" />
+                                        <stop offset="100%" stop-color="#5D7CFF" stop-opacity="0.02" />
                                     </linearGradient>
+                                    <!-- Clips all graph content to the chart area -->
+                                    <clipPath [id]="'trendClip' + trendAnimationKey">
+                                        <rect x="0" y="0" width="100" height="50" />
+                                    </clipPath>
                                 </defs>
-                                <polygon [attr.points]="getTrendPolygonPoints()" fill="url(#trendGradient)" />
-                                <polyline [attr.points]="getTrendPolylinePoints()" class="trend-polyline" />
+                                <!-- g with clip-path keeps polygon + polyline inside the viewBox -->
+                                <g [attr.clip-path]="'url(#trendClip' + trendAnimationKey + ')'">
+                                    <!-- Area fill: fades in separately -->
+                                    <polygon [attr.points]="getTrendPolygonPoints()"
+                                        [attr.fill]="'url(#trendGrad' + trendAnimationKey + ')'"
+                                        class="trend-area" />
+                                    <!-- Line: JS-controlled stroke-dashoffset draws left→right -->
+                                    <!-- vector-effect keeps stroke a fixed pixel width when SVG scales non-uniformly -->
+                                    <polyline [attr.points]="getTrendPolylinePoints()"
+                                        class="trend-polyline"
+                                        vector-effect="non-scaling-stroke"
+                                        [attr.stroke-dasharray]="TREND_DASH_LEN"
+                                        [attr.stroke-dashoffset]="trendDashOffset" />
+                                </g>
                             </svg>
                             <!-- Tooltip data points overlay -->
                             <div class="data-points-overlay">
@@ -174,6 +200,10 @@
                                 </div>
                                 }
                             </div>
+                            }
+                            @if (dataLoaded && trendIsEmpty) {
+                            <div class="trend-empty">No incidents in this period</div>
+                            }
                         </div>
                         <div class="x-axis-labels">
                             @for (label of trendTimeLabels; track label) {

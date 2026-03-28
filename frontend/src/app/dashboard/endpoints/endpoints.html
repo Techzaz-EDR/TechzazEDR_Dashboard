@@ -44,7 +44,7 @@
                     @for (ep of filteredEndpoints; track ep.id) {
                     <tr>
                         <td class="col-name">
-                            <a (click)="navigateToAgent(ep.name)" class="name-cell-link" style="cursor: pointer;">
+                            <a (click)="navigateToAgent(ep.id)" class="name-cell-link" style="cursor: pointer;">
                                 <div class="name-cell">
                                     <lucide-icon [name]="ShieldIcon" [size]="18" class="os-icon"></lucide-icon>
                                     <span>{{ ep.name }}</span>

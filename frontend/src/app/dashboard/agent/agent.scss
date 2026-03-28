@@ -44,14 +44,28 @@
           &:hover { transform: scale(1.1); }
         }
 
-        h1 {
-          font-size: 2rem;
-          font-weight: 800;
-          margin: 0;
-          background: linear-gradient(to right, #fff, #A8B6D6);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
+        .agent-title-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.15rem;
+
+          h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(to right, #fff, #A8B6D6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+
+          .agent-uuid-label {
+            font-size: 0.7rem;
+            color: #7483A3;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            letter-spacing: 0.02em;
+            opacity: 0.75;
+          }
         }
       }
 

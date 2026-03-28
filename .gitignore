@@ -18,3 +18,9 @@ backend/.pytest_cache/
 # OS
 .DS_Store
 Thumbs.db
+
+# Build / temp artifacts
+*.resolved
+frontend/build*.txt
+frontend/browser/
+package-lock.json
