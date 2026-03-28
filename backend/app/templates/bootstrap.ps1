@@ -1,9 +1,12 @@
-$computerName = $env:COMPUTERNAME
-$generatedId = if ("{{AGENT_ID}}" -eq "GENERIC" -or "{{AGENT_ID}}" -eq "") { $computerName } else { "{{AGENT_ID}}" }
+# Agent identity — both values are injected by the dashboard server
+# agent_id:   stable UUID (Firestore key, never changes, not shown to users)
+# agent_name: display label (defaults to machine name, can be renamed by admin)
+$agentId   = "{{AGENT_ID}}"          # UUID generated server-side
+$agentName = $env:COMPUTERNAME       # Always use the real machine name as display label
 $jsonConfig = @"
 {
-  "AgentId": "$generatedId",
-  "AgentName": "$computerName",
+  "AgentId": "$agentId",
+  "AgentName": "$agentName",
   "OrganizationApiKey": "{{API_KEY}}",
   "TrustedSystemProcesses": [],
   "TrustedExecutionPaths": [],
@@ -122,8 +125,8 @@ $jsonConfig = @"
 Set-Content -Path "config.json" -Value $jsonConfig -Encoding utf8
 Write-Host "----------------------------------------------------" -ForegroundColor Green
 Write-Host "TechzazEDR Agent Bootstrapped Successfully!" -ForegroundColor Green
-Write-Host "Agent ID:   $generatedId"
-Write-Host "Agent Name: $computerName"
+Write-Host "Agent ID:   $agentId"
+Write-Host "Agent Name: $agentName"
 Write-Host "Config saved to: $(Get-Location)\config.json"
 Write-Host "----------------------------------------------------"
 

@@ -38,36 +38,39 @@ export class Overview implements OnInit, OnDestroy {
   customFrom = '';
   customTo = '';
 
-  // Per-period KPI snapshots
+  // Loading state — true until first real data arrives
+  dataLoaded = false;
+
+  // Per-period KPI snapshots — all start blank (no hardcoded placeholder numbers)
   private kpiSnapshots: Record<string, {
     securityStatus: { label: string; value: string; subtitle: string; status: string; icon: any };
-    activeIncidents: { label: string; value: number; status: string; icon: any };
-    atRiskEndpoints: { label: string; value: number; status: string; icon: any };
+    activeIncidents: { label: string; value: number | null; status: string; icon: any };
+    atRiskEndpoints: { label: string; value: number | null; status: string; icon: any };
     totalEndpoints: { label: string; value: string; status: string; icon: any };
   }> = {
     '24h': {
-      securityStatus: { label: 'Security Score', value: '85%', subtitle: 'Overall Security Posture', status: 'secure', icon: Info },
-      activeIncidents: { label: 'Active Incidents', value: 3, status: 'critical', icon: AlertTriangle },
-      atRiskEndpoints: { label: 'At-Risk Endpoints', value: 12, status: 'critical', icon: XCircle },
-      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'critical', icon: Monitor }
+      securityStatus: { label: 'Security Score', value: '—', subtitle: 'Overall Security Posture', status: 'secure', icon: Info },
+      activeIncidents: { label: 'Active Incidents', value: null, status: 'secure', icon: AlertTriangle },
+      atRiskEndpoints: { label: 'At-Risk Endpoints', value: null, status: 'secure', icon: XCircle },
+      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'secure', icon: Monitor }
     },
     '7d': {
-      securityStatus: { label: 'Security Score', value: '78%', subtitle: 'Overall Security Posture', status: 'degraded', icon: Info },
-      activeIncidents: { label: 'Active Incidents', value: 11, status: 'critical', icon: AlertTriangle },
-      atRiskEndpoints: { label: 'At-Risk Endpoints', value: 24, status: 'critical', icon: XCircle },
-      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'critical', icon: Monitor }
+      securityStatus: { label: 'Security Score', value: '—', subtitle: 'Overall Security Posture', status: 'secure', icon: Info },
+      activeIncidents: { label: 'Active Incidents', value: null, status: 'secure', icon: AlertTriangle },
+      atRiskEndpoints: { label: 'At-Risk Endpoints', value: null, status: 'secure', icon: XCircle },
+      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'secure', icon: Monitor }
     },
     '30d': {
-      securityStatus: { label: 'Security Score', value: '71%', subtitle: 'Overall Security Posture', status: 'critical', icon: Info },
-      activeIncidents: { label: 'Active Incidents', value: 38, status: 'critical', icon: AlertTriangle },
-      atRiskEndpoints: { label: 'At-Risk Endpoints', value: 47, status: 'critical', icon: XCircle },
-      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'critical', icon: Monitor }
+      securityStatus: { label: 'Security Score', value: '—', subtitle: 'Overall Security Posture', status: 'secure', icon: Info },
+      activeIncidents: { label: 'Active Incidents', value: null, status: 'secure', icon: AlertTriangle },
+      atRiskEndpoints: { label: 'At-Risk Endpoints', value: null, status: 'secure', icon: XCircle },
+      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'secure', icon: Monitor }
     },
     'custom': {
       securityStatus: { label: 'Security Score', value: '—', subtitle: 'Select a date range', status: 'secure', icon: Info },
-      activeIncidents: { label: 'Active Incidents', value: 0, status: 'critical', icon: AlertTriangle },
-      atRiskEndpoints: { label: 'At-Risk Endpoints', value: 0, status: 'critical', icon: XCircle },
-      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'critical', icon: Monitor }
+      activeIncidents: { label: 'Active Incidents', value: null, status: 'secure', icon: AlertTriangle },
+      atRiskEndpoints: { label: 'At-Risk Endpoints', value: null, status: 'secure', icon: XCircle },
+      totalEndpoints: { label: 'Total Endpoints', value: '—', status: 'secure', icon: Monitor }
     }
   };
 
@@ -75,15 +78,15 @@ export class Overview implements OnInit, OnDestroy {
   kpiData = this.kpiSnapshots['24h'];
 
   // 2. Main Visual Row - Risk Trend
-  currentTrendPeriod = '7d'; // Default to one week
+  currentTrendPeriod = '7d';
   riskTrendData: number[] = [];
-
-  // Mock trend data
-  trends = {
-    '24h': [65, 68, 72, 70, 68, 65, 62, 60, 58, 55, 58, 62],
-    '7d': [45, 52, 58, 62, 70, 65, 60],
-    '30d': [30, 35, 42, 48, 55, 60, 58, 62, 65, 70, 72, 68, 65, 60, 55, 50, 48, 45, 42, 40, 38, 35, 32, 30, 28, 25, 22, 20, 18, 15]
-  };
+  // Toggled false→true to destroy+recreate the SVG so the JS animation runs fresh each time
+  trendChartVisible = false;
+  trendAnimationKey = 0;
+  // JS-driven stroke-dashoffset: starts at TREND_DASH_LEN (invisible), animates to 0 (fully drawn)
+  // 2000 covers the worst-case 30d polyline path length in SVG user-space coordinates
+  readonly TREND_DASH_LEN = 2000;
+  trendDashOffset = 2000;
 
   yAxisLabels: string[] = ['100', '75', '50', '25', '0'];
 
@@ -128,6 +131,13 @@ export class Overview implements OnInit, OnDestroy {
   activeIncidentsCount: number | null = null;
   activeCriticalIncidentsCount: number | null = null;
   private currentAlerts: any[] = [];
+  private cachedIncidents: any[] = [];
+
+  // Animated KPI display values (count up from 0)
+  displayActiveIncidents = 0;
+  displayCriticalIncidents = 0;
+  displayTotalEndpoints = 0;
+  displaySecurityScore = 0;
 
   // Incident Stats
   incidentStats = {
@@ -178,6 +188,21 @@ export class Overview implements OnInit, OnDestroy {
   isRefreshing = false;
   private subs = new Subscription();
 
+  /** Animates a number from 0 to `target` over `duration`ms, calling `onUpdate` each frame. */
+  private countUp(target: number, duration: number, onUpdate: (v: number) => void): void {
+    const start = performance.now();
+    const animate = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      onUpdate(Math.round(eased * target));
+      this.cdr.detectChanges();
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }
+
   constructor(
     private firestoreService: FirestoreService,
     private cdr: ChangeDetectorRef,
@@ -186,7 +211,10 @@ export class Overview implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.setTrendPeriod('7d');
+    // Don't call setTrendPeriod on init (it used mock data); start with empty array
+    this.riskTrendData = [];
+    this.trendTimeLabels = [];
+    this.updateYAxisLabels();
     this.animateIncidentDonutChart();
     this.animateStatusDonutChart();
     this.loadDashboardData();
@@ -217,14 +245,30 @@ export class Overview implements OnInit, OnDestroy {
           this.activeCriticalIncidentsCount = active.filter(i => 
             (i.priority || i.severity || '').toLowerCase() === 'critical'
           ).length;
-          
+
+          // Update KPI snapshots with live counts
+          Object.values(this.kpiSnapshots).forEach(snap => {
+            (snap as any).activeIncidents.value = active.length;
+            (snap as any).activeIncidents.status = active.length > 0 ? 'critical' : 'secure';
+          });
+          this.kpiData = { ...this.kpiSnapshots[this.activeTimeFilter] ?? this.kpiSnapshots['24h'] };
+
+          // Count-up animations for incident KPIs
+          this.countUp(active.length, 2200, v => this.displayActiveIncidents = v);
+          this.countUp(
+            active.filter(i => (i.priority || i.severity || '').toLowerCase() === 'critical').length,
+            2200, v => this.displayCriticalIncidents = v
+          );
+
           this.updateIncidentStats(active);
           this.updateIncidentStatusDistribution(incidents);
+          this.cachedIncidents = incidents;
           this.updateTrendData(incidents, this.currentTrendPeriod);
-          
+          this.dataLoaded = true;
+
           this.recentIncidents = incidents.slice(0, 5).map(inc => ({
             id: inc.id,
-            endpoint: inc.affectedAssets?.[0]?.hostname || inc.agent_id || 'Unknown',
+            endpoint: inc.affectedAssets?.[0]?.hostname || inc.agent_name || inc.hostname || 'Unknown',
             threat: inc.title || inc.name || 'Untitled Incident',
             severity: inc.priority || inc.severity || 'medium',
             status: inc.status || 'Active',
@@ -240,6 +284,8 @@ export class Overview implements OnInit, OnDestroy {
       this.firestoreService.getAgents().subscribe(agents => {
         this.zone.run(() => {
           this.calculateProtectionStats(agents);
+          // Count-up for total endpoints after stats are calculated
+          this.countUp(this.protectionStats.total, 2200, v => this.displayTotalEndpoints = v);
           this.cdr.detectChanges();
         });
       })
@@ -379,8 +425,7 @@ export class Overview implements OnInit, OnDestroy {
 
   private updateSecurityKpi(score: number) {
     const roundedScore = Math.round(score);
-    const valueStr = `${roundedScore}%`;
-    
+
     let status = 'secure';
     if (roundedScore < 70) {
       status = 'critical';
@@ -389,15 +434,24 @@ export class Overview implements OnInit, OnDestroy {
     }
 
     if (this.kpiData.securityStatus) {
-      this.kpiData.securityStatus.value = valueStr;
       this.kpiData.securityStatus.status = status;
     }
 
     Object.values(this.kpiSnapshots).forEach(snap => {
        if (snap.securityStatus) {
-         snap.securityStatus.value = valueStr;
          snap.securityStatus.status = status;
        }
+    });
+
+    // Count-up the security score from current displayed value to the new target
+    this.countUp(roundedScore, 2200, v => {
+      this.displaySecurityScore = v;
+      // Keep the snapshot value string in sync for any code that reads it
+      const str = `${v}%`;
+      if (this.kpiData.securityStatus) this.kpiData.securityStatus.value = str;
+      Object.values(this.kpiSnapshots).forEach(snap => {
+        if (snap.securityStatus) snap.securityStatus.value = str;
+      });
     });
   }
 
@@ -440,7 +494,6 @@ export class Overview implements OnInit, OnDestroy {
       lookbackMs = 30 * 24 * 60 * 60 * 1000;
       slots = 30;
     } else {
-      // Default to 7 days
       lookbackMs = 7 * 24 * 60 * 60 * 1000;
       slots = 7;
     }
@@ -449,12 +502,31 @@ export class Overview implements OnInit, OnDestroy {
     const startTime = new Date(now.getTime() - lookbackMs);
 
     incidents.forEach(incident => {
-      const createdDate = incident.createdAt?.toDate ? incident.createdAt.toDate() :
-        (incident.createdAt ? new Date(incident.createdAt) : null);
+      // Try every common field name — Firestore docs vary between projects
+      const raw =
+        incident.createdAt ??
+        incident.created_at ??
+        incident.timestamp ??
+        incident.time ??
+        incident.ts ??
+        incident.CreatedAt ??
+        incident.Timestamp ??
+        null;
 
-      if (createdDate && createdDate >= startTime) {
+      // Handle Firestore Timestamp objects, ISO strings, and epoch numbers
+      let createdDate: Date | null = null;
+      if (raw?.toDate) {
+        createdDate = raw.toDate();
+      } else if (raw?.seconds) {
+        // Firestore Timestamp serialized as { seconds, nanoseconds }
+        createdDate = new Date(raw.seconds * 1000);
+      } else if (raw) {
+        createdDate = new Date(raw);
+      }
+
+      if (createdDate && !isNaN(createdDate.getTime()) && createdDate >= startTime) {
         const diffMs = now.getTime() - createdDate.getTime();
-        
+
         let slot: number;
         if (period === '24h') {
           const diffHrs = diffMs / (60 * 60 * 1000);
@@ -474,10 +546,43 @@ export class Overview implements OnInit, OnDestroy {
     this.riskTrendData = trendData;
     this.trendTimeLabels = this.generateTimeLabels(period, trendData.length);
     this.updateYAxisLabels();
+    this.trendAnimationKey++;
+    // 1. Hide SVG → Angular removes it from DOM
+    this.trendChartVisible = false;
+    this.trendDashOffset = this.TREND_DASH_LEN;
+    this.cdr.detectChanges();
+    // 2. Show SVG on next tick → Angular creates fresh element → JS animation runs
+    setTimeout(() => {
+      this.trendChartVisible = true;
+      this.cdr.detectChanges();
+      requestAnimationFrame(() => requestAnimationFrame(() => this.animateTrendLine()));
+    }, 0);
+  }
+
+  /** True when all trend slots are zero — used to show the "no data" message */
+  get trendIsEmpty(): boolean {
+    return this.riskTrendData.length > 0 && this.riskTrendData.every(v => v === 0);
+  }
+
+
+  /** JS-driven stroke-dashoffset animation: draws the polyline from left to right */
+  private animateTrendLine(): void {
+    const duration = 2200;
+    const dashLen = this.TREND_DASH_LEN;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      // Ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      this.trendDashOffset = dashLen - dashLen * eased;
+      this.cdr.detectChanges();
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
 
   animateIncidentDonutChart() {
-    const duration = 1500;
+    const duration = 1000;
     let start: number | null = null;
 
     this.targetCritical = this.incidentStats.criticalPct;
@@ -530,7 +635,7 @@ export class Overview implements OnInit, OnDestroy {
   }
 
   animateStatusDonutChart() {
-    const duration = 1500;
+    const duration = 1000;
     let start: number | null = null;
 
     this.targetOpen = this.incidentStatusStats.openPct;
@@ -604,9 +709,16 @@ export class Overview implements OnInit, OnDestroy {
 
   setTrendPeriod(period: string) {
     this.currentTrendPeriod = period;
-    this.riskTrendData = this.trends[period as keyof typeof this.trends];
-    this.trendTimeLabels = this.generateTimeLabels(period, this.riskTrendData.length);
-    this.updateYAxisLabels();
+    if (this.cachedIncidents.length > 0) {
+      // Re-compute from real incident data
+      this.updateTrendData(this.cachedIncidents, period);
+    } else {
+      // Data not yet loaded — show empty until Firestore responds
+      this.riskTrendData = [];
+      this.trendTimeLabels = [];
+      this.updateYAxisLabels();
+      this.trendAnimationKey++;
+    }
   }
 
   updateYAxisLabels() {
@@ -629,17 +741,27 @@ export class Overview implements OnInit, OnDestroy {
   generateTimeLabels(period: string, count: number): string[] {
     const labels: string[] = [];
     const now = new Date();
-    
+
     for (let i = 0; i < count; i++) {
       if (period === '24h') {
+        // Every 2-hour mark: 0h, 2h, 4h … 22h
         labels.push(`${i * 2}h`);
       } else if (period === '7d') {
+        // Short day names: Mon, Tue …
         const date = new Date(now);
         date.setDate(now.getDate() - (6 - i));
         const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         labels.push(dayNames[date.getDay()]);
       } else {
-        labels.push(`Day ${i + 1}`);
+        // 30d: show "Mar 1" style label every 5 slots, blank otherwise
+        if (i % 5 === 0 || i === count - 1) {
+          const date = new Date(now);
+          date.setDate(now.getDate() - (count - 1 - i));
+          const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          labels.push(`${months[date.getMonth()]} ${date.getDate()}`);
+        } else {
+          labels.push('');
+        }
       }
     }
     return labels;
