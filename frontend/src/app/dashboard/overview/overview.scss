@@ -295,50 +295,50 @@
         fill: none;
         stroke-width: 2.8;
         /* Slightly thicker for segments */
-        stroke-linecap: round;
+        stroke-linecap: butt;
         transform: rotate(-90deg);
         transform-origin: 50% 50%;
         transition: stroke-dasharray 1.5s ease-out, stroke-dashoffset 1.5s ease-out;
 
         &.critical {
-            stroke: #ff1717;
-            filter: drop-shadow(0 0 8px rgba(255, 23, 68, 0.15));
+            stroke: #b91c1c;
+            filter: drop-shadow(0 0 8px rgba(185, 28, 28, 0.15));
         }
 
         &.high {
-            stroke: #a14905;
-            filter: drop-shadow(0 0 8px rgba(255, 109, 0, 0.15));
+            stroke: #c2410c;
+            filter: drop-shadow(0 0 8px rgba(194, 65, 12, 0.15));
         }
 
         &.medium {
-            stroke: #b19403;
-            filter: drop-shadow(0 0 6px rgba(255, 214, 0, 0.15));
+            stroke: #a16207;
+            filter: drop-shadow(0 0 6px rgba(161, 98, 7, 0.15));
         }
 
         &.low {
-            stroke: #2979FF;
-            filter: drop-shadow(0 0 6px rgba(41, 121, 255, 0.15));
+            stroke: #16a34a;
+            filter: drop-shadow(0 0 6px rgba(22, 163, 74, 0.15));
         }
 
         /* Status aliases */
         &.status-open {
-            stroke: #ff0000;
-            filter: drop-shadow(0 0 8px rgba(255, 23, 68, 0.15));
+            stroke: #b91c1c;
+            filter: drop-shadow(0 0 8px rgba(185, 28, 28, 0.15));
         }
 
         &.status-investigating {
-            stroke: #FF6D00;
-            filter: drop-shadow(0 0 8px rgba(255, 109, 0, 0.15));
+            stroke: #c2410c;
+            filter: drop-shadow(0 0 8px rgba(194, 65, 12, 0.15));
         }
 
         &.status-contained {
-            stroke: #005d88;
-            filter: drop-shadow(0 0 8px rgba(0, 176, 255, 0.15));
+            stroke: #0369a1;
+            filter: drop-shadow(0 0 8px rgba(3, 105, 161, 0.15));
         }
 
         &.status-resolved {
-            stroke: #d6c100;
-            filter: drop-shadow(0 0 8px rgba(0, 230, 118, 0.15));
+            stroke: #16a34a;
+            filter: drop-shadow(0 0 8px rgba(22, 163, 74, 0.15));
         }
     }
 
@@ -371,19 +371,19 @@
             border-radius: 50%;
 
             &.incident-critical {
-                background: #EF4444;
+                background: #b91c1c;
             }
 
             &.incident-high {
-                background: #f97316;
+                background: #c2410c;
             }
 
             &.incident-medium {
-                background: #EAB308;
+                background: #a16207;
             }
 
             &.incident-low {
-                background: #3B82F6;
+                background: #16a34a;
             }
         }
 
@@ -718,19 +718,19 @@
         flex-shrink: 0;
 
         &.sev-critical {
-            color: #EF4444;
+            color: #b91c1c;
         }
 
         &.sev-high {
-            color: #f97316;
+            color: #c2410c;
         }
 
         &.sev-medium {
-            color: #EAB308;
+            color: #a16207;
         }
 
         &.sev-low {
-            color: #3B82F6;
+            color: #16a34a;
         }
     }
 
@@ -747,19 +747,19 @@
         transition: width 1s ease-out;
 
         &.fill-critical {
-            background: #EF4444;
+            background: #b91c1c;
         }
 
         &.fill-high {
-            background: #f97316;
+            background: #c2410c;
         }
 
         &.fill-medium {
-            background: #EAB308;
+            background: #a16207;
         }
 
         &.fill-low {
-            background: #3B82F6;
+            background: #16a34a;
         }
     }
 }
@@ -801,29 +801,29 @@
         .circle {
             fill: none;
             stroke-width: 2.5;
-            stroke-linecap: round;
+            stroke-linecap: butt;
             transform: rotate(-90deg);
             transform-origin: center;
             transition: stroke-dasharray 1.5s ease-out, stroke-dashoffset 1.5s ease-out;
 
             &.status-open {
-                stroke: #EF4444;
-                filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.3));
+                stroke: #b91c1c;
+                filter: drop-shadow(0 0 4px rgba(185, 28, 28, 0.15));
             }
 
             &.status-investigating {
-                stroke: #f97316;
-                filter: drop-shadow(0 0 4px rgba(249, 115, 22, 0.3));
+                stroke: #c2410c;
+                filter: drop-shadow(0 0 4px rgba(194, 65, 12, 0.15));
             }
 
             &.status-contained {
-                stroke: #3EA0FF;
-                filter: drop-shadow(0 0 4px rgba(62, 160, 255, 0.3));
+                stroke: #0369a1;
+                filter: drop-shadow(0 0 4px rgba(3, 105, 161, 0.15));
             }
 
             &.status-resolved {
-                stroke: #d6c100;
-                filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.3));
+                stroke: #16a34a;
+                filter: drop-shadow(0 0 4px rgba(22, 163, 74, 0.15));
             }
         }
     }
@@ -858,23 +858,23 @@
                 flex-shrink: 0;
 
                 &.status-open {
-                    background: #ff0000;
-                    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+                    background: #b91c1c;
+                    box-shadow: 0 0 8px rgba(185, 28, 28, 0.2);
                 }
 
                 &.status-investigating {
-                    background: #f97316;
-                    box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+                    background: #c2410c;
+                    box-shadow: 0 0 8px rgba(194, 65, 12, 0.2);
                 }
 
                 &.status-contained {
-                    background: #3EA0FF;
-                    box-shadow: 0 0 8px rgba(62, 160, 255, 0.4);
+                    background: #0369a1;
+                    box-shadow: 0 0 8px rgba(3, 105, 161, 0.2);
                 }
 
                 &.status-resolved {
-                    background: #d6c100;
-                    box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+                    background: #16a34a;
+                    box-shadow: 0 0 8px rgba(22, 163, 74, 0.2);
                 }
             }
 

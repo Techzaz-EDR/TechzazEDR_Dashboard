@@ -69,6 +69,46 @@
         }
       }
 
+      .identity-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        .history-toggle-btn {
+          margin-left: 0;
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.5rem 1rem;
+          background: rgba(93, 124, 255, 0.1);
+          border: 1px solid rgba(93, 124, 255, 0.2);
+          border-radius: 8px;
+          color: #18D8FF;
+          font-size: 0.8rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          height: fit-content;
+          
+          span {
+            display: inline;
+          }
+
+          &:hover {
+            background: rgba(93, 124, 255, 0.2);
+            border-color: rgba(93, 124, 255, 0.3);
+            transform: translateY(-1px);
+          }
+
+          &.active {
+            background: #3EA0FF;
+            color: white;
+            border-color: #3EA0FF;
+            box-shadow: 0 0 15px rgba(93, 124, 255, 0.3);
+          }
+        }
+      }
+
       .status-badge {
         padding: 0.4rem 0.8rem;
         border-radius: 9999px;
@@ -116,8 +156,54 @@
         }
       }
 
-      .history-toggle-btn {
+      .header-main-actions {
         margin-left: auto;
+        display: flex;
+        gap: 0.75rem;
+
+        .action-pill-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.5rem 1rem;
+          background: rgba(93, 124, 255, 0.1);
+          border: 1px solid rgba(93, 124, 255, 0.2);
+          border-radius: 8px;
+          color: #18D8FF;
+          font-size: 0.8rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover:not(:disabled) {
+            background: rgba(93, 124, 255, 0.2);
+            border-color: rgba(93, 124, 255, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(93, 124, 255, 0.1);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+
+          &.scan-btn {
+            background: linear-gradient(135deg, rgba(93, 124, 255, 0.15), rgba(62, 160, 255, 0.15));
+            border-color: rgba(93, 124, 255, 0.3);
+            
+            &:hover:not(:disabled) {
+              background: linear-gradient(135deg, rgba(93, 124, 255, 0.25), rgba(62, 160, 255, 0.25));
+              color: #3EA0FF;
+            }
+          }
+
+          .spin {
+            animation: spin 1s linear infinite;
+          }
+        }
+      }
+
+      .history-toggle-btn {
         display: flex;
         align-items: center;
         gap: 0.6rem;
@@ -148,88 +234,11 @@
           display: flex;
           align-items: center;
         }
-
-        @media (max-width: 640px) {
-          margin-left: 0;
-          width: 100%;
-          justify-content: center;
-        }
       }
     }
   }
 
-  // 2. Action Bar
-  .action-bar-container {
-    margin-bottom: 2rem;
-  }
 
-  .action-panel {
-    background: var(--bg-card);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 0.75rem;
-
-    .action-buttons {
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      flex-wrap: wrap;
-
-      button {
-        flex: 1;
-        min-width: 200px;
-        padding: 0.75rem 1rem;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
-        background: rgba(93, 124, 255, 0.05);
-        color: #18D8FF;
-        font-size: 0.875rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-
-        &:hover:not(:disabled) {
-          background: rgba(93, 124, 255, 0.15);
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(93, 124, 255, 0.1);
-        }
-
-        &:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        lucide-icon {
-          width: 1.125rem;
-          height: 1.125rem;
-        }
-
-        .spin {
-          animation: spin 1s linear infinite;
-        }
-
-        &.full-scan-btn {
-          background: linear-gradient(135deg, rgba(93, 124, 255, 0.1), rgba(62, 160, 255, 0.1));
-          border: 1px solid rgba(93, 124, 255, 0.2);
-          color: #18D8FF;
-          font-weight: 600;
-          padding-left: 1.25rem;
-          padding-right: 1.25rem;
-
-          &:hover:not(:disabled) {
-            background: linear-gradient(135deg, rgba(93, 124, 255, 0.2), rgba(62, 160, 255, 0.2));
-            border-color: rgba(93, 124, 255, 0.4);
-            color: #3EA0FF;
-          }
-        }
-      }
-    }
-  }
 
   // 3. Grid area
   .content-grid {

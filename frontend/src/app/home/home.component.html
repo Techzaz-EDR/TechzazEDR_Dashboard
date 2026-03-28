@@ -1,53 +1,9 @@
 <div class="landing-page">
-    <!-- PRELOADER OVERLAY -->
-    <!-- PREMIUM PRELOADER OVERLAY -->
-    <div class="app-preloader" #preloader>
-        <!-- Background Ambient Layers -->
-        <div class="preloader-bg-ambient">
-            <div class="light-ray ray-1"></div>
-            <div class="light-ray ray-2"></div>
-            <div class="digital-grid-floor"></div>
-            <div class="particles-container" #particlesContainer></div>
-            <div class="ground-glow"></div>
-        </div>
 
-        <!-- Central Visualization -->
-        <div class="center-assembly" #centerAssembly>
-            <div class="brand-reveal">
-                <h1 class="brand-logo">
-                    <span class="word-tech">TECHZAZ</span>
-                    <span class="word-edr">EDR</span>
-                </h1>
-            </div>
-
-            <!-- Loader Progress -->
-            <div class="loader-metrics">
-                <div class="progress-line-track">
-                    <div class="progress-line-fill" #progressBar></div>
-                    <div class="progress-glow-trail" #progressGlow></div>
-                </div>
-
-                <div class="status-list">
-                    <div class="status-node" [class.active]="step >= 1"><span class="bullet"></span> INITIALIZING....
-                    </div>
-                    <div class="status-node" [class.active]="step >= 2"><span class="bullet"></span> CONNECTING TO
-                        ENDPOINTS....</div>
-                    <div class="status-node" [class.active]="step >= 3"><span class="bullet"></span> SCANNING
-                        THREATS....</div>
-                    <div class="status-node ready" [class.active]="step >= 4"><span class="bullet"></span> SYSTEM READY
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Final Transition Pulse -->
-        <div class="energy-pulse" #energyPulse></div>
-        <div class="final-flash" #finalFlash></div>
-    </div>
     <!-- Navbar -->
     <nav class="navbar" [class.scrolled]="scrolled" #navbar>
         <div class="container nav-container">
-            <div class="logo">
+            <div class="logo" (click)="scrollToSection('hero', $event)">
                 <img src="assets/Logo.png" alt="Techzaz EDR Logo" class="nav-logo-img">
             </div>
             <div class="nav-links">
@@ -63,7 +19,7 @@
     </nav>
 
     <!-- 1. HERO SECTION (STABLE RENDER) -->
-    <header class="hero-section">
+    <header class="hero-section" id="hero">
         <video class="hero-video" #heroVideo autoplay muted loop playsinline preload="auto" disablePictureInPicture>
             <source src="assets/videos/hero-background.mp4" type="video/mp4">
         </video>

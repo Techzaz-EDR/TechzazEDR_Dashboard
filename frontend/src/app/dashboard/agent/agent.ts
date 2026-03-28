@@ -79,6 +79,10 @@ export class AgentComponent implements OnInit, OnDestroy {
   isSavingAgent: boolean = false;
   saveSuccess: boolean = false;
 
+  // Status refresh
+  private _rawLastSeen: any = null;
+  private statusRefreshInterval: any;
+
   // Investigation Form
   investigationSeverity: string = 'High';
   investigationAssignee: string = '';
@@ -146,14 +150,29 @@ export class AgentComponent implements OnInit, OnDestroy {
         if (this.agentId) {
           this.loadAgentData(this.agentId);
         } else {
-          // If no agent selected, redirect back
           this.router.navigate(['/dashboard/endpoints']);
         }
       })
     );
 
-    // Load real organization users for the assignee dropdown
     this.loadOrganizationUsers();
+
+    // Recompute online/offline every 30s without waiting for a Firestore change
+    this.statusRefreshInterval = setInterval(() => {
+      if (this.agentDetails && this._rawLastSeen !== null) {
+        this.agentDetails = {
+          ...this.agentDetails,
+          status: this.computeStatus(this._rawLastSeen),
+          last_seen: this.formatLastSeen(this._rawLastSeen)
+        };
+        this.cdr.detectChanges();
+      }
+    }, 30_000);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+    if (this.statusRefreshInterval) clearInterval(this.statusRefreshInterval);
   }
 
   private loadOrganizationUsers() {
@@ -199,12 +218,13 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.firestoreService.getAgentDetails(agentId).subscribe(details => {
         if (details) {
+          this._rawLastSeen = details.last_seen ?? null;   // keep raw for interval recompute
           this.agentDetails = {
             ...details,
             name: details.hostname || details.id,
             os: details.os || 'Unknown OS',
             ip: details.ip || '0.0.0.0',
-            status: details.status || 'offline',
+            status: this.computeStatus(details.last_seen),
             last_seen: this.formatLastSeen(details.last_seen)
           };
           this.cdr.detectChanges();
@@ -357,10 +377,6 @@ export class AgentComponent implements OnInit, OnDestroy {
     return this.TerminalIcon;
   }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
-
   async runRemoteScan() {
     if (!this.agentId) return;
     this.loadingCommands['remoteScan'] = true;
@@ -408,14 +424,29 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.saveSuccess = false;
 
     try {
+      const newHostname = this.editableAgent.hostname;
       const updateData = {
-        hostname: this.editableAgent.hostname,
-        agent_name: this.editableAgent.hostname, // Force agent_name to match hostname
+        hostname: newHostname,
+        agent_name: newHostname, // Force agent_name to match hostname
         ip: this.editableAgent.ip,
         os: this.editableAgent.os
       };
 
+      // 1. Update Firestore document
       await this.firestoreService.updateAgent(this.agentId, updateData);
+
+      // 2. Send command to agent to update its local config.json
+      try {
+        await this.firestoreService.sendCommand(
+          this.agentId,
+          'update_agent_name',
+          { agent_name: newHostname }
+        );
+        console.log(`[Agent Config] Queued update_agent_name command → '${newHostname}'`);
+      } catch (cmdErr) {
+        // Non-fatal: Firestore was already updated; the agent will reflect the name on next poll/restart
+        console.warn('[Agent Config] Could not send update_agent_name command:', cmdErr);
+      }
       
       this.saveSuccess = true;
       setTimeout(() => {
@@ -481,6 +512,14 @@ export class AgentComponent implements OnInit, OnDestroy {
     }
     
     return String(timestamp);
+  }
+
+  /** An agent is online only if it checked in within the last 90 seconds. */
+  private computeStatus(lastSeen: any): string {
+    if (!lastSeen) return 'offline';
+    const date = lastSeen.toDate ? lastSeen.toDate() : new Date(lastSeen);
+    const diffSeconds = (Date.now() - date.getTime()) / 1000;
+    return diffSeconds < 90 ? 'online' : 'offline';
   }
 
   public formatLastSeen(timestamp: any): string {
