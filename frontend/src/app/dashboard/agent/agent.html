@@ -6,7 +6,6 @@
         <lucide-icon [name]="ShieldIcon" class="header-icon" (click)="backToEndpoints()" style="cursor: pointer;"></lucide-icon>
         <div class="agent-title-group">
           <h1 (click)="backToEndpoints()" style="cursor: pointer;">{{ agentDetails?.agent_name || agentDetails?.hostname || agentId }}</h1>
-          <span class="agent-uuid-label">ID: {{ agentId }}</span>
         </div>
       </div>
       <div class="status-badge" [class.active]="agentDetails?.status === 'online'">
@@ -182,7 +181,7 @@
         </div>
         <div>
           <h2>Command History</h2>
-          <span class="subtitle">Agent: {{ agentId }}</span>
+          <span class="subtitle">Agent: {{ agentDetails?.agent_name || agentDetails?.hostname || 'Unknown' }}</span>
         </div>
       </div>
       <button class="close-btn" (click)="closeCommandHistoryModal()">×</button>
@@ -256,7 +255,7 @@
         </div>
         <div>
           <h2>Agent configuration</h2>
-          <span class="subtitle">Adjust parameters for {{ agentId }}</span>
+          <span class="subtitle">Adjust parameters for {{ agentDetails?.agent_name || agentDetails?.hostname || 'this agent' }}</span>
         </div>
       </div>
       <button class="close-btn" (click)="closeConfigureAgentModal()">×</button>

@@ -220,19 +220,22 @@
                 }
 
                 .badge.status {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
                     padding: 4px 14px;
-                    border-radius: 8px;
-                    font-size: 0.75rem;
-                    font-weight: 800;
+                    border-radius: 20px;
+                    font-size: 0.7rem;
+                    font-weight: 700;
                     text-transform: uppercase;
-                    letter-spacing: 0.5px;
+                    letter-spacing: 0.05em;
                     border: 1px solid transparent;
 
-                    &.protected {
-                        background: rgba(34, 197, 94, 0.1);
+                    &.protected, &.online {
+                        background: rgba(34, 197, 94, 0.15);
                         color: #22C55E;
-                        border-color: rgba(34, 197, 94, 0.2);
-                        box-shadow: 0 0 15px rgba(34, 197, 94, 0.1);
+                        border-color: rgba(34, 197, 94, 0.3);
+                        box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
                     }
 
                     &.at-risk {
@@ -242,11 +245,10 @@
                         box-shadow: 0 0 15px rgba(249, 115, 22, 0.1);
                     }
 
-                    &.compromised {
-                        background: rgba(239, 68, 68, 0.1);
-                        color: #EF4444;
-                        border-color: rgba(239, 68, 68, 0.2);
-                        box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+                    &.compromised, &.offline {
+                        background: rgba(116, 131, 163, 0.1);
+                        color: #7483A3;
+                        border-color: rgba(116, 131, 163, 0.2);
                     }
                 }
             }

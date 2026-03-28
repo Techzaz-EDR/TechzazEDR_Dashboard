@@ -44,12 +44,8 @@
                             <span class="user-name">{{ user.name }}</span>
                         </div>
                         <div class="col email">{{ user.email }}</div>
-                        <div class="col role">
-                            <span class="badge" [class]="user.role.toLowerCase().replace(' ', '-')">{{ user.role }}</span>
-                        </div>
-                        <div class="col status">
-                            <span class="status-badge" [class]="user.status">{{ user.status }}</span>
-                        </div>
+                        <div class="col role">{{ user.role }}</div>
+                        <div class="col status"><span class="status-pill-neutral" [class]="user.status">{{ user.status }}</span></div>
                         <div class="col last-login">{{ user.lastLogin }}</div>
                         <div class="col actions">
                             <button class="icon-btn" title="Edit" (click)="openEditModal(user)">
