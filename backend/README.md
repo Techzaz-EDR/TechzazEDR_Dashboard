@@ -19,7 +19,8 @@ The TechzazEDR Backend is a high-performance, asynchronous REST API built with *
 
 ## 📦 Module Functions
 
-### 🔌 Alerts Module (`app/api/alerts.py`)
+### 🔌 Agents & Alerts Module (`app/api/agents.py`, `app/api/alerts.py`)
+- **Agent Onboarding**: The `/bootstrap` endpoint generates a PowerShell script containing a unique UUID and API key for zero-touch agent deployment.
 - **Telemetry Ingestion**: Highly optimized POST endpoint for agent alert streaming.
 - **Background Processing**: Queues alerts for non-blocking persistence to Firestore.
 - **Agent Pulse**: Automatically updates `last_seen` and `status` of agents upon data receipt.
@@ -88,6 +89,7 @@ Copy `.env.example` to `.env` and configure:
 | Variable | Description | Default |
 |:---|:---|:---|
 | `PROJECT_NAME` | Display name of the API | Techzaz EDR Dashboard |
+| `ALLOWED_ORIGINS` | Comma-separated list of allowed origins | `http://localhost:4200` |
 | `FIREBASE_PROJECT_ID` | Firebase Project ID | `techzazedr` |
 | `FIREBASE_PRIVATE_KEY` | Firebase Service Account Private Key | (from .env) |
 | `ALERTS_API_KEY` | Global/Default Ingestion Key| `tz_demo_key` |

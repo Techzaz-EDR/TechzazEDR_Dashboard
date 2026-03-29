@@ -25,6 +25,7 @@ A modern, high-performance Endpoint Detection and Response (EDR) orchestration h
 | :--- | :--- |
 | **Real-time Monitoring** | Live telemetry streaming from agents directly to the dashboard. |
 | **Multi-Tenant Hub** | Secure data isolation for multiple organizations and sub-tenants. |
+| **Agent Onboarding** | One-click **Bootstrap Script** generation for rapid agent deployment. |
 | **Fleet Orchestration** | Monitor agent health, status, and orchestrate remote scans. |
 | **Advanced Analytics** | High-fidelity visualizations for rapid threat triage and investigation. |
 | **RBAC** | Fine-grained access control (Admin, Analyst, Viewer) at the API layer. |
@@ -145,6 +146,22 @@ cd ../frontend
 npm install
 npm start                  # Start Console on http://localhost:4200
 ```
+
+---
+
+## ☁️ Railway Deployment
+
+The TechzazEDR Dashboard is optimized for **Railway**. To deploy, ensure the following environment variables are configured:
+
+### Backend Service
+| Variable | Value |
+| :--- | :--- |
+| `ALLOWED_ORIGINS` | `https://your-frontend-url.up.railway.app,http://localhost:4200` |
+| `FIREBASE_PROJECT_ID` | Your Firebase Project ID |
+| `FIREBASE_PRIVATE_KEY` | Your Firebase Private Key |
+
+### Frontend Service
+- The frontend dynamically detects the environment. It will point to the production backend automatically when running on your Railway domain.
 
 ---
 

@@ -12,6 +12,7 @@ A premium, high-fidelity security operations console. This dashboard provides re
 
 - **Signal-Based Reactivity**: Utilizing Angular's newest reactivity model for lightning-fast UI updates.
 - **GSAP-Powered UX**: Ultra-smooth micro-animations for a premium, "Defense Grade" feel.
+- **Agent Onboarding**: In-dashboard generation and download of agent bootstrap scripts.
 - **Real-time Alert Streams**: Direct Firestore integration for zero-latency detection updates.
 - **Multi-Tenant Navigation**: Context-aware switching between organizations and tenants.
 - **Responsive Command Center**: Optimized for desktop monitoring and tablet field use.
@@ -84,12 +85,13 @@ npm install
 ```bash
 npm start
 ```
-*Console will be live at http://localhost:4200/*
+*Console will be live at http://localhost:4200/. The `apiUrl` will automatically point to `localhost:8000` via dynamic environment detection.*
 
 ### 3. Production Build
 ```bash
 npm run build
 ```
+*In production (Railway), the dashboard automatically points to the production Backend endpoint.*
 
 ---
 
