@@ -61,13 +61,23 @@ export class Users implements OnInit, OnDestroy {
                             const diffMs = now.getTime() - lastSeenDate.getTime();
                             if (diffMs < 60000) status = 'online';
                         }
+
+                        // Store raw epoch ms for sorting
+                        const rawLogin = data['last_login_at'];
+                        let lastLoginTs = 0;
+                        if (rawLogin) {
+                            const d = rawLogin.toDate ? rawLogin.toDate() : new Date(rawLogin);
+                            lastLoginTs = isNaN(d.getTime()) ? 0 : d.getTime();
+                        }
+
                         return {
                             id: doc.id,
                             name: data['name'] || data['email'] || 'Unknown User',
                             email: data['email'] || 'No Email',
                             role: data['role'] || 'Unknown',
                             status,
-                            lastLogin: this.formatLastLogin(data['last_login_at'])
+                            lastLogin: this.formatLastLogin(data['last_login_at']),
+                            _lastLoginTs: lastLoginTs
                         };
                     });
                 } catch (error) {
@@ -92,11 +102,13 @@ export class Users implements OnInit, OnDestroy {
 
     get filteredUsers() {
         const term = this.searchTerm.toLowerCase();
-        return this.users.filter(user =>
-            (user.name?.toLowerCase() || '').includes(term) ||
-            (user.email?.toLowerCase() || '').includes(term) ||
-            (user.role?.toLowerCase() || '').includes(term)
-        );
+        return this.users
+            .filter(user =>
+                (user.name?.toLowerCase() || '').includes(term) ||
+                (user.email?.toLowerCase() || '').includes(term) ||
+                (user.role?.toLowerCase() || '').includes(term)
+            )
+            .sort((a, b) => (b._lastLoginTs ?? 0) - (a._lastLoginTs ?? 0));
     }
 
     // Modal & Action Logic

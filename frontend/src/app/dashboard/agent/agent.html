@@ -6,12 +6,17 @@
         <lucide-icon [name]="ShieldIcon" class="header-icon" (click)="backToEndpoints()" style="cursor: pointer;"></lucide-icon>
         <div class="agent-title-group">
           <h1 (click)="backToEndpoints()" style="cursor: pointer;">{{ agentDetails?.agent_name || agentDetails?.hostname || agentId }}</h1>
-          <span class="agent-uuid-label">ID: {{ agentId }}</span>
         </div>
       </div>
-      <div class="status-badge" [class.active]="agentDetails?.status === 'online'">
-        <span class="status-pulse" *ngIf="agentDetails?.status === 'online'"></span>
-        {{ agentDetails?.status === 'online' ? 'Online' : 'Offline' }}
+      <div class="identity-actions">
+        <button class="history-toggle-btn" (click)="openCommandHistoryModal()" [class.active]="showCommandHistoryModal">
+          <lucide-icon [name]="HistoryIcon" [size]="14"></lucide-icon>
+          <span>Command History</span>
+        </button>
+        <div class="status-badge" [class.active]="agentDetails?.status === 'online'">
+          <span class="status-pulse" *ngIf="agentDetails?.status === 'online'"></span>
+          {{ agentDetails?.status === 'online' ? 'Online' : 'Offline' }}
+        </div>
       </div>
     </div>
 
@@ -29,29 +34,21 @@
         <span>Last check-in: {{ agentDetails?.last_seen }}</span>
       </div>
 
-      <button class="history-toggle-btn" (click)="openCommandHistoryModal()" [class.active]="showCommandHistoryModal">
-        <lucide-icon [name]="HistoryIcon" [size]="16"></lucide-icon>
-        <span>Command History</span>
-      </button>
+      <div class="header-main-actions">
+        <button (click)="runRemoteScan()" [disabled]="loadingCommands['remoteScan']" class="action-pill-btn scan-btn">
+          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['remoteScan']" [size]="14"></lucide-icon>
+          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['remoteScan']" [size]="14"></lucide-icon>
+          {{ loadingCommands['remoteScan'] ? 'Scanning...' : 'Initiate Remote Scan' }}
+        </button>
+
+        <button (click)="openConfigureAgentModal()" class="action-pill-btn config-btn" title="Agent Configuration">
+          <lucide-icon [name]="SettingsIcon" [size]="14"></lucide-icon>
+        </button>
+      </div>
     </div>
   </header>
 
-  <div class="action-bar-container">
-    <section class="action-panel">
-      <div class="action-buttons">
-        <button (click)="runRemoteScan()" [disabled]="loadingCommands['remoteScan']" class="full-scan-btn">
-          <lucide-icon [name]="ActivityIcon" *ngIf="!loadingCommands['remoteScan']"></lucide-icon>
-          <lucide-icon [name]="RefreshCwIcon" class="spin" *ngIf="loadingCommands['remoteScan']"></lucide-icon>
-          {{ loadingCommands['remoteScan'] ? 'Initializing Remote Scan...' : 'Initiate Remote Scan' }}
-        </button>
 
-        <button (click)="openConfigureAgentModal()" class="configure-agent-btn">
-          <lucide-icon [name]="SettingsIcon"></lucide-icon>
-          Agent configuration
-        </button>
-      </div>
-    </section>
-  </div>
 
   <div class="content-grid single-column">
     <!-- 4. Local Threat Feed -->
@@ -182,7 +179,7 @@
         </div>
         <div>
           <h2>Command History</h2>
-          <span class="subtitle">Agent: {{ agentId }}</span>
+          <span class="subtitle">Agent: {{ agentDetails?.agent_name || agentDetails?.hostname || 'Unknown' }}</span>
         </div>
       </div>
       <button class="close-btn" (click)="closeCommandHistoryModal()">×</button>
@@ -256,7 +253,7 @@
         </div>
         <div>
           <h2>Agent configuration</h2>
-          <span class="subtitle">Adjust parameters for {{ agentId }}</span>
+          <span class="subtitle">Adjust parameters for {{ agentDetails?.agent_name || agentDetails?.hostname || 'this agent' }}</span>
         </div>
       </div>
       <button class="close-btn" (click)="closeConfigureAgentModal()">×</button>

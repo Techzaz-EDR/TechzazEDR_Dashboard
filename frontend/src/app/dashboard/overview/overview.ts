@@ -187,6 +187,8 @@ export class Overview implements OnInit, OnDestroy {
 
   isRefreshing = false;
   private subs = new Subscription();
+  /** Animations (count-up, donut, trend) only fire once on initial page load. */
+  private hasAnimated = false;
 
   /** Animates a number from 0 to `target` over `duration`ms, calling `onUpdate` each frame. */
   private countUp(target: number, duration: number, onUpdate: (v: number) => void): void {
@@ -253,12 +255,18 @@ export class Overview implements OnInit, OnDestroy {
           });
           this.kpiData = { ...this.kpiSnapshots[this.activeTimeFilter] ?? this.kpiSnapshots['24h'] };
 
-          // Count-up animations for incident KPIs
-          this.countUp(active.length, 2200, v => this.displayActiveIncidents = v);
-          this.countUp(
-            active.filter(i => (i.priority || i.severity || '').toLowerCase() === 'critical').length,
-            2200, v => this.displayCriticalIncidents = v
-          );
+          const criticalCount = active.filter(i =>
+            (i.priority || i.severity || '').toLowerCase() === 'critical'
+          ).length;
+
+          if (this.hasAnimated) {
+            // Subsequent updates: set values directly, no re-animation
+            this.displayActiveIncidents = active.length;
+            this.displayCriticalIncidents = criticalCount;
+          } else {
+            this.countUp(active.length, 2200, v => this.displayActiveIncidents = v);
+            this.countUp(criticalCount, 2200, v => this.displayCriticalIncidents = v);
+          }
 
           this.updateIncidentStats(active);
           this.updateIncidentStatusDistribution(incidents);
@@ -284,8 +292,14 @@ export class Overview implements OnInit, OnDestroy {
       this.firestoreService.getAgents().subscribe(agents => {
         this.zone.run(() => {
           this.calculateProtectionStats(agents);
-          // Count-up for total endpoints after stats are calculated
-          this.countUp(this.protectionStats.total, 2200, v => this.displayTotalEndpoints = v);
+          if (this.hasAnimated) {
+            this.displayTotalEndpoints = this.protectionStats.total;
+          } else {
+            this.countUp(this.protectionStats.total, 2200, v => this.displayTotalEndpoints = v);
+          }
+          if (!this.dataLoaded) {
+            this.dataLoaded = true;
+          }
           this.cdr.detectChanges();
         });
       })
@@ -359,9 +373,22 @@ export class Overview implements OnInit, OnDestroy {
     const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
 
     agents.forEach(agent => {
-      const lastSeen = agent.last_seen?.toDate ? agent.last_seen.toDate().getTime() : 0;
-      const isOffline = (now - lastSeen) > oneDayMs;
-      const isOffline30d = (now - lastSeen) > thirtyDaysMs;
+      // last_seen may be a Firestore Timestamp object OR an ISO string from the Python backend
+      const rawLastSeen = agent.last_seen;
+      let lastSeenMs = 0;
+      if (rawLastSeen) {
+        if (rawLastSeen.toDate) {
+          lastSeenMs = rawLastSeen.toDate().getTime();
+        } else if (rawLastSeen.seconds) {
+          lastSeenMs = rawLastSeen.seconds * 1000;
+        } else {
+          const parsed = new Date(rawLastSeen);
+          lastSeenMs = isNaN(parsed.getTime()) ? 0 : parsed.getTime();
+        }
+      }
+
+      const isOffline = (now - lastSeenMs) > oneDayMs;
+      const isOffline30d = (now - lastSeenMs) > thirtyDaysMs;
 
       if (isOffline) {
         offline++;
@@ -443,16 +470,26 @@ export class Overview implements OnInit, OnDestroy {
        }
     });
 
-    // Count-up the security score from current displayed value to the new target
-    this.countUp(roundedScore, 2200, v => {
-      this.displaySecurityScore = v;
-      // Keep the snapshot value string in sync for any code that reads it
-      const str = `${v}%`;
+    if (this.hasAnimated) {
+      // Subsequent updates: jump to value directly
+      this.displaySecurityScore = roundedScore;
+      const str = `${roundedScore}%`;
       if (this.kpiData.securityStatus) this.kpiData.securityStatus.value = str;
       Object.values(this.kpiSnapshots).forEach(snap => {
         if (snap.securityStatus) snap.securityStatus.value = str;
       });
-    });
+    } else {
+      // First load: animate count-up and mark as animated
+      this.countUp(roundedScore, 2200, v => {
+        this.displaySecurityScore = v;
+        const str = `${v}%`;
+        if (this.kpiData.securityStatus) this.kpiData.securityStatus.value = str;
+        Object.values(this.kpiSnapshots).forEach(snap => {
+          if (snap.securityStatus) snap.securityStatus.value = str;
+        });
+      });
+      this.hasAnimated = true;
+    }
   }
 
   updateIncidentStats(activeItems: any[]) {
@@ -466,19 +503,38 @@ export class Overview implements OnInit, OnDestroy {
     
     const total = activeItems.length;
 
+    const pcts = [critical, high, medium, low].map(v => total > 0 ? Math.round((v / total) * 100) : 0);
+    let sum = pcts.reduce((a, b) => a + b, 0);
+    
+    // Adjust if sum != 100 due to rounding
+    if (total > 0 && sum !== 100) {
+      const diff = 100 - sum;
+      // Find the index of the largest segment to apply the difference
+      const counts = [critical, high, medium, low];
+      const maxIndex = counts.indexOf(Math.max(...counts));
+      pcts[maxIndex] += diff;
+    }
+
     this.incidentStats = {
       total,
       critical,
       high,
       medium,
       low,
-      criticalPct: total > 0 ? Math.round((critical / total) * 100) : 0,
-      highPct: total > 0 ? Math.round((high / total) * 100) : 0,
-      mediumPct: total > 0 ? Math.round((medium / total) * 100) : 0,
-      lowPct: total > 0 ? Math.round((low / total) * 100) : 0,
+      criticalPct: pcts[0],
+      highPct: pcts[1],
+      mediumPct: pcts[2],
+      lowPct: pcts[3],
     };
     
-    this.animateIncidentDonutChart();
+    // Only animate donut chart on first load
+    if (!this.hasAnimated) this.animateIncidentDonutChart();
+    else {
+      this.animatedCriticalPct = this.incidentStats.criticalPct;
+      this.animatedHighPct = this.incidentStats.highPct;
+      this.animatedMediumPct = this.incidentStats.mediumPct;
+      this.animatedLowPct = this.incidentStats.lowPct;
+    }
   }
 
   private updateTrendData(incidents: any[], period: string = '7d') {
@@ -619,19 +675,38 @@ export class Overview implements OnInit, OnDestroy {
     const contained = allIncidents.filter(i => (i.status || '').toLowerCase() === 'contained').length;
     const resolved = allIncidents.filter(i => (i.status || '').toLowerCase() === 'resolved').length;
 
+    const pcts = [open, investigating, contained, resolved].map(v => total > 0 ? Math.round((v / total) * 100) : 0);
+    let sum = pcts.reduce((a, b) => a + b, 0);
+
+    // Adjust if sum != 100 due to rounding
+    if (total > 0 && sum !== 100) {
+      const diff = 100 - sum;
+      // Adjust the largest count to maintain visual balance
+      const counts = [open, investigating, contained, resolved];
+      const maxIndex = counts.indexOf(Math.max(...counts));
+      pcts[maxIndex] += diff;
+    }
+
     this.incidentStatusStats = {
       total,
       open,
       investigating,
       contained,
       resolved,
-      openPct: total > 0 ? Math.round((open / total) * 100) : 0,
-      investigatingPct: total > 0 ? Math.round((investigating / total) * 100) : 0,
-      containedPct: total > 0 ? Math.round((contained / total) * 100) : 0,
-      resolvedPct: total > 0 ? Math.round((resolved / total) * 100) : 0
+      openPct: pcts[0],
+      investigatingPct: pcts[1],
+      containedPct: pcts[2],
+      resolvedPct: pcts[3]
     };
 
-    this.animateStatusDonutChart();
+    // Only animate donut chart on first load
+    if (!this.hasAnimated) this.animateStatusDonutChart();
+    else {
+      this.animatedOpenPct = this.incidentStatusStats.openPct;
+      this.animatedInvestigatingPct = this.incidentStatusStats.investigatingPct;
+      this.animatedContainedPct = this.incidentStatusStats.containedPct;
+      this.animatedResolvedPct = this.incidentStatusStats.resolvedPct;
+    }
   }
 
   animateStatusDonutChart() {

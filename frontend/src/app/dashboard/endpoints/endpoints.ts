@@ -28,6 +28,7 @@ export class Endpoints implements OnInit, OnDestroy {
     searchQuery: string = '';
     endpoints: any[] = [];
     private subscriptions: Subscription = new Subscription();
+    private statusRefreshInterval: any;
 
     constructor(
         private firestoreService: FirestoreService,
@@ -41,22 +42,48 @@ export class Endpoints implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.firestoreService.getAgents().subscribe(agents => {
                 console.log('Agents received in component:', agents.length);
+                // Debug: log last_seen value and type for first agent
+                if (agents.length > 0) {
+                    const sample = agents[0];
+                    console.log('[Status Debug] last_seen value:', sample.last_seen, 'type:', typeof sample.last_seen, 'hasToDate:', !!(sample.last_seen?.toDate));
+                }
                 this.endpoints = agents.map(a => ({
                     ...a,
                     name: a.agent_name || a.hostname || a.id,
                     os: a.os || 'Unknown OS',
                     ip: a.ip || '0.0.0.0',
-                    status: a.status || 'offline',
+                    status: this.computeStatus(a.last_seen),
                     lastSeen: a.last_seen ? this.formatLastSeen(a.last_seen) : 'Never'
                 }));
                 this.onSearch();
-                this.cdr.detectChanges(); // Force refresh
+                this.cdr.detectChanges();
             })
         );
+
+        // Recompute online/offline status every 30s without waiting for a Firestore change
+        this.statusRefreshInterval = setInterval(() => {
+            if (this.endpoints.length === 0) return;
+            this.endpoints = this.endpoints.map(ep => ({
+                ...ep,
+                status: this.computeStatus(ep.last_seen),
+                lastSeen: ep.last_seen ? this.formatLastSeen(ep.last_seen) : 'Never'
+            }));
+            this.onSearch();
+            this.cdr.detectChanges();
+        }, 30_000);
     }
 
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
+        if (this.statusRefreshInterval) clearInterval(this.statusRefreshInterval);
+    }
+
+    /** An agent is online only if it checked in within the last 90 seconds. */
+    private computeStatus(lastSeen: any): string {
+        if (!lastSeen) return 'offline';
+        const date = lastSeen.toDate ? lastSeen.toDate() : new Date(lastSeen);
+        const diffSeconds = (Date.now() - date.getTime()) / 1000;
+        return diffSeconds < 90 ? 'online' : 'offline';
     }
 
     private formatLastSeen(timestamp: any): string {
