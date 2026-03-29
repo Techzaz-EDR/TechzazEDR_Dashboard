@@ -1,0 +1,1 @@
+Error generating report: 400 The query requires a COLLECTION_GROUP_ASC index for collection alerts and field Timestamp. You can create it here: https://console.firebase.google.com/v1/r/project/techzazedr/firestore/indexes?create_exemption=ClBwcm9qZWN0cy90ZWNoemF6ZWRyL2RhdGFiYXNlcy8oZGVmYXVsdCkvY29sbGVjdGlvbkdyb3Vwcy9hbGVydHMvZmllbGRzL1RpbWVzdGFtcBACGg0KCVRpbWVzdGFtcBAB 

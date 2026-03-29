@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "RS256"
     ALERTS_API_KEY: str = "tz_demo_d3m00rgk3y"
     
+<<<<<<< Updated upstream
+=======
+    # CORS Settings
+    ALLOWED_ORIGINS: list[str] = ["*"]
+    
+>>>>>>> Stashed changes
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 
 settings = Settings()

@@ -38,12 +38,9 @@
                     <div class="status-badge" [class]="report.status">{{ report.status }}</div>
 
                     <div class="action-buttons">
-                        <button class="icon-btn" title="View"><lucide-icon [name]="Eye"
-                                [size]="18"></lucide-icon></button>
-                        <button class="icon-btn" title="Download"><lucide-icon [name]="Download"
-                                [size]="18"></lucide-icon></button>
-                        <button class="icon-btn delete" title="Delete"><lucide-icon [name]="Trash2"
-                                [size]="18"></lucide-icon></button>
+                        <button class="icon-btn" title="Download" (click)="downloadReport()">
+                            <lucide-icon [name]="Download" [size]="18"></lucide-icon>
+                        </button>
                     </div>
                 </div>
             </div>

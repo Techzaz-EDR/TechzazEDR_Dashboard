@@ -7,3 +7,6 @@ httpx
 pytest
 firebase-admin
 pydantic[email]
+pymupdf
+matplotlib
+reportlab
