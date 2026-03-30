@@ -9,7 +9,7 @@ export const environment = {
         appId: "1:1085060204960:web:c17828bbf34584851ffcc5",
         measurementId: "G-P4H6BWZRWY"
     },
-    apiUrl: window.location.hostname.includes('railway.app')
-        ? "https://techzazedrdashboard-backend-production.up.railway.app/api/v1"
-        : `http://${window.location.hostname}:8000/api/v1`
+    apiUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? "http://localhost:8000/api/v1"
+        : "https://techzazedrdashboard-backend-production.up.railway.app/api/v1"
 };

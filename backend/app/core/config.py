@@ -23,7 +23,12 @@ class Settings(BaseSettings):
     ALERTS_API_KEY: str = "tz_demo_d3m00rgk3y"
     
     # CORS Settings
-    ALLOWED_ORIGINS: list[str] = ["*"]
+    ALLOWED_ORIGINS: list[str] = [
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+        "https://techzazedrdashboard-frontend-production.up.railway.app"
+    ]
+    
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 
 settings = Settings()
