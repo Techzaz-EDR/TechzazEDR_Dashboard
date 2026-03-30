@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { FirestoreService } from '../../core/services/firestore.service';
 import {
     LucideAngularModule,
@@ -13,7 +13,7 @@ import { BootstrapService, BootstrapResponse } from '../../core/services/bootstr
 @Component({
   selector: 'app-endpoints',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, RouterLink],
+  imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './endpoints.html',
   styleUrl: './endpoints.scss'
 })

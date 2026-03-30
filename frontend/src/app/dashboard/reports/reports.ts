@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 import {
     LucideAngularModule,
     BarChart2, Shield, Clipboard, Search, TrendingDown,
-    Eye, Download, Trash2
+    Download
 } from 'lucide-angular';
 
 @Component({
@@ -14,66 +16,40 @@ import {
     styleUrl: './reports.scss',
 })
 export class Reports {
+    private http = inject(HttpClient);
+
     // Icons
     readonly BarChart2 = BarChart2;
-    readonly Shield = Shield;
-    readonly Clipboard = Clipboard;
-    readonly Search = Search;
-    readonly TrendingDown = TrendingDown;
-    readonly Eye = Eye;
     readonly Download = Download;
-    readonly Trash2 = Trash2;
 
     reports = [
         {
             id: 1,
-            title: 'Executive Summary - October 2024',
+            title: 'Security Posture Report',
             type: 'Executive Summary',
             format: 'PDF',
-            size: '2.4 MB',
-            date: '2024-10-20',
+            size: 'In-Memory',
+            date: new Date().toISOString().split('T')[0],
             status: 'ready',
             icon: BarChart2
-        },
-        {
-            id: 2,
-            title: 'Threat Intelligence Report',
-            type: 'Threat Intelligence',
-            format: 'PDF',
-            size: '5.1 MB',
-            date: '2024-10-19',
-            status: 'ready',
-            icon: Shield
-        },
-        {
-            id: 3,
-            title: 'Compliance Report - ISO 27001',
-            type: 'Compliance Report',
-            format: 'PDF',
-            size: '3.8 MB',
-            date: '2024-10-18',
-            status: 'ready',
-            icon: Clipboard
-        },
-        {
-            id: 4,
-            title: 'Incident Analysis - Q3 2024',
-            type: 'Detailed Analysis',
-            format: 'PDF',
-            size: '4.2 MB',
-            date: '2024-10-15',
-            status: 'ready',
-            icon: Search
-        },
-        {
-            id: 5,
-            title: 'Network Traffic Analysis',
-            type: 'Technical Report',
-            format: 'CSV',
-            size: '12.5 MB',
-            date: '2024-10-10',
-            status: 'ready',
-            icon: TrendingDown
         }
     ];
+
+    downloadReport() {
+        const url = `${environment.apiUrl}/reports/security-posture?t=${new Date().getTime()}`;
+        console.log('Initiating download from:', url);
+        this.http.get(url, { responseType: 'blob' }).subscribe({
+            next: (blob) => {
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `Security_Posture_Report_${new Date().getTime()}.pdf`;
+                link.click();
+                window.URL.revokeObjectURL(downloadUrl);
+            },
+            error: (err) => {
+                console.error('Download failed:', err);
+            }
+        });
+    }
 }
