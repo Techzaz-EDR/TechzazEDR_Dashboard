@@ -504,11 +504,8 @@ form {
     align-items: center;
     text-align: center;
     flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    background: var(--glass-bg);
-    z-index: 5;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: transparent;
+    z-index: 1;
 
     .status-line {
         display: flex;

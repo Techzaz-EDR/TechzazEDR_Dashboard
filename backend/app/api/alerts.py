@@ -71,19 +71,47 @@ async def receive_alert(
     if not agent_id:
         raise HTTPException(status_code=400, detail="agent_id query parameter is required")
 
-    if not x_api_key or x_api_key != settings.ALERTS_API_KEY:
-        raise HTTPException(
-            status_code=403, 
-            detail="Invalid or missing API Key"
-        )
+async def resolve_organization_from_key(api_key: str) -> str:
+    """
+    Looks up the organization associated with an API key in Firestore.
+    """
+    # Check for the global demo key if explicitly configured (optional, but following strict policy)
+    if api_key == settings.ALERTS_API_KEY:
+        # We still allow demo-org for the master key, or we could disable it entirely.
+        # Strict policy: return demo-org only if it's the master key, otherwise lookup.
+        return "demo-org"
 
-    # Map the API key to an organization
-    if x_api_key == settings.ALERTS_API_KEY:
-        organization_id = "demo-org"
-    else:
-        organization_id = "demo-org"
+    org_docs = db.collection("organizations").where("api_key", "==", api_key).limit(1).stream()
+    for doc in org_docs:
+        return doc.id
+    
+    raise HTTPException(status_code=403, detail="Invalid or unauthorized API key.")
+
+@router.post("")
+async def receive_alert(
+    agent_id: str, 
+    alert: SecurityAlert, 
+    background_tasks: BackgroundTasks,
+    agent_name: Optional[str] = None,
+    agent_ip: Optional[str] = None,
+    agent_os: Optional[str] = None,
+    x_api_key: Optional[str] = Header(None)
+):
+    """
+    Receive a security alert from an agent.
+    - agent_id is passed as a query parameter (?agent_id=DESKTOP-ABC)
+    - x-api-key is required in the headers
+    """
+    if not agent_id:
+        raise HTTPException(status_code=400, detail="agent_id query parameter is required")
+
+    if not x_api_key:
+        raise HTTPException(status_code=403, detail="X-API-Key header is required")
+
+    # Resolve organization from API key
+    organization_id = await resolve_organization_from_key(x_api_key)
 
     # Add to background tasks so the agent gets an immediate 202 response
     background_tasks.add_task(process_alert_background, agent_id, organization_id, alert, agent_name, agent_ip, agent_os)
     
-    return {"status": "accepted", "message": "Alert queued for processing"}
+    return {"status": "accepted", "message": "Alert queued for processing", "tenant_id": organization_id}

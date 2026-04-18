@@ -4,13 +4,12 @@ import fitz  # PyMuPDF
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from fastapi import APIRouter, Response, HTTPException
+from fastapi import APIRouter, Response, HTTPException, Depends
 from fastapi.responses import Response
 from datetime import datetime, timedelta
 import traceback
-
-# Firestore Integration (Deferred to avoid initialization hangs on import)
-db = None
+from app.core.auth import UserContext, get_current_user
+from app.core.firebase import db
 
 router = APIRouter()
 
@@ -60,23 +59,69 @@ def generate_bar_chart(data, title, color):
     return buf
 
 @router.get("/security-posture")
-async def get_security_posture_report():
-    print("REPORTS: Executing fast-path generation...")
+async def get_security_posture_report(ctx: UserContext = Depends(get_current_user)):
+    print(f"REPORTS: Generating real-time report for tenant: {ctx.tenant_id}")
     try:
-        # --- 1. DATA SOURCE (REAL DATA FALLBACK) ---
-        org_id = "demo-org"
+        # --- 1. DATA AGGREGATION (REAL FIRESTORE DATA) ---
+        org_id = ctx.tenant_id
         
-        # Use recent dashboard snapshots to ensure INSTANT generation (prevents timeouts)
-        # These reflect the current project scale (10 agents, ~3.5k incidents)
         stats = {
-            "total_endpoints": 10,
-            "online_endpoints": 9,
-            "active_incidents": 3495,
-            "critical_alerts": 4,
-            "severity_map": {"Critical": 4, "High": 87, "Medium": 3404, "Low": 0},
-            "mitre_map": {"Network": 3390, "Malware": 105, "INFO": 0, "MAL": 0},
-            "target_heatmap": {"DESKTOP-TEST1": 1982, "INUKA-VIVOBOOKP": 1138, "LAPTOP-QDJ6JD9C": 360}
+            "total_endpoints": 0,
+            "online_endpoints": 0,
+            "offline_endpoints": 0,
+            "active_incidents": 0,
+            "critical_alerts": 0,
+            "severity_map": {"Critical": 0, "High": 0, "Medium": 0, "Low": 0},
+            "mitre_map": {},
+            "target_heatmap": {}
         }
+
+        # A. Agents & Health
+        agents_ref = db.collection("organizations").document(org_id).collection("agents")
+        agents = agents_ref.stream()
+        for agent in agents:
+            data = agent.to_dict()
+            stats["total_endpoints"] += 1
+            if data.get("status") == "online":
+                stats["online_endpoints"] += 1
+            else:
+                stats["offline_endpoints"] += 1
+
+        # B. Active Incidents
+        incidents_ref = db.collection("organizations").document(org_id).collection("incidents")
+        # Query for open/investigating incidents
+        active_incidents = incidents_ref.where("status", "in", ["open", "investigating", "contained", "Active"]).stream()
+        for inc in active_incidents:
+            stats["active_incidents"] += 1
+
+        # C. Alerts (Severity & MITRE)
+        # We use organization_id field which is tagged on every alert for multi-tenant collectionGroup querying
+        alerts = db.collection_group("alerts").where("organization_id", "==", org_id).stream()
+        
+        for alert in alerts:
+            a_data = alert.to_dict()
+            # If alert is resolved, skip it from the posture wrap-up
+            if a_data.get("status") == "resolved":
+                continue
+
+            # Severity
+            sev = (a_data.get("Severity") or a_data.get("severity") or "Medium").capitalize()
+            if sev in stats["severity_map"]:
+                stats["severity_map"][sev] += 1
+                if sev == "Critical":
+                    stats["critical_alerts"] += 1
+            
+            # MITRE Tactics (Aggregated from Rule or Technique fields)
+            tactic = a_data.get("tactic") or a_data.get("Tactic") or "Initial Access"
+            stats["mitre_map"][tactic] = stats["mitre_map"].get(tactic, 0) + 1
+
+            # Top Targets (Heatmap)
+            hostname = a_data.get("hostname") or a_data.get("agent_name") or "Unknown"
+            stats["target_heatmap"][hostname] = stats["target_heatmap"].get(hostname, 0) + 1
+
+        # Calculate a dynamic security score (simple heuristic: 100 - (critical*10 + high*5 + active_incidents*2))
+        penalty = (stats["critical_alerts"] * 10) + (stats["severity_map"].get("High", 0) * 5) + (stats["active_incidents"] * 2)
+        security_score = max(0, min(100, 100 - penalty))
 
         # --- 2. PDF GENERATION ---
         if not os.path.exists(TEMPLATE_PATH):
@@ -97,7 +142,7 @@ async def get_security_posture_report():
         # KPIs (Y=180)
         ky = 180
         kpis = [
-            ("Security Score", "98%"), 
+            ("Security Score", f"{security_score}%"), 
             ("Total Endpoints", str(stats["total_endpoints"])), 
             ("Active Incidents", str(stats["active_incidents"])), 
             ("Critical Alerts", str(stats["critical_alerts"]))
@@ -112,19 +157,22 @@ async def get_security_posture_report():
         sev_buf = generate_donut_chart(sev_data, "Severity Distribution", ['#db2777', '#7c3aed', '#94a3b8', '#334155'])
         page.insert_image(fitz.Rect(50, 230, 280, 410), stream=sev_buf.read())
         
-        health_data = {"Online": stats["online_endpoints"], "Offline": 1}
+        health_data = {"Online": stats["online_endpoints"], "Offline": stats["offline_endpoints"]}
         health_buf = generate_donut_chart(health_data, "Agent Health", ['#10b981', '#ef4444'])
         page.insert_image(fitz.Rect(320, 230, 550, 410), stream=health_buf.read())
 
         # MITRE Bar Chart
-        mitre_data = {k: v for k, v in stats["mitre_map"].items() if v > 0}
+        mitre_data = dict(sorted(stats["mitre_map"].items(), key=lambda x: x[1], reverse=True)[:6])
+        if not mitre_data:
+            mitre_data = {"No Data": 0}
         mitre_buf = generate_bar_chart(mitre_data, "MITRE ATT&CK® Tactic Coverage", "#7c3aed")
         page.insert_image(fitz.Rect(60, 420, 540, 600), stream=mitre_buf.read())
         
-        # High Risk Assets (Bottom)
+        # High Risk Assets (Bottom 3)
         hy = 640
-        page.insert_text((60, hy), "High-Risk Endpoint Activity", fontsize=11, color=(0.1, 0.1, 0.3), fontname="Helvetica-Bold")
-        for idx, (host, count) in enumerate(stats["target_heatmap"].items()):
+        page.insert_text((60, hy), "High-Risk Endpoint Activity (Top 3)", fontsize=11, color=(0.1, 0.1, 0.3), fontname="Helvetica-Bold")
+        top_targets = sorted(stats["target_heatmap"].items(), key=lambda x: x[1], reverse=True)[:3]
+        for idx, (host, count) in enumerate(top_targets):
             curr_y = hy + 30 + (idx * 22)
             page.insert_text((60, curr_y), f"Endpoint: {host}", fontsize=9)
             page.insert_text((420, curr_y), f"Alert Frequency: {count} events", fontsize=9, color=(0.6, 0.1, 0.1))
@@ -141,8 +189,13 @@ async def get_security_posture_report():
         return Response(
             content=final_bytes,
             media_type="application/pdf",
-            headers={"Content-Disposition": f"attachment; filename=Security_Posture_Report.pdf"}
+            headers={"Content-Disposition": f"attachment; filename=Security_Posture_Report_{org_id}.pdf"}
         )
+    except Exception as e:
+        print(f"REPORTS CRITICAL ERROR: {str(e)}")
+        traceback.print_exc()
+        return Response(content=f"Error: {str(e)}", status_code=500)
+
     except Exception as e:
         print(f"REPORTS CRITICAL ERROR: {str(e)}")
         traceback.print_exc()

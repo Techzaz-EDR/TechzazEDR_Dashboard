@@ -3,9 +3,28 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from firebase_admin import auth
 from pydantic import BaseModel
 from typing import List, Optional
-from app.core.firebase import firebase_auth
+from app.core.firebase import db, firebase_auth
+from app.core.config import settings
 
 security = HTTPBearer()
+
+async def resolve_tenant_by_api_key(api_key: str) -> str:
+    """
+    Looks up the organization associated with an API key in Firestore.
+    """
+    if not api_key:
+        raise HTTPException(status_code=403, detail="X-API-Key header is required")
+
+    # Optional: Allow the master demo key for development/demo purposes
+    if api_key == settings.ALERTS_API_KEY:
+        return "demo-org"
+
+    # Query organizations for matching api_key
+    org_docs = db.collection("organizations").where("api_key", "==", api_key).limit(1).stream()
+    for doc in org_docs:
+        return doc.id
+    
+    raise HTTPException(status_code=403, detail="Invalid or unauthorized API key.")
 
 class UserContext(BaseModel):
     uid: str
@@ -26,6 +45,27 @@ async def get_current_user(res: HTTPAuthorizationCredentials = Depends(security)
         tenant_id = decoded_token.get("tenantId")
         role = decoded_token.get("role")
         
+        if not tenant_id or not role:
+            # Fallback: Check Firestore users collection
+            user_ref = db.collection("users").document(decoded_token["uid"])
+            user_snap = user_ref.get()
+            
+            if user_snap.exists:
+                user_data = user_snap.to_dict()
+                tenant_id = tenant_id or user_data.get("tenantId")
+                role = role or user_data.get("role")
+                
+                # If we found missing claims in Firestore, attempt to sync them back to Auth
+                # so the next token refresh includes them.
+                if user_data.get("tenantId") and user_data.get("role"):
+                    try:
+                        auth.set_custom_user_claims(decoded_token["uid"], {
+                            "tenantId": user_data.get("tenantId"),
+                            "role": user_data.get("role")
+                        })
+                    except Exception as e:
+                        print(f"[AUTH FALLBACK] Failed to sync claims: {str(e)}")
+
         if not tenant_id or not role:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,

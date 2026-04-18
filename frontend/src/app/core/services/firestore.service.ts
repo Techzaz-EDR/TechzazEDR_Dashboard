@@ -50,7 +50,8 @@ export class FirestoreService {
   getAgents(): Observable<any[]> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
-        const tenantId = tId || 'demo-org';
+        if (!tId) return from([[]]);
+        const tenantId = tId;
         const subject = new ReplaySubject<any[]>(1);
         const agentsRef = collection(this.db, 'organizations', tenantId, 'agents');
         const q = query(agentsRef, orderBy('last_seen', 'desc'));
@@ -78,7 +79,8 @@ export class FirestoreService {
   getAgentDetails(agentId: string): Observable<any> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
-        const tenantId = tId || 'demo-org';
+        if (!tId) return from([null]);
+        const tenantId = tId;
         const subject = new ReplaySubject<any>(1);
         const agentDocRef = doc(this.db, 'organizations', tenantId, 'agents', agentId);
 
@@ -105,7 +107,8 @@ export class FirestoreService {
   getAgentAlerts(agentId: string): Observable<any[]> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
-        const tenantId = tId || 'demo-org';
+        if (!tId) return from([[]]);
+        const tenantId = tId;
         const subject = new ReplaySubject<any[]>(1);
         const alertsRef = collection(this.db, 'organizations', tenantId, 'agents', agentId, 'alerts');
         const q = query(alertsRef, orderBy('Timestamp', 'desc'), limit(250));
@@ -133,7 +136,8 @@ export class FirestoreService {
   getAgentCommands(agentId: string): Observable<any[]> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
-        const tenantId = tId || 'demo-org';
+        if (!tId) return from([[]]);
+        const tenantId = tId;
         const subject = new ReplaySubject<any[]>(1);
         const commandsRef = collection(this.db, 'organizations', tenantId, 'agents', agentId, 'commands');
         const q = query(commandsRef, orderBy('timestamp', 'desc'), limit(10));
@@ -170,7 +174,8 @@ export class FirestoreService {
       // Fallback: direct Firestore write if backend is unreachable
       console.warn('[sendCommand] Backend call failed, falling back to direct Firestore write.', err);
       const tId = await this.authService.tenantId$.pipe(first()).toPromise();
-      const tenantId = tId || 'demo-org';
+      if (!tId) throw new Error('Cannot send command: No tenant context');
+      const tenantId = tId;
       const commandsRef = collection(this.db, 'organizations', tenantId, 'agents', agentId, 'commands');
       await addDoc(commandsRef, {
         command: commandType,
@@ -184,7 +189,8 @@ export class FirestoreService {
 
   async cancelCommand(agentId: string, commandId: string) {
     const tId = await this.authService.tenantId$.pipe(first()).toPromise();
-    const tenantId = tId || 'demo-org';
+    if (!tId) throw new Error('Cannot cancel command: No tenant context');
+    const tenantId = tId;
     const commandRef = doc(this.db, 'organizations', tenantId, 'agents', agentId, 'commands', commandId);
     
     await updateDoc(commandRef, {
@@ -195,7 +201,8 @@ export class FirestoreService {
 
   async updateAlertStatus(agentId: string, alertId: string, status: string) {
     const tId = await this.authService.tenantId$.pipe(first()).toPromise();
-    const tenantId = tId || 'demo-org';
+    if (!tId) throw new Error('Cannot update alert: No tenant context');
+    const tenantId = tId;
     const alertRef = doc(this.db, 'organizations', tenantId, 'agents', agentId, 'alerts', alertId);
     
     await updateDoc(alertRef, {
@@ -206,7 +213,8 @@ export class FirestoreService {
 
   async updateAgent(agentId: string, data: any) {
     const tId = await this.authService.tenantId$.pipe(first()).toPromise();
-    const tenantId = tId || 'demo-org';
+    if (!tId) throw new Error('Cannot update agent: No tenant context');
+    const tenantId = tId;
     const agentRef = doc(this.db, 'organizations', tenantId, 'agents', agentId);
     
     await updateDoc(agentRef, {
@@ -217,7 +225,8 @@ export class FirestoreService {
 
   async updateIncidentStatus(incidentId: string, status: string) {
     const tId = await this.authService.tenantId$.pipe(first()).toPromise();
-    const tenantId = tId || 'demo-org';
+    if (!tId) throw new Error('Cannot update incident: No tenant context');
+    const tenantId = tId;
     const incidentRef = doc(this.db, 'organizations', tenantId, 'incidents', incidentId);
     
     await updateDoc(incidentRef, {
@@ -229,7 +238,8 @@ export class FirestoreService {
   getOrganizationAlerts(): Observable<any[]> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
-        const tenantId = tId || 'demo-org';
+        if (!tId) return from([[]]);
+        const tenantId = tId;
         const subject = new ReplaySubject<any[]>(1);
         
         // Simpler query: only filter by organization_id, no orderBy (avoids composite index requirement)
@@ -280,7 +290,8 @@ export class FirestoreService {
   getIncidents(): Observable<any[]> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
-        const tenantId = tId || 'demo-org';
+        if (!tId) return from([[]]);
+        const tenantId = tId;
         const subject = new ReplaySubject<any[]>(1);
         const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
         const q = query(incidentsRef, orderBy('timestamp', 'desc'));
@@ -321,7 +332,8 @@ export class FirestoreService {
   getOrganizationIncidents(): Observable<any[]> {
     return this.authService.tenantId$.pipe(
       switchMap(tId => {
-        const tenantId = tId || 'demo-org';
+        if (!tId) return from([[]]);
+        const tenantId = tId;
         const subject = new ReplaySubject<any[]>(1);
         const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
         const q = query(incidentsRef, orderBy('createdAt', 'desc'));
@@ -346,7 +358,8 @@ export class FirestoreService {
 
   async createIncident(incidentData: any) {
     const tId = await this.authService.tenantId$.pipe(first()).toPromise();
-    const tenantId = tId || 'demo-org';
+    if (!tId) throw new Error('Cannot create incident: No tenant context');
+    const tenantId = tId;
     const incidentsRef = collection(this.db, 'organizations', tenantId, 'incidents');
 
     // Generate sequential incident ID: INC-001, INC-002, ...

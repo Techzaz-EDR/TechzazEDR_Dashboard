@@ -160,15 +160,18 @@ export class LoginComponent implements AfterViewInit, OnInit {
         }
 
         try {
-            // Registration logic — wire to AuthService when backend is ready
-            console.log('Sign up payload:', {
-                firstName: this.signupFirstName,
-                lastName: this.signupLastName,
-                email: this.signupEmail,
-                company: this.signupCompany,
-                country: this.signupCountry,
-                phone: this.signupPhone,
-            });
+            // Register user via AuthService which handles Firebase and backend initialization
+            await this.authService.register(
+                this.signupEmail,
+                this.signupPassword,
+                {
+                    firstName: this.signupFirstName,
+                    lastName: this.signupLastName,
+                    companyName: this.signupCompany,
+                    country: this.signupCountry,
+                    phone: this.signupPhone,
+                }
+            );
             // On success, show confirmation state
             this.signupSuccess = true;
         } catch (error: any) {

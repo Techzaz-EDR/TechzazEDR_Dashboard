@@ -23,7 +23,7 @@
                 <lucide-icon [name]="kpiData.securityStatus.icon" [size]="24"></lucide-icon>
             </div>
             <div class="kpi-info">
-                <span class="value" [class.kpi-skeleton]="!dataLoaded">{{ dataLoaded ? displaySecurityScore + '%' : '—' }}</span>
+                <span class="value" [class.kpi-skeleton]="!dataLoaded">{{ (dataLoaded && protectionStats.total > 0) ? displaySecurityScore + '%' : '—' }}</span>
                 <span class="label">{{ kpiData.securityStatus.label }}</span>
                 <span class="subtitle">{{ kpiData.securityStatus.subtitle }}</span>
             </div>

@@ -433,7 +433,19 @@ export class Overview implements OnInit, OnDestroy {
   private calculateSecurityScore() {
     const totalEndpoints = this.protectionStats.total;
     if (totalEndpoints === 0) {
-      this.updateSecurityKpi(100);
+      // Handle empty state directly without triggering the animation system
+      // We don't set displaySecurityScore = 0 here to avoid flashing 0% if totalEndpoints flips.
+      const emptyVal = '—';
+      if (this.kpiData.securityStatus) {
+        this.kpiData.securityStatus.value = emptyVal;
+        this.kpiData.securityStatus.status = 'secure';
+      }
+      Object.values(this.kpiSnapshots).forEach(snap => {
+         if (snap.securityStatus) {
+           snap.securityStatus.value = emptyVal;
+           snap.securityStatus.status = 'secure';
+         }
+      });
       return;
     }
 
@@ -463,11 +475,8 @@ export class Overview implements OnInit, OnDestroy {
     if (this.kpiData.securityStatus) {
       this.kpiData.securityStatus.status = status;
     }
-
     Object.values(this.kpiSnapshots).forEach(snap => {
-       if (snap.securityStatus) {
-         snap.securityStatus.status = status;
-       }
+      if (snap.securityStatus) snap.securityStatus.status = status;
     });
 
     if (this.hasAnimated) {
@@ -480,7 +489,8 @@ export class Overview implements OnInit, OnDestroy {
       });
     } else {
       // First load: animate count-up and mark as animated
-      this.countUp(roundedScore, 2200, v => {
+      // Snappier 1.2s duration for better feel
+      this.countUp(roundedScore, 1200, v => {
         this.displaySecurityScore = v;
         const str = `${v}%`;
         if (this.kpiData.securityStatus) this.kpiData.securityStatus.value = str;
